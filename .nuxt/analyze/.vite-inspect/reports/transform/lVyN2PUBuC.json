@@ -1,0 +1,12 @@
+{
+  "resolvedId": "\u0000commonjsHelpers.js",
+  "transforms": [
+    {
+      "name": "commonjs",
+      "result": "\nexport var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};\n\nexport function getDefaultExportFromCjs (x) {\n\treturn x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;\n}\n\nexport function getDefaultExportFromNamespaceIfPresent (n) {\n\treturn n && Object.prototype.hasOwnProperty.call(n, 'default') ? n['default'] : n;\n}\n\nexport function getDefaultExportFromNamespaceIfNotNamed (n) {\n\treturn n && Object.prototype.hasOwnProperty.call(n, 'default') && Object.keys(n).length === 1 ? n['default'] : n;\n}\n\nexport function getAugmentedNamespace(n) {\n  if (n.__esModule) return n;\n  var f = n.default;\n\tif (typeof f == \"function\") {\n\t\tvar a = function a () {\n\t\t\tif (this instanceof a) {\n        return Reflect.construct(f, arguments, this.constructor);\n\t\t\t}\n\t\t\treturn f.apply(this, arguments);\n\t\t};\n\t\ta.prototype = f.prototype;\n  } else a = {};\n  Object.defineProperty(a, '__esModule', {value: true});\n\tObject.keys(n).forEach(function (k) {\n\t\tvar d = Object.getOwnPropertyDescriptor(n, k);\n\t\tObject.defineProperty(a, k, d.get ? d : {\n\t\t\tenumerable: true,\n\t\t\tget: function () {\n\t\t\t\treturn n[k];\n\t\t\t}\n\t\t});\n\t});\n\treturn a;\n}\n",
+      "start": 1748496724734,
+      "end": 1748496724735,
+      "sourcemaps": null
+    }
+  ]
+}

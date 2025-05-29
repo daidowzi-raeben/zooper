@@ -1,0 +1,300 @@
+{
+  "resolvedId": "/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue?vue&type=style&index=0&lang.css?inline&used",
+  "transforms": [
+    {
+      "name": "vite:vue",
+      "result": "\n.prose h2 a,\n.prose h3 a {\n  @apply no-underline;\n}\n",
+      "start": 1748496730984,
+      "end": 1748496730984,
+      "sourcemaps": {
+        "version": 3,
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue"
+        ],
+        "names": [],
+        "mappings": ";AAwBA,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,EAAE,CAAC;AACX,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,EAAE,EAAE;EACV,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACrB",
+        "file": "/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue",
+        "sourceRoot": "",
+        "sourcesContent": [
+          "<template>\n  <main class=\"min-h-screen\">\n    <div\n      class=\"prose dark:prose-invert prose-blockquote:not-italic prose-pre:bg-gray-900 prose-img:ring-1 prose-img:ring-gray-200 dark:prose-img:ring-white/10 prose-img:rounded-lg\"\n    >\n      <ContentDoc v-slot=\"{ doc }\" tag=\"article\">\n        <article>\n          <h1>{{ doc.title }}</h1>\n          <ContentRenderer :value=\"doc\" />\n        </article>\n      </ContentDoc>\n    </div>\n  </main>\n</template>\n<script setup>\nconst route = useRoute();\nconst { slug } = route.params;\nuseSeoMeta({\n  ogImage: `https://fayazahmed.com/articles/${slug}.png`,\n  twitterCard: \"summary_large_image\",\n  articleAuthor: \"Fayaz Ahmed\",\n});\n</script>\n<style>\n.prose h2 a,\n.prose h3 a {\n  @apply no-underline;\n}\n</style>\n"
+        ]
+      }
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748496730984,
+      "end": 1748496730984,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748496730984,
+      "end": 1748496730984,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748496730984,
+      "end": 1748496730985,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748496730984,
+      "end": 1748496730985,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748496730985,
+      "end": 1748496730985,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748496730985,
+      "end": 1748496730985,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:client-fallback-auto-id",
+      "start": 1748496730985,
+      "end": 1748496730985,
+      "order": "pre"
+    },
+    {
+      "name": "vite:css",
+      "result": ".prose h2 a,.prose h3 a{text-decoration-line:none}",
+      "start": 1748496730985,
+      "end": 1748496731002,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue",
+        "mappings": "AAGE,wBAAA,yBAAmB",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue"
+        ],
+        "sourcesContent": [
+          "\n.prose h2 a,\n.prose h3 a {\n  @apply no-underline;\n}\n"
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:esbuild",
+      "start": 1748496731002,
+      "end": 1748496731002,
+      "order": "normal"
+    },
+    {
+      "name": "vite:json",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue",
+      "result": ".prose h2 a,.prose h3 a{text-decoration-line:none}",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue",
+        "mappings": "AAAA,wBAAwB,yBAAyB",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue"
+        ],
+        "sourcesContent": [
+          null
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:vue-jsx",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:components:imports",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496731017,
+      "end": 1748496731017,
+      "order": "normal"
+    },
+    {
+      "name": "ssr-styles",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "vite:define",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "vite:css-post",
+      "result": "export default \".prose h2 a,.prose h3 a{text-decoration-line:none}\"",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal",
+      "sourcemaps": {
+        "mappings": ""
+      }
+    },
+    {
+      "name": "vite:build-html",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker-import-meta-url",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "vite:asset-import-meta-url",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "commonjs",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "vite:dynamic-import-vars",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-glob",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-template",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:components-loader",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-composables:transform",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "post"
+    },
+    {
+      "name": "vite:build-import-analysis",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    },
+    {
+      "name": "vite:reporter",
+      "start": 1748496731018,
+      "end": 1748496731018,
+      "order": "normal"
+    }
+  ]
+}

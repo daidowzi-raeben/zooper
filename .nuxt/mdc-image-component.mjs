@@ -1,0 +1,1 @@
+export { default } from "/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/image/dist/runtime/components/nuxt-img"

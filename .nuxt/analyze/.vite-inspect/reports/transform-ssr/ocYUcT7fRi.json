@@ -1,0 +1,300 @@
+{
+  "resolvedId": "/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue?vue&type=style&index=0&scoped=e9f86973&lang.css",
+  "transforms": [
+    {
+      "name": "vite:vue",
+      "result": "\n@property --num {\n  syntax: \"<integer>\";\n  initial-value: 0;\n  inherits: false;\n}\n\n@keyframes counter {\n  from {\n    --num: 0;\n  }\n  to {\n    --num: v-bind(props.targetNumber);\n  }\n}\n",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "sourcemaps": {
+        "version": 3,
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue"
+        ],
+        "names": [],
+        "mappings": ";AA6CA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,EAAE;EACd,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;EACnB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC;EAChB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC;AACjB;;AAEA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE;EACjB,CAAC,CAAC,CAAC,EAAE;IACH,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC;EACV;EACA,CAAC,EAAE;IACD,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;EACnC;AACF",
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue",
+        "sourceRoot": "",
+        "sourcesContent": [
+          "<template>\n  <div class=\"px-4 py-8 flex items-center justify-center flex-col\">\n    <span\n      ref=\"target\"\n      class=\"flex tabular-nums text-slate-900 dark:text-white text-5xl font-extrabold mb-2 [counter-set:_num_var(--num)] before:content-[counter(num)] animate-counter\"\n    >\n      <span class=\"sr-only\">{{ targetNumber }}</span\n      >+\n    </span>\n    <UButton color=\"white\" @click=\"startCounter\" class=\"mt-4\" size=\"xs\">\n      Start Counter\n    </UButton>\n    <p class=\"text-xs mt-2 text-gray-500\">\n      or start the counter when this component is in the viewport\n    </p>\n  </div>\n</template>\n\n<script setup>\nconst target = ref(null);\nconst targetIsVisible = useElementVisibility(target);\n\nconst props = defineProps({\n  targetNumber: {\n    type: Number,\n    required: true,\n    default: 1234,\n  },\n});\n\nconst startCounter = () => {\n  const counter = document.querySelector(\".animate-counter\");\n  counter.animate([{ \"--num\": 0 }, { \"--num\": props.targetNumber }], {\n    duration: 1000,\n    easing: \"ease-out\",\n    fill: \"forwards\",\n  });\n};\n\nwatchOnce(targetIsVisible, () => {\n  startCounter();\n});\n</script>\n\n<style scoped>\n@property --num {\n  syntax: \"<integer>\";\n  initial-value: 0;\n  inherits: false;\n}\n\n@keyframes counter {\n  from {\n    --num: 0;\n  }\n  to {\n    --num: v-bind(props.targetNumber);\n  }\n}\n</style>\n"
+        ]
+      }
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:client-fallback-auto-id",
+      "start": 1748496730825,
+      "end": 1748496730825,
+      "order": "pre"
+    },
+    {
+      "name": "vite:css",
+      "result": "@property --num{syntax:\"<integer>\";initial-value:0;inherits:false}@keyframes counter{0%{--num:0}to{--num:v-bind(props.targetNumber)}}",
+      "start": 1748496730825,
+      "end": 1748496730841,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue",
+        "mappings": "AACA,gBACE,kBAAmB,CACnB,eAAgB,CAChB,cACF,CAEA,mBACE,GACE,OACF,CACA,GACE,gCACF,CACF",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue"
+        ],
+        "sourcesContent": [
+          "\n@property --num {\n  syntax: \"<integer>\";\n  initial-value: 0;\n  inherits: false;\n}\n\n@keyframes counter {\n  from {\n    --num: 0;\n  }\n  to {\n    --num: v-bind(props.targetNumber);\n  }\n}\n"
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:esbuild",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:json",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue",
+      "result": "@property --num{syntax:\"<integer>\";initial-value:0;inherits:false}@keyframes counter-e9f86973{0%{--num:0}to{--num:var(--4977d1da)}}",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue",
+        "mappings": "AAAA,gBAAgB,kBAAkB,CAAC,eAAe,CAAC,cAAc,CAAC,4BAAmB,GAAG,OAAO,CAAC,GAAG,qBAAgC,CAAC",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue"
+        ],
+        "sourcesContent": [
+          null
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:vue-jsx",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:components:imports",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "ssr-styles",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:define",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:css-post",
+      "result": "",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal",
+      "sourcemaps": {
+        "mappings": ""
+      }
+    },
+    {
+      "name": "vite:build-html",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker-import-meta-url",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:asset-import-meta-url",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "commonjs",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:dynamic-import-vars",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-glob",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-template",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:components-loader",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-composables:transform",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "post"
+    },
+    {
+      "name": "vite:build-import-analysis",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    },
+    {
+      "name": "vite:reporter",
+      "start": 1748496730841,
+      "end": 1748496730841,
+      "order": "normal"
+    }
+  ]
+}

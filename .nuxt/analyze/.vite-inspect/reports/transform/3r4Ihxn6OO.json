@@ -1,0 +1,243 @@
+{
+  "resolvedId": "/Users/jang-yeong-ug/Documents/zooper/app.config.ts",
+  "transforms": [
+    {
+      "name": "vite:load-fallback",
+      "result": "export default defineAppConfig({\n  ui: {\n    primary: \"teal\",\n    gray: \"neutral\",\n    formGroup: {\n      help: \"text-xs mt-1 text-gray-500 dark:text-gray-400\",\n      error: \"text-xs mt-1 text-red-500 dark:text-red-400\",\n      label: {\n        base: \"text-sm block font-medium text-gray-500 dark:text-gray-200\",\n      },\n    },\n    button: {\n      rounded:\n        \"rounded-md transition-transform active:scale-x-[0.98] active:scale-y-[0.99]\",\n    },\n    modal: {\n      overlay: {\n        background: \"bg-[rgba(0,8,47,.275)] saturate-50\",\n      },\n      padding: \"p-0\",\n      rounded: \"rounded-t-2xl sm:rounded-xl\",\n      transition: {\n        enterFrom: \"opacity-0 translate-y-full sm:translate-y-0 sm:scale-x-95\",\n        leaveFrom: \"opacity-100 translate-y-0 sm:scale-x-100\",\n      },\n    },\n    container: {\n      constrained: \"max-w-2xl\",\n    },\n  },\n});\n",
+      "start": 1748496724838,
+      "end": 1748496724847,
+      "sourcemaps": null
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748496724847,
+      "end": 1748496724847,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748496724847,
+      "end": 1748496724847,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748496724847,
+      "end": 1748496724847,
+      "order": "pre"
+    },
+    {
+      "name": "fontaine-transform",
+      "start": 1748496724847,
+      "end": 1748496724847,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:client-fallback-auto-id",
+      "start": 1748496724847,
+      "end": 1748496724847,
+      "order": "pre"
+    },
+    {
+      "name": "vite:css",
+      "start": 1748496724847,
+      "end": 1748496724847,
+      "order": "normal"
+    },
+    {
+      "name": "vite:esbuild",
+      "result": "export default defineAppConfig({\n  ui: {\n    primary: \"teal\",\n    gray: \"neutral\",\n    formGroup: {\n      help: \"text-xs mt-1 text-gray-500 dark:text-gray-400\",\n      error: \"text-xs mt-1 text-red-500 dark:text-red-400\",\n      label: {\n        base: \"text-sm block font-medium text-gray-500 dark:text-gray-200\"\n      }\n    },\n    button: {\n      rounded: \"rounded-md transition-transform active:scale-x-[0.98] active:scale-y-[0.99]\"\n    },\n    modal: {\n      overlay: {\n        background: \"bg-[rgba(0,8,47,.275)] saturate-50\"\n      },\n      padding: \"p-0\",\n      rounded: \"rounded-t-2xl sm:rounded-xl\",\n      transition: {\n        enterFrom: \"opacity-0 translate-y-full sm:translate-y-0 sm:scale-x-95\",\n        leaveFrom: \"opacity-100 translate-y-0 sm:scale-x-100\"\n      }\n    },\n    container: {\n      constrained: \"max-w-2xl\"\n    }\n  }\n});\n",
+      "start": 1748496724847,
+      "end": 1748496724950,
+      "order": "normal",
+      "sourcemaps": {
+        "version": 3,
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/app.config.ts"
+        ],
+        "sourcesContent": [
+          "export default defineAppConfig({\n  ui: {\n    primary: \"teal\",\n    gray: \"neutral\",\n    formGroup: {\n      help: \"text-xs mt-1 text-gray-500 dark:text-gray-400\",\n      error: \"text-xs mt-1 text-red-500 dark:text-red-400\",\n      label: {\n        base: \"text-sm block font-medium text-gray-500 dark:text-gray-200\",\n      },\n    },\n    button: {\n      rounded:\n        \"rounded-md transition-transform active:scale-x-[0.98] active:scale-y-[0.99]\",\n    },\n    modal: {\n      overlay: {\n        background: \"bg-[rgba(0,8,47,.275)] saturate-50\",\n      },\n      padding: \"p-0\",\n      rounded: \"rounded-t-2xl sm:rounded-xl\",\n      transition: {\n        enterFrom: \"opacity-0 translate-y-full sm:translate-y-0 sm:scale-x-95\",\n        leaveFrom: \"opacity-100 translate-y-0 sm:scale-x-100\",\n      },\n    },\n    container: {\n      constrained: \"max-w-2xl\",\n    },\n  },\n});\n"
+        ],
+        "mappings": "AAAA,eAAe,gBAAgB;AAAA,EAC7B,IAAI;AAAA,IACF,SAAS;AAAA,IACT,MAAM;AAAA,IACN,WAAW;AAAA,MACT,MAAM;AAAA,MACN,OAAO;AAAA,MACP,OAAO;AAAA,QACL,MAAM;AAAA,MACR;AAAA,IACF;AAAA,IACA,QAAQ;AAAA,MACN,SACE;AAAA,IACJ;AAAA,IACA,OAAO;AAAA,MACL,SAAS;AAAA,QACP,YAAY;AAAA,MACd;AAAA,MACA,SAAS;AAAA,MACT,SAAS;AAAA,MACT,YAAY;AAAA,QACV,WAAW;AAAA,QACX,WAAW;AAAA,MACb;AAAA,IACF;AAAA,IACA,WAAW;AAAA,MACT,aAAa;AAAA,IACf;AAAA,EACF;AACF,CAAC;",
+        "names": []
+      }
+    },
+    {
+      "name": "vite:json",
+      "start": 1748496724950,
+      "end": 1748496724950,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker",
+      "start": 1748496724950,
+      "end": 1748496724950,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue",
+      "start": 1748496724950,
+      "end": 1748496724950,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue-jsx",
+      "start": 1748496724951,
+      "end": 1748496724951,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496724951,
+      "end": 1748496724951,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748496724951,
+      "end": 1748496724951,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:chunk-error",
+      "start": 1748496724951,
+      "end": 1748496724951,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:components:imports",
+      "start": 1748496724969,
+      "end": 1748496724969,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496724969,
+      "end": 1748496724969,
+      "order": "normal"
+    },
+    {
+      "name": "ssr-styles",
+      "start": 1748496724969,
+      "end": 1748496724969,
+      "order": "normal"
+    },
+    {
+      "name": "vite:define",
+      "start": 1748496724969,
+      "end": 1748496724969,
+      "order": "normal"
+    },
+    {
+      "name": "vite:css-post",
+      "start": 1748496724970,
+      "end": 1748496724970,
+      "order": "normal"
+    },
+    {
+      "name": "vite:build-html",
+      "start": 1748496724970,
+      "end": 1748496724970,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker-import-meta-url",
+      "start": 1748496724970,
+      "end": 1748496724970,
+      "order": "normal"
+    },
+    {
+      "name": "vite:asset-import-meta-url",
+      "start": 1748496724971,
+      "end": 1748496724971,
+      "order": "normal"
+    },
+    {
+      "name": "commonjs",
+      "start": 1748496724971,
+      "end": 1748496724971,
+      "order": "normal"
+    },
+    {
+      "name": "vite:dynamic-import-vars",
+      "start": 1748496724971,
+      "end": 1748496724971,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-glob",
+      "start": 1748496724971,
+      "end": 1748496724971,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748496724971,
+      "end": 1748496724971,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "result": "import { defineAppConfig } from '#app/nuxt';\nexport default defineAppConfig({\n  ui: {\n    primary: \"teal\",\n    gray: \"neutral\",\n    formGroup: {\n      help: \"text-xs mt-1 text-gray-500 dark:text-gray-400\",\n      error: \"text-xs mt-1 text-red-500 dark:text-red-400\",\n      label: {\n        base: \"text-sm block font-medium text-gray-500 dark:text-gray-200\"\n      }\n    },\n    button: {\n      rounded: \"rounded-md transition-transform active:scale-x-[0.98] active:scale-y-[0.99]\"\n    },\n    modal: {\n      overlay: {\n        background: \"bg-[rgba(0,8,47,.275)] saturate-50\"\n      },\n      padding: \"p-0\",\n      rounded: \"rounded-t-2xl sm:rounded-xl\",\n      transition: {\n        enterFrom: \"opacity-0 translate-y-full sm:translate-y-0 sm:scale-x-95\",\n        leaveFrom: \"opacity-100 translate-y-0 sm:scale-x-100\"\n      }\n    },\n    container: {\n      constrained: \"max-w-2xl\"\n    }\n  }\n});\n",
+      "start": 1748496724971,
+      "end": 1748496724972,
+      "order": "post",
+      "sourcemaps": {
+        "version": 3,
+        "sources": [
+          ""
+        ],
+        "names": [],
+        "mappings": ";AAAA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC/B,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACN,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACnB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACnB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACf,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC3D,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC1D,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACb,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACzE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACN,CAAC,CAAC,CAAC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACZ,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC3F,CAAC,CAAC,CAAC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACX,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACf,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACvD,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACP,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACpB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC5C,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAClB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC9E,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC5D,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACN,CAAC,CAAC,CAAC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACf,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC7B,CAAC,CAAC,CAAC,CAAC;AACJ,CAAC,CAAC;AACF,CAAC,CAAC;"
+      }
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:runtime-paths-dep",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:route-injection-plugin",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:components-loader",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-composables:transform",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "post"
+    },
+    {
+      "name": "vite:build-import-analysis",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "normal"
+    },
+    {
+      "name": "vite:reporter",
+      "start": 1748496724972,
+      "end": 1748496724972,
+      "order": "normal"
+    }
+  ]
+}

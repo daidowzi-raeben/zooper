@@ -1,0 +1,300 @@
+{
+  "resolvedId": "/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue?vue&type=style&index=0&scoped=95c436b2&lang.css",
+  "transforms": [
+    {
+      "name": "vite:vue",
+      "result": "\n.active-tab {\n  @apply after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary-500 after:bottom-[-9px] after:left-0 after:pointer-events-none;\n}\n",
+      "start": 1748496730669,
+      "end": 1748496730669,
+      "sourcemaps": {
+        "version": 3,
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue"
+        ],
+        "names": [],
+        "mappings": ";AAoFA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE;EACV,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACnJ",
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue",
+        "sourceRoot": "",
+        "sourcesContent": [
+          "<template>\n  <div>\n    <h2 class=\"text-sm font-semibold\">{{ title }}</h2>\n    <p class=\"text-gray-500 text-sm\">\n      {{ description }}\n    </p>\n    <div\n      class=\"mt-2 border dark:border-white/10 rounded-lg shadow-sm overflow-hidden\"\n    >\n      <div class=\"p-2 flex items-center gap-2 border-b dark:border-white/10\">\n        <div class=\"flex items-center w-full\">\n          <UButton\n            @click=\"tab = 'preview'\"\n            label=\"Preview\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'preview' }\"\n          />\n          <UButton\n            @click=\"tab = 'code'\"\n            label=\"Code\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'code' }\"\n          />\n          <UButton\n            v-if=\"showUsageTab\"\n            @click=\"tab = 'usage'\"\n            label=\"Usage\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'usage' }\"\n          />\n          <UButton\n            v-if=\"showCreditTab\"\n            @click=\"tab = 'credit'\"\n            label=\"Credits\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'credit' }\"\n          />\n        </div>\n      </div>\n      <div>\n        <div\n          v-if=\"tab === 'preview'\"\n          class=\"bg-gray-100 dark:bg-gray-900 overflow-hidden\"\n        >\n          <slot name=\"preview\" />\n        </div>\n        <slot v-if=\"tab === 'code'\" name=\"codebase\" />\n        <slot v-if=\"tab === 'usage'\" name=\"usage\" />\n        <slot v-if=\"tab === 'credit'\" name=\"credit\" />\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup>\ndefineProps({\n  title: String,\n  description: String,\n  showUsageTab: {\n    type: Boolean,\n    default: true,\n  },\n  showCreditTab: {\n    type: Boolean,\n    default: false,\n  },\n});\n\nconst tab = ref(\"preview\");\n</script>\n\n<style scoped>\n.active-tab {\n  @apply after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary-500 after:bottom-[-9px] after:left-0 after:pointer-events-none;\n}\n</style>\n"
+        ]
+      }
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748496730669,
+      "end": 1748496730669,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748496730669,
+      "end": 1748496730669,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748496730669,
+      "end": 1748496730669,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748496730669,
+      "end": 1748496730669,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748496730670,
+      "end": 1748496730670,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748496730670,
+      "end": 1748496730670,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:client-fallback-auto-id",
+      "start": 1748496730670,
+      "end": 1748496730670,
+      "order": "pre"
+    },
+    {
+      "name": "vite:css",
+      "result": ".active-tab:after{bottom:-9px;height:.125rem;left:0;pointer-events:none;position:absolute;width:100%;--tw-bg-opacity:1;background-color:rgb(var(--color-primary-500)/1);background-color:rgb(var(--color-primary-500)/var(--tw-bg-opacity));--tw-content:\"\";content:\"\";content:var(--tw-content)}",
+      "start": 1748496730670,
+      "end": 1748496730685,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue",
+        "mappings": "AAEE,kBAAA,WAAiJ,CAAjJ,cAAiJ,CAAjJ,MAAiJ,CAAjJ,mBAAiJ,CAAjJ,iBAAiJ,CAAjJ,UAAiJ,CAAjJ,iBAAiJ,CAAjJ,gDAAiJ,CAAjJ,mEAAiJ,CAAjJ,eAAiJ,CAAjJ,UAAiJ,CAAjJ,yBAAiJ",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue"
+        ],
+        "sourcesContent": [
+          "\n.active-tab {\n  @apply after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary-500 after:bottom-[-9px] after:left-0 after:pointer-events-none;\n}\n"
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:esbuild",
+      "start": 1748496730685,
+      "end": 1748496730685,
+      "order": "normal"
+    },
+    {
+      "name": "vite:json",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue",
+      "result": ".active-tab[data-v-95c436b2]:after{bottom:-9px;height:.125rem;left:0;pointer-events:none;position:absolute;width:100%;--tw-bg-opacity:1;background-color:rgb(var(--color-primary-500)/1);background-color:rgb(var(--color-primary-500)/var(--tw-bg-opacity));--tw-content:\"\";content:\"\";content:var(--tw-content)}",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue",
+        "mappings": "AAAA,mCAAkB,WAAW,CAAC,cAAc,CAAC,MAAM,CAAC,mBAAmB,CAAC,iBAAiB,CAAC,UAAU,CAAC,iBAAiB,CAAC,gDAAgD,CAAC,mEAAmE,CAAC,eAAe,CAAC,UAAU,CAAC,yBAAyB",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue"
+        ],
+        "sourcesContent": [
+          null
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:vue-jsx",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:components:imports",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "ssr-styles",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:define",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:css-post",
+      "result": "",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal",
+      "sourcemaps": {
+        "mappings": ""
+      }
+    },
+    {
+      "name": "vite:build-html",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker-import-meta-url",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:asset-import-meta-url",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "commonjs",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:dynamic-import-vars",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-glob",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-template",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:components-loader",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-composables:transform",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "post"
+    },
+    {
+      "name": "vite:build-import-analysis",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    },
+    {
+      "name": "vite:reporter",
+      "start": 1748496730686,
+      "end": 1748496730686,
+      "order": "normal"
+    }
+  ]
+}

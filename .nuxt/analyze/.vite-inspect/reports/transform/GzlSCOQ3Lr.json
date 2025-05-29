@@ -1,0 +1,11 @@
+{
+  "resolvedId": "\u0000/Users/jang-yeong-ug/Documents/zooper/node_modules/slugify/slugify.js?commonjs-module",
+  "transforms": [
+    {
+      "name": "commonjs",
+      "result": "var slugify = {exports: {}}; export {slugify as __module}",
+      "start": 1748496724735,
+      "end": 1748496724735
+    }
+  ]
+}
