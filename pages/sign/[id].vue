@@ -21,13 +21,12 @@ onMounted(async () => {
       idnt_code: id,
     })
     
-    window.location.href = '/'
-    
     if (res.result === 'SUCCESS' && res.data) {
       student.value = res.data
       
       sessionStorage.setItem('idnt_code', id)
       sessionStorage.setItem('student', JSON.stringify(student.value))
+      window.location.href = '/'
 
     } else {
       console.error(res.message || '학생 정보 없음')
@@ -37,9 +36,9 @@ onMounted(async () => {
     }
   } catch (err) {
     console.error('에러:', err)
-    sessionStorage.removeItem('idnt_code')
-    sessionStorage.removeItem('student')
-    window.location.href = '/login'
+    // sessionStorage.removeItem('idnt_code')
+    // sessionStorage.removeItem('student')
+    // window.location.href = '/login'
   }
 })
 </script>

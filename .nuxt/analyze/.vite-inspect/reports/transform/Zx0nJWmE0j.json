@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <NuxtLink :to=\"article._path\" class=\"group\">\n    <article>\n      <time\n        class=\"relative z-10 order-first mb-3 flex items-center text-sm text-gray-400 dark:text-gray-500 pl-3.5\"\n        datetime=\"2022-09-05\"\n        ><span\n          class=\"absolute inset-y-0 left-0 flex items-center\"\n          aria-hidden=\"true\"\n          ><span\n            class=\"h-4 w-0.5 rounded-full bg-gray-200 dark:bg-gray-500\"\n          ></span\n        ></span>\n        {{ getReadableDate(article.published) }}\n      </time>\n      <h2\n        class=\"text-base font-semibold font-display tracking-tight text-gray-800 dark:text-gray-100 group-hover:text-primary-600\"\n      >\n        {{ article.title }}\n      </h2>\n      <p class=\"relative z-10 mt-2 text-sm text-gray-600 dark:text-gray-400\">\n        {{ article.description }}\n      </p>\n    </article>\n  </NuxtLink>\n</template>\n\n<script setup>\ndefineProps({\n  article: {\n    type: Object,\n    required: true,\n  },\n});\n\nconst getReadableDate = (dateString) => {\n  const date = new Date(dateString);\n  return date.toLocaleDateString(\"en-US\", {\n    year: \"numeric\",\n    month: \"short\",\n    day: \"numeric\",\n  });\n};\n</script>",
-      "start": 1748498862641,
-      "end": 1748498862694,
+      "start": 1748499204998,
+      "end": 1748499205054,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205054,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { createElementVNode as _createElementVNode, toDisplayString as _toDisplayString, createTextVNode as _createTextVNode, resolveComponent as _resolveComponent, withCtx as _withCtx, openBlock as _openBlock, createBlock as _createBlock } from \"vue\"\n\nconst _hoisted_1 = {\n  class: \"relative z-10 order-first mb-3 flex items-center text-sm text-gray-400 dark:text-gray-500 pl-3.5\",\n  datetime: \"2022-09-05\"\n}\nconst _hoisted_2 = { class: \"text-base font-semibold font-display tracking-tight text-gray-800 dark:text-gray-100 group-hover:text-primary-600\" }\nconst _hoisted_3 = { class: \"relative z-10 mt-2 text-sm text-gray-600 dark:text-gray-400\" }\n\n\nconst _sfc_main = {\n  __name: 'ArticleCard',\n  props: {\n  article: {\n    type: Object,\n    required: true,\n  },\n},\n  setup(__props) {\n\n\n\nconst getReadableDate = (dateString) => {\n  const date = new Date(dateString);\n  return date.toLocaleDateString(\"en-US\", {\n    year: \"numeric\",\n    month: \"short\",\n    day: \"numeric\",\n  });\n};\n\nreturn (_ctx, _cache) => {\n  const _component_NuxtLink = _resolveComponent(\"NuxtLink\")\n\n  return (_openBlock(), _createBlock(_component_NuxtLink, {\n    to: __props.article._path,\n    class: \"group\"\n  }, {\n    default: _withCtx(() => [\n      _createElementVNode(\"article\", null, [\n        _createElementVNode(\"time\", _hoisted_1, [\n          _cache[0] || (_cache[0] = _createElementVNode(\"span\", {\n            class: \"absolute inset-y-0 left-0 flex items-center\",\n            \"aria-hidden\": \"true\"\n          }, [\n            _createElementVNode(\"span\", { class: \"h-4 w-0.5 rounded-full bg-gray-200 dark:bg-gray-500\" })\n          ], -1)),\n          _createTextVNode(\" \" + _toDisplayString(getReadableDate(__props.article.published)), 1)\n        ]),\n        _createElementVNode(\"h2\", _hoisted_2, _toDisplayString(__props.article.title), 1),\n        _createElementVNode(\"p\", _hoisted_3, _toDisplayString(__props.article.description), 1)\n      ])\n    ]),\n    _: 1\n  }, 8, [\"to\"]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205054,
+      "end": 1748499205055,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,153 +74,153 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748498862694,
-      "end": 1748498862694,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748498862694,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/nuxt/dist/app/components/nuxt-link\";\nimport { createElementVNode as _createElementVNode, toDisplayString as _toDisplayString, createTextVNode as _createTextVNode, resolveComponent as _resolveComponent, withCtx as _withCtx, openBlock as _openBlock, createBlock as _createBlock } from \"vue\"\n\nconst _hoisted_1 = {\n  class: \"relative z-10 order-first mb-3 flex items-center text-sm text-gray-400 dark:text-gray-500 pl-3.5\",\n  datetime: \"2022-09-05\"\n}\nconst _hoisted_2 = { class: \"text-base font-semibold font-display tracking-tight text-gray-800 dark:text-gray-100 group-hover:text-primary-600\" }\nconst _hoisted_3 = { class: \"relative z-10 mt-2 text-sm text-gray-600 dark:text-gray-400\" }\n\n\nconst _sfc_main = {\n  __name: 'ArticleCard',\n  props: {\n  article: {\n    type: Object,\n    required: true,\n  },\n},\n  setup(__props) {\n\n\n\nconst getReadableDate = (dateString) => {\n  const date = new Date(dateString);\n  return date.toLocaleDateString(\"en-US\", {\n    year: \"numeric\",\n    month: \"short\",\n    day: \"numeric\",\n  });\n};\n\nreturn (_ctx, _cache) => {\n  const _component_NuxtLink = __nuxt_component_0\n\n  return (_openBlock(), _createBlock(_component_NuxtLink, {\n    to: __props.article._path,\n    class: \"group\"\n  }, {\n    default: _withCtx(() => [\n      _createElementVNode(\"article\", null, [\n        _createElementVNode(\"time\", _hoisted_1, [\n          _cache[0] || (_cache[0] = _createElementVNode(\"span\", {\n            class: \"absolute inset-y-0 left-0 flex items-center\",\n            \"aria-hidden\": \"true\"\n          }, [\n            _createElementVNode(\"span\", { class: \"h-4 w-0.5 rounded-full bg-gray-200 dark:bg-gray-500\" })\n          ], -1)),\n          _createTextVNode(\" \" + _toDisplayString(getReadableDate(__props.article.published)), 1)\n        ]),\n        _createElementVNode(\"h2\", _hoisted_2, _toDisplayString(__props.article.title), 1),\n        _createElementVNode(\"p\", _hoisted_3, _toDisplayString(__props.article.description), 1)\n      ])\n    ]),\n    _: 1\n  }, 8, [\"to\"]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205055,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205055,
+      "end": 1748499205056,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748498862695,
-      "end": 1748498862695,
+      "start": 1748499205056,
+      "end": 1748499205056,
       "order": "normal"
     }
   ]

@@ -4,220 +4,220 @@
     {
       "name": "virtual",
       "result": "import { default as _91slug_938cZJyhk0gLMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue?macro=true\";\nimport { default as indexxGdgZilZemMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/articles/index.vue?macro=true\";\nimport { default as bookmarksuYPbsxIOCJMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/bookmarks.vue?macro=true\";\nimport { default as expenseXUMnUg8AbIMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/expense.vue?macro=true\";\nimport { default as incomeQkiH99htCmMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/income.vue?macro=true\";\nimport { default as indexQoQLWaCyM6Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/index.vue?macro=true\";\nimport { default as labjA88YzYL3QMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/lab.vue?macro=true\";\nimport { default as loginJpUoHo2pzSMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/login.vue?macro=true\";\nimport { default as penalty4GoCPxsuw9Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/penalty.vue?macro=true\";\nimport { default as projectsWoEnN50sHVMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/projects.vue?macro=true\";\nimport { default as _91id_939yyyo6WDPNMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/sign/[id].vue?macro=true\";\nimport { default as taxB9ayKylTP5Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/tax.vue?macro=true\";\nimport { default as transferWFGEg6SxJxMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/transfer.vue?macro=true\";\nimport { default as whats_45in_45my_45bag2dLkYQm5u6Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/whats-in-my-bag.vue?macro=true\";\nexport default [\n  {\n    name: _91slug_938cZJyhk0gLMeta?.name ?? \"articles-slug\",\n    path: _91slug_938cZJyhk0gLMeta?.path ?? \"/articles/:slug()\",\n    meta: _91slug_938cZJyhk0gLMeta || {},\n    alias: _91slug_938cZJyhk0gLMeta?.alias || [],\n    redirect: _91slug_938cZJyhk0gLMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue\").then(m => m.default || m)\n  },\n  {\n    name: indexxGdgZilZemMeta?.name ?? \"articles\",\n    path: indexxGdgZilZemMeta?.path ?? \"/articles\",\n    meta: indexxGdgZilZemMeta || {},\n    alias: indexxGdgZilZemMeta?.alias || [],\n    redirect: indexxGdgZilZemMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/articles/index.vue\").then(m => m.default || m)\n  },\n  {\n    name: bookmarksuYPbsxIOCJMeta?.name ?? \"bookmarks\",\n    path: bookmarksuYPbsxIOCJMeta?.path ?? \"/bookmarks\",\n    meta: bookmarksuYPbsxIOCJMeta || {},\n    alias: bookmarksuYPbsxIOCJMeta?.alias || [],\n    redirect: bookmarksuYPbsxIOCJMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/bookmarks.vue\").then(m => m.default || m)\n  },\n  {\n    name: expenseXUMnUg8AbIMeta?.name ?? \"expense\",\n    path: expenseXUMnUg8AbIMeta?.path ?? \"/expense\",\n    meta: expenseXUMnUg8AbIMeta || {},\n    alias: expenseXUMnUg8AbIMeta?.alias || [],\n    redirect: expenseXUMnUg8AbIMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/expense.vue\").then(m => m.default || m)\n  },\n  {\n    name: incomeQkiH99htCmMeta?.name ?? \"income\",\n    path: incomeQkiH99htCmMeta?.path ?? \"/income\",\n    meta: incomeQkiH99htCmMeta || {},\n    alias: incomeQkiH99htCmMeta?.alias || [],\n    redirect: incomeQkiH99htCmMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/income.vue\").then(m => m.default || m)\n  },\n  {\n    name: indexQoQLWaCyM6Meta?.name ?? \"index\",\n    path: indexQoQLWaCyM6Meta?.path ?? \"/\",\n    meta: indexQoQLWaCyM6Meta || {},\n    alias: indexQoQLWaCyM6Meta?.alias || [],\n    redirect: indexQoQLWaCyM6Meta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/index.vue\").then(m => m.default || m)\n  },\n  {\n    name: labjA88YzYL3QMeta?.name ?? \"lab\",\n    path: labjA88YzYL3QMeta?.path ?? \"/lab\",\n    meta: labjA88YzYL3QMeta || {},\n    alias: labjA88YzYL3QMeta?.alias || [],\n    redirect: labjA88YzYL3QMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/lab.vue\").then(m => m.default || m)\n  },\n  {\n    name: loginJpUoHo2pzSMeta?.name ?? \"login\",\n    path: loginJpUoHo2pzSMeta?.path ?? \"/login\",\n    meta: loginJpUoHo2pzSMeta || {},\n    alias: loginJpUoHo2pzSMeta?.alias || [],\n    redirect: loginJpUoHo2pzSMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/login.vue\").then(m => m.default || m)\n  },\n  {\n    name: penalty4GoCPxsuw9Meta?.name ?? \"penalty\",\n    path: penalty4GoCPxsuw9Meta?.path ?? \"/penalty\",\n    meta: penalty4GoCPxsuw9Meta || {},\n    alias: penalty4GoCPxsuw9Meta?.alias || [],\n    redirect: penalty4GoCPxsuw9Meta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/penalty.vue\").then(m => m.default || m)\n  },\n  {\n    name: projectsWoEnN50sHVMeta?.name ?? \"projects\",\n    path: projectsWoEnN50sHVMeta?.path ?? \"/projects\",\n    meta: projectsWoEnN50sHVMeta || {},\n    alias: projectsWoEnN50sHVMeta?.alias || [],\n    redirect: projectsWoEnN50sHVMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/projects.vue\").then(m => m.default || m)\n  },\n  {\n    name: _91id_939yyyo6WDPNMeta?.name ?? \"sign-id\",\n    path: _91id_939yyyo6WDPNMeta?.path ?? \"/sign/:id()\",\n    meta: _91id_939yyyo6WDPNMeta || {},\n    alias: _91id_939yyyo6WDPNMeta?.alias || [],\n    redirect: _91id_939yyyo6WDPNMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/sign/[id].vue\").then(m => m.default || m)\n  },\n  {\n    name: taxB9ayKylTP5Meta?.name ?? \"tax\",\n    path: taxB9ayKylTP5Meta?.path ?? \"/tax\",\n    meta: taxB9ayKylTP5Meta || {},\n    alias: taxB9ayKylTP5Meta?.alias || [],\n    redirect: taxB9ayKylTP5Meta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/tax.vue\").then(m => m.default || m)\n  },\n  {\n    name: transferWFGEg6SxJxMeta?.name ?? \"transfer\",\n    path: transferWFGEg6SxJxMeta?.path ?? \"/transfer\",\n    meta: transferWFGEg6SxJxMeta || {},\n    alias: transferWFGEg6SxJxMeta?.alias || [],\n    redirect: transferWFGEg6SxJxMeta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/transfer.vue\").then(m => m.default || m)\n  },\n  {\n    name: whats_45in_45my_45bag2dLkYQm5u6Meta?.name ?? \"whats-in-my-bag\",\n    path: whats_45in_45my_45bag2dLkYQm5u6Meta?.path ?? \"/whats-in-my-bag\",\n    meta: whats_45in_45my_45bag2dLkYQm5u6Meta || {},\n    alias: whats_45in_45my_45bag2dLkYQm5u6Meta?.alias || [],\n    redirect: whats_45in_45my_45bag2dLkYQm5u6Meta?.redirect || undefined,\n    component: () => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/whats-in-my-bag.vue\").then(m => m.default || m)\n  }\n]",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "normal"
     },
     {
       "name": "vite:vue",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203361,
       "order": "normal"
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203361,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748498861120,
-      "end": 1748498861120,
+      "start": 1748499203362,
+      "end": 1748499203362,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748498861121,
-      "end": 1748498861121,
+      "start": 1748499203362,
+      "end": 1748499203363,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748498861121,
-      "end": 1748498861121,
+      "start": 1748499203363,
+      "end": 1748499203363,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748498861121,
-      "end": 1748498861121,
+      "start": 1748499203363,
+      "end": 1748499203363,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748498861121,
-      "end": 1748498861123,
+      "start": 1748499203363,
+      "end": 1748499203365,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748498861123,
-      "end": 1748498861123,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748498861123,
-      "end": 1748498861123,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748498861123,
-      "end": 1748498861123,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748498861123,
-      "end": 1748498861124,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748498861124,
-      "end": 1748498861124,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748498861124,
-      "end": 1748498861124,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
       "result": "import { __vitePreload } from \"\u0000vite/preload-helper.js\";import { default as _91slug_938cZJyhk0gLMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue?macro=true\";\nimport { default as indexxGdgZilZemMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/articles/index.vue?macro=true\";\nimport { default as bookmarksuYPbsxIOCJMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/bookmarks.vue?macro=true\";\nimport { default as expenseXUMnUg8AbIMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/expense.vue?macro=true\";\nimport { default as incomeQkiH99htCmMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/income.vue?macro=true\";\nimport { default as indexQoQLWaCyM6Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/index.vue?macro=true\";\nimport { default as labjA88YzYL3QMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/lab.vue?macro=true\";\nimport { default as loginJpUoHo2pzSMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/login.vue?macro=true\";\nimport { default as penalty4GoCPxsuw9Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/penalty.vue?macro=true\";\nimport { default as projectsWoEnN50sHVMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/projects.vue?macro=true\";\nimport { default as _91id_939yyyo6WDPNMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/sign/[id].vue?macro=true\";\nimport { default as taxB9ayKylTP5Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/tax.vue?macro=true\";\nimport { default as transferWFGEg6SxJxMeta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/transfer.vue?macro=true\";\nimport { default as whats_45in_45my_45bag2dLkYQm5u6Meta } from \"/Users/jang-yeong-ug/Documents/zooper/pages/whats-in-my-bag.vue?macro=true\";\nexport default [\n  {\n    name: _91slug_938cZJyhk0gLMeta?.name ?? \"articles-slug\",\n    path: _91slug_938cZJyhk0gLMeta?.path ?? \"/articles/:slug()\",\n    meta: _91slug_938cZJyhk0gLMeta || {},\n    alias: _91slug_938cZJyhk0gLMeta?.alias || [],\n    redirect: _91slug_938cZJyhk0gLMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: indexxGdgZilZemMeta?.name ?? \"articles\",\n    path: indexxGdgZilZemMeta?.path ?? \"/articles\",\n    meta: indexxGdgZilZemMeta || {},\n    alias: indexxGdgZilZemMeta?.alias || [],\n    redirect: indexxGdgZilZemMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/articles/index.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: bookmarksuYPbsxIOCJMeta?.name ?? \"bookmarks\",\n    path: bookmarksuYPbsxIOCJMeta?.path ?? \"/bookmarks\",\n    meta: bookmarksuYPbsxIOCJMeta || {},\n    alias: bookmarksuYPbsxIOCJMeta?.alias || [],\n    redirect: bookmarksuYPbsxIOCJMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/bookmarks.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: expenseXUMnUg8AbIMeta?.name ?? \"expense\",\n    path: expenseXUMnUg8AbIMeta?.path ?? \"/expense\",\n    meta: expenseXUMnUg8AbIMeta || {},\n    alias: expenseXUMnUg8AbIMeta?.alias || [],\n    redirect: expenseXUMnUg8AbIMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/expense.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: incomeQkiH99htCmMeta?.name ?? \"income\",\n    path: incomeQkiH99htCmMeta?.path ?? \"/income\",\n    meta: incomeQkiH99htCmMeta || {},\n    alias: incomeQkiH99htCmMeta?.alias || [],\n    redirect: incomeQkiH99htCmMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/income.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: indexQoQLWaCyM6Meta?.name ?? \"index\",\n    path: indexQoQLWaCyM6Meta?.path ?? \"/\",\n    meta: indexQoQLWaCyM6Meta || {},\n    alias: indexQoQLWaCyM6Meta?.alias || [],\n    redirect: indexQoQLWaCyM6Meta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/index.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: labjA88YzYL3QMeta?.name ?? \"lab\",\n    path: labjA88YzYL3QMeta?.path ?? \"/lab\",\n    meta: labjA88YzYL3QMeta || {},\n    alias: labjA88YzYL3QMeta?.alias || [],\n    redirect: labjA88YzYL3QMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/lab.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: loginJpUoHo2pzSMeta?.name ?? \"login\",\n    path: loginJpUoHo2pzSMeta?.path ?? \"/login\",\n    meta: loginJpUoHo2pzSMeta || {},\n    alias: loginJpUoHo2pzSMeta?.alias || [],\n    redirect: loginJpUoHo2pzSMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/login.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: penalty4GoCPxsuw9Meta?.name ?? \"penalty\",\n    path: penalty4GoCPxsuw9Meta?.path ?? \"/penalty\",\n    meta: penalty4GoCPxsuw9Meta || {},\n    alias: penalty4GoCPxsuw9Meta?.alias || [],\n    redirect: penalty4GoCPxsuw9Meta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/penalty.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: projectsWoEnN50sHVMeta?.name ?? \"projects\",\n    path: projectsWoEnN50sHVMeta?.path ?? \"/projects\",\n    meta: projectsWoEnN50sHVMeta || {},\n    alias: projectsWoEnN50sHVMeta?.alias || [],\n    redirect: projectsWoEnN50sHVMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/projects.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: _91id_939yyyo6WDPNMeta?.name ?? \"sign-id\",\n    path: _91id_939yyyo6WDPNMeta?.path ?? \"/sign/:id()\",\n    meta: _91id_939yyyo6WDPNMeta || {},\n    alias: _91id_939yyyo6WDPNMeta?.alias || [],\n    redirect: _91id_939yyyo6WDPNMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/sign/[id].vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: taxB9ayKylTP5Meta?.name ?? \"tax\",\n    path: taxB9ayKylTP5Meta?.path ?? \"/tax\",\n    meta: taxB9ayKylTP5Meta || {},\n    alias: taxB9ayKylTP5Meta?.alias || [],\n    redirect: taxB9ayKylTP5Meta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/tax.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: transferWFGEg6SxJxMeta?.name ?? \"transfer\",\n    path: transferWFGEg6SxJxMeta?.path ?? \"/transfer\",\n    meta: transferWFGEg6SxJxMeta || {},\n    alias: transferWFGEg6SxJxMeta?.alias || [],\n    redirect: transferWFGEg6SxJxMeta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/transfer.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  },\n  {\n    name: whats_45in_45my_45bag2dLkYQm5u6Meta?.name ?? \"whats-in-my-bag\",\n    path: whats_45in_45my_45bag2dLkYQm5u6Meta?.path ?? \"/whats-in-my-bag\",\n    meta: whats_45in_45my_45bag2dLkYQm5u6Meta || {},\n    alias: whats_45in_45my_45bag2dLkYQm5u6Meta?.alias || [],\n    redirect: whats_45in_45my_45bag2dLkYQm5u6Meta?.redirect || undefined,\n    component: () => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/pages/whats-in-my-bag.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(m => m.default || m)\n  }\n]",
-      "start": 1748498861124,
-      "end": 1748498861124,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "vite:reporter",
-      "start": 1748498861124,
-      "end": 1748498861124,
+      "start": 1748499203365,
+      "end": 1748499203365,
       "order": "normal"
     }
   ]
