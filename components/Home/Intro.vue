@@ -1,32 +1,133 @@
-<template>
-  <div class="space-y-6">
-    <NuxtImg src="/avatar.png" alt="Fayaz Ahmed"
-      class="ring-2 border ring-gray-200 border-gray-300 dark:ring-white/10 dark:border-gray-800 hover:ring-4 transition-all duration-300 bg-gray-200 dark:bg-gray-900 rounded-full h-12 w-12 sm:h-16 sm:w-16"
-      sizes="48px sm:64px" placeholder format="webp" />
-    <h1 class="text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
-      Hello!
-    </h1>
-    <p class="text-gray-900 dark:text-gray-400">
-      I'm Fayaz, I work as a software, product engineer and designer from
-      Bengaluru, India. I specialize in building web applications and sites
-      using Javascript, React, Vue &amp; Node. I've procrastinated building this
-      website for years but finally it's here, I've carved out my own little
-      nook on the internet to share my silly experiments, nifty projects, and
-      thoughts (mostly about tech and design).
-    </p>
-    <p class="text-gray-900 dark:text-gray-400">
-      By day, I'm a Fullstack Developer at
-      <a href="https://headshotpro.com" target="_blank" class="underline">Headshotpro</a>, and
-      by night (and weekends), I'm busy tinkering with some random tool or app
-      that I am building.
-    </p>
-  </div>
-</template>
-
 <script setup>
+
+import { apiPost,apiPoint } from '@/common/api'
+
+const logout = () => {
+  sessionStorage.removeItem('idnt_code')
+  sessionStorage.removeItem('student')
+  window.location.href = '/login'
+}
+
+const student = ref({});
+const memberPoint = ref(0)
+
+const storeItems = ref([])
+const teacher = ref(null)
+
+const fetchStoreItems = async () => {
+  const res = await apiPost('store.php', {
+    mode: 'storeList',
+    teacher: teacher,
+  })
+
+  if (res.result === 'SUCCESS') {
+    storeItems.value = res.data
+  }
+}
+
+
+onMounted( async () => {
+  if(sessionStorage.getItem('student')) {
+    student.value = JSON.parse(sessionStorage.getItem('student'))
+  } 
+  memberPoint.value = await apiPoint()
+  teacher.value = JSON.parse(sessionStorage.getItem('student'))?.teacher
+   fetchStoreItems()
+})
+
 useSeoMeta({
   title: "Fayaz Ahmed",
   description:
     "I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.",
 });
+
+const isMoney = ref(false)
 </script>
+
+
+<template>
+  <div>
+  <div class="space-y-4">
+    <!-- 환영 메시지 -->
+    <div class="flex justify-between items-center">
+      <p class="text-lg font-semibold text-gray-700">{{ student?.student_name }}친구, 환영합니다 👋</p>
+      <button
+        class="flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition"
+        @click="logout"
+      >
+        <span class="i-heroicons-arrow-right-on-rectangle w-4 h-4" />
+        로그아웃
+      </button>
+    </div>
+
+    <!-- 내 잔액 -->
+    <div class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center">
+      <div class="flex flex-col justify-center">
+        <p class="text-sm opacity-80">내 잔액</p>
+        <p class="text-2xl font-bold">
+          <span v-if="isMoney" @click="isMoney = false">
+          💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">돌맹이</span>
+          </span>
+          <span v-if="!isMoney" @click="isMoney = true">
+            나의 잔액 확인하기
+          </span>
+        </p>
+      </div>
+      <UButton
+        label="이체하기"
+        color="white"
+        class="text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100"
+        @click="$router.push('/transfer')"
+      />
+    </div>
+
+    <!-- 버튼 8개 -->
+    <div class="grid grid-cols-2 gap-4">
+      <router-link to="/income">
+        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer">
+          💰 입금
+        </div>
+      </router-link>
+      <router-link to="/expense">
+        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer">
+          💸 출금
+        </div>
+      </router-link>
+      <router-link to="/tax">
+        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
+          💼 세금
+        </div>
+      </router-link>
+      <router-link to="/penalty">
+        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg font-bold cursor-pointer">
+          ⚠️ 벌금
+        </div>
+      </router-link>
+    </div>
+  </div>
+  
+      <div class="mt-10">
+          <div class="">
+            <h1 class="text-2xl font-bold mb-4">상점 아이템 목록</h1>
+
+            <div v-if="storeItems.length > 0">
+              <ul>
+                <li
+                  v-for="(item, index) in storeItems"
+                  :key="index"
+                  class="mb-4 p-4 border rounded-lg"
+                >
+                  <div class="text-lg font-semibold">{{ item.item_name }}</div>
+                  <div class="text-sm text-gray-600">{{ item.item_desc }}</div>
+                  <div class="text-right font-bold text-blue-600">
+                    {{ item.price.toLocaleString() }} 포인트
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div v-else class="text-gray-500">불러올 아이템이 없습니다.</div>
+          </div>
+      </div>
+  </div>
+</template>

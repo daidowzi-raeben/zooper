@@ -1,12 +1,31 @@
+<script setup>
+import { useRoute, useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+
+const route = useRoute()
+const router = useRouter()
+
+onMounted(() => {
+  const idntCode = sessionStorage.getItem('idnt_code')
+  if (!idntCode && route.path !== '/login') {
+    router.push('/login')
+  }
+})
+</script>
+
 <template>
   <NuxtLoadingIndicator color="#14b8a6" />
-  <AppNavbar />
-  <div class="h-32"></div>
+
+  <!-- 로그인 페이지가 아닐 때만 표시 -->
+  <AppNavbar v-if="route.path !== '/login'" />
+  <div class="h-32" v-if="route.path !== '/login'"></div>
+
   <UContainer>
     <NuxtPage />
   </UContainer>
-  <div class="h-32"></div>
-  <AppFooter />
+
+  <div class="h-32" v-if="route.path !== '/login'"></div>
+  <AppFooter v-if="route.path !== '/login'" />
 </template>
 
 <style>

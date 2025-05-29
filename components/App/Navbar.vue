@@ -42,27 +42,11 @@ const headerRef = ref(null);
 const { styles } = useFixedHeader(headerRef);
 
 const items = [
-  { name: "Home", path: "/", icon: "solar:home-smile-outline" },
-  {
-    name: "Projects",
-    path: "/projects",
-    icon: "solar:folder-with-files-outline",
-  },
-  {
-    name: "Articles",
-    path: "/articles",
-    icon: "solar:document-add-outline",
-  },
-  { name: "Lab", path: "/lab", icon: "heroicons:beaker" },
-  {
-    name: "What's in my bag?",
-    path: "/whats-in-my-bag",
-    icon: "solar:backpack-outline",
-  },
-  {
-    name: "Bookmarks",
-    path: "/bookmarks",
-    icon: "solar:bookmark-linear",
-  },
-];
+  { name: "Home", path: "/", icon: "solar:home-2-outline" },
+  { name: "이체", path: "/transfer", icon: "solar:arrow-right-linear" },
+  { name: "입금", path: "/income", icon: "solar:wallet-2-outline" },
+  { name: "출금", path: "/expense", icon: "solar:money-bag-outline" }, // 예: 교체됨
+  { name: "세금", path: "/tax", icon: "solar:bill-list-outline" },
+  { name: "벌금", path: "/penalty", icon: "solar:danger-triangle-outline" },
+]
 </script>
