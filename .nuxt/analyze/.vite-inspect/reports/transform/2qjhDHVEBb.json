@@ -4,218 +4,218 @@
     {
       "name": "vite:load-fallback",
       "result": "var K = Object.defineProperty, Q = Object.defineProperties;\nvar W = Object.getOwnPropertyDescriptors;\nvar N = Object.getOwnPropertySymbols;\nvar X = Object.prototype.hasOwnProperty, Z = Object.prototype.propertyIsEnumerable;\nvar I = (t, n, i) => n in t ? K(t, n, { enumerable: !0, configurable: !0, writable: !0, value: i }) : t[n] = i, u = (t, n) => {\n  for (var i in n || (n = {}))\n    X.call(n, i) && I(t, i, n[i]);\n  if (N)\n    for (var i of N(n))\n      Z.call(n, i) && I(t, i, n[i]);\n  return t;\n}, L = (t, n) => Q(t, W(n));\nimport { ref as C, onMounted as q, onBeforeUnmount as ee, shallowRef as ne, watch as te, unref as r, readonly as oe, computed as F } from \"vue\";\nconst y = typeof window != \"undefined\";\nfunction ie() {\n  const t = C(!1);\n  if (!y)\n    return t;\n  const n = window.matchMedia(\"(prefers-reduced-motion: reduce)\"), i = () => t.value = n.matches;\n  return q(() => {\n    var l;\n    i(), (l = n.addEventListener) == null || l.call(n, \"change\", i);\n  }), ee(() => {\n    var l;\n    (l = n.removeEventListener) == null || l.call(n, \"change\", i);\n  }), t;\n}\nconst B = \"cubic-bezier(0.16, 1, 0.3, 1)\", re = {\n  enterStyles: {\n    transition: `all 0.35s ${B} 0s`,\n    transform: \"translateY(0px)\"\n  },\n  leaveStyles: {\n    transition: `all 0.5s ${B} 0s`,\n    transform: \"translateY(-101%)\"\n  }\n};\nfunction le(t, n = {}) {\n  const { enterStyles: i, leaveStyles: l } = re, P = () => n.root || n.root === null ? r(n.root) : null, b = () => n.transitionOpacity === void 0 ? !1 : r(n.transitionOpacity), Y = ie(), s = {\n    resizeObserver: void 0,\n    initResizeObserver: !1,\n    isListeningScroll: !1,\n    isHovering: !1\n  }, v = ne({}), a = C(\n    0\n    /* READY */\n  ), m = (e) => v.value = e, g = () => v.value = {}, h = (e) => a.value = e;\n  function d() {\n    const e = P();\n    return e != null ? e : document.documentElement;\n  }\n  function p() {\n    const e = d();\n    return e ? e.scrollTop : 0;\n  }\n  function _() {\n    const e = r(t);\n    if (!e)\n      return !1;\n    const { position: o, display: c } = window.getComputedStyle(e);\n    return (o === \"fixed\" || o === \"sticky\") && c !== \"none\";\n  }\n  function A() {\n    const e = r(t);\n    if (!e)\n      return 0;\n    let o = e.scrollHeight;\n    const { marginTop: c, marginBottom: f } = window.getComputedStyle(e);\n    return o += Number.parseFloat(c) + Number.parseFloat(f), o;\n  }\n  function U() {\n    s.resizeObserver = new ResizeObserver(() => {\n      if (!s.initResizeObserver)\n        return s.initResizeObserver = !0;\n      z();\n    });\n    const e = d();\n    e && s.resizeObserver.observe(e);\n  }\n  function R() {\n    a.value !== 1 && (E(), m(L(u(u({}, i), b() ? { opacity: 1 } : {}), {\n      visibility: \"\"\n    })), h(\n      1\n      /* ENTER */\n    ));\n  }\n  function V() {\n    a.value !== 2 && (m(u(u({}, l), b() ? { opacity: 0 } : {})), h(\n      2\n      /* LEAVE */\n    ), $());\n  }\n  function w(e) {\n    if (E(), !r(t) || e.target !== r(t) || e.propertyName !== \"transform\")\n      return;\n    const { transform: o } = window.getComputedStyle(r(t));\n    o !== \"matrix(1, 0, 0, 1, 0, 0)\" && m(L(u({}, l), {\n      visibility: \"hidden\"\n    }));\n  }\n  function $() {\n    const e = r(t);\n    e && e.addEventListener(\"transitionend\", w);\n  }\n  function E() {\n    const e = r(t);\n    e && e.removeEventListener(\"transitionend\", w);\n  }\n  function k() {\n    let e = y ? p() : 0;\n    return () => {\n      const o = p(), c = o <= A(), f = o < e, S = o > e, x = Math.abs(o - e);\n      if (c)\n        return R();\n      x < 10 || (s.isHovering || (f ? R() : S && V()), e = p());\n    };\n  }\n  const O = k();\n  function D() {\n    const e = d();\n    if (!e)\n      return;\n    (e === document.documentElement ? document : e).addEventListener(\"scroll\", O, { passive: !0 }), s.isListeningScroll = !0;\n  }\n  function G() {\n    const e = d();\n    if (!e)\n      return;\n    (e === document.documentElement ? document : e).removeEventListener(\"scroll\", O), s.isListeningScroll = !1;\n  }\n  function T(e) {\n    var o, c;\n    s.isHovering = (c = (o = r(t)) == null ? void 0 : o.contains(e.target)) != null ? c : !1;\n  }\n  function j() {\n    document.addEventListener(\"pointermove\", T);\n  }\n  function J() {\n    document.removeEventListener(\"pointermove\", T);\n  }\n  function z() {\n    const e = _();\n    s.isListeningScroll ? e || (H(), g()) : e && (D(), j());\n  }\n  function H() {\n    G(), J();\n  }\n  return y && te(\n    () => [r(t), d(), Y.value, r(n.watch)],\n    ([e, o, c], f, S) => {\n      !c && e && (o || o === null) && (U(), z()), S(() => {\n        var M;\n        H(), g(), (M = s.resizeObserver) == null || M.disconnect(), s.initResizeObserver = !1;\n      });\n    },\n    { immediate: !0, flush: \"post\" }\n  ), {\n    styles: oe(v),\n    isLeave: F(\n      () => a.value === 2\n      /* LEAVE */\n    ),\n    isEnter: F(\n      () => a.value === 1\n      /* ENTER */\n    )\n  };\n}\nexport {\n  le as useFixedHeader\n};\n",
-      "start": 1748516096313,
-      "end": 1748516096400,
+      "start": 1748517867795,
+      "end": 1748517867880,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "normal"
     },
     {
       "name": "vite:vue",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "normal"
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867880,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867880,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748516096400,
-      "end": 1748516096400,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748516096400,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748516096401,
-      "end": 1748516096401,
+      "start": 1748517867881,
+      "end": 1748517867881,
       "order": "normal"
     }
   ]

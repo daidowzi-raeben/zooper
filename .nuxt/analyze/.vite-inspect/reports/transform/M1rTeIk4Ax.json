@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <NuxtLink\n    class=\"flex items-end gap-4 group p-2 -m-2 rounded-lg\"\n    :to=\"project.url\"\n    target=\"_blank\"\n    external\n  >\n    <div class=\"max-w-sm\">\n      <h3 class=\"text-sm font-medium group-hover:text-primary-600\">\n        {{ project.name }}\n      </h3>\n      <p class=\"text-gray-400 text-sm\">{{ project.description }}</p>\n    </div>\n    <div\n      class=\"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700\"\n    ></div>\n    <UAvatar\n      :src=\"project.thumbnail\"\n      :ui=\"{ rounded: 'rounded z-10 relative' }\"\n      size=\"md\"\n      :alt=\"project.name\"\n    />\n  </NuxtLink>\n</template>\n\n<script setup>\ndefineProps({\n  project: {\n    type: Object,\n    required: true,\n  },\n});\n</script>\n",
-      "start": 1748516096084,
-      "end": 1748516096152,
+      "start": 1748517867585,
+      "end": 1748517867650,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867650,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, resolveComponent as _resolveComponent, createVNode as _createVNode, withCtx as _withCtx, openBlock as _openBlock, createBlock as _createBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"max-w-sm\" }\nconst _hoisted_2 = { class: \"text-sm font-medium group-hover:text-primary-600\" }\nconst _hoisted_3 = { class: \"text-gray-400 text-sm\" }\n\n\nconst _sfc_main = {\n  __name: 'ProjectCard',\n  props: {\n  project: {\n    type: Object,\n    required: true,\n  },\n},\n  setup(__props) {\n\n\n\nreturn (_ctx, _cache) => {\n  const _component_UAvatar = _resolveComponent(\"UAvatar\")\n  const _component_NuxtLink = _resolveComponent(\"NuxtLink\")\n\n  return (_openBlock(), _createBlock(_component_NuxtLink, {\n    class: \"flex items-end gap-4 group p-2 -m-2 rounded-lg\",\n    to: __props.project.url,\n    target: \"_blank\",\n    external: \"\"\n  }, {\n    default: _withCtx(() => [\n      _createElementVNode(\"div\", _hoisted_1, [\n        _createElementVNode(\"h3\", _hoisted_2, _toDisplayString(__props.project.name), 1),\n        _createElementVNode(\"p\", _hoisted_3, _toDisplayString(__props.project.description), 1)\n      ]),\n      _cache[0] || (_cache[0] = _createElementVNode(\"div\", { class: \"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700\" }, null, -1)),\n      _createVNode(_component_UAvatar, {\n        src: __props.project.thumbnail,\n        ui: { rounded: 'rounded z-10 relative' },\n        size: \"md\",\n        alt: __props.project.name\n      }, null, 8, [\"src\", \"alt\"])\n    ]),\n    _: 1,\n    __: [0]\n  }, 8, [\"to\"]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867650,
+      "end": 1748517867651,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,153 +74,153 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748516096152,
-      "end": 1748516096152,
+      "start": 1748517867651,
+      "end": 1748517867651,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748516096152,
-      "end": 1748516096153,
+      "start": 1748517867651,
+      "end": 1748517867652,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Avatar.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/nuxt/dist/app/components/nuxt-link\";\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, resolveComponent as _resolveComponent, createVNode as _createVNode, withCtx as _withCtx, openBlock as _openBlock, createBlock as _createBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"max-w-sm\" }\nconst _hoisted_2 = { class: \"text-sm font-medium group-hover:text-primary-600\" }\nconst _hoisted_3 = { class: \"text-gray-400 text-sm\" }\n\n\nconst _sfc_main = {\n  __name: 'ProjectCard',\n  props: {\n  project: {\n    type: Object,\n    required: true,\n  },\n},\n  setup(__props) {\n\n\n\nreturn (_ctx, _cache) => {\n  const _component_UAvatar = __nuxt_component_0\n  const _component_NuxtLink = __nuxt_component_1\n\n  return (_openBlock(), _createBlock(_component_NuxtLink, {\n    class: \"flex items-end gap-4 group p-2 -m-2 rounded-lg\",\n    to: __props.project.url,\n    target: \"_blank\",\n    external: \"\"\n  }, {\n    default: _withCtx(() => [\n      _createElementVNode(\"div\", _hoisted_1, [\n        _createElementVNode(\"h3\", _hoisted_2, _toDisplayString(__props.project.name), 1),\n        _createElementVNode(\"p\", _hoisted_3, _toDisplayString(__props.project.description), 1)\n      ]),\n      _cache[0] || (_cache[0] = _createElementVNode(\"div\", { class: \"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700\" }, null, -1)),\n      _createVNode(_component_UAvatar, {\n        src: __props.project.thumbnail,\n        ui: { rounded: 'rounded z-10 relative' },\n        size: \"md\",\n        alt: __props.project.name\n      }, null, 8, [\"src\", \"alt\"])\n    ]),\n    _: 1,\n    __: [0]\n  }, 8, [\"to\"]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748516096153,
-      "end": 1748516096153,
+      "start": 1748517867652,
+      "end": 1748517867652,
       "order": "normal"
     }
   ]

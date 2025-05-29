@@ -46,7 +46,7 @@ const items = [
   { name: "이체", path: "/transfer", icon: "solar:arrow-right-linear" },
   { name: "입금", path: "/income", icon: "solar:wallet-2-outline" },
   { name: "출금", path: "/expense", icon: "solar:money-bag-outline" }, // 예: 교체됨
-  { name: "세금", path: "/tax", icon: "solar:bill-list-outline" },
-  { name: "벌금", path: "/penalty", icon: "solar:danger-triangle-outline" },
+  // { name: "세금", path: "/tax", icon: "solar:bill-list-outline" },
+  // { name: "벌금", path: "/penalty", icon: "solar:danger-triangle-outline" },
 ]
 </script>

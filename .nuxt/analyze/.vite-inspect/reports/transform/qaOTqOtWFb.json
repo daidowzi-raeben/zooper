@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div>\n    <h2 class=\"text-sm font-semibold\">{{ title }}</h2>\n    <p class=\"text-gray-500 text-sm\">\n      {{ description }}\n    </p>\n    <div\n      class=\"mt-2 border dark:border-white/10 rounded-lg shadow-sm overflow-hidden\"\n    >\n      <div class=\"p-2 flex items-center gap-2 border-b dark:border-white/10\">\n        <div class=\"flex items-center w-full\">\n          <UButton\n            @click=\"tab = 'preview'\"\n            label=\"Preview\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'preview' }\"\n          />\n          <UButton\n            @click=\"tab = 'code'\"\n            label=\"Code\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'code' }\"\n          />\n          <UButton\n            v-if=\"showUsageTab\"\n            @click=\"tab = 'usage'\"\n            label=\"Usage\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'usage' }\"\n          />\n          <UButton\n            v-if=\"showCreditTab\"\n            @click=\"tab = 'credit'\"\n            label=\"Credits\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'credit' }\"\n          />\n        </div>\n      </div>\n      <div>\n        <div\n          v-if=\"tab === 'preview'\"\n          class=\"bg-gray-100 dark:bg-gray-900 overflow-hidden\"\n        >\n          <slot name=\"preview\" />\n        </div>\n        <slot v-if=\"tab === 'code'\" name=\"codebase\" />\n        <slot v-if=\"tab === 'usage'\" name=\"usage\" />\n        <slot v-if=\"tab === 'credit'\" name=\"credit\" />\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup>\ndefineProps({\n  title: String,\n  description: String,\n  showUsageTab: {\n    type: Boolean,\n    default: true,\n  },\n  showCreditTab: {\n    type: Boolean,\n    default: false,\n  },\n});\n\nconst tab = ref(\"preview\");\n</script>\n\n<style scoped>\n.active-tab {\n  @apply after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary-500 after:bottom-[-9px] after:left-0 after:pointer-events-none;\n}\n</style>\n",
-      "start": 1748516094812,
-      "end": 1748516095770,
+      "start": 1748517866211,
+      "end": 1748517867264,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, unref as _unref, resolveComponent as _resolveComponent, normalizeClass as _normalizeClass, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock, createCommentVNode as _createCommentVNode, renderSlot as _renderSlot, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"text-sm font-semibold\" }\nconst _hoisted_2 = { class: \"text-gray-500 text-sm\" }\nconst _hoisted_3 = { class: \"mt-2 border dark:border-white/10 rounded-lg shadow-sm overflow-hidden\" }\nconst _hoisted_4 = { class: \"p-2 flex items-center gap-2 border-b dark:border-white/10\" }\nconst _hoisted_5 = { class: \"flex items-center w-full\" }\nconst _hoisted_6 = {\n  key: 0,\n  class: \"bg-gray-100 dark:bg-gray-900 overflow-hidden\"\n}\n\n\nconst _sfc_main = {\n  __name: 'LabCard',\n  props: {\n  title: String,\n  description: String,\n  showUsageTab: {\n    type: Boolean,\n    default: true,\n  },\n  showCreditTab: {\n    type: Boolean,\n    default: false,\n  },\n},\n  setup(__props) {\n\n\n\nconst tab = ref(\"preview\");\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  return (_openBlock(), _createElementBlock(\"div\", null, [\n    _createElementVNode(\"h2\", _hoisted_1, _toDisplayString(__props.title), 1),\n    _createElementVNode(\"p\", _hoisted_2, _toDisplayString(__props.description), 1),\n    _createElementVNode(\"div\", _hoisted_3, [\n      _createElementVNode(\"div\", _hoisted_4, [\n        _createElementVNode(\"div\", _hoisted_5, [\n          _createVNode(_component_UButton, {\n            onClick: _cache[0] || (_cache[0] = $event => (tab.value = 'preview')),\n            label: \"Preview\",\n            variant: \"soft\",\n            color: \"white\",\n            size: \"xs\",\n            class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'preview' }])\n          }, null, 8, [\"class\"]),\n          _createVNode(_component_UButton, {\n            onClick: _cache[1] || (_cache[1] = $event => (tab.value = 'code')),\n            label: \"Code\",\n            variant: \"soft\",\n            color: \"white\",\n            size: \"xs\",\n            class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'code' }])\n          }, null, 8, [\"class\"]),\n          (__props.showUsageTab)\n            ? (_openBlock(), _createBlock(_component_UButton, {\n                key: 0,\n                onClick: _cache[2] || (_cache[2] = $event => (tab.value = 'usage')),\n                label: \"Usage\",\n                variant: \"soft\",\n                color: \"white\",\n                size: \"xs\",\n                class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'usage' }])\n              }, null, 8, [\"class\"]))\n            : _createCommentVNode(\"\", true),\n          (__props.showCreditTab)\n            ? (_openBlock(), _createBlock(_component_UButton, {\n                key: 1,\n                onClick: _cache[3] || (_cache[3] = $event => (tab.value = 'credit')),\n                label: \"Credits\",\n                variant: \"soft\",\n                color: \"white\",\n                size: \"xs\",\n                class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'credit' }])\n              }, null, 8, [\"class\"]))\n            : _createCommentVNode(\"\", true)\n        ])\n      ]),\n      _createElementVNode(\"div\", null, [\n        (_unref(tab) === 'preview')\n          ? (_openBlock(), _createElementBlock(\"div\", _hoisted_6, [\n              _renderSlot(_ctx.$slots, \"preview\", {}, undefined, true)\n            ]))\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'code')\n          ? _renderSlot(_ctx.$slots, \"codebase\", { key: 1 }, undefined, true)\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'usage')\n          ? _renderSlot(_ctx.$slots, \"usage\", { key: 2 }, undefined, true)\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'credit')\n          ? _renderSlot(_ctx.$slots, \"credit\", { key: 3 }, undefined, true)\n          : _createCommentVNode(\"\", true)\n      ])\n    ])\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue?vue&type=style&index=0&scoped=95c436b2&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-95c436b2\"]])",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748516095770,
-      "end": 1748516095770,
+      "start": 1748517867264,
+      "end": 1748517867264,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { ref } from 'vue';\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, unref as _unref, resolveComponent as _resolveComponent, normalizeClass as _normalizeClass, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock, createCommentVNode as _createCommentVNode, renderSlot as _renderSlot, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"text-sm font-semibold\" }\nconst _hoisted_2 = { class: \"text-gray-500 text-sm\" }\nconst _hoisted_3 = { class: \"mt-2 border dark:border-white/10 rounded-lg shadow-sm overflow-hidden\" }\nconst _hoisted_4 = { class: \"p-2 flex items-center gap-2 border-b dark:border-white/10\" }\nconst _hoisted_5 = { class: \"flex items-center w-full\" }\nconst _hoisted_6 = {\n  key: 0,\n  class: \"bg-gray-100 dark:bg-gray-900 overflow-hidden\"\n}\n\n\nconst _sfc_main = {\n  __name: 'LabCard',\n  props: {\n  title: String,\n  description: String,\n  showUsageTab: {\n    type: Boolean,\n    default: true,\n  },\n  showCreditTab: {\n    type: Boolean,\n    default: false,\n  },\n},\n  setup(__props) {\n\n\n\nconst tab = ref(\"preview\");\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  return (_openBlock(), _createElementBlock(\"div\", null, [\n    _createElementVNode(\"h2\", _hoisted_1, _toDisplayString(__props.title), 1),\n    _createElementVNode(\"p\", _hoisted_2, _toDisplayString(__props.description), 1),\n    _createElementVNode(\"div\", _hoisted_3, [\n      _createElementVNode(\"div\", _hoisted_4, [\n        _createElementVNode(\"div\", _hoisted_5, [\n          _createVNode(_component_UButton, {\n            onClick: _cache[0] || (_cache[0] = $event => (tab.value = 'preview')),\n            label: \"Preview\",\n            variant: \"soft\",\n            color: \"white\",\n            size: \"xs\",\n            class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'preview' }])\n          }, null, 8, [\"class\"]),\n          _createVNode(_component_UButton, {\n            onClick: _cache[1] || (_cache[1] = $event => (tab.value = 'code')),\n            label: \"Code\",\n            variant: \"soft\",\n            color: \"white\",\n            size: \"xs\",\n            class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'code' }])\n          }, null, 8, [\"class\"]),\n          (__props.showUsageTab)\n            ? (_openBlock(), _createBlock(_component_UButton, {\n                key: 0,\n                onClick: _cache[2] || (_cache[2] = $event => (tab.value = 'usage')),\n                label: \"Usage\",\n                variant: \"soft\",\n                color: \"white\",\n                size: \"xs\",\n                class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'usage' }])\n              }, null, 8, [\"class\"]))\n            : _createCommentVNode(\"\", true),\n          (__props.showCreditTab)\n            ? (_openBlock(), _createBlock(_component_UButton, {\n                key: 1,\n                onClick: _cache[3] || (_cache[3] = $event => (tab.value = 'credit')),\n                label: \"Credits\",\n                variant: \"soft\",\n                color: \"white\",\n                size: \"xs\",\n                class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'credit' }])\n              }, null, 8, [\"class\"]))\n            : _createCommentVNode(\"\", true)\n        ])\n      ]),\n      _createElementVNode(\"div\", null, [\n        (_unref(tab) === 'preview')\n          ? (_openBlock(), _createElementBlock(\"div\", _hoisted_6, [\n              _renderSlot(_ctx.$slots, \"preview\", {}, undefined, true)\n            ]))\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'code')\n          ? _renderSlot(_ctx.$slots, \"codebase\", { key: 1 }, undefined, true)\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'usage')\n          ? _renderSlot(_ctx.$slots, \"usage\", { key: 2 }, undefined, true)\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'credit')\n          ? _renderSlot(_ctx.$slots, \"credit\", { key: 3 }, undefined, true)\n          : _createCommentVNode(\"\", true)\n      ])\n    ])\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue?vue&type=style&index=0&scoped=95c436b2&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-95c436b2\"]])",
-      "start": 1748516095770,
-      "end": 1748516095772,
+      "start": 1748517867264,
+      "end": 1748517867265,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,51 +185,51 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867265,
+      "end": 1748517867265,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867265,
+      "end": 1748517867265,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867265,
+      "end": 1748517867265,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867265,
+      "end": 1748517867265,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Button.vue\";\nimport { ref } from 'vue';\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, unref as _unref, resolveComponent as _resolveComponent, normalizeClass as _normalizeClass, createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock, createCommentVNode as _createCommentVNode, renderSlot as _renderSlot, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"text-sm font-semibold\" }\nconst _hoisted_2 = { class: \"text-gray-500 text-sm\" }\nconst _hoisted_3 = { class: \"mt-2 border dark:border-white/10 rounded-lg shadow-sm overflow-hidden\" }\nconst _hoisted_4 = { class: \"p-2 flex items-center gap-2 border-b dark:border-white/10\" }\nconst _hoisted_5 = { class: \"flex items-center w-full\" }\nconst _hoisted_6 = {\n  key: 0,\n  class: \"bg-gray-100 dark:bg-gray-900 overflow-hidden\"\n}\n\n\nconst _sfc_main = {\n  __name: 'LabCard',\n  props: {\n  title: String,\n  description: String,\n  showUsageTab: {\n    type: Boolean,\n    default: true,\n  },\n  showCreditTab: {\n    type: Boolean,\n    default: false,\n  },\n},\n  setup(__props) {\n\n\n\nconst tab = ref(\"preview\");\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = __nuxt_component_0\n\n  return (_openBlock(), _createElementBlock(\"div\", null, [\n    _createElementVNode(\"h2\", _hoisted_1, _toDisplayString(__props.title), 1),\n    _createElementVNode(\"p\", _hoisted_2, _toDisplayString(__props.description), 1),\n    _createElementVNode(\"div\", _hoisted_3, [\n      _createElementVNode(\"div\", _hoisted_4, [\n        _createElementVNode(\"div\", _hoisted_5, [\n          _createVNode(_component_UButton, {\n            onClick: _cache[0] || (_cache[0] = $event => (tab.value = 'preview')),\n            label: \"Preview\",\n            variant: \"soft\",\n            color: \"white\",\n            size: \"xs\",\n            class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'preview' }])\n          }, null, 8, [\"class\"]),\n          _createVNode(_component_UButton, {\n            onClick: _cache[1] || (_cache[1] = $event => (tab.value = 'code')),\n            label: \"Code\",\n            variant: \"soft\",\n            color: \"white\",\n            size: \"xs\",\n            class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'code' }])\n          }, null, 8, [\"class\"]),\n          (__props.showUsageTab)\n            ? (_openBlock(), _createBlock(_component_UButton, {\n                key: 0,\n                onClick: _cache[2] || (_cache[2] = $event => (tab.value = 'usage')),\n                label: \"Usage\",\n                variant: \"soft\",\n                color: \"white\",\n                size: \"xs\",\n                class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'usage' }])\n              }, null, 8, [\"class\"]))\n            : _createCommentVNode(\"\", true),\n          (__props.showCreditTab)\n            ? (_openBlock(), _createBlock(_component_UButton, {\n                key: 1,\n                onClick: _cache[3] || (_cache[3] = $event => (tab.value = 'credit')),\n                label: \"Credits\",\n                variant: \"soft\",\n                color: \"white\",\n                size: \"xs\",\n                class: _normalizeClass([\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'credit' }])\n              }, null, 8, [\"class\"]))\n            : _createCommentVNode(\"\", true)\n        ])\n      ]),\n      _createElementVNode(\"div\", null, [\n        (_unref(tab) === 'preview')\n          ? (_openBlock(), _createElementBlock(\"div\", _hoisted_6, [\n              _renderSlot(_ctx.$slots, \"preview\", {}, undefined, true)\n            ]))\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'code')\n          ? _renderSlot(_ctx.$slots, \"codebase\", { key: 1 }, undefined, true)\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'usage')\n          ? _renderSlot(_ctx.$slots, \"usage\", { key: 2 }, undefined, true)\n          : _createCommentVNode(\"\", true),\n        (_unref(tab) === 'credit')\n          ? _renderSlot(_ctx.$slots, \"credit\", { key: 3 }, undefined, true)\n          : _createCommentVNode(\"\", true)\n      ])\n    ])\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue?vue&type=style&index=0&scoped=95c436b2&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-95c436b2\"]])",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867265,
+      "end": 1748517867266,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867266,
+      "end": 1748517867266,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867266,
+      "end": 1748517867266,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748516095772,
-      "end": 1748516095772,
+      "start": 1748517867266,
+      "end": 1748517867266,
       "order": "normal"
     }
   ]
