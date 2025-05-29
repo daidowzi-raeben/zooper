@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nimport { useRoute } from 'vue-router'\nimport { onMounted, ref } from 'vue'\nimport { apiPost } from '@/common/api'\n\nconst route = useRoute()\nconst id = route.params.id\nconst student = ref(null)\n\nonMounted(async () => {\n  try {\n    if (sessionStorage.getItem('idnt_code')) {\n      sessionStorage.removeItem('idnt_code')\n    }\n\n    // idnt_code 세션 저장\n    \n    // 학생 정보 조회\n    const res = await apiPost('member.php', {\n      mode: 'studentInfo',\n      idnt_code: id,\n    })\n    \n    if (res.result === 'SUCCESS' && res.data) {\n      student.value = res.data\n      \n      sessionStorage.setItem('idnt_code', id)\n      sessionStorage.setItem('student', JSON.stringify(student.value))\n      window.location.href = '/'\n\n    } else {\n      alert('학생정보가 없습니다.')\n      console.error(res.message || '학생 정보 없음')\n      sessionStorage.removeItem('idnt_code')\n      sessionStorage.removeItem('student')\n      window.location.href = '/login'\n    }\n  } catch (err) {\n    console.error('에러:', err)\n    alert('에러가 발생했습니다.')\n    sessionStorage.removeItem('idnt_code')\n    sessionStorage.removeItem('student')\n    window.location.href = '/login'\n  }\n})\n</script>\n\n<template>\n  <main class=\"min-h-screen p-4\">\n    <!-- <div v-if=\"student\">\n      <h1 class=\"text-xl font-bold\">학생 정보</h1>\n      <p>이름: {{ student.student_name }}</p>\n      <p>학년: {{ student.student_grade }}</p>\n      <p>반: {{ student.student_class }}</p>\n      <p>번호: {{ student.student_number }}</p>\n      <p>성별: {{ student.gender }}</p>\n      <p>보호자 이름: {{ student.guardian_name }}</p>\n      <p>보호자 연락처: {{ student.guardian_phone }}</p>\n    </div>\n    <div v-else>\n      <p>학생 정보를 불러오는 중입니다...</p>\n    </div> -->\n  </main>\n</template>",
-      "start": 1748513880508,
-      "end": 1748513880635,
+      "start": 1748515678692,
+      "end": 1748515678873,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderAttrs as _ssrRenderAttrs } from \"vue/server-renderer\"\n\nimport { useRoute } from 'vue-router'\nimport { onMounted, ref } from 'vue'\nimport { apiPost } from '@/common/api'\n\n\nconst _sfc_main = {\n  __name: '[id]',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst route = useRoute()\nconst id = route.params.id\nconst student = ref(null)\n\nonMounted(async () => {\n  try {\n    if (sessionStorage.getItem('idnt_code')) {\n      sessionStorage.removeItem('idnt_code')\n    }\n\n    // idnt_code 세션 저장\n    \n    // 학생 정보 조회\n    const res = await apiPost('member.php', {\n      mode: 'studentInfo',\n      idnt_code: id,\n    })\n    \n    if (res.result === 'SUCCESS' && res.data) {\n      student.value = res.data\n      \n      sessionStorage.setItem('idnt_code', id)\n      sessionStorage.setItem('student', JSON.stringify(student.value))\n      window.location.href = '/'\n\n    } else {\n      alert('학생정보가 없습니다.')\n      console.error(res.message || '학생 정보 없음')\n      sessionStorage.removeItem('idnt_code')\n      sessionStorage.removeItem('student')\n      window.location.href = '/login'\n    }\n  } catch (err) {\n    console.error('에러:', err)\n    alert('에러가 발생했습니다.')\n    sessionStorage.removeItem('idnt_code')\n    sessionStorage.removeItem('student')\n    window.location.href = '/login'\n  }\n})\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  _push(`<main${_ssrRenderAttrs(_mergeProps({ class: \"min-h-screen p-4\" }, _attrs))}></main>`)\n}\n}\n\n}\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"pages/sign/[id].vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,167 +94,167 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748513880635,
-      "end": 1748513880635,
+      "start": 1748515678873,
+      "end": 1748515678873,
       "order": "normal"
     },
     {
       "name": "vite:define",
       "result": "import { mergeProps as _mergeProps } from \"vue\";\nimport { ssrRenderAttrs as _ssrRenderAttrs } from \"vue/server-renderer\";\nimport { useRoute } from \"vue-router\";\nimport { onMounted, ref } from \"vue\";\nimport { apiPost } from \"@/common/api\";\nconst _sfc_main = {\n  __name: \"[id]\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const route = useRoute();\n    const id = route.params.id;\n    const student = ref(null);\n    onMounted(async () => {\n      try {\n        if (sessionStorage.getItem(\"idnt_code\")) {\n          sessionStorage.removeItem(\"idnt_code\");\n        }\n        const res = await apiPost(\"member.php\", {\n          mode: \"studentInfo\",\n          idnt_code: id\n        });\n        if (res.result === \"SUCCESS\" && res.data) {\n          student.value = res.data;\n          sessionStorage.setItem(\"idnt_code\", id);\n          sessionStorage.setItem(\"student\", JSON.stringify(student.value));\n          (void 0).location.href = \"/\";\n        } else {\n          alert(\"학생정보가 없습니다.\");\n          console.error(res.message || \"학생 정보 없음\");\n          sessionStorage.removeItem(\"idnt_code\");\n          sessionStorage.removeItem(\"student\");\n          (void 0).location.href = \"/login\";\n        }\n      } catch (err) {\n        console.error(\"에러:\", err);\n        alert(\"에러가 발생했습니다.\");\n        sessionStorage.removeItem(\"idnt_code\");\n        sessionStorage.removeItem(\"student\");\n        (void 0).location.href = \"/login\";\n      }\n    });\n    return (_ctx, _push, _parent, _attrs) => {\n      _push(`<main${_ssrRenderAttrs(_mergeProps({ class: \"min-h-screen p-4\" }, _attrs))}></main>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"pages/sign/[id].vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748513880635,
-      "end": 1748513881131,
+      "start": 1748515678873,
+      "end": 1748515679399,
       "order": "normal",
       "sourcemaps": "{\n  \"version\": 3,\n  \"sources\": [\"/Users/jang-yeong-ug/Documents/zooper/pages/sign/[id].vue\"],\n  \"sourcesContent\": [\"import { mergeProps as _mergeProps } from \\\"vue\\\"\\nimport { ssrRenderAttrs as _ssrRenderAttrs } from \\\"vue/server-renderer\\\"\\n\\nimport { useRoute } from 'vue-router'\\nimport { onMounted, ref } from 'vue'\\nimport { apiPost } from '@/common/api'\\n\\n\\nconst _sfc_main = {\\n  __name: '[id]',\\n  __ssrInlineRender: true,\\n  setup(__props) {\\n\\nconst route = useRoute()\\nconst id = route.params.id\\nconst student = ref(null)\\n\\nonMounted(async () => {\\n  try {\\n    if (sessionStorage.getItem('idnt_code')) {\\n      sessionStorage.removeItem('idnt_code')\\n    }\\n\\n    // idnt_code 세션 저장\\n    \\n    // 학생 정보 조회\\n    const res = await apiPost('member.php', {\\n      mode: 'studentInfo',\\n      idnt_code: id,\\n    })\\n    \\n    if (res.result === 'SUCCESS' && res.data) {\\n      student.value = res.data\\n      \\n      sessionStorage.setItem('idnt_code', id)\\n      sessionStorage.setItem('student', JSON.stringify(student.value))\\n      window.location.href = '/'\\n\\n    } else {\\n      alert('학생정보가 없습니다.')\\n      console.error(res.message || '학생 정보 없음')\\n      sessionStorage.removeItem('idnt_code')\\n      sessionStorage.removeItem('student')\\n      window.location.href = '/login'\\n    }\\n  } catch (err) {\\n    console.error('에러:', err)\\n    alert('에러가 발생했습니다.')\\n    sessionStorage.removeItem('idnt_code')\\n    sessionStorage.removeItem('student')\\n    window.location.href = '/login'\\n  }\\n})\\n\\nreturn (_ctx, _push, _parent, _attrs) => {\\n  _push(`<main${_ssrRenderAttrs(_mergeProps({ class: \\\"min-h-screen p-4\\\" }, _attrs))}></main>`)\\n}\\n}\\n\\n}\\n\\n\\n\\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\\nconst _sfc_setup = _sfc_main.setup\\n_sfc_main.setup = (props, ctx) => {\\n  const ssrContext = __vite_useSSRContext()\\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\\\"pages/sign/[id].vue\\\")\\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\\n}\\nexport default _sfc_main\"],\n  \"mappings\": \"AAAA,SAAS,cAAc,mBAAmB;AAC1C,SAAS,kBAAkB,uBAAuB;AAElD,SAAS,gBAAgB;AACzB,SAAS,WAAW,WAAW;AAC/B,SAAS,eAAe;AAGxB,MAAM,YAAY;AAAA,EAChB,QAAQ;AAAA,EACR,mBAAmB;AAAA,EACnB,MAAM,SAAS;AAEjB,UAAM,QAAQ,SAAS;AACvB,UAAM,KAAK,MAAM,OAAO;AACxB,UAAM,UAAU,IAAI,IAAI;AAExB,cAAU,YAAY;AACpB,UAAI;AACF,YAAI,eAAe,QAAQ,WAAW,GAAG;AACvC,yBAAe,WAAW,WAAW;AAAA,QACvC;AAKA,cAAM,MAAM,MAAM,QAAQ,cAAc;AAAA,UACtC,MAAM;AAAA,UACN,WAAW;AAAA,QACb,CAAC;AAED,YAAI,IAAI,WAAW,aAAa,IAAI,MAAM;AACxC,kBAAQ,QAAQ,IAAI;AAEpB,yBAAe,QAAQ,aAAa,EAAE;AACtC,yBAAe,QAAQ,WAAW,KAAK,UAAU,QAAQ,KAAK,CAAC;AAC/D,mBAAO,SAAS,OAAO;AAAA,QAEzB,OAAO;AACL,gBAAM,aAAa;AACnB,kBAAQ,MAAM,IAAI,WAAW,UAAU;AACvC,yBAAe,WAAW,WAAW;AACrC,yBAAe,WAAW,SAAS;AACnC,mBAAO,SAAS,OAAO;AAAA,QACzB;AAAA,MACF,SAAS,KAAK;AACZ,gBAAQ,MAAM,OAAO,GAAG;AACxB,cAAM,aAAa;AACnB,uBAAe,WAAW,WAAW;AACrC,uBAAe,WAAW,SAAS;AACnC,iBAAO,SAAS,OAAO;AAAA,MACzB;AAAA,IACF,CAAC;AAED,WAAO,CAAC,MAAM,OAAO,SAAS,WAAW;AACvC,YAAM,QAAQ,gBAAgB,YAAY,EAAE,OAAO,mBAAmB,GAAG,MAAM,CAAC,CAAC,UAAU;AAAA,IAC7F;AAAA,EACA;AAEA;AAIA,SAAS,iBAAiB,4BAA4B;AACtD,MAAM,aAAa,UAAU;AAC7B,UAAU,QAAQ,CAAC,OAAO,QAAQ;AAChC,QAAM,aAAa,qBAAqB;AACvC,GAAC,WAAW,YAAY,WAAW,UAAU,oBAAI,IAAI,IAAI,IAAI,qBAAqB;AACnF,SAAO,aAAa,WAAW,OAAO,GAAG,IAAI;AAC/C;AACA,eAAe;\",\n  \"names\": []\n}\n"
     },
     {
       "name": "vite:css-post",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679399,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679399,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679401,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679401,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679401,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679401,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679401,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748513881131,
-      "end": 1748513881131,
+      "start": 1748515679401,
+      "end": 1748515679401,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
       "result": "import { mergeProps as _mergeProps } from \"vue\";\nimport { ssrRenderAttrs as _ssrRenderAttrs } from \"vue/server-renderer\";\nimport { useRoute } from \"vue-router\";\nimport { onMounted, ref } from \"vue\";\nimport { apiPost } from \"@/common/api\";\nconst _sfc_main = {\n  __name: \"[id]\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const route = useRoute();\n    const id = route.params.id;\n    const student = ref(null);\n     false && /*@__PURE__*/ onMounted(async () => {\n      try {\n        if (sessionStorage.getItem(\"idnt_code\")) {\n          sessionStorage.removeItem(\"idnt_code\");\n        }\n        const res = await apiPost(\"member.php\", {\n          mode: \"studentInfo\",\n          idnt_code: id\n        });\n        if (res.result === \"SUCCESS\" && res.data) {\n          student.value = res.data;\n          sessionStorage.setItem(\"idnt_code\", id);\n          sessionStorage.setItem(\"student\", JSON.stringify(student.value));\n          (void 0).location.href = \"/\";\n        } else {\n          alert(\"학생정보가 없습니다.\");\n          console.error(res.message || \"학생 정보 없음\");\n          sessionStorage.removeItem(\"idnt_code\");\n          sessionStorage.removeItem(\"student\");\n          (void 0).location.href = \"/login\";\n        }\n      } catch (err) {\n        console.error(\"에러:\", err);\n        alert(\"에러가 발생했습니다.\");\n        sessionStorage.removeItem(\"idnt_code\");\n        sessionStorage.removeItem(\"student\");\n        (void 0).location.href = \"/login\";\n      }\n    });\n    return (_ctx, _push, _parent, _attrs) => {\n      _push(`<main${_ssrRenderAttrs(_mergeProps({ class: \"min-h-screen p-4\" }, _attrs))}></main>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"pages/sign/[id].vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748513881131,
-      "end": 1748513881132,
+      "start": 1748515679401,
+      "end": 1748515679402,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -267,14 +267,14 @@
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748513881132,
-      "end": 1748513881132,
+      "start": 1748515679402,
+      "end": 1748515679402,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748513881132,
-      "end": 1748513881132,
+      "start": 1748515679402,
+      "end": 1748515679402,
       "order": "normal"
     }
   ]

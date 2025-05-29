@@ -239,7 +239,7 @@ const handleDeposit = async () => {
         class="flex items-center gap-4 dark:hover:text-gray-300 group"
         >
         <span class="text-sm leading-none">
-            {{ item.description }} ({{ item.point_type === 'save' ? '+' : '-' }}{{ item.point.toLocaleString() }}P)
+            {{ item.description }} ({{ item.point_type === 'save' ? '+' : '-' }}{{ item.point.toLocaleString() }} 돌멩이)
         </span>
         <div class="flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5"></div>
         <span class="text-xs text-gray-500 leading-none">

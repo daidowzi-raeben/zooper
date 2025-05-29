@@ -68,7 +68,7 @@ const isMoney = ref(false)
         <p class="text-sm opacity-80">내 잔액</p>
         <p class="text-2xl font-bold">
           <span v-if="isMoney" @click="isMoney = false">
-          💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">돌맹이</span>
+          💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">돌멩이</span>
           </span>
           <span v-if="!isMoney" @click="isMoney = true">
             나의 잔액 확인하기

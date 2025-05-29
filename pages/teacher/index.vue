@@ -187,7 +187,7 @@ const handleDeposit = async () => {
         <p class="text-sm opacity-80">국고 잔액</p>
         <p class="text-2xl font-bold">
           <span>
-          💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">돌맹이</span>
+          💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">돌멩이</span>
           </span>
         </p>
       </div>

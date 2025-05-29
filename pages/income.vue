@@ -214,7 +214,7 @@ const handleDeposit = async () => {
         <div v-if="isScanning">
             <div style="background-color: #000; position: fixed; top:0; left:0; width:100%; height:100%; z-index:99; opacity: 0.6;"></div>
             <div style=" z-index:100; top:50%; left:50%; color:#fff; font-size:30px; position: fixed; transform: translate(-50%,-50%); margin-top:-250px;">
-              {{ amountInput }} <span style="font-size:16px;">돌맹이 입금!</span>
+              {{ amountInput }} <span style="font-size:16px;">돌멩이 입금!</span>
             </div>
              <qrcode-stream
              style="top:50%; left:50%; z-index:99; position: fixed; transform: translate(-50%,-50%); max-width:400px; max-height:400px;"
@@ -232,7 +232,7 @@ const handleDeposit = async () => {
         class="flex items-center gap-4 dark:hover:text-gray-300 group"
         >
         <span class="text-sm leading-none">
-            {{ item.description }} ({{ item.point_type === 'save' ? '+' : '-' }}{{ item.point.toLocaleString() }}P)
+            {{ item.description }} ({{ item.point_type === 'save' ? '+' : '-' }}{{ item.point.toLocaleString() }} 돌멩이)
         </span>
         <div class="flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5"></div>
         <span class="text-xs text-gray-500 leading-none">

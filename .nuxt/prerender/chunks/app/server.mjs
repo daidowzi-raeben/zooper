@@ -622,7 +622,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/expense-BYzBM_fV.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/expense-BkTglhhF.mjs').then((m) => m.default || m)
   },
   {
     name: "income",
@@ -630,7 +630,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/income-Dtgwb4iK.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/income-SKUJ3EI2.mjs').then((m) => m.default || m)
   },
   {
     name: "index",
@@ -638,7 +638,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-NI20xntc.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-C5fbmJHs.mjs').then((m) => m.default || m)
   },
   {
     name: "lab",
@@ -662,7 +662,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/penalty-Csn2LBc1.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/penalty-DmRw4ezq.mjs').then((m) => m.default || m)
   },
   {
     name: "projects",
@@ -686,7 +686,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/tax-B0RfcU29.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/tax-BPN_aJNt.mjs').then((m) => m.default || m)
   },
   {
     name: "teacher-id",
@@ -702,7 +702,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-BNCcIbuv.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-BkAikQy_.mjs').then((m) => m.default || m)
   },
   {
     name: "transfer",
@@ -710,7 +710,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/transfer-DxMvUkav.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/transfer-BLoqfrQP.mjs').then((m) => m.default || m)
   },
   {
     name: "whats-in-my-bag",
@@ -853,7 +853,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "fab03ef4-df7a-48ed-bf62-1247eb96bf63"
+    "buildId": "437c626d-deab-4ee7-afe0-0dfa4a3abb66"
   },
   "ui": {
     "primary": "green",
