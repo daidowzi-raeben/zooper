@@ -4,123 +4,123 @@
     {
       "name": "vite:load-fallback",
       "result": "import { joinURL, withLeadingSlash, withoutTrailingSlash } from \"ufo\";\nimport { hash } from \"ohash\";\nimport { createQuery } from \"../../query/query.js\";\nimport { encodeQueryParams } from \"../../utils/query.js\";\nimport { jsonStringify } from \"../../utils/json.js\";\nimport { addPrerenderPath, shouldUseClientDB, withContentBase } from \"../../composables/utils.js\";\nimport { useContentPreview } from \"../../composables/preview.js\";\nimport { useRuntimeConfig } from \"#imports\";\nexport const createQueryFetch = () => async (query) => {\n  const { content } = useRuntimeConfig().public;\n  const params = query.params();\n  const apiPath = content.experimental.stripQueryParameters ? withContentBase(`/query/${import.meta.dev ? \"_\" : `${hash(params)}.${content.integrity}`}/${encodeQueryParams(params)}.json`) : withContentBase(import.meta.dev ? \"/query\" : `/query/${hash(params)}.${content.integrity}.json`);\n  if (!import.meta.dev && import.meta.server) {\n    addPrerenderPath(apiPath);\n  }\n  if (shouldUseClientDB()) {\n    const db = await import(\"./client-db.js\").then((m) => m.useContentDatabase());\n    return db.fetch(query);\n  }\n  const data = await $fetch(apiPath, {\n    method: \"GET\",\n    responseType: \"json\",\n    params: content.experimental.stripQueryParameters ? void 0 : {\n      _params: jsonStringify(params),\n      previewToken: useContentPreview().getPreviewToken()\n    }\n  });\n  if (typeof data === \"string\" && data.startsWith(\"<!DOCTYPE html>\")) {\n    throw new Error(\"Not found\");\n  }\n  return data;\n};\nexport function queryContent(query, ...pathParts) {\n  const { content } = useRuntimeConfig().public;\n  const queryBuilder = createQuery(createQueryFetch(), {\n    initialParams: typeof query !== \"string\" ? query : {},\n    legacy: true\n  });\n  let path;\n  if (typeof query === \"string\") {\n    path = withLeadingSlash(joinURL(query, ...pathParts));\n  }\n  const originalParamsFn = queryBuilder.params;\n  queryBuilder.params = () => {\n    const params = originalParamsFn();\n    if (path) {\n      params.where = params.where || [];\n      if (params.first && (params.where || []).length === 0) {\n        params.where.push({ _path: withoutTrailingSlash(path) });\n      } else {\n        params.where.push({ _path: new RegExp(`^${path.replace(/[-[\\]{}()*+.,^$\\s/]/g, \"\\\\$&\")}`) });\n      }\n    }\n    if (!params.sort?.length) {\n      params.sort = [{ _stem: 1, $numeric: true }];\n    }\n    if (content.locales.length) {\n      const queryLocale = params.where?.find((w) => w._locale)?._locale;\n      if (!queryLocale) {\n        params.where = params.where || [];\n        params.where.push({ _locale: content.defaultLocale });\n      }\n    }\n    return params;\n  };\n  return queryBuilder;\n}\n",
-      "start": 1748498462607,
-      "end": 1748498462659,
+      "start": 1748498869187,
+      "end": 1748498869233,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "vite:vue",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869233,
       "order": "normal"
     },
     {
       "name": "replace",
       "result": "import { joinURL, withLeadingSlash, withoutTrailingSlash } from \"ufo\";\nimport { hash } from \"ohash\";\nimport { createQuery } from \"../../query/query.js\";\nimport { encodeQueryParams } from \"../../utils/query.js\";\nimport { jsonStringify } from \"../../utils/json.js\";\nimport { addPrerenderPath, shouldUseClientDB, withContentBase } from \"../../composables/utils.js\";\nimport { useContentPreview } from \"../../composables/preview.js\";\nimport { useRuntimeConfig } from \"#imports\";\nexport const createQueryFetch = () => async (query) => {\n  const { content } = useRuntimeConfig().public;\n  const params = query.params();\n  const apiPath = content.experimental.stripQueryParameters ? withContentBase(`/query/${false ? \"_\" : `${hash(params)}.${content.integrity}`}/${encodeQueryParams(params)}.json`) : withContentBase(false ? \"/query\" : `/query/${hash(params)}.${content.integrity}.json`);\n  if (!false && true) {\n    addPrerenderPath(apiPath);\n  }\n  if (shouldUseClientDB()) {\n    const db = await import(\"./client-db.js\").then((m) => m.useContentDatabase());\n    return db.fetch(query);\n  }\n  const data = await $fetch(apiPath, {\n    method: \"GET\",\n    responseType: \"json\",\n    params: content.experimental.stripQueryParameters ? void 0 : {\n      _params: jsonStringify(params),\n      previewToken: useContentPreview().getPreviewToken()\n    }\n  });\n  if (typeof data === \"string\" && data.startsWith(\"<!DOCTYPE html>\")) {\n    throw new Error(\"Not found\");\n  }\n  return data;\n};\nexport function queryContent(query, ...pathParts) {\n  const { content } = useRuntimeConfig().public;\n  const queryBuilder = createQuery(createQueryFetch(), {\n    initialParams: typeof query !== \"string\" ? query : {},\n    legacy: true\n  });\n  let path;\n  if (typeof query === \"string\") {\n    path = withLeadingSlash(joinURL(query, ...pathParts));\n  }\n  const originalParamsFn = queryBuilder.params;\n  queryBuilder.params = () => {\n    const params = originalParamsFn();\n    if (path) {\n      params.where = params.where || [];\n      if (params.first && (params.where || []).length === 0) {\n        params.where.push({ _path: withoutTrailingSlash(path) });\n      } else {\n        params.where.push({ _path: new RegExp(`^${path.replace(/[-[\\]{}()*+.,^$\\s/]/g, \"\\\\$&\")}`) });\n      }\n    }\n    if (!params.sort?.length) {\n      params.sort = [{ _stem: 1, $numeric: true }];\n    }\n    if (content.locales.length) {\n      const queryLocale = params.where?.find((w) => w._locale)?._locale;\n      if (!queryLocale) {\n        params.where = params.where || [];\n        params.where.push({ _locale: content.defaultLocale });\n      }\n    }\n    return params;\n  };\n  return queryBuilder;\n}\n",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869233,
+      "end": 1748498869234,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -133,75 +133,75 @@
     },
     {
       "name": "ssr-styles",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748498462659,
-      "end": 1748498462659,
+      "start": 1748498869234,
+      "end": 1748498869234,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { useRuntimeConfig } from '#app/nuxt';\nimport { joinURL, withLeadingSlash, withoutTrailingSlash } from \"ufo\";\nimport { hash } from \"ohash\";\nimport { createQuery } from \"../../query/query.js\";\nimport { encodeQueryParams } from \"../../utils/query.js\";\nimport { jsonStringify } from \"../../utils/json.js\";\nimport { addPrerenderPath, shouldUseClientDB, withContentBase } from \"../../composables/utils.js\";\nimport { useContentPreview } from \"../../composables/preview.js\";\nexport const createQueryFetch = () => async (query) => {\n  const { content } = useRuntimeConfig().public;\n  const params = query.params();\n  const apiPath = content.experimental.stripQueryParameters ? withContentBase(`/query/${false ? \"_\" : `${hash(params)}.${content.integrity}`}/${encodeQueryParams(params)}.json`) : withContentBase(false ? \"/query\" : `/query/${hash(params)}.${content.integrity}.json`);\n  if (!false && true) {\n    addPrerenderPath(apiPath);\n  }\n  if (shouldUseClientDB()) {\n    const db = await import(\"./client-db.js\").then((m) => m.useContentDatabase());\n    return db.fetch(query);\n  }\n  const data = await $fetch(apiPath, {\n    method: \"GET\",\n    responseType: \"json\",\n    params: content.experimental.stripQueryParameters ? void 0 : {\n      _params: jsonStringify(params),\n      previewToken: useContentPreview().getPreviewToken()\n    }\n  });\n  if (typeof data === \"string\" && data.startsWith(\"<!DOCTYPE html>\")) {\n    throw new Error(\"Not found\");\n  }\n  return data;\n};\nexport function queryContent(query, ...pathParts) {\n  const { content } = useRuntimeConfig().public;\n  const queryBuilder = createQuery(createQueryFetch(), {\n    initialParams: typeof query !== \"string\" ? query : {},\n    legacy: true\n  });\n  let path;\n  if (typeof query === \"string\") {\n    path = withLeadingSlash(joinURL(query, ...pathParts));\n  }\n  const originalParamsFn = queryBuilder.params;\n  queryBuilder.params = () => {\n    const params = originalParamsFn();\n    if (path) {\n      params.where = params.where || [];\n      if (params.first && (params.where || []).length === 0) {\n        params.where.push({ _path: withoutTrailingSlash(path) });\n      } else {\n        params.where.push({ _path: new RegExp(`^${path.replace(/[-[\\]{}()*+.,^$\\s/]/g, \"\\\\$&\")}`) });\n      }\n    }\n    if (!params.sort?.length) {\n      params.sort = [{ _stem: 1, $numeric: true }];\n    }\n    if (content.locales.length) {\n      const queryLocale = params.where?.find((w) => w._locale)?._locale;\n      if (!queryLocale) {\n        params.where = params.where || [];\n        params.where.push({ _locale: content.defaultLocale });\n      }\n    }\n    return params;\n  };\n  return queryBuilder;\n}\n",
-      "start": 1748498462659,
-      "end": 1748498462660,
+      "start": 1748498869234,
+      "end": 1748498869235,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -215,8 +215,8 @@
     {
       "name": "nuxt:imports-transform",
       "result": "import { useRuntimeConfig } from '#app/nuxt';\nimport { joinURL, withLeadingSlash, withoutTrailingSlash } from \"ufo\";\nimport { hash } from \"ohash\";\nimport { createQuery } from \"../../query/query.js\";\nimport { encodeQueryParams } from \"../../utils/query.js\";\nimport { jsonStringify } from \"../../utils/json.js\";\nimport { addPrerenderPath, shouldUseClientDB, withContentBase } from \"../../composables/utils.js\";\nimport { useContentPreview } from \"../../composables/preview.js\";\nexport const createQueryFetch = () => async (query) => {\n  const { content } = useRuntimeConfig().public;\n  const params = query.params();\n  const apiPath = content.experimental.stripQueryParameters ? withContentBase(`/query/${false ? \"_\" : `${hash(params)}.${content.integrity}`}/${encodeQueryParams(params)}.json`) : withContentBase(false ? \"/query\" : `/query/${hash(params)}.${content.integrity}.json`);\n  if (!false && true) {\n    addPrerenderPath(apiPath);\n  }\n  if (shouldUseClientDB()) {\n    const db = await import(\"./client-db.js\").then((m) => m.useContentDatabase());\n    return db.fetch(query);\n  }\n  const data = await $fetch(apiPath, {\n    method: \"GET\",\n    responseType: \"json\",\n    params: content.experimental.stripQueryParameters ? void 0 : {\n      _params: jsonStringify(params),\n      previewToken: useContentPreview().getPreviewToken()\n    }\n  });\n  if (typeof data === \"string\" && data.startsWith(\"<!DOCTYPE html>\")) {\n    throw new Error(\"Not found\");\n  }\n  return data;\n};\nexport function queryContent(query, ...pathParts) {\n  const { content } = useRuntimeConfig().public;\n  const queryBuilder = createQuery(createQueryFetch(), {\n    initialParams: typeof query !== \"string\" ? query : {},\n    legacy: true\n  });\n  let path;\n  if (typeof query === \"string\") {\n    path = withLeadingSlash(joinURL(query, ...pathParts));\n  }\n  const originalParamsFn = queryBuilder.params;\n  queryBuilder.params = () => {\n    const params = originalParamsFn();\n    if (path) {\n      params.where = params.where || [];\n      if (params.first && (params.where || []).length === 0) {\n        params.where.push({ _path: withoutTrailingSlash(path) });\n      } else {\n        params.where.push({ _path: new RegExp(`^${path.replace(/[-[\\]{}()*+.,^$\\s/]/g, \"\\\\$&\")}`) });\n      }\n    }\n    if (!params.sort?.length) {\n      params.sort = [{ _stem: 1, $numeric: true }];\n    }\n    if (content.locales.length) {\n      const queryLocale = params.where?.find((w) => w._locale)?._locale;\n      if (!queryLocale) {\n        params.where = params.where || [];\n        params.where.push({ _locale: content.defaultLocale });\n      }\n    }\n    return params;\n  };\n  return queryBuilder;\n}\n",
-      "start": 1748498462659,
-      "end": 1748498462660,
+      "start": 1748498869234,
+      "end": 1748498869235,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -229,56 +229,56 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748498462660,
-      "end": 1748498462660,
+      "start": 1748498869235,
+      "end": 1748498869235,
       "order": "normal"
     }
   ]
