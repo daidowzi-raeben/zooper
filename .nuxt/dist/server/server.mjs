@@ -585,7 +585,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/_slug_-qhwQygdb.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/_slug_-B11nkZe8.js").then((m) => m.default || m)
   },
   {
     name: "articles",
@@ -593,7 +593,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-BLeF9jDO.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-Ccu9ir7Q.js").then((m) => m.default || m)
   },
   {
     name: "bookmarks",
@@ -601,7 +601,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/bookmarks-ZmnCc8EC.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/bookmarks-CsrGiwEn.js").then((m) => m.default || m)
   },
   {
     name: "expense",
@@ -609,7 +609,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/expense-Cwzjza8A.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/expense-BYzBM_fV.js").then((m) => m.default || m)
   },
   {
     name: "income",
@@ -617,7 +617,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/income-COSF_Tt_.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/income-Dtgwb4iK.js").then((m) => m.default || m)
   },
   {
     name: "index",
@@ -625,7 +625,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-DcmC9HzX.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-NI20xntc.js").then((m) => m.default || m)
   },
   {
     name: "lab",
@@ -633,7 +633,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/lab-DUc2vDhC.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/lab-Ch6jHTxq.js").then((m) => m.default || m)
   },
   {
     name: "login",
@@ -649,7 +649,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/penalty-BroQ7DsA.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/penalty-Csn2LBc1.js").then((m) => m.default || m)
   },
   {
     name: "projects",
@@ -657,7 +657,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/projects-BaWcJkvs.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/projects-7cLP3yBB.js").then((m) => m.default || m)
   },
   {
     name: "sign-id",
@@ -673,7 +673,23 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/tax-B1RVFcNs.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/tax-B0RfcU29.js").then((m) => m.default || m)
+  },
+  {
+    name: "teacher-id",
+    path: "/teacher/:id()",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import("./_nuxt/_id_-CokJ1VvY.js").then((m) => m.default || m)
+  },
+  {
+    name: "teacher",
+    path: "/teacher",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import("./_nuxt/index-BNCcIbuv.js").then((m) => m.default || m)
   },
   {
     name: "transfer",
@@ -681,7 +697,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/transfer-CTdZQMzJ.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/transfer-DxMvUkav.js").then((m) => m.default || m)
   },
   {
     name: "whats-in-my-bag",
@@ -689,7 +705,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/whats-in-my-bag-YNtyqW8c.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/whats-in-my-bag-CICd3SCm.js").then((m) => m.default || m)
   }
 ];
 const _wrapIf = (component, props, slots) => {
@@ -824,7 +840,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "1cba9100-e615-42ca-9874-c214e6c5f94a"
+    "buildId": "fab03ef4-df7a-48ed-bf62-1247eb96bf63"
   },
   "ui": {
     "primary": "green",
@@ -1052,21 +1068,21 @@ const revive_payload_server_eJ33V7gbc6 = /* @__PURE__ */ defineNuxtPlugin({
     }
   }
 });
-const LazyAnimatedCounter = defineAsyncComponent(() => import("./_nuxt/AnimatedCounter-n4tDNyte.js").then((r) => r.default));
+const LazyAnimatedCounter = defineAsyncComponent(() => import("./_nuxt/AnimatedCounter-Bzvn0CCg.js").then((r) => r.default));
 const LazyCodeView = defineAsyncComponent(() => import("./_nuxt/CodeView-MTyAn4HH.js").then((r) => r.default));
 const LazyCredit = defineAsyncComponent(() => import("./_nuxt/Credit-DHWJYWxb.js").then((r) => r.default));
 const LazyEncryption = defineAsyncComponent(() => import("./_nuxt/Encryption-DL8UGNl-.js").then((r) => r.default));
 const LazyHackerButton = defineAsyncComponent(() => import("./_nuxt/HackerButton-DcymvL4i.js").then((r) => r.default));
-const LazyLabCard = defineAsyncComponent(() => import("./_nuxt/LabCard-D4tHBlfd.js").then((r) => r.default));
-const LazyRocket = defineAsyncComponent(() => import("./_nuxt/Rocket-BlFB1v7n.js").then((r) => r.default));
+const LazyLabCard = defineAsyncComponent(() => import("./_nuxt/LabCard-CDcc6F9F.js").then((r) => r.default));
+const LazyRocket = defineAsyncComponent(() => import("./_nuxt/Rocket-BV02fsGF.js").then((r) => r.default));
 const LazyShapes = defineAsyncComponent(() => import("./_nuxt/Shapes-BmY0byxR.js").then((r) => r.default));
 const LazyTextRotator = defineAsyncComponent(() => import("./_nuxt/TextRotator-CSL7tLoi.js").then((r) => r.default));
-const LazyContentDoc = defineAsyncComponent(() => import("./_nuxt/ContentDoc-BKPgjIRH.js").then((r) => r.default));
-const LazyContentList = defineAsyncComponent(() => import("./_nuxt/ContentList-BnpPR_aw.js").then((r) => r.default));
-const LazyContentNavigation = defineAsyncComponent(() => import("./_nuxt/ContentNavigation-DskJsXQo.js").then((r) => r.default));
-const LazyContentQuery = defineAsyncComponent(() => import("./_nuxt/ContentQuery-C-8IlGAf.js").then((r) => r.default));
-const LazyContentRenderer = defineAsyncComponent(() => import("./_nuxt/ContentRenderer-BlDnnZ8m.js").then((r) => r.default));
-const LazyContentRendererMarkdown = defineAsyncComponent(() => import("./_nuxt/ContentRendererMarkdown-kmYXpPSN.js").then((r) => r.default));
+const LazyContentDoc = defineAsyncComponent(() => import("./_nuxt/ContentDoc-CHL-oOHl.js").then((r) => r.default));
+const LazyContentList = defineAsyncComponent(() => import("./_nuxt/ContentList-COskSOQp.js").then((r) => r.default));
+const LazyContentNavigation = defineAsyncComponent(() => import("./_nuxt/ContentNavigation-D-en790j.js").then((r) => r.default));
+const LazyContentQuery = defineAsyncComponent(() => import("./_nuxt/ContentQuery-BEUPas7N.js").then((r) => r.default));
+const LazyContentRenderer = defineAsyncComponent(() => import("./_nuxt/ContentRenderer-_FU9__CC.js").then((r) => r.default));
+const LazyContentRendererMarkdown = defineAsyncComponent(() => import("./_nuxt/ContentRendererMarkdown-DWtxLYo7.js").then((r) => r.default));
 const LazyContentSlot = defineAsyncComponent(() => import("./_nuxt/ContentSlot-DRdVY1wy.js").then((r) => r.default));
 const LazyDocumentDrivenEmpty = defineAsyncComponent(() => import("./_nuxt/DocumentDrivenEmpty-CVfz7tly.js").then((r) => r.default));
 const LazyDocumentDrivenNotFound = defineAsyncComponent(() => import("./_nuxt/DocumentDrivenNotFound-4pTrsASA.js").then((r) => r.default));
@@ -1077,14 +1093,14 @@ const LazyProsePre = defineAsyncComponent(() => import("./_nuxt/ProsePre-BCe7-UH
 const LazyProseA = defineAsyncComponent(() => import("./_nuxt/ProseA-Jt8l2yMn.js").then((r) => r.default));
 const LazyProseBlockquote = defineAsyncComponent(() => import("./_nuxt/ProseBlockquote-C_eyQOMN.js").then((r) => r.default));
 const LazyProseEm = defineAsyncComponent(() => import("./_nuxt/ProseEm-ySAyym_S.js").then((r) => r.default));
-const LazyProseH1 = defineAsyncComponent(() => import("./_nuxt/ProseH1-CmN4kPRJ.js").then((r) => r.default));
-const LazyProseH2 = defineAsyncComponent(() => import("./_nuxt/ProseH2-nK-9plXK.js").then((r) => r.default));
-const LazyProseH3 = defineAsyncComponent(() => import("./_nuxt/ProseH3-YwMZstKh.js").then((r) => r.default));
-const LazyProseH4 = defineAsyncComponent(() => import("./_nuxt/ProseH4-DNO-C8Na.js").then((r) => r.default));
-const LazyProseH5 = defineAsyncComponent(() => import("./_nuxt/ProseH5-DcOy67lr.js").then((r) => r.default));
-const LazyProseH6 = defineAsyncComponent(() => import("./_nuxt/ProseH6-B2dODFg7.js").then((r) => r.default));
+const LazyProseH1 = defineAsyncComponent(() => import("./_nuxt/ProseH1-BObwpJqT.js").then((r) => r.default));
+const LazyProseH2 = defineAsyncComponent(() => import("./_nuxt/ProseH2-DF7_6DPt.js").then((r) => r.default));
+const LazyProseH3 = defineAsyncComponent(() => import("./_nuxt/ProseH3-D7_y1w7z.js").then((r) => r.default));
+const LazyProseH4 = defineAsyncComponent(() => import("./_nuxt/ProseH4-BdfsIdWU.js").then((r) => r.default));
+const LazyProseH5 = defineAsyncComponent(() => import("./_nuxt/ProseH5-DG4C0EOD.js").then((r) => r.default));
+const LazyProseH6 = defineAsyncComponent(() => import("./_nuxt/ProseH6-DtdowkzB.js").then((r) => r.default));
 const LazyProseHr = defineAsyncComponent(() => import("./_nuxt/ProseHr-D7HXu5Sj.js").then((r) => r.default));
-const LazyProseImg = defineAsyncComponent(() => import("./_nuxt/ProseImg-B_6kQevs.js").then((r) => r.default));
+const LazyProseImg = defineAsyncComponent(() => import("./_nuxt/ProseImg-B7I2jqQ2.js").then((r) => r.default));
 const LazyProseLi = defineAsyncComponent(() => import("./_nuxt/ProseLi-CLt8erTL.js").then((r) => r.default));
 const LazyProseOl = defineAsyncComponent(() => import("./_nuxt/ProseOl-BbkArePq.js").then((r) => r.default));
 const LazyProseP = defineAsyncComponent(() => import("./_nuxt/ProseP-DFrAmVjB.js").then((r) => r.default));
@@ -1100,7 +1116,7 @@ const LazyProseUl = defineAsyncComponent(() => import("./_nuxt/ProseUl-2f0MRhTP.
 const LazyIcon = defineAsyncComponent(() => Promise.resolve().then(function() {
   return Icon;
 }).then((r) => r.default));
-const LazyIconCSS = defineAsyncComponent(() => import("./_nuxt/IconCSS-YzNyIjTY.js").then((r) => r.default));
+const LazyIconCSS = defineAsyncComponent(() => import("./_nuxt/IconCSS-D3xbTYfR.js").then((r) => r.default));
 const lazyGlobalComponents = [
   ["AnimatedCounter", LazyAnimatedCounter],
   ["CodeView", LazyCodeView],
@@ -4189,16 +4205,16 @@ export {
   entry$1 as default,
   useUI as e,
   appConfig as f,
-  get as g,
-  useRuntimeConfig as h,
-  input as i,
-  useNuxtApp as j,
-  asyncDataDefaults as k,
-  looseToNumber as l,
+  useRuntimeConfig as g,
+  useNuxtApp as h,
+  asyncDataDefaults as i,
+  __nuxt_component_0 as j,
+  useAppConfig as k,
+  input as l,
   mergeConfig as m,
-  __nuxt_component_0 as n,
-  useAppConfig as o,
-  __nuxt_component_0$1 as p,
+  looseToNumber as n,
+  __nuxt_component_0$1 as o,
+  get as p,
   useState as q,
   resolveIconName as r,
   select as s,

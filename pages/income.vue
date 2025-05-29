@@ -188,8 +188,9 @@ const handleDeposit = async () => {
         </h2>
         </div>
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-        입금 할 금액은 <strong>{{ studentRole }}</strong> 친구 중 1명에게 전달하세요.<br>
-        전달받은 친구가 마지막으로 QR코드 승인을 해야 합니다.
+       입금을 하기 위해선 <span style="font-weight:bold; color:red">은행원의 승인</span>이 필요합니다. <br>
+       은행원 친구와 함께 오세요.
+       
         </p>
         <div class="flex items-center gap-3 mt-6">
        <!-- <USelect
@@ -212,6 +213,9 @@ const handleDeposit = async () => {
         </div>
         <div v-if="isScanning">
             <div style="background-color: #000; position: fixed; top:0; left:0; width:100%; height:100%; z-index:99; opacity: 0.6;"></div>
+            <div style=" z-index:100; top:50%; left:50%; color:#fff; font-size:30px; position: fixed; transform: translate(-50%,-50%); margin-top:-250px;">
+              {{ amountInput }} <span style="font-size:16px;">돌맹이 입금!</span>
+            </div>
              <qrcode-stream
              style="top:50%; left:50%; z-index:99; position: fixed; transform: translate(-50%,-50%); max-width:400px; max-height:400px;"
             @detect="onDetect"

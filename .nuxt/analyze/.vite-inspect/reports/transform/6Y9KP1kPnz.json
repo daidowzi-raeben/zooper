@@ -4,220 +4,220 @@
     {
       "name": "vite:load-fallback",
       "result": "export async function imageMeta(_ctx, url) {\n  const meta = await _imageMeta(url).catch((err) => {\n    console.error(\"Failed to get image meta for \" + url, err + \"\");\n    return {\n      width: 0,\n      height: 0,\n      ratio: 0\n    };\n  });\n  return meta;\n}\nasync function _imageMeta(url) {\n  if (process.server) {\n    const imageMeta2 = await import(\"image-meta\").then((r) => r.imageMeta);\n    const data = await fetch(url).then((res) => res.buffer());\n    const metadata = imageMeta2(data);\n    if (!metadata) {\n      throw new Error(`No metadata could be extracted from the image \\`${url}\\`.`);\n    }\n    const { width, height } = metadata;\n    const meta = {\n      width,\n      height,\n      ratio: width && height ? width / height : void 0\n    };\n    return meta;\n  }\n  if (typeof Image === \"undefined\") {\n    throw new TypeError(\"Image not supported\");\n  }\n  return new Promise((resolve, reject) => {\n    const img = new Image();\n    img.onload = () => {\n      const meta = {\n        width: img.width,\n        height: img.height,\n        ratio: img.width / img.height\n      };\n      resolve(meta);\n    };\n    img.onerror = (err) => reject(err);\n    img.src = url;\n  });\n}\n",
-      "start": 1748499767317,
-      "end": 1748499767334,
+      "start": 1748513875421,
+      "end": 1748513875445,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "vite:vue",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875445,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875445,
+      "end": 1748513875446,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875446,
+      "end": 1748513875446,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748499767334,
-      "end": 1748499767334,
+      "start": 1748513875446,
+      "end": 1748513875446,
       "order": "normal"
     },
     {
       "name": "vite:define",
       "result": "export async function imageMeta(_ctx, url) {\n  const meta = await _imageMeta(url).catch((err) => {\n    console.error(\"Failed to get image meta for \" + url, err + \"\");\n    return {\n      width: 0,\n      height: 0,\n      ratio: 0\n    };\n  });\n  return meta;\n}\nasync function _imageMeta(url) {\n  if (false) {\n    const imageMeta2 = await null.then((r) => r.imageMeta);\n    const data = await fetch(url).then((res) => res.buffer());\n    const metadata = imageMeta2(data);\n    if (!metadata) {\n      throw new Error(`No metadata could be extracted from the image \\`${url}\\`.`);\n    }\n    const { width, height } = metadata;\n    const meta = {\n      width,\n      height,\n      ratio: width && height ? width / height : void 0\n    };\n    return meta;\n  }\n  if (typeof Image === \"undefined\") {\n    throw new TypeError(\"Image not supported\");\n  }\n  return new Promise((resolve, reject) => {\n    const img = new Image();\n    img.onload = () => {\n      const meta = {\n        width: img.width,\n        height: img.height,\n        ratio: img.width / img.height\n      };\n      resolve(meta);\n    };\n    img.onerror = (err) => reject(err);\n    img.src = url;\n  });\n}\n",
-      "start": 1748499767334,
-      "end": 1748499767335,
+      "start": 1748513875446,
+      "end": 1748513875447,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "vite:css-post",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748499767335,
-      "end": 1748499767335,
+      "start": 1748513875447,
+      "end": 1748513875447,
       "order": "normal"
     }
   ]

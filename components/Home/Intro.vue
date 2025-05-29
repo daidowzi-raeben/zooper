@@ -5,6 +5,8 @@ import { apiPost,apiPoint } from '@/common/api'
 const logout = () => {
   sessionStorage.removeItem('idnt_code')
   sessionStorage.removeItem('student')
+  sessionStorage.removeItem('t_idnt_code')
+  sessionStorage.removeItem('teacher')
   window.location.href = '/login'
 }
 
@@ -106,7 +108,7 @@ const isMoney = ref(false)
     </div>
   </div>
   
-      <div class="mt-10">
+      <!-- <div class="mt-10">
           <div class="">
             <h1 class="text-2xl font-bold mb-4">상점 아이템 목록</h1>
 
@@ -128,6 +130,6 @@ const isMoney = ref(false)
 
             <div v-else class="text-gray-500">불러올 아이템이 없습니다.</div>
           </div>
-      </div>
+      </div> -->
   </div>
 </template>

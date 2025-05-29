@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div class=\"min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white px-4\">\n    <div class=\"bg-white rounded-xl shadow-xl p-8 max-w-sm w-full text-center\">\n      <h1 class=\"text-2xl font-bold text-gray-800 mb-4\">QR 코드 로그인</h1>\n      <p class=\"text-sm text-gray-600 mb-6\">QR 코드를 스캔해주세요</p>\n\n      <button\n        v-if=\"!isScanning\"\n        class=\"bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition\"\n        @click=\"startScan\"\n      >\n        QR코드로 로그인\n      </button>\n\n      <div class=\"mt-6 mb-6\">\n        <button \n        v-if=\"!isScanningTeacher\"\n        @click=\"startScanTeacher\" class=\"text-blue-600 underline text-sm hover:text-blue-800\">\n            선생님이신가요?\n        </button>\n        </div>\n\n      <qrcode-stream\n        v-if=\"isScanning\"\n        @detect=\"onDetect\"\n        @error=\"onError\"\n      />\n      <qrcode-stream\n        v-if=\"isScanningTeacher\"\n        @detect=\"onDetectTeacher\"\n        @error=\"onErrorTeacher\"\n      />\n\n      <p v-if=\"error\" class=\"text-red-500 text-sm mt-4\">{{ error }}</p>\n    </div>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nimport { useRouter } from 'vue-router'\nimport { QrcodeStream } from 'vue-qrcode-reader'\n\nconst isScanning = ref(false)\nconst isScanningTeacher = ref(false)\nconst error = ref('')\nconst errorTeacher = ref('')\nconst router = useRouter()\n\nconst startScan = () => {\n  isScanning.value = true\n  error.value = ''\n}\nconst startScanTeacher = () => {\n  isScanningTeacher.value = true\n  errorTeacher.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\nconst onDetectTeacher = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/teacher/' + url)\n}\n\nconst onErrorTeacher = (err) => {\n  errorTeacher.value = '카메라 접근 실패'\n  console.error(err)\n  isScanningTeacher.value = false\n}\n</script>\n\n<script>\nexport default {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n</script>",
-      "start": 1748499772852,
-      "end": 1748499773040,
+      "start": 1748513880501,
+      "end": 1748513880564,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748499773040,
-      "end": 1748499773040,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748499773040,
-      "end": 1748499773040,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748499773040,
-      "end": 1748499773040,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748499773040,
-      "end": 1748499773040,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748499773040,
-      "end": 1748499773040,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748499773040,
-      "end": 1748499773040,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748499773040,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { unref as _unref, mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\"\n\nimport { ref } from 'vue'\nimport { useRouter } from 'vue-router'\nimport { QrcodeStream } from 'vue-qrcode-reader'\n\n\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n\n\nconst _sfc_main = /*@__PURE__*/Object.assign(__default__, {\n  __name: 'login',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst isScanning = ref(false)\nconst isScanningTeacher = ref(false)\nconst error = ref('')\nconst errorTeacher = ref('')\nconst router = useRouter()\n\nconst startScan = () => {\n  isScanning.value = true\n  error.value = ''\n}\nconst startScanTeacher = () => {\n  isScanningTeacher.value = true\n  errorTeacher.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\nconst onDetectTeacher = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/teacher/' + url)\n}\n\nconst onErrorTeacher = (err) => {\n  errorTeacher.value = '카메라 접근 실패'\n  console.error(err)\n  isScanningTeacher.value = false\n}\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  _push(`<div${_ssrRenderAttrs(_mergeProps({ class: \"min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white px-4\" }, _attrs))}><div class=\"bg-white rounded-xl shadow-xl p-8 max-w-sm w-full text-center\"><h1 class=\"text-2xl font-bold text-gray-800 mb-4\">QR 코드 로그인</h1><p class=\"text-sm text-gray-600 mb-6\">QR 코드를 스캔해주세요</p>`)\n  if (!isScanning.value) {\n    _push(`<button class=\"bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition\"> QR코드로 로그인 </button>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`<div class=\"mt-6 mb-6\">`)\n  if (!isScanningTeacher.value) {\n    _push(`<button class=\"text-blue-600 underline text-sm hover:text-blue-800\"> 선생님이신가요? </button>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div>`)\n  if (isScanning.value) {\n    _push(_ssrRenderComponent(_unref(QrcodeStream), {\n      onDetect: onDetect,\n      onError: onError\n    }, null, _parent))\n  } else {\n    _push(`<!---->`)\n  }\n  if (isScanningTeacher.value) {\n    _push(_ssrRenderComponent(_unref(QrcodeStream), {\n      onDetect: onDetectTeacher,\n      onError: onErrorTeacher\n    }, null, _parent))\n  } else {\n    _push(`<!---->`)\n  }\n  if (error.value) {\n    _push(`<p class=\"text-red-500 text-sm mt-4\">${_ssrInterpolate(error.value)}</p>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div></div>`)\n}\n}\n\n})\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"pages/login.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,176 +94,176 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880564,
+      "end": 1748513880564,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880579,
+      "end": 1748513880579,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880579,
+      "end": 1748513880579,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880579,
+      "end": 1748513880579,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880580,
+      "end": 1748513880580,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880580,
+      "end": 1748513880580,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880580,
+      "end": 1748513880580,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880580,
+      "end": 1748513880580,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880593,
+      "end": 1748513880595,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880595,
+      "end": 1748513880595,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880596,
+      "end": 1748513880596,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880596,
+      "end": 1748513880596,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880596,
+      "end": 1748513880596,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880596,
+      "end": 1748513880596,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880596,
+      "end": 1748513880596,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748499773041,
-      "end": 1748499773041,
+      "start": 1748513880596,
+      "end": 1748513880596,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748499773041,
-      "end": 1748499773042,
+      "start": 1748513880596,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748499773041,
-      "end": 1748499773042,
+      "start": 1748513880596,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748499773042,
-      "end": 1748499773042,
+      "start": 1748513880598,
+      "end": 1748513880598,
       "order": "normal"
     }
   ]

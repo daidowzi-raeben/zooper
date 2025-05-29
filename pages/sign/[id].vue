@@ -29,6 +29,7 @@ onMounted(async () => {
       window.location.href = '/'
 
     } else {
+      alert('학생정보가 없습니다.')
       console.error(res.message || '학생 정보 없음')
       sessionStorage.removeItem('idnt_code')
       sessionStorage.removeItem('student')
@@ -36,9 +37,10 @@ onMounted(async () => {
     }
   } catch (err) {
     console.error('에러:', err)
-    // sessionStorage.removeItem('idnt_code')
-    // sessionStorage.removeItem('student')
-    // window.location.href = '/login'
+    alert('에러가 발생했습니다.')
+    sessionStorage.removeItem('idnt_code')
+    sessionStorage.removeItem('student')
+    window.location.href = '/login'
   }
 })
 </script>
