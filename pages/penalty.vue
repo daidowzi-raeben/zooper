@@ -1,3 +1,8 @@
+import { definePageMeta } from '#imports';
+
+definePageMeta({
+  prerender: false
+})
 <script setup>
 import { onMounted, ref } from 'vue'
 import { apiPost,apiPoint } from '@/common/api'

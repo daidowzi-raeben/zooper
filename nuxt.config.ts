@@ -13,6 +13,12 @@ export default defineNuxtConfig({
   ui: {
     icons: ["heroicons", "lucide"],
   },
+  nitro: {
+    prerender: {
+      routes: [],
+      crawlLinks: false
+    }
+  },
   app: {
     baseURL: '/',
     pageTransition: { name: "page", mode: "out-in" },
