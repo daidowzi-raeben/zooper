@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <main class=\"min-h-screen\">\n    <AppHeader class=\"mb-12\" title=\"Lab\" :description=\"description\" />\n    <div class=\"space-y-24\">\n      <ContentList path=\"/lab\" v-slot=\"{ list }\">\n        <ContentQuery\n          v-for=\"item in list\"\n          :key=\"item._path\"\n          :path=\"item._path\"\n          find=\"one\"\n          v-slot=\"{ data }\"\n        >\n          <ContentRenderer>\n            <ContentRendererMarkdown :value=\"data\" />\n          </ContentRenderer>\n        </ContentQuery>\n      </ContentList>\n    </div>\n  </main>\n</template>\n\n<script setup>\nconst description = \"Some random experiments with UI I do in my free time.\";\nuseSeoMeta({\n  title: \"Lab | Fayaz Ahmed\",\n  description,\n});\n</script>\n",
-      "start": 1748515673118,
-      "end": 1748515673181,
+      "start": 1748516095824,
+      "end": 1748516095889,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, withCtx as _withCtx, createBlock as _createBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-24\" }\n\nconst description = \"Some random experiments with UI I do in my free time.\";\n\nconst _sfc_main = {\n  __name: 'lab',\n  setup(__props) {\n\nuseSeoMeta({\n  title: \"Lab | Fayaz Ahmed\",\n  description,\n});\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_ContentRendererMarkdown = _resolveComponent(\"ContentRendererMarkdown\")\n  const _component_ContentRenderer = _resolveComponent(\"ContentRenderer\")\n  const _component_ContentQuery = _resolveComponent(\"ContentQuery\")\n  const _component_ContentList = _resolveComponent(\"ContentList\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-12\",\n      title: \"Lab\",\n      description: description\n    }),\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createVNode(_component_ContentList, { path: \"/lab\" }, {\n        default: _withCtx(({ list }) => [\n          (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(list, (item) => {\n            return (_openBlock(), _createBlock(_component_ContentQuery, {\n              key: item._path,\n              path: item._path,\n              find: \"one\"\n            }, {\n              default: _withCtx(({ data }) => [\n                _createVNode(_component_ContentRenderer, null, {\n                  default: _withCtx(() => [\n                    _createVNode(_component_ContentRendererMarkdown, { value: data }, null, 8, [\"value\"])\n                  ]),\n                  _: 2\n                }, 1024)\n              ]),\n              _: 2\n            }, 1032, [\"path\"]))\n          }), 128))\n        ]),\n        _: 1\n      })\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748515673181,
-      "end": 1748515673181,
+      "start": 1748516095889,
+      "end": 1748516095889,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { useSeoMeta } from '@unhead/vue';\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, withCtx as _withCtx, createBlock as _createBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-24\" }\n\nconst description = \"Some random experiments with UI I do in my free time.\";\n\nconst _sfc_main = {\n  __name: 'lab',\n  setup(__props) {\n\nuseSeoMeta({\n  title: \"Lab | Fayaz Ahmed\",\n  description,\n});\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_ContentRendererMarkdown = _resolveComponent(\"ContentRendererMarkdown\")\n  const _component_ContentRenderer = _resolveComponent(\"ContentRenderer\")\n  const _component_ContentQuery = _resolveComponent(\"ContentQuery\")\n  const _component_ContentList = _resolveComponent(\"ContentList\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-12\",\n      title: \"Lab\",\n      description: description\n    }),\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createVNode(_component_ContentList, { path: \"/lab\" }, {\n        default: _withCtx(({ list }) => [\n          (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(list, (item) => {\n            return (_openBlock(), _createBlock(_component_ContentQuery, {\n              key: item._path,\n              path: item._path,\n              find: \"one\"\n            }, {\n              default: _withCtx(({ data }) => [\n                _createVNode(_component_ContentRenderer, null, {\n                  default: _withCtx(() => [\n                    _createVNode(_component_ContentRendererMarkdown, { value: data }, null, 8, [\"value\"])\n                  ]),\n                  _: 2\n                }, 1024)\n              ]),\n              _: 2\n            }, 1032, [\"path\"]))\n          }), 128))\n        ]),\n        _: 1\n      })\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748515673181,
-      "end": 1748515673182,
+      "start": 1748516095889,
+      "end": 1748516095890,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,51 +185,51 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/components/App/Header.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/components/ContentRendererMarkdown.vue\";\nimport { default as __nuxt_component_2 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/components/ContentRenderer.vue\";\nimport { default as __nuxt_component_3 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/components/ContentQuery.vue\";\nimport { default as __nuxt_component_4 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/components/ContentList.vue\";\nimport { useSeoMeta } from '@unhead/vue';\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, withCtx as _withCtx, createBlock as _createBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-24\" }\n\nconst description = \"Some random experiments with UI I do in my free time.\";\n\nconst _sfc_main = {\n  __name: 'lab',\n  setup(__props) {\n\nuseSeoMeta({\n  title: \"Lab | Fayaz Ahmed\",\n  description,\n});\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = __nuxt_component_0\n  const _component_ContentRendererMarkdown = __nuxt_component_1\n  const _component_ContentRenderer = __nuxt_component_2\n  const _component_ContentQuery = __nuxt_component_3\n  const _component_ContentList = __nuxt_component_4\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-12\",\n      title: \"Lab\",\n      description: description\n    }),\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createVNode(_component_ContentList, { path: \"/lab\" }, {\n        default: _withCtx(({ list }) => [\n          (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(list, (item) => {\n            return (_openBlock(), _createBlock(_component_ContentQuery, {\n              key: item._path,\n              path: item._path,\n              find: \"one\"\n            }, {\n              default: _withCtx(({ data }) => [\n                _createVNode(_component_ContentRenderer, null, {\n                  default: _withCtx(() => [\n                    _createVNode(_component_ContentRendererMarkdown, { value: data }, null, 8, [\"value\"])\n                  ]),\n                  _: 2\n                }, 1024)\n              ]),\n              _: 2\n            }, 1032, [\"path\"]))\n          }), 128))\n        ]),\n        _: 1\n      })\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748515673182,
-      "end": 1748515673182,
+      "start": 1748516095890,
+      "end": 1748516095890,
       "order": "normal"
     }
   ]

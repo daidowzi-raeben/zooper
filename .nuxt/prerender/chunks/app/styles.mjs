@@ -1,9 +1,9 @@
 const interopDefault = r => r.default || r || [];
 const styles = {
   "node_modules/nuxt/dist/app/entry.js": () => import('./_nuxt/entry-styles.B6ynXH_4.mjs').then(interopDefault),
-  "components/content/AnimatedCounter.vue": () => import('./_nuxt/AnimatedCounter-styles.EC6WnIPy.mjs').then(interopDefault),
   "components/content/LabCard.vue": () => import('./_nuxt/LabCard-styles.tMpFSIAF.mjs').then(interopDefault),
   "components/content/Rocket.vue": () => import('./_nuxt/Rocket-styles.D4DvrQ71.mjs').then(interopDefault),
+  "components/content/AnimatedCounter.vue": () => import('./_nuxt/AnimatedCounter-styles.EC6WnIPy.mjs').then(interopDefault),
   "components/content/TextRotator.vue": () => import('./_nuxt/TextRotator-styles.B6-AJl0A.mjs').then(interopDefault),
   "node_modules/@nuxt/content/dist/runtime/components/Prose/ProseCode.vue": () => import('./_nuxt/ProseCode-styles.BaOCvZyF.mjs').then(interopDefault),
   "node_modules/@nuxt/content/dist/runtime/components/Prose/ProsePre.vue": () => import('./_nuxt/ProsePre-styles.COD05knw.mjs').then(interopDefault),

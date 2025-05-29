@@ -625,7 +625,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-C5fbmJHs.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-Dg_ZXdML.js").then((m) => m.default || m)
   },
   {
     name: "lab",
@@ -840,7 +840,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "437c626d-deab-4ee7-afe0-0dfa4a3abb66"
+    "buildId": "abb239b6-92a5-4d45-aef8-3791c4fe58a9"
   },
   "ui": {
     "primary": "green",

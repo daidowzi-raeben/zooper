@@ -95,7 +95,7 @@ const isMoney = ref(false)
           💸 출금
         </div>
       </router-link>
-      <router-link to="/tax">
+      <!-- <router-link to="/tax">
         <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
           💼 세금
         </div>
@@ -104,7 +104,7 @@ const isMoney = ref(false)
         <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg font-bold cursor-pointer">
           ⚠️ 벌금
         </div>
-      </router-link>
+      </router-link> -->
     </div>
   </div>
   
