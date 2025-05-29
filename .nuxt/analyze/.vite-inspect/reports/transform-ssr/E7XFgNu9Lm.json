@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div>\n    <h2 class=\"text-sm font-semibold\">{{ title }}</h2>\n    <p class=\"text-gray-500 text-sm\">\n      {{ description }}\n    </p>\n    <div\n      class=\"mt-2 border dark:border-white/10 rounded-lg shadow-sm overflow-hidden\"\n    >\n      <div class=\"p-2 flex items-center gap-2 border-b dark:border-white/10\">\n        <div class=\"flex items-center w-full\">\n          <UButton\n            @click=\"tab = 'preview'\"\n            label=\"Preview\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'preview' }\"\n          />\n          <UButton\n            @click=\"tab = 'code'\"\n            label=\"Code\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'code' }\"\n          />\n          <UButton\n            v-if=\"showUsageTab\"\n            @click=\"tab = 'usage'\"\n            label=\"Usage\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'usage' }\"\n          />\n          <UButton\n            v-if=\"showCreditTab\"\n            @click=\"tab = 'credit'\"\n            label=\"Credits\"\n            variant=\"soft\"\n            color=\"white\"\n            size=\"xs\"\n            class=\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\"\n            :class=\"{ 'active-tab': tab === 'credit' }\"\n          />\n        </div>\n      </div>\n      <div>\n        <div\n          v-if=\"tab === 'preview'\"\n          class=\"bg-gray-100 dark:bg-gray-900 overflow-hidden\"\n        >\n          <slot name=\"preview\" />\n        </div>\n        <slot v-if=\"tab === 'code'\" name=\"codebase\" />\n        <slot v-if=\"tab === 'usage'\" name=\"usage\" />\n        <slot v-if=\"tab === 'credit'\" name=\"credit\" />\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup>\ndefineProps({\n  title: String,\n  description: String,\n  showUsageTab: {\n    type: Boolean,\n    default: true,\n  },\n  showCreditTab: {\n    type: Boolean,\n    default: false,\n  },\n});\n\nconst tab = ref(\"preview\");\n</script>\n\n<style scoped>\n.active-tab {\n  @apply after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary-500 after:bottom-[-9px] after:left-0 after:pointer-events-none;\n}\n</style>\n",
-      "start": 1748517870317,
-      "end": 1748517871387,
+      "start": 1748518132098,
+      "end": 1748518133093,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748517871387,
-      "end": 1748517871387,
+      "start": 1748518133093,
+      "end": 1748518133093,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { unref as _unref, resolveComponent as _resolveComponent } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderSlot as _ssrRenderSlot, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\"\n\n\nconst _sfc_main = {\n  __name: 'LabCard',\n  __ssrInlineRender: true,\n  props: {\n  title: String,\n  description: String,\n  showUsageTab: {\n    type: Boolean,\n    default: true,\n  },\n  showCreditTab: {\n    type: Boolean,\n    default: false,\n  },\n},\n  setup(__props) {\n\n\n\nconst tab = ref(\"preview\");\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  _push(`<div${\n    _ssrRenderAttrs(_attrs)\n  } data-v-95c436b2><h2 class=\"text-sm font-semibold\" data-v-95c436b2>${\n    _ssrInterpolate(__props.title)\n  }</h2><p class=\"text-gray-500 text-sm\" data-v-95c436b2>${\n    _ssrInterpolate(__props.description)\n  }</p><div class=\"mt-2 border dark:border-white/10 rounded-lg shadow-sm overflow-hidden\" data-v-95c436b2><div class=\"p-2 flex items-center gap-2 border-b dark:border-white/10\" data-v-95c436b2><div class=\"flex items-center w-full\" data-v-95c436b2>`)\n  _push(_ssrRenderComponent(_component_UButton, {\n    onClick: $event => (tab.value = 'preview'),\n    label: \"Preview\",\n    variant: \"soft\",\n    color: \"white\",\n    size: \"xs\",\n    class: [\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'preview' }]\n  }, null, _parent))\n  _push(_ssrRenderComponent(_component_UButton, {\n    onClick: $event => (tab.value = 'code'),\n    label: \"Code\",\n    variant: \"soft\",\n    color: \"white\",\n    size: \"xs\",\n    class: [\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'code' }]\n  }, null, _parent))\n  if (__props.showUsageTab) {\n    _push(_ssrRenderComponent(_component_UButton, {\n      onClick: $event => (tab.value = 'usage'),\n      label: \"Usage\",\n      variant: \"soft\",\n      color: \"white\",\n      size: \"xs\",\n      class: [\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'usage' }]\n    }, null, _parent))\n  } else {\n    _push(`<!---->`)\n  }\n  if (__props.showCreditTab) {\n    _push(_ssrRenderComponent(_component_UButton, {\n      onClick: $event => (tab.value = 'credit'),\n      label: \"Credits\",\n      variant: \"soft\",\n      color: \"white\",\n      size: \"xs\",\n      class: [\"relative hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300\", { 'active-tab': _unref(tab) === 'credit' }]\n    }, null, _parent))\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div></div><div data-v-95c436b2>`)\n  if (_unref(tab) === 'preview') {\n    _push(`<div class=\"bg-gray-100 dark:bg-gray-900 overflow-hidden\" data-v-95c436b2>`)\n    _ssrRenderSlot(_ctx.$slots, \"preview\", {}, null, _push, _parent)\n    _push(`</div>`)\n  } else {\n    _push(`<!---->`)\n  }\n  if (_unref(tab) === 'code') {\n    _ssrRenderSlot(_ctx.$slots, \"codebase\", {}, null, _push, _parent)\n  } else {\n    _push(`<!---->`)\n  }\n  if (_unref(tab) === 'usage') {\n    _ssrRenderSlot(_ctx.$slots, \"usage\", {}, null, _push, _parent)\n  } else {\n    _push(`<!---->`)\n  }\n  if (_unref(tab) === 'credit') {\n    _ssrRenderSlot(_ctx.$slots, \"credit\", {}, null, _push, _parent)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div></div></div>`)\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue?vue&type=style&index=0&scoped=95c436b2&lang.css\"\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"components/content/LabCard.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-95c436b2\"]])",
-      "start": 1748517871387,
-      "end": 1748517871389,
+      "start": 1748518133093,
+      "end": 1748518133096,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,178 +94,178 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
       "result": "import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => import(\"/Users/jang-yeong-ug/Documents/zooper/components/content/LabCard.vue\").then(r => r.default))",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "replace",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748517871389,
-      "end": 1748517871389,
+      "start": 1748518133096,
+      "end": 1748518133096,
       "order": "normal"
     }
   ]

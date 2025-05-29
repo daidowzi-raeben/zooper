@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <main class=\"min-h-screen\">\n    <AppHeader class=\"mb-16\" title=\"Articles\" :description=\"description\" />\n    <ul class=\"space-y-16\">\n      <li v-for=\"(article, id) in articles\" :key=\"id\">\n        <AppArticleCard :article=\"article\" />\n      </li>\n    </ul>\n  </main>\n</template>\n\n<script setup>\nconst description =\n  \"All of my long-form thoughts on programming, user interfaces, product design, and more, collected in chronological order.\";\nuseSeoMeta({\n  title: \"Articles | Fayaz Ahmed\",\n  description,\n});\n\nconst { data: articles } = await useAsyncData(\"all-articles\", () =>\n  queryContent(\"/articles\").sort({ published: -1 }).find()\n);\n</script>\n",
-      "start": 1748517867302,
-      "end": 1748517867371,
+      "start": 1748518129054,
+      "end": 1748518129145,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748517867371,
-      "end": 1748517867371,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { withAsyncContext as _withAsyncContext } from 'vue'\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-16\" }\n\nconst description =\n  \"All of my long-form thoughts on programming, user interfaces, product design, and more, collected in chronological order.\";\n\nconst _sfc_main = {\n  __name: 'index',\n  async setup(__props) {\n\nlet __temp, __restore\n\nuseSeoMeta({\n  title: \"Articles | Fayaz Ahmed\",\n  description,\n});\n\nconst { data: articles } = (\n  ([__temp,__restore] = _withAsyncContext(() => useAsyncData(\"all-articles\", () =>\n  queryContent(\"/articles\").sort({ published: -1 }).find()\n))),\n  __temp = await __temp,\n  __restore(),\n  __temp\n);\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_AppArticleCard = _resolveComponent(\"AppArticleCard\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-16\",\n      title: \"Articles\",\n      description: description\n    }),\n    _createElementVNode(\"ul\", _hoisted_2, [\n      (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(articles), (article, id) => {\n        return (_openBlock(), _createElementBlock(\"li\", { key: id }, [\n          _createVNode(_component_AppArticleCard, { article: article }, null, 8, [\"article\"])\n        ]))\n      }), 128))\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129145,
+      "end": 1748518129145,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129145,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129146,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748517867372,
-      "end": 1748517867372,
+      "start": 1748518129146,
+      "end": 1748518129147,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { useSeoMeta } from '@unhead/vue';\nimport { useAsyncData } from '#app/composables/asyncData';\nimport { queryContent } from '/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/legacy/composables/query';\nimport { withAsyncContext as _withAsyncContext } from 'vue'\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-16\" }\n\nconst description =\n  \"All of my long-form thoughts on programming, user interfaces, product design, and more, collected in chronological order.\";\n\nconst _sfc_main = {\n  __name: 'index',\n  async setup(__props) {\n\nlet __temp, __restore\n\nuseSeoMeta({\n  title: \"Articles | Fayaz Ahmed\",\n  description,\n});\n\nconst { data: articles } = (\n  ([__temp,__restore] = _withAsyncContext(() => useAsyncData(\"all-articles\", () =>\n  queryContent(\"/articles\").sort({ published: -1 }).find()\n))),\n  __temp = await __temp,\n  __restore(),\n  __temp\n);\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_AppArticleCard = _resolveComponent(\"AppArticleCard\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-16\",\n      title: \"Articles\",\n      description: description\n    }),\n    _createElementVNode(\"ul\", _hoisted_2, [\n      (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(articles), (article, id) => {\n        return (_openBlock(), _createElementBlock(\"li\", { key: id }, [\n          _createVNode(_component_AppArticleCard, { article: article }, null, 8, [\"article\"])\n        ]))\n      }), 128))\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748517867372,
-      "end": 1748517867373,
+      "start": 1748518129147,
+      "end": 1748518129148,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,51 +185,51 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129148,
+      "end": 1748518129148,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129148,
+      "end": 1748518129148,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129148,
+      "end": 1748518129148,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129148,
+      "end": 1748518129148,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/components/App/Header.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/components/App/ArticleCard.vue\";\nimport { useSeoMeta } from '@unhead/vue';\nimport { useAsyncData } from '#app/composables/asyncData';\nimport { queryContent } from '/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/legacy/composables/query';\nimport { withAsyncContext as _withAsyncContext } from 'vue'\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-16\" }\n\nconst description =\n  \"All of my long-form thoughts on programming, user interfaces, product design, and more, collected in chronological order.\";\n\nconst _sfc_main = {\n  __name: 'index',\n  async setup(__props) {\n\nlet __temp, __restore\n\nuseSeoMeta({\n  title: \"Articles | Fayaz Ahmed\",\n  description,\n});\n\nconst { data: articles } = (\n  ([__temp,__restore] = _withAsyncContext(() => useAsyncData(\"all-articles\", () =>\n  queryContent(\"/articles\").sort({ published: -1 }).find()\n))),\n  __temp = await __temp,\n  __restore(),\n  __temp\n);\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = __nuxt_component_0\n  const _component_AppArticleCard = __nuxt_component_1\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-16\",\n      title: \"Articles\",\n      description: description\n    }),\n    _createElementVNode(\"ul\", _hoisted_2, [\n      (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(articles), (article, id) => {\n        return (_openBlock(), _createElementBlock(\"li\", { key: id }, [\n          _createVNode(_component_AppArticleCard, { article: article }, null, 8, [\"article\"])\n        ]))\n      }), 128))\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129148,
+      "end": 1748518129149,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129149,
+      "end": 1748518129149,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129149,
+      "end": 1748518129149,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748517867373,
-      "end": 1748517867373,
+      "start": 1748518129149,
+      "end": 1748518129149,
       "order": "normal"
     }
   ]

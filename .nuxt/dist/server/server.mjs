@@ -840,7 +840,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "2b7be540-3bb7-43f0-8f1e-24214717cfd6"
+    "buildId": "29f7e095-a6ea-490d-997f-a6f6e02c70b3"
   },
   "ui": {
     "primary": "green",
@@ -3722,12 +3722,10 @@ const _sfc_main$5 = {
     const { styles } = useFixedHeader(headerRef);
     const items = [
       { name: "Home", path: "/", icon: "solar:home-2-outline" },
-      { name: "이체", path: "/transfer", icon: "solar:arrow-right-linear" },
+      { name: "이체", path: "/transfer", icon: "mdi:bank-transfer" },
+      // 변경됨
       { name: "입금", path: "/income", icon: "solar:wallet-2-outline" },
       { name: "출금", path: "/expense", icon: "solar:money-bag-outline" }
-      // 예: 교체됨
-      // { name: "세금", path: "/tax", icon: "solar:bill-list-outline" },
-      // { name: "벌금", path: "/penalty", icon: "solar:danger-triangle-outline" },
     ];
     return (_ctx, _push, _parent, _attrs) => {
       const _component_UTooltip = __nuxt_component_0$3;

@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <NuxtLink\n    :href=\"props.href\"\n    :target=\"props.target\"\n  >\n    <slot />\n  </NuxtLink>\n</template>\n\n<script setup lang=\"ts\">\nimport type { PropType } from 'vue'\n\nconst props = defineProps({\n  href: {\n    type: String,\n    default: ''\n  },\n  target: {\n    type: String as PropType<'_blank' | '_parent' | '_self' | '_top' | (string & object) | null | undefined>,\n    default: undefined,\n    required: false\n  }\n})\n</script>\n",
-      "start": 1748517864168,
-      "end": 1748517866045,
+      "start": 1748518126679,
+      "end": 1748518127865,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748517866045,
-      "end": 1748517866045,
+      "start": 1748518127865,
+      "end": 1748518127865,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import _sfc_main from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseA.vue?vue&type=script&setup=true&lang.ts\";\nexport * from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseA.vue?vue&type=script&setup=true&lang.ts\";\nexport default _sfc_main;\n",
-      "start": 1748517866045,
-      "end": 1748517866060,
+      "start": 1748518127865,
+      "end": 1748518127882,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,156 +74,156 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127882,
+      "end": 1748518127882,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127882,
+      "end": 1748518127882,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127882,
+      "end": 1748518127882,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127882,
+      "end": 1748518127882,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
       "result": "import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => import(\"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseA.vue\").then(r => r.default))",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127882,
+      "end": 1748518127883,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "replace",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748517866060,
-      "end": 1748517866060,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748517866060,
-      "end": 1748517866061,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127883,
+      "end": 1748518127883,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748517866061,
-      "end": 1748517866061,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
       "result": "import { __vitePreload } from \"\u0000vite/preload-helper.js\";import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseA.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(r => r.default))",
-      "start": 1748517866061,
-      "end": 1748517866062,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "vite:reporter",
-      "start": 1748517866062,
-      "end": 1748517866062,
+      "start": 1748518127884,
+      "end": 1748518127884,
       "order": "normal"
     }
   ]

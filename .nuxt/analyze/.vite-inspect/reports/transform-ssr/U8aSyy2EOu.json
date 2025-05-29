@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\n\nimport { apiPost,apiPoint } from '@/common/api'\n\nconst logout = () => {\n  sessionStorage.removeItem('idnt_code')\n  sessionStorage.removeItem('student')\n  sessionStorage.removeItem('t_idnt_code')\n  sessionStorage.removeItem('teacher')\n  window.location.href = '/login'\n}\n\nconst student = ref({});\nconst memberPoint = ref(0)\n\nconst storeItems = ref([])\nconst teacher = ref(null)\n\nconst fetchStoreItems = async () => {\n  const res = await apiPost('store.php', {\n    mode: 'storeList',\n    teacher: teacher,\n  })\n\n  if (res.result === 'SUCCESS') {\n    storeItems.value = res.data\n  }\n}\n\n\nonMounted( async () => {\n  if(sessionStorage.getItem('student')) {\n    student.value = JSON.parse(sessionStorage.getItem('student'))\n  } \n  memberPoint.value = await apiPoint()\n  teacher.value = JSON.parse(sessionStorage.getItem('student'))?.teacher\n   fetchStoreItems()\n})\n\nuseSeoMeta({\n  title: \"Fayaz Ahmed\",\n  description:\n    \"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\",\n});\n\nconst isMoney = ref(false)\n</script>\n\n\n<template>\n  <div>\n  <div class=\"space-y-4\">\n    <!-- 환영 메시지 -->\n    <div class=\"flex justify-between items-center\">\n      <p class=\"text-lg font-semibold text-gray-700\">{{ student?.student_name }}친구, 환영합니다 👋</p>\n      <button\n        class=\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\"\n        @click=\"logout\"\n      >\n        <span class=\"i-heroicons-arrow-right-on-rectangle w-4 h-4\" />\n        로그아웃\n      </button>\n    </div>\n\n    <!-- 내 잔액 -->\n    <div class=\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\">\n      <div class=\"flex flex-col justify-center\">\n        <p class=\"text-sm opacity-80\">내 잔액</p>\n        <p class=\"text-2xl font-bold\">\n          <span v-if=\"isMoney\" @click=\"isMoney = false\">\n          💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class=\"text-sm font-normal align-middle\">돌멩이</span>\n          </span>\n          <span v-if=\"!isMoney\" @click=\"isMoney = true\">\n            나의 잔액 확인하기\n          </span>\n        </p>\n      </div>\n      <UButton\n        label=\"이체하기\"\n        color=\"white\"\n        class=\"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\"\n        @click=\"$router.push('/transfer')\"\n      />\n    </div>\n\n    <!-- 버튼 8개 -->\n    <div class=\"grid grid-cols-2 gap-4\">\n      <router-link to=\"/income\">\n        <div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\">\n          💰 입금\n        </div>\n      </router-link>\n      <router-link to=\"/expense\">\n        <div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\">\n          💸 출금\n        </div>\n      </router-link>\n      <!-- <router-link to=\"/tax\">\n        <div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer\">\n          💼 세금\n        </div>\n      </router-link>\n      <router-link to=\"/penalty\">\n        <div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg font-bold cursor-pointer\">\n          ⚠️ 벌금\n        </div>\n      </router-link> -->\n    </div>\n  </div>\n  \n      <!-- <div class=\"mt-10\">\n          <div class=\"\">\n            <h1 class=\"text-2xl font-bold mb-4\">상점 아이템 목록</h1>\n\n            <div v-if=\"storeItems.length > 0\">\n              <ul>\n                <li\n                  v-for=\"(item, index) in storeItems\"\n                  :key=\"index\"\n                  class=\"mb-4 p-4 border rounded-lg\"\n                >\n                  <div class=\"text-lg font-semibold\">{{ item.item_name }}</div>\n                  <div class=\"text-sm text-gray-600\">{{ item.item_desc }}</div>\n                  <div class=\"text-right font-bold text-blue-600\">\n                    {{ item.price.toLocaleString() }} 포인트\n                  </div>\n                </li>\n              </ul>\n            </div>\n\n            <div v-else class=\"text-gray-500\">불러올 아이템이 없습니다.</div>\n          </div>\n      </div> -->\n  </div>\n</template>",
-      "start": 1748517873704,
-      "end": 1748517873856,
+      "start": 1748518135058,
+      "end": 1748518135238,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748517873856,
-      "end": 1748517873856,
+      "start": 1748518135238,
+      "end": 1748518135238,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\"\n\nimport { apiPost,apiPoint } from '@/common/api'\n\n\nconst _sfc_main = {\n  __name: 'Intro',\n  __ssrInlineRender: true,\n  setup(__props) {\n\n\nconst logout = () => {\n  sessionStorage.removeItem('idnt_code')\n  sessionStorage.removeItem('student')\n  sessionStorage.removeItem('t_idnt_code')\n  sessionStorage.removeItem('teacher')\n  window.location.href = '/login'\n}\n\nconst student = ref({});\nconst memberPoint = ref(0)\n\nconst storeItems = ref([])\nconst teacher = ref(null)\n\nconst fetchStoreItems = async () => {\n  const res = await apiPost('store.php', {\n    mode: 'storeList',\n    teacher: teacher,\n  })\n\n  if (res.result === 'SUCCESS') {\n    storeItems.value = res.data\n  }\n}\n\n\nonMounted( async () => {\n  if(sessionStorage.getItem('student')) {\n    student.value = JSON.parse(sessionStorage.getItem('student'))\n  } \n  memberPoint.value = await apiPoint()\n  teacher.value = JSON.parse(sessionStorage.getItem('student'))?.teacher\n   fetchStoreItems()\n})\n\nuseSeoMeta({\n  title: \"Fayaz Ahmed\",\n  description:\n    \"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\",\n});\n\nconst isMoney = ref(false)\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_UButton = _resolveComponent(\"UButton\")\n  const _component_router_link = _resolveComponent(\"router-link\")\n\n  _push(`<div${\n    _ssrRenderAttrs(_attrs)\n  }><div class=\"space-y-4\"><div class=\"flex justify-between items-center\"><p class=\"text-lg font-semibold text-gray-700\">${\n    _ssrInterpolate(_unref(student)?.student_name)\n  }친구, 환영합니다 👋</p><button class=\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\"><span class=\"i-heroicons-arrow-right-on-rectangle w-4 h-4\"></span> 로그아웃 </button></div><div class=\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\"><div class=\"flex flex-col justify-center\"><p class=\"text-sm opacity-80\">내 잔액</p><p class=\"text-2xl font-bold\">`)\n  if (_unref(isMoney)) {\n    _push(`<span> 💰 ${_ssrInterpolate(Number(_unref(memberPoint) || 0).toLocaleString())} <span class=\"text-sm font-normal align-middle\">돌멩이</span></span>`)\n  } else {\n    _push(`<!---->`)\n  }\n  if (!_unref(isMoney)) {\n    _push(`<span> 나의 잔액 확인하기 </span>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</p></div>`)\n  _push(_ssrRenderComponent(_component_UButton, {\n    label: \"이체하기\",\n    color: \"white\",\n    class: \"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\",\n    onClick: $event => (_ctx.$router.push('/transfer'))\n  }, null, _parent))\n  _push(`</div><div class=\"grid grid-cols-2 gap-4\">`)\n  _push(_ssrRenderComponent(_component_router_link, { to: \"/income\" }, {\n    default: _withCtx((_, _push, _parent, _scopeId) => {\n      if (_push) {\n        _push(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💰 입금 </div>`)\n      } else {\n        return [\n          _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💰 입금 \")\n        ]\n      }\n    }),\n    _: 1\n  }, _parent))\n  _push(_ssrRenderComponent(_component_router_link, { to: \"/expense\" }, {\n    default: _withCtx((_, _push, _parent, _scopeId) => {\n      if (_push) {\n        _push(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💸 출금 </div>`)\n      } else {\n        return [\n          _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💸 출금 \")\n        ]\n      }\n    }),\n    _: 1\n  }, _parent))\n  _push(`</div></div></div>`)\n}\n}\n\n}\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"components/Home/Intro.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748517873856,
-      "end": 1748517873858,
+      "start": 1748518135238,
+      "end": 1748518135244,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -96,119 +96,119 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748517873858,
-      "end": 1748517873858,
+      "start": 1748518135244,
+      "end": 1748518135244,
       "order": "normal"
     },
     {
       "name": "vite:define",
       "result": "import { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode } from \"vue\";\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nconst _sfc_main = {\n  __name: \"Intro\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const logout = () => {\n      sessionStorage.removeItem(\"idnt_code\");\n      sessionStorage.removeItem(\"student\");\n      sessionStorage.removeItem(\"t_idnt_code\");\n      sessionStorage.removeItem(\"teacher\");\n      (void 0).location.href = \"/login\";\n    };\n    const student = ref({});\n    const memberPoint = ref(0);\n    const storeItems = ref([]);\n    const teacher = ref(null);\n    const fetchStoreItems = async () => {\n      const res = await apiPost(\"store.php\", {\n        mode: \"storeList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        storeItems.value = res.data;\n      }\n    };\n    onMounted(async () => {\n      if (sessionStorage.getItem(\"student\")) {\n        student.value = JSON.parse(sessionStorage.getItem(\"student\"));\n      }\n      memberPoint.value = await apiPoint();\n      teacher.value = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      fetchStoreItems();\n    });\n    useSeoMeta({\n      title: \"Fayaz Ahmed\",\n      description: \"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\"\n    });\n    const isMoney = ref(false);\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UButton = _resolveComponent(\"UButton\");\n      const _component_router_link = _resolveComponent(\"router-link\");\n      _push(`<div${_ssrRenderAttrs(_attrs)}><div class=\"space-y-4\"><div class=\"flex justify-between items-center\"><p class=\"text-lg font-semibold text-gray-700\">${_ssrInterpolate(_unref(student)?.student_name)}친구, 환영합니다 👋</p><button class=\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\"><span class=\"i-heroicons-arrow-right-on-rectangle w-4 h-4\"></span> 로그아웃 </button></div><div class=\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\"><div class=\"flex flex-col justify-center\"><p class=\"text-sm opacity-80\">내 잔액</p><p class=\"text-2xl font-bold\">`);\n      if (_unref(isMoney)) {\n        _push(`<span> 💰 ${_ssrInterpolate(Number(_unref(memberPoint) || 0).toLocaleString())} <span class=\"text-sm font-normal align-middle\">돌멩이</span></span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (!_unref(isMoney)) {\n        _push(`<span> 나의 잔액 확인하기 </span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</p></div>`);\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"이체하기\",\n        color: \"white\",\n        class: \"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\",\n        onClick: ($event) => _ctx.$router.push(\"/transfer\")\n      }, null, _parent));\n      _push(`</div><div class=\"grid grid-cols-2 gap-4\">`);\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/income\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💰 입금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💰 입금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/expense\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💸 출금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💸 출금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(`</div></div></div>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"components/Home/Intro.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748517873858,
-      "end": 1748517874100,
+      "start": 1748518135244,
+      "end": 1748518135465,
       "order": "normal",
       "sourcemaps": "{\n  \"version\": 3,\n  \"sources\": [\"/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue\"],\n  \"sourcesContent\": [\"import { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode } from \\\"vue\\\"\\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \\\"vue/server-renderer\\\"\\n\\nimport { apiPost,apiPoint } from '@/common/api'\\n\\n\\nconst _sfc_main = {\\n  __name: 'Intro',\\n  __ssrInlineRender: true,\\n  setup(__props) {\\n\\n\\nconst logout = () => {\\n  sessionStorage.removeItem('idnt_code')\\n  sessionStorage.removeItem('student')\\n  sessionStorage.removeItem('t_idnt_code')\\n  sessionStorage.removeItem('teacher')\\n  window.location.href = '/login'\\n}\\n\\nconst student = ref({});\\nconst memberPoint = ref(0)\\n\\nconst storeItems = ref([])\\nconst teacher = ref(null)\\n\\nconst fetchStoreItems = async () => {\\n  const res = await apiPost('store.php', {\\n    mode: 'storeList',\\n    teacher: teacher,\\n  })\\n\\n  if (res.result === 'SUCCESS') {\\n    storeItems.value = res.data\\n  }\\n}\\n\\n\\nonMounted( async () => {\\n  if(sessionStorage.getItem('student')) {\\n    student.value = JSON.parse(sessionStorage.getItem('student'))\\n  } \\n  memberPoint.value = await apiPoint()\\n  teacher.value = JSON.parse(sessionStorage.getItem('student'))?.teacher\\n   fetchStoreItems()\\n})\\n\\nuseSeoMeta({\\n  title: \\\"Fayaz Ahmed\\\",\\n  description:\\n    \\\"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\\\",\\n});\\n\\nconst isMoney = ref(false)\\n\\nreturn (_ctx, _push, _parent, _attrs) => {\\n  const _component_UButton = _resolveComponent(\\\"UButton\\\")\\n  const _component_router_link = _resolveComponent(\\\"router-link\\\")\\n\\n  _push(`<div${\\n    _ssrRenderAttrs(_attrs)\\n  }><div class=\\\"space-y-4\\\"><div class=\\\"flex justify-between items-center\\\"><p class=\\\"text-lg font-semibold text-gray-700\\\">${\\n    _ssrInterpolate(_unref(student)?.student_name)\\n  }친구, 환영합니다 👋</p><button class=\\\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\\\"><span class=\\\"i-heroicons-arrow-right-on-rectangle w-4 h-4\\\"></span> 로그아웃 </button></div><div class=\\\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\\\"><div class=\\\"flex flex-col justify-center\\\"><p class=\\\"text-sm opacity-80\\\">내 잔액</p><p class=\\\"text-2xl font-bold\\\">`)\\n  if (_unref(isMoney)) {\\n    _push(`<span> 💰 ${_ssrInterpolate(Number(_unref(memberPoint) || 0).toLocaleString())} <span class=\\\"text-sm font-normal align-middle\\\">돌멩이</span></span>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  if (!_unref(isMoney)) {\\n    _push(`<span> 나의 잔액 확인하기 </span>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  _push(`</p></div>`)\\n  _push(_ssrRenderComponent(_component_UButton, {\\n    label: \\\"이체하기\\\",\\n    color: \\\"white\\\",\\n    class: \\\"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\\\",\\n    onClick: $event => (_ctx.$router.push('/transfer'))\\n  }, null, _parent))\\n  _push(`</div><div class=\\\"grid grid-cols-2 gap-4\\\">`)\\n  _push(_ssrRenderComponent(_component_router_link, { to: \\\"/income\\\" }, {\\n    default: _withCtx((_, _push, _parent, _scopeId) => {\\n      if (_push) {\\n        _push(`<div class=\\\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\\\"${_scopeId}> 💰 입금 </div>`)\\n      } else {\\n        return [\\n          _createVNode(\\\"div\\\", { class: \\\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\\\" }, \\\" 💰 입금 \\\")\\n        ]\\n      }\\n    }),\\n    _: 1\\n  }, _parent))\\n  _push(_ssrRenderComponent(_component_router_link, { to: \\\"/expense\\\" }, {\\n    default: _withCtx((_, _push, _parent, _scopeId) => {\\n      if (_push) {\\n        _push(`<div class=\\\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\\\"${_scopeId}> 💸 출금 </div>`)\\n      } else {\\n        return [\\n          _createVNode(\\\"div\\\", { class: \\\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\\\" }, \\\" 💸 출금 \\\")\\n        ]\\n      }\\n    }),\\n    _: 1\\n  }, _parent))\\n  _push(`</div></div></div>`)\\n}\\n}\\n\\n}\\n\\n\\n\\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\\nconst _sfc_setup = _sfc_main.setup\\n_sfc_main.setup = (props, ctx) => {\\n  const ssrContext = __vite_useSSRContext()\\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\\\"components/Home/Intro.vue\\\")\\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\\n}\\nexport default _sfc_main\"],\n  \"mappings\": \"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\",\n  \"names\": [\"_push\", \"_parent\"]\n}\n"
     },
     {
       "name": "vite:css-post",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748517874100,
-      "end": 1748517874100,
+      "start": 1748518135465,
+      "end": 1748518135465,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { ref, onMounted } from 'vue';\nimport { useSeoMeta } from '@unhead/vue';\nimport { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode } from \"vue\";\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nconst _sfc_main = {\n  __name: \"Intro\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const logout = () => {\n      sessionStorage.removeItem(\"idnt_code\");\n      sessionStorage.removeItem(\"student\");\n      sessionStorage.removeItem(\"t_idnt_code\");\n      sessionStorage.removeItem(\"teacher\");\n      (void 0).location.href = \"/login\";\n    };\n    const student = ref({});\n    const memberPoint = ref(0);\n    const storeItems = ref([]);\n    const teacher = ref(null);\n    const fetchStoreItems = async () => {\n      const res = await apiPost(\"store.php\", {\n        mode: \"storeList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        storeItems.value = res.data;\n      }\n    };\n    onMounted(async () => {\n      if (sessionStorage.getItem(\"student\")) {\n        student.value = JSON.parse(sessionStorage.getItem(\"student\"));\n      }\n      memberPoint.value = await apiPoint();\n      teacher.value = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      fetchStoreItems();\n    });\n    useSeoMeta({\n      title: \"Fayaz Ahmed\",\n      description: \"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\"\n    });\n    const isMoney = ref(false);\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UButton = _resolveComponent(\"UButton\");\n      const _component_router_link = _resolveComponent(\"router-link\");\n      _push(`<div${_ssrRenderAttrs(_attrs)}><div class=\"space-y-4\"><div class=\"flex justify-between items-center\"><p class=\"text-lg font-semibold text-gray-700\">${_ssrInterpolate(_unref(student)?.student_name)}친구, 환영합니다 👋</p><button class=\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\"><span class=\"i-heroicons-arrow-right-on-rectangle w-4 h-4\"></span> 로그아웃 </button></div><div class=\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\"><div class=\"flex flex-col justify-center\"><p class=\"text-sm opacity-80\">내 잔액</p><p class=\"text-2xl font-bold\">`);\n      if (_unref(isMoney)) {\n        _push(`<span> 💰 ${_ssrInterpolate(Number(_unref(memberPoint) || 0).toLocaleString())} <span class=\"text-sm font-normal align-middle\">돌멩이</span></span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (!_unref(isMoney)) {\n        _push(`<span> 나의 잔액 확인하기 </span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</p></div>`);\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"이체하기\",\n        color: \"white\",\n        class: \"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\",\n        onClick: ($event) => _ctx.$router.push(\"/transfer\")\n      }, null, _parent));\n      _push(`</div><div class=\"grid grid-cols-2 gap-4\">`);\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/income\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💰 입금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💰 입금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/expense\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💸 출금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💸 출금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(`</div></div></div>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"components/Home/Intro.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748517874100,
-      "end": 1748517874102,
+      "start": 1748518135465,
+      "end": 1748518135467,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -222,8 +222,8 @@
     {
       "name": "nuxt:imports-transform",
       "result": "import { ref, onMounted } from 'vue';\nimport { useSeoMeta } from '@unhead/vue';\nimport { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode } from \"vue\";\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nconst _sfc_main = {\n  __name: \"Intro\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const logout = () => {\n      sessionStorage.removeItem(\"idnt_code\");\n      sessionStorage.removeItem(\"student\");\n      sessionStorage.removeItem(\"t_idnt_code\");\n      sessionStorage.removeItem(\"teacher\");\n      (void 0).location.href = \"/login\";\n    };\n    const student = ref({});\n    const memberPoint = ref(0);\n    const storeItems = ref([]);\n    const teacher = ref(null);\n    const fetchStoreItems = async () => {\n      const res = await apiPost(\"store.php\", {\n        mode: \"storeList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        storeItems.value = res.data;\n      }\n    };\n    onMounted(async () => {\n      if (sessionStorage.getItem(\"student\")) {\n        student.value = JSON.parse(sessionStorage.getItem(\"student\"));\n      }\n      memberPoint.value = await apiPoint();\n      teacher.value = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      fetchStoreItems();\n    });\n    useSeoMeta({\n      title: \"Fayaz Ahmed\",\n      description: \"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\"\n    });\n    const isMoney = ref(false);\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UButton = _resolveComponent(\"UButton\");\n      const _component_router_link = _resolveComponent(\"router-link\");\n      _push(`<div${_ssrRenderAttrs(_attrs)}><div class=\"space-y-4\"><div class=\"flex justify-between items-center\"><p class=\"text-lg font-semibold text-gray-700\">${_ssrInterpolate(_unref(student)?.student_name)}친구, 환영합니다 👋</p><button class=\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\"><span class=\"i-heroicons-arrow-right-on-rectangle w-4 h-4\"></span> 로그아웃 </button></div><div class=\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\"><div class=\"flex flex-col justify-center\"><p class=\"text-sm opacity-80\">내 잔액</p><p class=\"text-2xl font-bold\">`);\n      if (_unref(isMoney)) {\n        _push(`<span> 💰 ${_ssrInterpolate(Number(_unref(memberPoint) || 0).toLocaleString())} <span class=\"text-sm font-normal align-middle\">돌멩이</span></span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (!_unref(isMoney)) {\n        _push(`<span> 나의 잔액 확인하기 </span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</p></div>`);\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"이체하기\",\n        color: \"white\",\n        class: \"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\",\n        onClick: ($event) => _ctx.$router.push(\"/transfer\")\n      }, null, _parent));\n      _push(`</div><div class=\"grid grid-cols-2 gap-4\">`);\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/income\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💰 입금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💰 입금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/expense\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💸 출금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💸 출금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(`</div></div></div>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"components/Home/Intro.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748517874100,
-      "end": 1748517874102,
+      "start": 1748518135465,
+      "end": 1748518135467,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -236,39 +236,39 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748517874102,
-      "end": 1748517874102,
+      "start": 1748518135467,
+      "end": 1748518135467,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748517874102,
-      "end": 1748517874102,
+      "start": 1748518135467,
+      "end": 1748518135467,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748517874102,
-      "end": 1748517874102,
+      "start": 1748518135467,
+      "end": 1748518135467,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748517874102,
-      "end": 1748517874102,
+      "start": 1748518135467,
+      "end": 1748518135467,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748517874102,
-      "end": 1748517874102,
+      "start": 1748518135467,
+      "end": 1748518135467,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Button.vue\";\nimport { ref, onMounted } from 'vue';\nimport { useSeoMeta } from '@unhead/vue';\nimport { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode } from \"vue\";\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nconst _sfc_main = {\n  __name: \"Intro\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const logout = () => {\n      sessionStorage.removeItem(\"idnt_code\");\n      sessionStorage.removeItem(\"student\");\n      sessionStorage.removeItem(\"t_idnt_code\");\n      sessionStorage.removeItem(\"teacher\");\n      (void 0).location.href = \"/login\";\n    };\n    const student = ref({});\n    const memberPoint = ref(0);\n    const storeItems = ref([]);\n    const teacher = ref(null);\n    const fetchStoreItems = async () => {\n      const res = await apiPost(\"store.php\", {\n        mode: \"storeList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        storeItems.value = res.data;\n      }\n    };\n    onMounted(async () => {\n      if (sessionStorage.getItem(\"student\")) {\n        student.value = JSON.parse(sessionStorage.getItem(\"student\"));\n      }\n      memberPoint.value = await apiPoint();\n      teacher.value = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      fetchStoreItems();\n    });\n    useSeoMeta({\n      title: \"Fayaz Ahmed\",\n      description: \"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\"\n    });\n    const isMoney = ref(false);\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UButton = __nuxt_component_0;\n      const _component_router_link = _resolveComponent(\"router-link\");\n      _push(`<div${_ssrRenderAttrs(_attrs)}><div class=\"space-y-4\"><div class=\"flex justify-between items-center\"><p class=\"text-lg font-semibold text-gray-700\">${_ssrInterpolate(_unref(student)?.student_name)}친구, 환영합니다 👋</p><button class=\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\"><span class=\"i-heroicons-arrow-right-on-rectangle w-4 h-4\"></span> 로그아웃 </button></div><div class=\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\"><div class=\"flex flex-col justify-center\"><p class=\"text-sm opacity-80\">내 잔액</p><p class=\"text-2xl font-bold\">`);\n      if (_unref(isMoney)) {\n        _push(`<span> 💰 ${_ssrInterpolate(Number(_unref(memberPoint) || 0).toLocaleString())} <span class=\"text-sm font-normal align-middle\">돌멩이</span></span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (!_unref(isMoney)) {\n        _push(`<span> 나의 잔액 확인하기 </span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</p></div>`);\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"이체하기\",\n        color: \"white\",\n        class: \"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\",\n        onClick: ($event) => _ctx.$router.push(\"/transfer\")\n      }, null, _parent));\n      _push(`</div><div class=\"grid grid-cols-2 gap-4\">`);\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/income\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💰 입금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💰 입금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/expense\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💸 출금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💸 출금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(`</div></div></div>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"components/Home/Intro.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748517874102,
-      "end": 1748517874102,
+      "start": 1748518135467,
+      "end": 1748518135467,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -282,8 +282,8 @@
     {
       "name": "nuxt:tree-shake-composables:transform",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Button.vue\";\nimport { ref, onMounted } from 'vue';\nimport { useSeoMeta } from '@unhead/vue';\nimport { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode } from \"vue\";\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nconst _sfc_main = {\n  __name: \"Intro\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const logout = () => {\n      sessionStorage.removeItem(\"idnt_code\");\n      sessionStorage.removeItem(\"student\");\n      sessionStorage.removeItem(\"t_idnt_code\");\n      sessionStorage.removeItem(\"teacher\");\n      (void 0).location.href = \"/login\";\n    };\n    const student = ref({});\n    const memberPoint = ref(0);\n    const storeItems = ref([]);\n    const teacher = ref(null);\n    const fetchStoreItems = async () => {\n      const res = await apiPost(\"store.php\", {\n        mode: \"storeList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        storeItems.value = res.data;\n      }\n    };\n     false && /*@__PURE__*/ onMounted(async () => {\n      if (sessionStorage.getItem(\"student\")) {\n        student.value = JSON.parse(sessionStorage.getItem(\"student\"));\n      }\n      memberPoint.value = await apiPoint();\n      teacher.value = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      fetchStoreItems();\n    });\n    useSeoMeta({\n      title: \"Fayaz Ahmed\",\n      description: \"I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.\"\n    });\n    const isMoney = ref(false);\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UButton = __nuxt_component_0;\n      const _component_router_link = _resolveComponent(\"router-link\");\n      _push(`<div${_ssrRenderAttrs(_attrs)}><div class=\"space-y-4\"><div class=\"flex justify-between items-center\"><p class=\"text-lg font-semibold text-gray-700\">${_ssrInterpolate(_unref(student)?.student_name)}친구, 환영합니다 👋</p><button class=\"flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition\"><span class=\"i-heroicons-arrow-right-on-rectangle w-4 h-4\"></span> 로그아웃 </button></div><div class=\"col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center\"><div class=\"flex flex-col justify-center\"><p class=\"text-sm opacity-80\">내 잔액</p><p class=\"text-2xl font-bold\">`);\n      if (_unref(isMoney)) {\n        _push(`<span> 💰 ${_ssrInterpolate(Number(_unref(memberPoint) || 0).toLocaleString())} <span class=\"text-sm font-normal align-middle\">돌멩이</span></span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (!_unref(isMoney)) {\n        _push(`<span> 나의 잔액 확인하기 </span>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</p></div>`);\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"이체하기\",\n        color: \"white\",\n        class: \"text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100\",\n        onClick: ($event) => _ctx.$router.push(\"/transfer\")\n      }, null, _parent));\n      _push(`</div><div class=\"grid grid-cols-2 gap-4\">`);\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/income\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💰 입금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💰 입금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(_ssrRenderComponent(_component_router_link, { to: \"/expense\" }, {\n        default: _withCtx((_, _push2, _parent2, _scopeId) => {\n          if (_push2) {\n            _push2(`<div class=\"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\"${_scopeId}> 💸 출금 </div>`);\n          } else {\n            return [\n              _createVNode(\"div\", { class: \"rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer\" }, \" 💸 출금 \")\n            ];\n          }\n        }),\n        _: 1\n      }, _parent));\n      _push(`</div></div></div>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"components/Home/Intro.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748517874103,
-      "end": 1748517874103,
+      "start": 1748518135467,
+      "end": 1748518135468,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -296,14 +296,14 @@
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748517874103,
-      "end": 1748517874103,
+      "start": 1748518135468,
+      "end": 1748518135468,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748517874103,
-      "end": 1748517874103,
+      "start": 1748518135468,
+      "end": 1748518135468,
       "order": "normal"
     }
   ]
