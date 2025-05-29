@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nconst colorMode = useColorMode();\n\nconst isDark = computed({\n  get() {\n    return colorMode.value === \"dark\";\n  },\n  set() {\n    colorMode.preference = colorMode.value === \"dark\" ? \"light\" : \"dark\";\n  },\n});\n</script>\n\n<template>\n  <UTooltip text=\"Toggle theme\" :ui=\"{ popper: { strategy: 'absolute' } }\">\n    <button\n      class=\"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\"\n      @click=\"isDark = !isDark\"\n    >\n      <Icon\n        aria-hidden=\"true\"\n        :name=\"isDark ? 'solar:sun-2-outline' : 'solar:moon-outline'\"\n        class=\"w-5 h-5\"\n      />\n      <span class=\"sr-only\">Toggle theme</span>\n    </button>\n  </UTooltip>\n</template>\n",
-      "start": 1748497713813,
-      "end": 1748497713951,
+      "start": 1748498045577,
+      "end": 1748498045688,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748497713951,
-      "end": 1748497713951,
+      "start": 1748498045688,
+      "end": 1748498045688,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { resolveComponent as _resolveComponent, unref as _unref, withCtx as _withCtx, createVNode as _createVNode, mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent } from \"vue/server-renderer\"\n\n\nconst _sfc_main = {\n  __name: 'ThemeToggle',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst colorMode = useColorMode();\n\nconst isDark = computed({\n  get() {\n    return colorMode.value === \"dark\";\n  },\n  set() {\n    colorMode.preference = colorMode.value === \"dark\" ? \"light\" : \"dark\";\n  },\n});\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_UTooltip = _resolveComponent(\"UTooltip\")\n  const _component_Icon = _resolveComponent(\"Icon\")\n\n  _push(_ssrRenderComponent(_component_UTooltip, _mergeProps({\n    text: \"Toggle theme\",\n    ui: { popper: { strategy: 'absolute' } }\n  }, _attrs), {\n    default: _withCtx((_, _push, _parent, _scopeId) => {\n      if (_push) {\n        _push(`<button class=\"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\"${_scopeId}>`)\n        _push(_ssrRenderComponent(_component_Icon, {\n          \"aria-hidden\": \"true\",\n          name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n          class: \"w-5 h-5\"\n        }, null, _parent, _scopeId))\n        _push(`<span class=\"sr-only\"${_scopeId}>Toggle theme</span></button>`)\n      } else {\n        return [\n          _createVNode(\"button\", {\n            class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n            onClick: $event => (isDark.value = !_unref(isDark))\n          }, [\n            _createVNode(_component_Icon, {\n              \"aria-hidden\": \"true\",\n              name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n              class: \"w-5 h-5\"\n            }, null, 8, [\"name\"]),\n            _createVNode(\"span\", { class: \"sr-only\" }, \"Toggle theme\")\n          ], 8, [\"onClick\"])\n        ]\n      }\n    }),\n    _: 1\n  }, _parent))\n}\n}\n\n}\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"components/App/ThemeToggle.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748497713951,
-      "end": 1748497713952,
+      "start": 1748498045688,
+      "end": 1748498045689,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,117 +94,117 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748497713952,
-      "end": 1748497713952,
+      "start": 1748498045689,
+      "end": 1748498045689,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { useColorMode } from '/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/color-mode/dist/runtime/composables';\nimport { computed } from 'vue';\nimport { resolveComponent as _resolveComponent, unref as _unref, withCtx as _withCtx, createVNode as _createVNode, mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent } from \"vue/server-renderer\"\n\n\nconst _sfc_main = {\n  __name: 'ThemeToggle',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst colorMode = useColorMode();\n\nconst isDark = computed({\n  get() {\n    return colorMode.value === \"dark\";\n  },\n  set() {\n    colorMode.preference = colorMode.value === \"dark\" ? \"light\" : \"dark\";\n  },\n});\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_UTooltip = _resolveComponent(\"UTooltip\")\n  const _component_Icon = _resolveComponent(\"Icon\")\n\n  _push(_ssrRenderComponent(_component_UTooltip, _mergeProps({\n    text: \"Toggle theme\",\n    ui: { popper: { strategy: 'absolute' } }\n  }, _attrs), {\n    default: _withCtx((_, _push, _parent, _scopeId) => {\n      if (_push) {\n        _push(`<button class=\"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\"${_scopeId}>`)\n        _push(_ssrRenderComponent(_component_Icon, {\n          \"aria-hidden\": \"true\",\n          name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n          class: \"w-5 h-5\"\n        }, null, _parent, _scopeId))\n        _push(`<span class=\"sr-only\"${_scopeId}>Toggle theme</span></button>`)\n      } else {\n        return [\n          _createVNode(\"button\", {\n            class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n            onClick: $event => (isDark.value = !_unref(isDark))\n          }, [\n            _createVNode(_component_Icon, {\n              \"aria-hidden\": \"true\",\n              name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n              class: \"w-5 h-5\"\n            }, null, 8, [\"name\"]),\n            _createVNode(\"span\", { class: \"sr-only\" }, \"Toggle theme\")\n          ], 8, [\"onClick\"])\n        ]\n      }\n    }),\n    _: 1\n  }, _parent))\n}\n}\n\n}\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"components/App/ThemeToggle.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748497713952,
-      "end": 1748497713953,
+      "start": 1748498045689,
+      "end": 1748498045690,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -218,8 +218,8 @@
     {
       "name": "nuxt:imports-transform",
       "result": "import { useColorMode } from '/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/color-mode/dist/runtime/composables';\nimport { computed } from 'vue';\nimport { resolveComponent as _resolveComponent, unref as _unref, withCtx as _withCtx, createVNode as _createVNode, mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent } from \"vue/server-renderer\"\n\n\nconst _sfc_main = {\n  __name: 'ThemeToggle',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst colorMode = useColorMode();\n\nconst isDark = computed({\n  get() {\n    return colorMode.value === \"dark\";\n  },\n  set() {\n    colorMode.preference = colorMode.value === \"dark\" ? \"light\" : \"dark\";\n  },\n});\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_UTooltip = _resolveComponent(\"UTooltip\")\n  const _component_Icon = _resolveComponent(\"Icon\")\n\n  _push(_ssrRenderComponent(_component_UTooltip, _mergeProps({\n    text: \"Toggle theme\",\n    ui: { popper: { strategy: 'absolute' } }\n  }, _attrs), {\n    default: _withCtx((_, _push, _parent, _scopeId) => {\n      if (_push) {\n        _push(`<button class=\"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\"${_scopeId}>`)\n        _push(_ssrRenderComponent(_component_Icon, {\n          \"aria-hidden\": \"true\",\n          name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n          class: \"w-5 h-5\"\n        }, null, _parent, _scopeId))\n        _push(`<span class=\"sr-only\"${_scopeId}>Toggle theme</span></button>`)\n      } else {\n        return [\n          _createVNode(\"button\", {\n            class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n            onClick: $event => (isDark.value = !_unref(isDark))\n          }, [\n            _createVNode(_component_Icon, {\n              \"aria-hidden\": \"true\",\n              name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n              class: \"w-5 h-5\"\n            }, null, 8, [\"name\"]),\n            _createVNode(\"span\", { class: \"sr-only\" }, \"Toggle theme\")\n          ], 8, [\"onClick\"])\n        ]\n      }\n    }),\n    _: 1\n  }, _parent))\n}\n}\n\n}\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"components/App/ThemeToggle.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748497713952,
-      "end": 1748497713953,
+      "start": 1748498045689,
+      "end": 1748498045690,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -232,39 +232,39 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/overlays/Tooltip.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/nuxt-icon/dist/runtime/Icon.vue\";\nimport { useColorMode } from '/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/color-mode/dist/runtime/composables';\nimport { computed } from 'vue';\nimport { resolveComponent as _resolveComponent, unref as _unref, withCtx as _withCtx, createVNode as _createVNode, mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent } from \"vue/server-renderer\"\n\n\nconst _sfc_main = {\n  __name: 'ThemeToggle',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst colorMode = useColorMode();\n\nconst isDark = computed({\n  get() {\n    return colorMode.value === \"dark\";\n  },\n  set() {\n    colorMode.preference = colorMode.value === \"dark\" ? \"light\" : \"dark\";\n  },\n});\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_UTooltip = __nuxt_component_0\n  const _component_Icon = __nuxt_component_1\n\n  _push(_ssrRenderComponent(_component_UTooltip, _mergeProps({\n    text: \"Toggle theme\",\n    ui: { popper: { strategy: 'absolute' } }\n  }, _attrs), {\n    default: _withCtx((_, _push, _parent, _scopeId) => {\n      if (_push) {\n        _push(`<button class=\"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\"${_scopeId}>`)\n        _push(_ssrRenderComponent(_component_Icon, {\n          \"aria-hidden\": \"true\",\n          name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n          class: \"w-5 h-5\"\n        }, null, _parent, _scopeId))\n        _push(`<span class=\"sr-only\"${_scopeId}>Toggle theme</span></button>`)\n      } else {\n        return [\n          _createVNode(\"button\", {\n            class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n            onClick: $event => (isDark.value = !_unref(isDark))\n          }, [\n            _createVNode(_component_Icon, {\n              \"aria-hidden\": \"true\",\n              name: _unref(isDark) ? 'solar:sun-2-outline' : 'solar:moon-outline',\n              class: \"w-5 h-5\"\n            }, null, 8, [\"name\"]),\n            _createVNode(\"span\", { class: \"sr-only\" }, \"Toggle theme\")\n          ], 8, [\"onClick\"])\n        ]\n      }\n    }),\n    _: 1\n  }, _parent))\n}\n}\n\n}\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"components/App/ThemeToggle.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -277,20 +277,20 @@
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748497713953,
-      "end": 1748497713953,
+      "start": 1748498045690,
+      "end": 1748498045690,
       "order": "normal"
     }
   ]
