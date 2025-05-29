@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <main class=\"min-h-screen\">\n    <AppHeader class=\"mb-8\" title=\"Bookmarks\" :description=\"description\" />\n    <ul class=\"space-y-2\">\n      <li v-for=\"bookmark in bookmarks\" :key=\"bookmark.id\">\n        <a\n          :href=\"bookmark.url\"\n          target=\"_blank\"\n          class=\"flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-white/10 p-2 rounded-lg -m-2 text-sm min-w-0\"\n        >\n          <UAvatar\n            :src=\"getThumbnail(bookmark.url)\"\n            :alt=\"bookmark.label\"\n            :ui=\"{ rounded: 'rounded-md' }\"\n          />\n          <p class=\"truncate text-gray-700 dark:text-gray-200\">\n            {{ bookmark.label }}\n          </p>\n          <span class=\"flex-1\"></span>\n          <span class=\"text-xs font-medium text-gray-400 dark:text-gray-600\">\n            {{ getHost(bookmark.url) }}\n          </span>\n        </a>\n      </li>\n    </ul>\n  </main>\n</template>\n\n<script setup>\nconst description =\n  \"Awesome things I've found on the internet. This page is still WIP, I want to add search like bmrks.com\";\nuseSeoMeta({\n  title: \"Bookmarks | Fayaz Ahmed\",\n  description,\n});\n\nconst bookmarks = [\n  {\n    id: 1,\n    label: \"Adam Wathan - Tailwind CSS Best Practice Patterns\",\n    url: \"https://www.youtube.com/watch?v=J_7_mnFSLDg\",\n  },\n  {\n    id: 2,\n    label: \"Dicebear Awesome avatars\",\n    url: \"https://www.dicebear.com/\",\n  },\n  {\n    id: 3,\n    label: \"Circuit design stock image\",\n    url: \"https://images.unsplash.com/photo-1592659762303-90081d34b277?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2873&q=80\",\n  },\n  {\n    id: 4,\n    label: \"Beautiful Gradient Generator\",\n    url: \"https://www.joshwcomeau.com/gradient-generator/\",\n  },\n  {\n    id: 5,\n    label: \"3D device mockups\",\n    url: \"https://deviceframes.com/\",\n  },\n  {\n    id: 6,\n    label: \"Box shadow examples\",\n    url: \"https://getcssscan.com/css-box-shadow-examples\",\n  },\n  {\n    id: 7,\n    label: \"Octupos Illustration\",\n    url: \"https://refine.new/\",\n  },\n  {\n    id: 8,\n    label: \"Metalab agency\",\n    url: \"https://www.metalab.com/\",\n  },\n  {\n    id: 9,\n    label: \"Tines - Beautiful landing page\",\n    url: \"https://www.tines.com/product\",\n  },\n  {\n    id: 10,\n    label: \"SVG Spinners\",\n    url: \"https://github.com/n3r4zzurr0/svg-spinners\",\n  },\n  {\n    id: 11,\n    label: \"ASCII Flow - Text based image drawing\",\n    url: \"https://asciiflow.com/#/\",\n  },\n  {\n    id: 12,\n    label: \"REQRES Mock apis for testing\",\n    url: \"https://reqres.in/\",\n  },\n  {\n    id: 13,\n    label: \"Haikie - SVG background generator\",\n    url: \"https://app.haikei.app/\",\n  },\n  {\n    id: 14,\n    label: \"IP API\",\n    url: \"https://ipapi.is/\",\n  },\n  {\n    id: 15,\n    label: \"Rakko Tools\",\n    url: \"https://en.rakko.tools/\",\n  },\n];\n\nfunction getHost(url) {\n  const parsedUrl = new URL(url);\n  let host = parsedUrl.host;\n  if (host.startsWith(\"www.\")) {\n    host = host.substring(4);\n  }\n  return host;\n}\n\nfunction getThumbnail(url) {\n  const host = getHost(url);\n  return `https://logo.clearbit.com/${host}`;\n}\n</script>\n",
-      "start": 1748496723385,
-      "end": 1748496723523,
+      "start": 1748497706489,
+      "end": 1748497706551,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748496723523,
-      "end": 1748496723523,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-2\" }\nconst _hoisted_3 = [\"href\"]\nconst _hoisted_4 = { class: \"truncate text-gray-700 dark:text-gray-200\" }\nconst _hoisted_5 = { class: \"text-xs font-medium text-gray-400 dark:text-gray-600\" }\n\nconst description =\n  \"Awesome things I've found on the internet. This page is still WIP, I want to add search like bmrks.com\";\n\nconst _sfc_main = {\n  __name: 'bookmarks',\n  setup(__props) {\n\nuseSeoMeta({\n  title: \"Bookmarks | Fayaz Ahmed\",\n  description,\n});\n\nconst bookmarks = [\n  {\n    id: 1,\n    label: \"Adam Wathan - Tailwind CSS Best Practice Patterns\",\n    url: \"https://www.youtube.com/watch?v=J_7_mnFSLDg\",\n  },\n  {\n    id: 2,\n    label: \"Dicebear Awesome avatars\",\n    url: \"https://www.dicebear.com/\",\n  },\n  {\n    id: 3,\n    label: \"Circuit design stock image\",\n    url: \"https://images.unsplash.com/photo-1592659762303-90081d34b277?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2873&q=80\",\n  },\n  {\n    id: 4,\n    label: \"Beautiful Gradient Generator\",\n    url: \"https://www.joshwcomeau.com/gradient-generator/\",\n  },\n  {\n    id: 5,\n    label: \"3D device mockups\",\n    url: \"https://deviceframes.com/\",\n  },\n  {\n    id: 6,\n    label: \"Box shadow examples\",\n    url: \"https://getcssscan.com/css-box-shadow-examples\",\n  },\n  {\n    id: 7,\n    label: \"Octupos Illustration\",\n    url: \"https://refine.new/\",\n  },\n  {\n    id: 8,\n    label: \"Metalab agency\",\n    url: \"https://www.metalab.com/\",\n  },\n  {\n    id: 9,\n    label: \"Tines - Beautiful landing page\",\n    url: \"https://www.tines.com/product\",\n  },\n  {\n    id: 10,\n    label: \"SVG Spinners\",\n    url: \"https://github.com/n3r4zzurr0/svg-spinners\",\n  },\n  {\n    id: 11,\n    label: \"ASCII Flow - Text based image drawing\",\n    url: \"https://asciiflow.com/#/\",\n  },\n  {\n    id: 12,\n    label: \"REQRES Mock apis for testing\",\n    url: \"https://reqres.in/\",\n  },\n  {\n    id: 13,\n    label: \"Haikie - SVG background generator\",\n    url: \"https://app.haikei.app/\",\n  },\n  {\n    id: 14,\n    label: \"IP API\",\n    url: \"https://ipapi.is/\",\n  },\n  {\n    id: 15,\n    label: \"Rakko Tools\",\n    url: \"https://en.rakko.tools/\",\n  },\n];\n\nfunction getHost(url) {\n  const parsedUrl = new URL(url);\n  let host = parsedUrl.host;\n  if (host.startsWith(\"www.\")) {\n    host = host.substring(4);\n  }\n  return host;\n}\n\nfunction getThumbnail(url) {\n  const host = getHost(url);\n  return `https://logo.clearbit.com/${host}`;\n}\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_UAvatar = _resolveComponent(\"UAvatar\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-8\",\n      title: \"Bookmarks\",\n      description: description\n    }),\n    _createElementVNode(\"ul\", _hoisted_2, [\n      (_openBlock(), _createElementBlock(_Fragment, null, _renderList(bookmarks, (bookmark) => {\n        return _createElementVNode(\"li\", {\n          key: bookmark.id\n        }, [\n          _createElementVNode(\"a\", {\n            href: bookmark.url,\n            target: \"_blank\",\n            class: \"flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-white/10 p-2 rounded-lg -m-2 text-sm min-w-0\"\n          }, [\n            _createVNode(_component_UAvatar, {\n              src: getThumbnail(bookmark.url),\n              alt: bookmark.label,\n              ui: { rounded: 'rounded-md' }\n            }, null, 8, [\"src\", \"alt\"]),\n            _createElementVNode(\"p\", _hoisted_4, _toDisplayString(bookmark.label), 1),\n            _cache[0] || (_cache[0] = _createElementVNode(\"span\", { class: \"flex-1\" }, null, -1)),\n            _createElementVNode(\"span\", _hoisted_5, _toDisplayString(getHost(bookmark.url)), 1)\n          ], 8, _hoisted_3)\n        ])\n      }), 64))\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748496723523,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748496723524,
-      "end": 1748496723524,
+      "start": 1748497706551,
+      "end": 1748497706551,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { useSeoMeta } from '@unhead/vue';\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-2\" }\nconst _hoisted_3 = [\"href\"]\nconst _hoisted_4 = { class: \"truncate text-gray-700 dark:text-gray-200\" }\nconst _hoisted_5 = { class: \"text-xs font-medium text-gray-400 dark:text-gray-600\" }\n\nconst description =\n  \"Awesome things I've found on the internet. This page is still WIP, I want to add search like bmrks.com\";\n\nconst _sfc_main = {\n  __name: 'bookmarks',\n  setup(__props) {\n\nuseSeoMeta({\n  title: \"Bookmarks | Fayaz Ahmed\",\n  description,\n});\n\nconst bookmarks = [\n  {\n    id: 1,\n    label: \"Adam Wathan - Tailwind CSS Best Practice Patterns\",\n    url: \"https://www.youtube.com/watch?v=J_7_mnFSLDg\",\n  },\n  {\n    id: 2,\n    label: \"Dicebear Awesome avatars\",\n    url: \"https://www.dicebear.com/\",\n  },\n  {\n    id: 3,\n    label: \"Circuit design stock image\",\n    url: \"https://images.unsplash.com/photo-1592659762303-90081d34b277?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2873&q=80\",\n  },\n  {\n    id: 4,\n    label: \"Beautiful Gradient Generator\",\n    url: \"https://www.joshwcomeau.com/gradient-generator/\",\n  },\n  {\n    id: 5,\n    label: \"3D device mockups\",\n    url: \"https://deviceframes.com/\",\n  },\n  {\n    id: 6,\n    label: \"Box shadow examples\",\n    url: \"https://getcssscan.com/css-box-shadow-examples\",\n  },\n  {\n    id: 7,\n    label: \"Octupos Illustration\",\n    url: \"https://refine.new/\",\n  },\n  {\n    id: 8,\n    label: \"Metalab agency\",\n    url: \"https://www.metalab.com/\",\n  },\n  {\n    id: 9,\n    label: \"Tines - Beautiful landing page\",\n    url: \"https://www.tines.com/product\",\n  },\n  {\n    id: 10,\n    label: \"SVG Spinners\",\n    url: \"https://github.com/n3r4zzurr0/svg-spinners\",\n  },\n  {\n    id: 11,\n    label: \"ASCII Flow - Text based image drawing\",\n    url: \"https://asciiflow.com/#/\",\n  },\n  {\n    id: 12,\n    label: \"REQRES Mock apis for testing\",\n    url: \"https://reqres.in/\",\n  },\n  {\n    id: 13,\n    label: \"Haikie - SVG background generator\",\n    url: \"https://app.haikei.app/\",\n  },\n  {\n    id: 14,\n    label: \"IP API\",\n    url: \"https://ipapi.is/\",\n  },\n  {\n    id: 15,\n    label: \"Rakko Tools\",\n    url: \"https://en.rakko.tools/\",\n  },\n];\n\nfunction getHost(url) {\n  const parsedUrl = new URL(url);\n  let host = parsedUrl.host;\n  if (host.startsWith(\"www.\")) {\n    host = host.substring(4);\n  }\n  return host;\n}\n\nfunction getThumbnail(url) {\n  const host = getHost(url);\n  return `https://logo.clearbit.com/${host}`;\n}\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_UAvatar = _resolveComponent(\"UAvatar\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-8\",\n      title: \"Bookmarks\",\n      description: description\n    }),\n    _createElementVNode(\"ul\", _hoisted_2, [\n      (_openBlock(), _createElementBlock(_Fragment, null, _renderList(bookmarks, (bookmark) => {\n        return _createElementVNode(\"li\", {\n          key: bookmark.id\n        }, [\n          _createElementVNode(\"a\", {\n            href: bookmark.url,\n            target: \"_blank\",\n            class: \"flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-white/10 p-2 rounded-lg -m-2 text-sm min-w-0\"\n          }, [\n            _createVNode(_component_UAvatar, {\n              src: getThumbnail(bookmark.url),\n              alt: bookmark.label,\n              ui: { rounded: 'rounded-md' }\n            }, null, 8, [\"src\", \"alt\"]),\n            _createElementVNode(\"p\", _hoisted_4, _toDisplayString(bookmark.label), 1),\n            _cache[0] || (_cache[0] = _createElementVNode(\"span\", { class: \"flex-1\" }, null, -1)),\n            _createElementVNode(\"span\", _hoisted_5, _toDisplayString(getHost(bookmark.url)), 1)\n          ], 8, _hoisted_3)\n        ])\n      }), 64))\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748496723524,
-      "end": 1748496723525,
+      "start": 1748497706551,
+      "end": 1748497706552,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,51 +185,51 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748496723525,
-      "end": 1748496723525,
+      "start": 1748497706552,
+      "end": 1748497706552,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748496723525,
-      "end": 1748496723525,
+      "start": 1748497706552,
+      "end": 1748497706552,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748496723525,
-      "end": 1748496723525,
+      "start": 1748497706552,
+      "end": 1748497706552,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748496723525,
-      "end": 1748496723525,
+      "start": 1748497706552,
+      "end": 1748497706552,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/components/App/Header.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Avatar.vue\";\nimport { useSeoMeta } from '@unhead/vue';\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-2\" }\nconst _hoisted_3 = [\"href\"]\nconst _hoisted_4 = { class: \"truncate text-gray-700 dark:text-gray-200\" }\nconst _hoisted_5 = { class: \"text-xs font-medium text-gray-400 dark:text-gray-600\" }\n\nconst description =\n  \"Awesome things I've found on the internet. This page is still WIP, I want to add search like bmrks.com\";\n\nconst _sfc_main = {\n  __name: 'bookmarks',\n  setup(__props) {\n\nuseSeoMeta({\n  title: \"Bookmarks | Fayaz Ahmed\",\n  description,\n});\n\nconst bookmarks = [\n  {\n    id: 1,\n    label: \"Adam Wathan - Tailwind CSS Best Practice Patterns\",\n    url: \"https://www.youtube.com/watch?v=J_7_mnFSLDg\",\n  },\n  {\n    id: 2,\n    label: \"Dicebear Awesome avatars\",\n    url: \"https://www.dicebear.com/\",\n  },\n  {\n    id: 3,\n    label: \"Circuit design stock image\",\n    url: \"https://images.unsplash.com/photo-1592659762303-90081d34b277?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2873&q=80\",\n  },\n  {\n    id: 4,\n    label: \"Beautiful Gradient Generator\",\n    url: \"https://www.joshwcomeau.com/gradient-generator/\",\n  },\n  {\n    id: 5,\n    label: \"3D device mockups\",\n    url: \"https://deviceframes.com/\",\n  },\n  {\n    id: 6,\n    label: \"Box shadow examples\",\n    url: \"https://getcssscan.com/css-box-shadow-examples\",\n  },\n  {\n    id: 7,\n    label: \"Octupos Illustration\",\n    url: \"https://refine.new/\",\n  },\n  {\n    id: 8,\n    label: \"Metalab agency\",\n    url: \"https://www.metalab.com/\",\n  },\n  {\n    id: 9,\n    label: \"Tines - Beautiful landing page\",\n    url: \"https://www.tines.com/product\",\n  },\n  {\n    id: 10,\n    label: \"SVG Spinners\",\n    url: \"https://github.com/n3r4zzurr0/svg-spinners\",\n  },\n  {\n    id: 11,\n    label: \"ASCII Flow - Text based image drawing\",\n    url: \"https://asciiflow.com/#/\",\n  },\n  {\n    id: 12,\n    label: \"REQRES Mock apis for testing\",\n    url: \"https://reqres.in/\",\n  },\n  {\n    id: 13,\n    label: \"Haikie - SVG background generator\",\n    url: \"https://app.haikei.app/\",\n  },\n  {\n    id: 14,\n    label: \"IP API\",\n    url: \"https://ipapi.is/\",\n  },\n  {\n    id: 15,\n    label: \"Rakko Tools\",\n    url: \"https://en.rakko.tools/\",\n  },\n];\n\nfunction getHost(url) {\n  const parsedUrl = new URL(url);\n  let host = parsedUrl.host;\n  if (host.startsWith(\"www.\")) {\n    host = host.substring(4);\n  }\n  return host;\n}\n\nfunction getThumbnail(url) {\n  const host = getHost(url);\n  return `https://logo.clearbit.com/${host}`;\n}\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = __nuxt_component_0\n  const _component_UAvatar = __nuxt_component_1\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-8\",\n      title: \"Bookmarks\",\n      description: description\n    }),\n    _createElementVNode(\"ul\", _hoisted_2, [\n      (_openBlock(), _createElementBlock(_Fragment, null, _renderList(bookmarks, (bookmark) => {\n        return _createElementVNode(\"li\", {\n          key: bookmark.id\n        }, [\n          _createElementVNode(\"a\", {\n            href: bookmark.url,\n            target: \"_blank\",\n            class: \"flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-white/10 p-2 rounded-lg -m-2 text-sm min-w-0\"\n          }, [\n            _createVNode(_component_UAvatar, {\n              src: getThumbnail(bookmark.url),\n              alt: bookmark.label,\n              ui: { rounded: 'rounded-md' }\n            }, null, 8, [\"src\", \"alt\"]),\n            _createElementVNode(\"p\", _hoisted_4, _toDisplayString(bookmark.label), 1),\n            _cache[0] || (_cache[0] = _createElementVNode(\"span\", { class: \"flex-1\" }, null, -1)),\n            _createElementVNode(\"span\", _hoisted_5, _toDisplayString(getHost(bookmark.url)), 1)\n          ], 8, _hoisted_3)\n        ])\n      }), 64))\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748496723525,
-      "end": 1748496723525,
+      "start": 1748497706552,
+      "end": 1748497706553,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748496723525,
-      "end": 1748496723525,
+      "start": 1748497706553,
+      "end": 1748497706553,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748496723525,
-      "end": 1748496723526,
+      "start": 1748497706553,
+      "end": 1748497706553,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748496723526,
-      "end": 1748496723526,
+      "start": 1748497706553,
+      "end": 1748497706553,
       "order": "normal"
     }
   ]

@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div\n    class=\"py-12 relative overflow-hidden flex items-center justify-center w-full bg-gray-100 dark:bg-gray-900 dark:text-white\"\n    @mouseover=\"fast = true\"\n    @mouseleave=\"fast = false\"\n    :style=\"{ '--streak-speed': streakSpeed }\"\n  >\n    <span class=\"rocket\" :class=\"{ shake: fast, move: !fast }\">\n      <Icon name=\"ph:rocket-duotone\" class=\"h-12 w-12 -rotate-90\" />\n    </span>\n    <span\n      v-for=\"n in 5\"\n      :key=\"n\"\n      :style=\"{\n        top: Math.random() * 100 + '%',\n        animationDelay: Math.random() * 1 + 's',\n        animationDuration: streakSpeed,\n      }\"\n      class=\"streak absolute left-0 w-1/5 h-0.5 bg-gradient-to-r from-transparent to-black/60 dark:to-white/40\"\n    ></span>\n  </div>\n</template>\n\n<script setup>\nconst fast = ref(false);\nconst streakSpeed = computed(() => (fast.value ? \"0.5s\" : \"2s\"));\n</script>\n\n<style scoped>\n.rocket.move {\n  animation: move 1s linear infinite;\n}\n\n.rocket.shake {\n  animation: shake 0.5s linear infinite;\n}\n\n.streak {\n  animation: streaks linear infinite;\n  animation-duration: var(--streak-speed);\n}\n\n@keyframes move {\n  0% {\n    transform: translateY(0);\n  }\n  50% {\n    transform: translateY(-10px);\n  }\n  100% {\n    transform: translateY(0);\n  }\n}\n\n@keyframes streaks {\n  to {\n    left: 100%;\n  }\n}\n\n@keyframes shake {\n  2% {\n    transform: translate(2.5px, 1.5px) rotate(-0.5deg);\n  }\n\n  4% {\n    transform: translate(2.5px, 0.5px) rotate(-0.5deg);\n  }\n  6% {\n    transform: translate(2.5px, 0.5px) rotate(0.5deg);\n  }\n  8% {\n    transform: translate(2.5px, 2.5px) rotate(1.5deg);\n  }\n  10% {\n    transform: translate(1.5px, -1.5px) rotate(-0.5deg);\n  }\n  12% {\n    transform: translate(-1.5px, 0.5px) rotate(0.5deg);\n  }\n  14% {\n    transform: translate(0.5px, 1.5px) rotate(-0.5deg);\n  }\n  16% {\n    transform: translate(-1.5px, 0.5px) rotate(0.5deg);\n  }\n  18% {\n    transform: translate(1.5px, -1.5px) rotate(0.5deg);\n  }\n  20% {\n    transform: translate(2.5px, 1.5px) rotate(-0.5deg);\n  }\n  22% {\n    transform: translate(0.5px, -1.5px) rotate(1.5deg);\n  }\n  24% {\n    transform: translate(0.5px, -0.5px) rotate(-0.5deg);\n  }\n  26% {\n    transform: translate(0.5px, -1.5px) rotate(1.5deg);\n  }\n  28% {\n    transform: translate(0.5px, 0.5px) rotate(0.5deg);\n  }\n  30% {\n    transform: translate(2.5px, 0.5px) rotate(0.5deg);\n  }\n  32% {\n    transform: translate(-0.5px, 0.5px) rotate(0.5deg);\n  }\n  34% {\n    transform: translate(2.5px, 0.5px) rotate(-0.5deg);\n  }\n  36% {\n    transform: translate(0.5px, 2.5px) rotate(0.5deg);\n  }\n  38% {\n    transform: translate(-0.5px, 0.5px) rotate(-0.5deg);\n  }\n  40% {\n    transform: translate(-1.5px, 1.5px) rotate(-0.5deg);\n  }\n  42% {\n    transform: translate(1.5px, 2.5px) rotate(-0.5deg);\n  }\n  44% {\n    transform: translate(-0.5px, 0.5px) rotate(-0.5deg);\n  }\n  46% {\n    transform: translate(2.5px, 1.5px) rotate(-0.5deg);\n  }\n  48% {\n    transform: translate(-1.5px, 2.5px) rotate(1.5deg);\n  }\n  50% {\n    transform: translate(-0.5px, -1.5px) rotate(-0.5deg);\n  }\n  52% {\n    transform: translate(-1.5px, 1.5px) rotate(1.5deg);\n  }\n  54% {\n    transform: translate(-1.5px, -1.5px) rotate(-0.5deg);\n  }\n  56% {\n    transform: translate(2.5px, 1.5px) rotate(0.5deg);\n  }\n  58% {\n    transform: translate(-1.5px, -1.5px) rotate(0.5deg);\n  }\n  60% {\n    transform: translate(1.5px, 0.5px) rotate(0.5deg);\n  }\n  62% {\n    transform: translate(-0.5px, -1.5px) rotate(1.5deg);\n  }\n  64% {\n    transform: translate(0.5px, 1.5px) rotate(-0.5deg);\n  }\n  66% {\n    transform: translate(-0.5px, 2.5px) rotate(0.5deg);\n  }\n  68% {\n    transform: translate(2.5px, 2.5px) rotate(1.5deg);\n  }\n  70% {\n    transform: translate(1.5px, -1.5px) rotate(0.5deg);\n  }\n  72% {\n    transform: translate(0.5px, 2.5px) rotate(-0.5deg);\n  }\n  74% {\n    transform: translate(0.5px, -1.5px) rotate(1.5deg);\n  }\n  76% {\n    transform: translate(-0.5px, 0.5px) rotate(0.5deg);\n  }\n  78% {\n    transform: translate(1.5px, -0.5px) rotate(0.5deg);\n  }\n  80% {\n    transform: translate(-0.5px, 2.5px) rotate(-0.5deg);\n  }\n  82% {\n    transform: translate(-1.5px, 0.5px) rotate(1.5deg);\n  }\n  84% {\n    transform: translate(-1.5px, 2.5px) rotate(-0.5deg);\n  }\n  86% {\n    transform: translate(1.5px, -0.5px) rotate(0.5deg);\n  }\n  88% {\n    transform: translate(-1.5px, 0.5px) rotate(0.5deg);\n  }\n  90% {\n    transform: translate(0.5px, 0.5px) rotate(0.5deg);\n  }\n  92% {\n    transform: translate(0.5px, -1.5px) rotate(-0.5deg);\n  }\n  94% {\n    transform: translate(0.5px, 0.5px) rotate(-0.5deg);\n  }\n  96% {\n    transform: translate(2.5px, 2.5px) rotate(1.5deg);\n  }\n  98% {\n    transform: translate(1.5px, 2.5px) rotate(0.5deg);\n  }\n  0%,\n  100% {\n    transform: translate(0, 0) rotate(0);\n  }\n}\n</style>\n",
-      "start": 1748496727829,
-      "end": 1748496728940,
+      "start": 1748497710658,
+      "end": 1748497711671,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748496728940,
-      "end": 1748496728940,
+      "start": 1748497711671,
+      "end": 1748497711671,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { unref as _unref, resolveComponent as _resolveComponent, mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderClass as _ssrRenderClass, ssrRenderStyle as _ssrRenderStyle, ssrRenderAttrs as _ssrRenderAttrs, ssrRenderList as _ssrRenderList } from \"vue/server-renderer\"\n\n\nconst _sfc_main = {\n  __name: 'Rocket',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst fast = ref(false);\nconst streakSpeed = computed(() => (fast.value ? \"0.5s\" : \"2s\"));\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_Icon = _resolveComponent(\"Icon\")\n\n  _push(`<div${\n    _ssrRenderAttrs(_mergeProps({\n      class: \"py-12 relative overflow-hidden flex items-center justify-center w-full bg-gray-100 dark:bg-gray-900 dark:text-white\",\n      style: { '--streak-speed': _unref(streakSpeed) }\n    }, _attrs))\n  } data-v-fa2d0691><span class=\"${\n    _ssrRenderClass([{ shake: _unref(fast), move: !_unref(fast) }, \"rocket\"])\n  }\" data-v-fa2d0691>`)\n  _push(_ssrRenderComponent(_component_Icon, {\n    name: \"ph:rocket-duotone\",\n    class: \"h-12 w-12 -rotate-90\"\n  }, null, _parent))\n  _push(`</span><!--[-->`)\n  _ssrRenderList(5, (n) => {\n    _push(`<span style=\"${_ssrRenderStyle({\n        top: Math.random() * 100 + '%',\n        animationDelay: Math.random() * 1 + 's',\n        animationDuration: _unref(streakSpeed),\n      })}\" class=\"streak absolute left-0 w-1/5 h-0.5 bg-gradient-to-r from-transparent to-black/60 dark:to-white/40\" data-v-fa2d0691></span>`)\n  })\n  _push(`<!--]--></div>`)\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/Rocket.vue?vue&type=style&index=0&scoped=fa2d0691&lang.css\"\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"components/content/Rocket.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-fa2d0691\"]])",
-      "start": 1748496728940,
-      "end": 1748496728942,
+      "start": 1748497711671,
+      "end": 1748497711677,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,178 +94,178 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748496728942,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
       "result": "import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => import(\"/Users/jang-yeong-ug/Documents/zooper/components/content/Rocket.vue\").then(r => r.default))",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "replace",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748496728943,
-      "end": 1748496728943,
+      "start": 1748497711677,
+      "end": 1748497711677,
       "order": "normal"
     }
   ]

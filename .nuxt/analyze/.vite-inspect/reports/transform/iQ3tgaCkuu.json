@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div ref=\"headerRef\" :style=\"styles\" class=\"fixed top-0 w-full z-50\">\n    <nav class=\"mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl\">\n      <ul\n        class=\"flex items-center my-4 px-3 text-sm font-medium text-gray-800 rounded-full shadow-lg bg-white/90 shadow-gray-800/5 ring-1 backdrop-blur dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/20 ring-gray-900/5\"\n      >\n        <li v-for=\"item in items\" :key=\"item.path\">\n          <UTooltip\n            :text=\"item.name\"\n            :ui=\"{ popper: { strategy: 'absolute' } }\"\n          >\n            <ULink\n              :to=\"item.path\"\n              class=\"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\"\n              active-class=\"text-primary-600 dark:text-primary-400\"\n            >\n              <Icon aria-hidden=\"true\" :name=\"item.icon\" class=\"w-5 h-5 z-10\" />\n              <span\n                v-if=\"$route.path === item.path\"\n                class=\"absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-500/0 via-primary-500/70 to-primary-500/0 dark:from-primary-400/0 dark:via-primary-400/40 dark:to-primary-400/0\"\n              ></span>\n              <span\n                v-if=\"$route.path === item.path\"\n                class=\"absolute h-8 w-8 z-0 rounded-full bg-gray-100 dark:bg-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2\"\n              ></span>\n              <span class=\"sr-only\">{{ item.name }}</span>\n            </ULink>\n          </UTooltip>\n        </li>\n        <li class=\"flex-1\"></li>\n        <li>\n          <AppThemeToggle />\n        </li>\n      </ul>\n    </nav>\n  </div>\n</template>\n\n<script setup>\nimport { useFixedHeader } from 'vue-use-fixed-header'\nconst headerRef = ref(null);\nconst { styles } = useFixedHeader(headerRef);\n\nconst items = [\n  { name: \"Home\", path: \"/\", icon: \"solar:home-2-outline\" },\n  { name: \"이체\", path: \"/transfer\", icon: \"solar:arrow-right-linear\" },\n  { name: \"입금\", path: \"/income\", icon: \"solar:wallet-2-outline\" },\n  { name: \"출금\", path: \"/expense\", icon: \"solar:money-bag-outline\" }, // 예: 교체됨\n  { name: \"세금\", path: \"/tax\", icon: \"solar:bill-list-outline\" },\n  { name: \"벌금\", path: \"/penalty\", icon: \"solar:danger-triangle-outline\" },\n]\n</script>\n",
-      "start": 1748496724008,
-      "end": 1748496724122,
+      "start": 1748497706795,
+      "end": 1748497706896,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748496724122,
-      "end": 1748496724122,
+      "start": 1748497706896,
+      "end": 1748497706896,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, resolveComponent as _resolveComponent, createVNode as _createVNode, createCommentVNode as _createCommentVNode, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, withCtx as _withCtx, normalizeStyle as _normalizeStyle } from \"vue\"\n\nconst _hoisted_1 = { class: \"mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl\" }\nconst _hoisted_2 = { class: \"flex items-center my-4 px-3 text-sm font-medium text-gray-800 rounded-full shadow-lg bg-white/90 shadow-gray-800/5 ring-1 backdrop-blur dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/20 ring-gray-900/5\" }\nconst _hoisted_3 = {\n  key: 0,\n  class: \"absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-500/0 via-primary-500/70 to-primary-500/0 dark:from-primary-400/0 dark:via-primary-400/40 dark:to-primary-400/0\"\n}\nconst _hoisted_4 = {\n  key: 1,\n  class: \"absolute h-8 w-8 z-0 rounded-full bg-gray-100 dark:bg-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2\"\n}\nconst _hoisted_5 = { class: \"sr-only\" }\n\nimport { useFixedHeader } from 'vue-use-fixed-header'\n\nconst _sfc_main = {\n  __name: 'Navbar',\n  setup(__props) {\n\nconst headerRef = ref(null);\nconst { styles } = useFixedHeader(headerRef);\n\nconst items = [\n  { name: \"Home\", path: \"/\", icon: \"solar:home-2-outline\" },\n  { name: \"이체\", path: \"/transfer\", icon: \"solar:arrow-right-linear\" },\n  { name: \"입금\", path: \"/income\", icon: \"solar:wallet-2-outline\" },\n  { name: \"출금\", path: \"/expense\", icon: \"solar:money-bag-outline\" }, // 예: 교체됨\n  { name: \"세금\", path: \"/tax\", icon: \"solar:bill-list-outline\" },\n  { name: \"벌금\", path: \"/penalty\", icon: \"solar:danger-triangle-outline\" },\n]\n\nreturn (_ctx, _cache) => {\n  const _component_Icon = _resolveComponent(\"Icon\")\n  const _component_ULink = _resolveComponent(\"ULink\")\n  const _component_UTooltip = _resolveComponent(\"UTooltip\")\n  const _component_AppThemeToggle = _resolveComponent(\"AppThemeToggle\")\n\n  return (_openBlock(), _createElementBlock(\"div\", {\n    ref_key: \"headerRef\",\n    ref: headerRef,\n    style: _normalizeStyle(_unref(styles)),\n    class: \"fixed top-0 w-full z-50\"\n  }, [\n    _createElementVNode(\"nav\", _hoisted_1, [\n      _createElementVNode(\"ul\", _hoisted_2, [\n        (_openBlock(), _createElementBlock(_Fragment, null, _renderList(items, (item) => {\n          return _createElementVNode(\"li\", {\n            key: item.path\n          }, [\n            _createVNode(_component_UTooltip, {\n              text: item.name,\n              ui: { popper: { strategy: 'absolute' } }\n            }, {\n              default: _withCtx(() => [\n                _createVNode(_component_ULink, {\n                  to: item.path,\n                  class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n                  \"active-class\": \"text-primary-600 dark:text-primary-400\"\n                }, {\n                  default: _withCtx(() => [\n                    _createVNode(_component_Icon, {\n                      \"aria-hidden\": \"true\",\n                      name: item.icon,\n                      class: \"w-5 h-5 z-10\"\n                    }, null, 8, [\"name\"]),\n                    (_ctx.$route.path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_3))\n                      : _createCommentVNode(\"\", true),\n                    (_ctx.$route.path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_4))\n                      : _createCommentVNode(\"\", true),\n                    _createElementVNode(\"span\", _hoisted_5, _toDisplayString(item.name), 1)\n                  ]),\n                  _: 2\n                }, 1032, [\"to\"])\n              ]),\n              _: 2\n            }, 1032, [\"text\"])\n          ])\n        }), 64)),\n        _cache[0] || (_cache[0] = _createElementVNode(\"li\", { class: \"flex-1\" }, null, -1)),\n        _createElementVNode(\"li\", null, [\n          _createVNode(_component_AppThemeToggle)\n        ])\n      ])\n    ])\n  ], 4))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748496724122,
-      "end": 1748496724123,
+      "start": 1748497706896,
+      "end": 1748497706898,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748496724123,
-      "end": 1748496724123,
+      "start": 1748497706898,
+      "end": 1748497706898,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { ref } from 'vue';\nimport { unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, resolveComponent as _resolveComponent, createVNode as _createVNode, createCommentVNode as _createCommentVNode, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, withCtx as _withCtx, normalizeStyle as _normalizeStyle } from \"vue\"\n\nconst _hoisted_1 = { class: \"mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl\" }\nconst _hoisted_2 = { class: \"flex items-center my-4 px-3 text-sm font-medium text-gray-800 rounded-full shadow-lg bg-white/90 shadow-gray-800/5 ring-1 backdrop-blur dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/20 ring-gray-900/5\" }\nconst _hoisted_3 = {\n  key: 0,\n  class: \"absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-500/0 via-primary-500/70 to-primary-500/0 dark:from-primary-400/0 dark:via-primary-400/40 dark:to-primary-400/0\"\n}\nconst _hoisted_4 = {\n  key: 1,\n  class: \"absolute h-8 w-8 z-0 rounded-full bg-gray-100 dark:bg-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2\"\n}\nconst _hoisted_5 = { class: \"sr-only\" }\n\nimport { useFixedHeader } from 'vue-use-fixed-header'\n\nconst _sfc_main = {\n  __name: 'Navbar',\n  setup(__props) {\n\nconst headerRef = ref(null);\nconst { styles } = useFixedHeader(headerRef);\n\nconst items = [\n  { name: \"Home\", path: \"/\", icon: \"solar:home-2-outline\" },\n  { name: \"이체\", path: \"/transfer\", icon: \"solar:arrow-right-linear\" },\n  { name: \"입금\", path: \"/income\", icon: \"solar:wallet-2-outline\" },\n  { name: \"출금\", path: \"/expense\", icon: \"solar:money-bag-outline\" }, // 예: 교체됨\n  { name: \"세금\", path: \"/tax\", icon: \"solar:bill-list-outline\" },\n  { name: \"벌금\", path: \"/penalty\", icon: \"solar:danger-triangle-outline\" },\n]\n\nreturn (_ctx, _cache) => {\n  const _component_Icon = _resolveComponent(\"Icon\")\n  const _component_ULink = _resolveComponent(\"ULink\")\n  const _component_UTooltip = _resolveComponent(\"UTooltip\")\n  const _component_AppThemeToggle = _resolveComponent(\"AppThemeToggle\")\n\n  return (_openBlock(), _createElementBlock(\"div\", {\n    ref_key: \"headerRef\",\n    ref: headerRef,\n    style: _normalizeStyle(_unref(styles)),\n    class: \"fixed top-0 w-full z-50\"\n  }, [\n    _createElementVNode(\"nav\", _hoisted_1, [\n      _createElementVNode(\"ul\", _hoisted_2, [\n        (_openBlock(), _createElementBlock(_Fragment, null, _renderList(items, (item) => {\n          return _createElementVNode(\"li\", {\n            key: item.path\n          }, [\n            _createVNode(_component_UTooltip, {\n              text: item.name,\n              ui: { popper: { strategy: 'absolute' } }\n            }, {\n              default: _withCtx(() => [\n                _createVNode(_component_ULink, {\n                  to: item.path,\n                  class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n                  \"active-class\": \"text-primary-600 dark:text-primary-400\"\n                }, {\n                  default: _withCtx(() => [\n                    _createVNode(_component_Icon, {\n                      \"aria-hidden\": \"true\",\n                      name: item.icon,\n                      class: \"w-5 h-5 z-10\"\n                    }, null, 8, [\"name\"]),\n                    (_ctx.$route.path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_3))\n                      : _createCommentVNode(\"\", true),\n                    (_ctx.$route.path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_4))\n                      : _createCommentVNode(\"\", true),\n                    _createElementVNode(\"span\", _hoisted_5, _toDisplayString(item.name), 1)\n                  ]),\n                  _: 2\n                }, 1032, [\"to\"])\n              ]),\n              _: 2\n            }, 1032, [\"text\"])\n          ])\n        }), 64)),\n        _cache[0] || (_cache[0] = _createElementVNode(\"li\", { class: \"flex-1\" }, null, -1)),\n        _createElementVNode(\"li\", null, [\n          _createVNode(_component_AppThemeToggle)\n        ])\n      ])\n    ])\n  ], 4))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748496724123,
-      "end": 1748496724125,
+      "start": 1748497706898,
+      "end": 1748497706900,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,27 +185,27 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748496724125,
-      "end": 1748496724125,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748496724125,
-      "end": 1748496724125,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748496724125,
-      "end": 1748496724125,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
       "result": "import { PageRouteSymbol as __nuxt_route_symbol } from '#app/components/injections';\nimport { ref } from 'vue';\nimport { unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, resolveComponent as _resolveComponent, createVNode as _createVNode, createCommentVNode as _createCommentVNode, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, withCtx as _withCtx, normalizeStyle as _normalizeStyle } from \"vue\"\n\nconst _hoisted_1 = { class: \"mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl\" }\nconst _hoisted_2 = { class: \"flex items-center my-4 px-3 text-sm font-medium text-gray-800 rounded-full shadow-lg bg-white/90 shadow-gray-800/5 ring-1 backdrop-blur dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/20 ring-gray-900/5\" }\nconst _hoisted_3 = {\n  key: 0,\n  class: \"absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-500/0 via-primary-500/70 to-primary-500/0 dark:from-primary-400/0 dark:via-primary-400/40 dark:to-primary-400/0\"\n}\nconst _hoisted_4 = {\n  key: 1,\n  class: \"absolute h-8 w-8 z-0 rounded-full bg-gray-100 dark:bg-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2\"\n}\nconst _hoisted_5 = { class: \"sr-only\" }\n\nimport { useFixedHeader } from 'vue-use-fixed-header'\n\nconst _sfc_main = {\n  __name: 'Navbar',\n  setup(__props) {\n\nconst headerRef = ref(null);\nconst { styles } = useFixedHeader(headerRef);\n\nconst items = [\n  { name: \"Home\", path: \"/\", icon: \"solar:home-2-outline\" },\n  { name: \"이체\", path: \"/transfer\", icon: \"solar:arrow-right-linear\" },\n  { name: \"입금\", path: \"/income\", icon: \"solar:wallet-2-outline\" },\n  { name: \"출금\", path: \"/expense\", icon: \"solar:money-bag-outline\" }, // 예: 교체됨\n  { name: \"세금\", path: \"/tax\", icon: \"solar:bill-list-outline\" },\n  { name: \"벌금\", path: \"/penalty\", icon: \"solar:danger-triangle-outline\" },\n]\n\nreturn (_ctx, _cache) => {\n  const _component_Icon = _resolveComponent(\"Icon\")\n  const _component_ULink = _resolveComponent(\"ULink\")\n  const _component_UTooltip = _resolveComponent(\"UTooltip\")\n  const _component_AppThemeToggle = _resolveComponent(\"AppThemeToggle\")\n\n  return (_openBlock(), _createElementBlock(\"div\", {\n    ref_key: \"headerRef\",\n    ref: headerRef,\n    style: _normalizeStyle(_unref(styles)),\n    class: \"fixed top-0 w-full z-50\"\n  }, [\n    _createElementVNode(\"nav\", _hoisted_1, [\n      _createElementVNode(\"ul\", _hoisted_2, [\n        (_openBlock(), _createElementBlock(_Fragment, null, _renderList(items, (item) => {\n          return _createElementVNode(\"li\", {\n            key: item.path\n          }, [\n            _createVNode(_component_UTooltip, {\n              text: item.name,\n              ui: { popper: { strategy: 'absolute' } }\n            }, {\n              default: _withCtx(() => [\n                _createVNode(_component_ULink, {\n                  to: item.path,\n                  class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n                  \"active-class\": \"text-primary-600 dark:text-primary-400\"\n                }, {\n                  default: _withCtx(() => [\n                    _createVNode(_component_Icon, {\n                      \"aria-hidden\": \"true\",\n                      name: item.icon,\n                      class: \"w-5 h-5 z-10\"\n                    }, null, 8, [\"name\"]),\n                    ((_ctx._.provides[__nuxt_route_symbol] || _ctx.$route).path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_3))\n                      : _createCommentVNode(\"\", true),\n                    ((_ctx._.provides[__nuxt_route_symbol] || _ctx.$route).path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_4))\n                      : _createCommentVNode(\"\", true),\n                    _createElementVNode(\"span\", _hoisted_5, _toDisplayString(item.name), 1)\n                  ]),\n                  _: 2\n                }, 1032, [\"to\"])\n              ]),\n              _: 2\n            }, 1032, [\"text\"])\n          ])\n        }), 64)),\n        _cache[0] || (_cache[0] = _createElementVNode(\"li\", { class: \"flex-1\" }, null, -1)),\n        _createElementVNode(\"li\", null, [\n          _createVNode(_component_AppThemeToggle)\n        ])\n      ])\n    ])\n  ], 4))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748496724125,
-      "end": 1748496724125,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -219,26 +219,26 @@
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/nuxt-icon/dist/runtime/Icon.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Link.vue\";\nimport { default as __nuxt_component_2 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/overlays/Tooltip.vue\";\nimport { default as __nuxt_component_3 } from \"/Users/jang-yeong-ug/Documents/zooper/components/App/ThemeToggle.vue\";\nimport { PageRouteSymbol as __nuxt_route_symbol } from '#app/components/injections';\nimport { ref } from 'vue';\nimport { unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, resolveComponent as _resolveComponent, createVNode as _createVNode, createCommentVNode as _createCommentVNode, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, withCtx as _withCtx, normalizeStyle as _normalizeStyle } from \"vue\"\n\nconst _hoisted_1 = { class: \"mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl\" }\nconst _hoisted_2 = { class: \"flex items-center my-4 px-3 text-sm font-medium text-gray-800 rounded-full shadow-lg bg-white/90 shadow-gray-800/5 ring-1 backdrop-blur dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/20 ring-gray-900/5\" }\nconst _hoisted_3 = {\n  key: 0,\n  class: \"absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-500/0 via-primary-500/70 to-primary-500/0 dark:from-primary-400/0 dark:via-primary-400/40 dark:to-primary-400/0\"\n}\nconst _hoisted_4 = {\n  key: 1,\n  class: \"absolute h-8 w-8 z-0 rounded-full bg-gray-100 dark:bg-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2\"\n}\nconst _hoisted_5 = { class: \"sr-only\" }\n\nimport { useFixedHeader } from 'vue-use-fixed-header'\n\nconst _sfc_main = {\n  __name: 'Navbar',\n  setup(__props) {\n\nconst headerRef = ref(null);\nconst { styles } = useFixedHeader(headerRef);\n\nconst items = [\n  { name: \"Home\", path: \"/\", icon: \"solar:home-2-outline\" },\n  { name: \"이체\", path: \"/transfer\", icon: \"solar:arrow-right-linear\" },\n  { name: \"입금\", path: \"/income\", icon: \"solar:wallet-2-outline\" },\n  { name: \"출금\", path: \"/expense\", icon: \"solar:money-bag-outline\" }, // 예: 교체됨\n  { name: \"세금\", path: \"/tax\", icon: \"solar:bill-list-outline\" },\n  { name: \"벌금\", path: \"/penalty\", icon: \"solar:danger-triangle-outline\" },\n]\n\nreturn (_ctx, _cache) => {\n  const _component_Icon = __nuxt_component_0\n  const _component_ULink = __nuxt_component_1\n  const _component_UTooltip = __nuxt_component_2\n  const _component_AppThemeToggle = __nuxt_component_3\n\n  return (_openBlock(), _createElementBlock(\"div\", {\n    ref_key: \"headerRef\",\n    ref: headerRef,\n    style: _normalizeStyle(_unref(styles)),\n    class: \"fixed top-0 w-full z-50\"\n  }, [\n    _createElementVNode(\"nav\", _hoisted_1, [\n      _createElementVNode(\"ul\", _hoisted_2, [\n        (_openBlock(), _createElementBlock(_Fragment, null, _renderList(items, (item) => {\n          return _createElementVNode(\"li\", {\n            key: item.path\n          }, [\n            _createVNode(_component_UTooltip, {\n              text: item.name,\n              ui: { popper: { strategy: 'absolute' } }\n            }, {\n              default: _withCtx(() => [\n                _createVNode(_component_ULink, {\n                  to: item.path,\n                  class: \"relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400\",\n                  \"active-class\": \"text-primary-600 dark:text-primary-400\"\n                }, {\n                  default: _withCtx(() => [\n                    _createVNode(_component_Icon, {\n                      \"aria-hidden\": \"true\",\n                      name: item.icon,\n                      class: \"w-5 h-5 z-10\"\n                    }, null, 8, [\"name\"]),\n                    ((_ctx._.provides[__nuxt_route_symbol] || _ctx.$route).path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_3))\n                      : _createCommentVNode(\"\", true),\n                    ((_ctx._.provides[__nuxt_route_symbol] || _ctx.$route).path === item.path)\n                      ? (_openBlock(), _createElementBlock(\"span\", _hoisted_4))\n                      : _createCommentVNode(\"\", true),\n                    _createElementVNode(\"span\", _hoisted_5, _toDisplayString(item.name), 1)\n                  ]),\n                  _: 2\n                }, 1032, [\"to\"])\n              ]),\n              _: 2\n            }, 1032, [\"text\"])\n          ])\n        }), 64)),\n        _cache[0] || (_cache[0] = _createElementVNode(\"li\", { class: \"flex-1\" }, null, -1)),\n        _createElementVNode(\"li\", null, [\n          _createVNode(_component_AppThemeToggle)\n        ])\n      ])\n    ])\n  ], 4))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748496724125,
-      "end": 1748496724125,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748496724125,
-      "end": 1748496724125,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748496724125,
-      "end": 1748496724125,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748496724125,
-      "end": 1748496724126,
+      "start": 1748497706900,
+      "end": 1748497706900,
       "order": "normal"
     }
   ]

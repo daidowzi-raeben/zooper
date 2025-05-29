@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     icons: ["heroicons", "lucide"],
   },
   app: {
+    baseURL: '/',
     pageTransition: { name: "page", mode: "out-in" },
     head: {
       htmlAttrs: {
