@@ -2,7 +2,8 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:3095/jelly/',
+    baseURL: 'https://api.school-os.net/',
+    // baseURL: 'http://localhost:3095/jelly/',
     headers: {
         'Content-Type': 'application/json',
     },
