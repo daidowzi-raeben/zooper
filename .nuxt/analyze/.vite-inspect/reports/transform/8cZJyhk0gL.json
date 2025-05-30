@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <main class=\"min-h-screen\">\n    <div\n      class=\"prose dark:prose-invert prose-blockquote:not-italic prose-pre:bg-gray-900 prose-img:ring-1 prose-img:ring-gray-200 dark:prose-img:ring-white/10 prose-img:rounded-lg\"\n    >\n      <ContentDoc v-slot=\"{ doc }\" tag=\"article\">\n        <article>\n          <h1>{{ doc.title }}</h1>\n          <ContentRenderer :value=\"doc\" />\n        </article>\n      </ContentDoc>\n    </div>\n  </main>\n</template>\n<script setup>\nconst route = useRoute();\nconst { slug } = route.params;\nuseSeoMeta({\n  ogImage: `https://fayazahmed.com/articles/${slug}.png`,\n  twitterCard: \"summary_large_image\",\n  articleAuthor: \"Fayaz Ahmed\",\n});\n</script>\n<style>\n.prose h2 a,\n.prose h3 a {\n  @apply no-underline;\n}\n</style>\n",
-      "start": 1748518129054,
-      "end": 1748518129143,
+      "start": 1748577034817,
+      "end": 1748577034934,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748518129143,
-      "end": 1748518129143,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748518129143,
-      "end": 1748518129143,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748518129143,
-      "end": 1748518129143,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748518129143,
-      "end": 1748518129143,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748518129143,
-      "end": 1748518129143,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, resolveComponent as _resolveComponent, createVNode as _createVNode, withCtx as _withCtx, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"prose dark:prose-invert prose-blockquote:not-italic prose-pre:bg-gray-900 prose-img:ring-1 prose-img:ring-gray-200 dark:prose-img:ring-white/10 prose-img:rounded-lg\" }\n\n\nconst _sfc_main = {\n  __name: '[slug]',\n  setup(__props) {\n\nconst route = useRoute();\nconst { slug } = route.params;\nuseSeoMeta({\n  ogImage: `https://fayazahmed.com/articles/${slug}.png`,\n  twitterCard: \"summary_large_image\",\n  articleAuthor: \"Fayaz Ahmed\",\n});\n\nreturn (_ctx, _cache) => {\n  const _component_ContentRenderer = _resolveComponent(\"ContentRenderer\")\n  const _component_ContentDoc = _resolveComponent(\"ContentDoc\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createVNode(_component_ContentDoc, { tag: \"article\" }, {\n        default: _withCtx(({ doc }) => [\n          _createElementVNode(\"article\", null, [\n            _createElementVNode(\"h1\", null, _toDisplayString(doc.title), 1),\n            _createVNode(_component_ContentRenderer, { value: doc }, null, 8, [\"value\"])\n          ])\n        ]),\n        _: 1\n      })\n    ])\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue?vue&type=style&index=0&lang.css\"\n\nexport default _sfc_main",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748518129144,
-      "end": 1748518129144,
+      "start": 1748577034934,
+      "end": 1748577034934,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { useRoute } from '#app/composables/router';\nimport { useSeoMeta } from '@unhead/vue';\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, resolveComponent as _resolveComponent, createVNode as _createVNode, withCtx as _withCtx, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"prose dark:prose-invert prose-blockquote:not-italic prose-pre:bg-gray-900 prose-img:ring-1 prose-img:ring-gray-200 dark:prose-img:ring-white/10 prose-img:rounded-lg\" }\n\n\nconst _sfc_main = {\n  __name: '[slug]',\n  setup(__props) {\n\nconst route = useRoute();\nconst { slug } = route.params;\nuseSeoMeta({\n  ogImage: `https://fayazahmed.com/articles/${slug}.png`,\n  twitterCard: \"summary_large_image\",\n  articleAuthor: \"Fayaz Ahmed\",\n});\n\nreturn (_ctx, _cache) => {\n  const _component_ContentRenderer = _resolveComponent(\"ContentRenderer\")\n  const _component_ContentDoc = _resolveComponent(\"ContentDoc\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createVNode(_component_ContentDoc, { tag: \"article\" }, {\n        default: _withCtx(({ doc }) => [\n          _createElementVNode(\"article\", null, [\n            _createElementVNode(\"h1\", null, _toDisplayString(doc.title), 1),\n            _createVNode(_component_ContentRenderer, { value: doc }, null, 8, [\"value\"])\n          ])\n        ]),\n        _: 1\n      })\n    ])\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue?vue&type=style&index=0&lang.css\"\n\nexport default _sfc_main",
-      "start": 1748518129144,
-      "end": 1748518129145,
+      "start": 1748577034934,
+      "end": 1748577034935,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,51 +185,51 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/components/ContentRenderer.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/components/ContentDoc.vue\";\nimport { useRoute } from '#app/composables/router';\nimport { useSeoMeta } from '@unhead/vue';\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, resolveComponent as _resolveComponent, createVNode as _createVNode, withCtx as _withCtx, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"prose dark:prose-invert prose-blockquote:not-italic prose-pre:bg-gray-900 prose-img:ring-1 prose-img:ring-gray-200 dark:prose-img:ring-white/10 prose-img:rounded-lg\" }\n\n\nconst _sfc_main = {\n  __name: '[slug]',\n  setup(__props) {\n\nconst route = useRoute();\nconst { slug } = route.params;\nuseSeoMeta({\n  ogImage: `https://fayazahmed.com/articles/${slug}.png`,\n  twitterCard: \"summary_large_image\",\n  articleAuthor: \"Fayaz Ahmed\",\n});\n\nreturn (_ctx, _cache) => {\n  const _component_ContentRenderer = __nuxt_component_0\n  const _component_ContentDoc = __nuxt_component_1\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createVNode(_component_ContentDoc, { tag: \"article\" }, {\n        default: _withCtx(({ doc }) => [\n          _createElementVNode(\"article\", null, [\n            _createElementVNode(\"h1\", null, _toDisplayString(doc.title), 1),\n            _createVNode(_component_ContentRenderer, { value: doc }, null, 8, [\"value\"])\n          ])\n        ]),\n        _: 1\n      })\n    ])\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/pages/articles/[slug].vue?vue&type=style&index=0&lang.css\"\n\nexport default _sfc_main",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748518129145,
-      "end": 1748518129145,
+      "start": 1748577034935,
+      "end": 1748577034935,
       "order": "normal"
     }
   ]

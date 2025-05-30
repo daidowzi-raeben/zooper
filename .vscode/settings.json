@@ -5,6 +5,10 @@
     "editor.quickSuggestions": {
         "strings": true
     },
+    "editor.formatOnSave": true,
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    },
     "tailwindCSS.experimental.configFile": "tailwind.config.ts",
     "tailwindCSS.experimental.classRegex": [
         [

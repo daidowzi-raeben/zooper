@@ -1,0 +1,11 @@
+{
+  "resolvedId": "\u0000/Users/jang-yeong-ug/Documents/zooper/node_modules/xlsx/dist/xlsx.full.min.js?commonjs-module",
+  "transforms": [
+    {
+      "name": "commonjs",
+      "result": "var xlsx_full_min = {exports: {}}; export {xlsx_full_min as __module}",
+      "start": 1748577035717,
+      "end": 1748577035717
+    }
+  ]
+}

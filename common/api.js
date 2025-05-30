@@ -51,4 +51,14 @@ export const apiPoint = async () => {
     return Number(res.data?.mb_point) || 0
 }
 
+
+export const apiTeacher = async () => {
+    const res = await apiPost('teacher.php', {
+        mode: 'teacherInfo',
+        idnt_code: sessionStorage.getItem('t_idnt_code')
+    })
+
+    return res?.data
+}
+
 export default api

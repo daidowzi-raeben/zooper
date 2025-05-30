@@ -17,15 +17,15 @@ onMounted(() => {
   <NuxtLoadingIndicator color="#14b8a6" />
 
   <!-- 로그인 페이지가 아닐 때만 표시 -->
-  <AppNavbar v-if="route.path !== '/login'" />
-  <div class="h-32" v-if="route.path !== '/login'"></div>
+  <AppNavbar v-if="route.path !== '/login' && route.path !== '/signUp' && route.path !== '/teacher'" />
+  <div class="h-32" v-if="route.path !== '/login' && route.path !== '/signUp' && route.path !== '/teacher'"></div>
 
   <UContainer>
     <NuxtPage />
   </UContainer>
 
-  <div class="h-32" v-if="route.path !== '/login'"></div>
-  <AppFooter v-if="route.path !== '/login'" />
+  <div class="h-32"></div>
+  <AppFooter />
 </template>
 
 <style>

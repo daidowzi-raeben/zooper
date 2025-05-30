@@ -1,0 +1,260 @@
+{
+  "resolvedId": "/Users/jang-yeong-ug/Documents/zooper/node_modules/@headlessui/vue/dist/hooks/use-outside-click.js",
+  "transforms": [
+    {
+      "name": "vite:load-fallback",
+      "result": "import{computed as E,ref as s}from\"vue\";import{FocusableMode as d,isFocusableElement as p}from'../utils/focus-management.js';import{dom as C}from'../utils/dom.js';import{useDocumentEvent as l}from'./use-document-event.js';import{useWindowEvent as T}from'./use-window-event.js';function y(f,c,i=E(()=>!0)){function a(e,r){if(!i.value||e.defaultPrevented)return;let t=r(e);if(t===null||!t.getRootNode().contains(t))return;let m=function o(n){return typeof n==\"function\"?o(n()):Array.isArray(n)||n instanceof Set?n:[n]}(f);for(let o of m){if(o===null)continue;let n=o instanceof HTMLElement?o:C(o);if(n!=null&&n.contains(t)||e.composed&&e.composedPath().includes(n))return}return!p(t,d.Loose)&&t.tabIndex!==-1&&e.preventDefault(),c(e,t)}let u=s(null);l(\"pointerdown\",e=>{var r,t;i.value&&(u.value=((t=(r=e.composedPath)==null?void 0:r.call(e))==null?void 0:t[0])||e.target)},!0),l(\"mousedown\",e=>{var r,t;i.value&&(u.value=((t=(r=e.composedPath)==null?void 0:r.call(e))==null?void 0:t[0])||e.target)},!0),l(\"click\",e=>{u.value&&(a(e,()=>u.value),u.value=null)},!0),l(\"touchend\",e=>a(e,()=>e.target instanceof HTMLElement?e.target:null),!0),T(\"blur\",e=>a(e,()=>window.document.activeElement instanceof HTMLIFrameElement?window.document.activeElement:null),!0)}export{y as useOutsideClick};\n",
+      "start": 1748577042787,
+      "end": 1748577042812,
+      "sourcemaps": null
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:client-fallback-auto-id",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "pre"
+    },
+    {
+      "name": "vite:css",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "vite:esbuild",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "vite:json",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue-jsx",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:components:imports",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "ssr-styles",
+      "start": 1748577042812,
+      "end": 1748577042812,
+      "order": "normal"
+    },
+    {
+      "name": "vite:define",
+      "result": "import { computed as E, ref as s } from \"vue\";\nimport { FocusableMode as d, isFocusableElement as p } from \"../utils/focus-management.js\";\nimport { dom as C } from \"../utils/dom.js\";\nimport { useDocumentEvent as l } from \"./use-document-event.js\";\nimport { useWindowEvent as T } from \"./use-window-event.js\";\nfunction y(f, c, i = E(() => true)) {\n  function a(e, r) {\n    if (!i.value || e.defaultPrevented)\n      return;\n    let t = r(e);\n    if (t === null || !t.getRootNode().contains(t))\n      return;\n    let m = function o(n) {\n      return typeof n == \"function\" ? o(n()) : Array.isArray(n) || n instanceof Set ? n : [n];\n    }(f);\n    for (let o of m) {\n      if (o === null)\n        continue;\n      let n = o instanceof HTMLElement ? o : C(o);\n      if (n != null && n.contains(t) || e.composed && e.composedPath().includes(n))\n        return;\n    }\n    return !p(t, d.Loose) && t.tabIndex !== -1 && e.preventDefault(), c(e, t);\n  }\n  let u = s(null);\n  l(\"pointerdown\", (e) => {\n    var r, t;\n    i.value && (u.value = ((t = (r = e.composedPath) == null ? void 0 : r.call(e)) == null ? void 0 : t[0]) || e.target);\n  }, true), l(\"mousedown\", (e) => {\n    var r, t;\n    i.value && (u.value = ((t = (r = e.composedPath) == null ? void 0 : r.call(e)) == null ? void 0 : t[0]) || e.target);\n  }, true), l(\"click\", (e) => {\n    u.value && (a(e, () => u.value), u.value = null);\n  }, true), l(\"touchend\", (e) => a(e, () => e.target instanceof HTMLElement ? e.target : null), true), T(\"blur\", (e) => a(e, () => (void 0).document.activeElement instanceof HTMLIFrameElement ? (void 0).document.activeElement : null), true);\n}\nexport { y as useOutsideClick };\n",
+      "start": 1748577042812,
+      "end": 1748577043079,
+      "order": "normal",
+      "sourcemaps": "{\n  \"version\": 3,\n  \"sources\": [\"/Users/jang-yeong-ug/Documents/zooper/node_modules/@headlessui/vue/dist/hooks/use-outside-click.js\"],\n  \"sourcesContent\": [\"import{computed as E,ref as s}from\\\"vue\\\";import{FocusableMode as d,isFocusableElement as p}from'../utils/focus-management.js';import{dom as C}from'../utils/dom.js';import{useDocumentEvent as l}from'./use-document-event.js';import{useWindowEvent as T}from'./use-window-event.js';function y(f,c,i=E(()=>!0)){function a(e,r){if(!i.value||e.defaultPrevented)return;let t=r(e);if(t===null||!t.getRootNode().contains(t))return;let m=function o(n){return typeof n==\\\"function\\\"?o(n()):Array.isArray(n)||n instanceof Set?n:[n]}(f);for(let o of m){if(o===null)continue;let n=o instanceof HTMLElement?o:C(o);if(n!=null&&n.contains(t)||e.composed&&e.composedPath().includes(n))return}return!p(t,d.Loose)&&t.tabIndex!==-1&&e.preventDefault(),c(e,t)}let u=s(null);l(\\\"pointerdown\\\",e=>{var r,t;i.value&&(u.value=((t=(r=e.composedPath)==null?void 0:r.call(e))==null?void 0:t[0])||e.target)},!0),l(\\\"mousedown\\\",e=>{var r,t;i.value&&(u.value=((t=(r=e.composedPath)==null?void 0:r.call(e))==null?void 0:t[0])||e.target)},!0),l(\\\"click\\\",e=>{u.value&&(a(e,()=>u.value),u.value=null)},!0),l(\\\"touchend\\\",e=>a(e,()=>e.target instanceof HTMLElement?e.target:null),!0),T(\\\"blur\\\",e=>a(e,()=>window.document.activeElement instanceof HTMLIFrameElement?window.document.activeElement:null),!0)}export{y as useOutsideClick};\\n\"],\n  \"mappings\": \"AAAA,SAAO,YAAY,GAAE,OAAO,SAAM;AAAM,SAAO,iBAAiB,GAAE,sBAAsB,SAAM;AAA+B,SAAO,OAAO,SAAM;AAAkB,SAAO,oBAAoB,SAAM;AAA0B,SAAO,kBAAkB,SAAM;AAAwB,SAAS,EAAE,GAAE,GAAE,IAAE,EAAE,MAAI,IAAE,GAAE;AAAC,WAAS,EAAE,GAAE,GAAE;AAAC,QAAG,CAAC,EAAE,SAAO,EAAE;AAAiB;AAAO,QAAI,IAAE,EAAE,CAAC;AAAE,QAAG,MAAI,QAAM,CAAC,EAAE,YAAY,EAAE,SAAS,CAAC;AAAE;AAAO,QAAI,IAAE,SAAS,EAAE,GAAE;AAAC,aAAO,OAAO,KAAG,aAAW,EAAE,EAAE,CAAC,IAAE,MAAM,QAAQ,CAAC,KAAG,aAAa,MAAI,IAAE,CAAC,CAAC;AAAA,IAAC,EAAE,CAAC;AAAE,aAAQ,KAAK,GAAE;AAAC,UAAG,MAAI;AAAK;AAAS,UAAI,IAAE,aAAa,cAAY,IAAE,EAAE,CAAC;AAAE,UAAG,KAAG,QAAM,EAAE,SAAS,CAAC,KAAG,EAAE,YAAU,EAAE,aAAa,EAAE,SAAS,CAAC;AAAE;AAAA,IAAM;AAAC,WAAM,CAAC,EAAE,GAAE,EAAE,KAAK,KAAG,EAAE,aAAW,MAAI,EAAE,eAAe,GAAE,EAAE,GAAE,CAAC;AAAA,EAAC;AAAC,MAAI,IAAE,EAAE,IAAI;AAAE,IAAE,eAAc,OAAG;AAAC,QAAI,GAAE;AAAE,MAAE,UAAQ,EAAE,UAAQ,KAAG,IAAE,EAAE,iBAAe,OAAK,SAAO,EAAE,KAAK,CAAC,MAAI,OAAK,SAAO,EAAE,CAAC,MAAI,EAAE;AAAA,EAAO,GAAE,IAAE,GAAE,EAAE,aAAY,OAAG;AAAC,QAAI,GAAE;AAAE,MAAE,UAAQ,EAAE,UAAQ,KAAG,IAAE,EAAE,iBAAe,OAAK,SAAO,EAAE,KAAK,CAAC,MAAI,OAAK,SAAO,EAAE,CAAC,MAAI,EAAE;AAAA,EAAO,GAAE,IAAE,GAAE,EAAE,SAAQ,OAAG;AAAC,MAAE,UAAQ,EAAE,GAAE,MAAI,EAAE,KAAK,GAAE,EAAE,QAAM;AAAA,EAAK,GAAE,IAAE,GAAE,EAAE,YAAW,OAAG,EAAE,GAAE,MAAI,EAAE,kBAAkB,cAAY,EAAE,SAAO,IAAI,GAAE,IAAE,GAAE,EAAE,QAAO,OAAG,EAAE,GAAE,MAAI,SAAO,SAAS,yBAAyB,oBAAkB,SAAO,SAAS,gBAAc,IAAI,GAAE,IAAE;AAAC;AAAC,SAAO,KAAK;\",\n  \"names\": []\n}\n"
+    },
+    {
+      "name": "vite:css-post",
+      "start": 1748577043079,
+      "end": 1748577043079,
+      "order": "normal"
+    },
+    {
+      "name": "vite:build-html",
+      "start": 1748577043079,
+      "end": 1748577043079,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker-import-meta-url",
+      "start": 1748577043079,
+      "end": 1748577043079,
+      "order": "normal"
+    },
+    {
+      "name": "vite:asset-import-meta-url",
+      "start": 1748577043079,
+      "end": 1748577043079,
+      "order": "normal"
+    },
+    {
+      "name": "commonjs",
+      "start": 1748577043079,
+      "end": 1748577043080,
+      "order": "normal"
+    },
+    {
+      "name": "vite:dynamic-import-vars",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-glob",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-template",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:components-loader",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-composables:transform",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "post"
+    },
+    {
+      "name": "vite:build-import-analysis",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "normal"
+    },
+    {
+      "name": "vite:reporter",
+      "start": 1748577043080,
+      "end": 1748577043080,
+      "order": "normal"
+    }
+  ]
+}

@@ -654,7 +654,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/login-Ezyb6znk.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/login-CcEUpybS.mjs').then((m) => m.default || m)
   },
   {
     name: "penalty",
@@ -681,6 +681,14 @@ const _routes = [
     component: () => import('./_nuxt/_id_-9n8P3Pov.mjs').then((m) => m.default || m)
   },
   {
+    name: "signUp",
+    path: "/signUp",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import('./_nuxt/signUp-Cym7-cLE.mjs').then((m) => m.default || m)
+  },
+  {
     name: "tax",
     path: "/tax",
     meta: {},
@@ -702,7 +710,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/index-BkAikQy_.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/index-Cl2elGwK.mjs').then((m) => m.default || m)
   },
   {
     name: "transfer",
@@ -710,7 +718,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import('./_nuxt/transfer-BLoqfrQP.mjs').then((m) => m.default || m)
+    component: () => import('./_nuxt/transfer-dFXQV2i6.mjs').then((m) => m.default || m)
   },
   {
     name: "whats-in-my-bag",
@@ -853,7 +861,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "29f7e095-a6ea-490d-997f-a6f6e02c70b3"
+    "buildId": "f799e75a-97ce-421d-9592-8eeadef941e3"
   },
   "ui": {
     "primary": "green",
@@ -4066,12 +4074,12 @@ const _sfc_main$2 = {
       const _component_AppFooter = __nuxt_component_4;
       _push(`<!--[-->`);
       _push(ssrRenderComponent(_component_NuxtLoadingIndicator, { color: "#14b8a6" }, null, _parent));
-      if (unref(route).path !== "/login") {
+      if (unref(route).path !== "/login" && unref(route).path !== "/signUp" && unref(route).path !== "/teacher") {
         _push(ssrRenderComponent(_component_AppNavbar, null, null, _parent));
       } else {
         _push(`<!---->`);
       }
-      if (unref(route).path !== "/login") {
+      if (unref(route).path !== "/login" && unref(route).path !== "/signUp" && unref(route).path !== "/teacher") {
         _push(`<div class="h-32"></div>`);
       } else {
         _push(`<!---->`);
@@ -4088,16 +4096,8 @@ const _sfc_main$2 = {
         }),
         _: 1
       }, _parent));
-      if (unref(route).path !== "/login") {
-        _push(`<div class="h-32"></div>`);
-      } else {
-        _push(`<!---->`);
-      }
-      if (unref(route).path !== "/login") {
-        _push(ssrRenderComponent(_component_AppFooter, null, null, _parent));
-      } else {
-        _push(`<!---->`);
-      }
+      _push(`<div class="h-32"></div>`);
+      _push(ssrRenderComponent(_component_AppFooter, null, null, _parent));
       _push(`<!--]-->`);
     };
   }

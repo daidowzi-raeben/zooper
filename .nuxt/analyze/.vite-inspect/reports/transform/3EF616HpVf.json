@@ -1,0 +1,12 @@
+{
+  "resolvedId": "\u0000commonjs-dynamic-modules",
+  "transforms": [
+    {
+      "name": "commonjs",
+      "result": "export function commonjsRequire(path) {\n\tthrow new Error('Could not dynamically require \"' + path + '\". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');\n}",
+      "start": 1748577035717,
+      "end": 1748577035717,
+      "sourcemaps": null
+    }
+  ]
+}
