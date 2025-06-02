@@ -204,7 +204,13 @@ const saveClassSettings = async () => {
     mode: 'updateInfo',
     idnt_code: sessionStorage.getItem('t_idnt_code'),
     class_name: teacherInfo.value.class_name || '',
-    currency_name: teacherInfo.value.currency_name || ''
+    currency_name: teacherInfo.value.currency_name || '',
+    deposit_cycle: teacherInfo.value.deposit_cycle || '',
+    deposit_interest: teacherInfo.value.deposit_interest || '',
+    deposit_amount: teacherInfo.value.deposit_amount || '',
+    // 🔽 여기에 추가
+    deposit_min: teacherInfo.value.deposit_min || '',
+    deposit_max: teacherInfo.value.deposit_max || ''
   })
 
   if (res.result === 'SUCCESS') {
@@ -334,6 +340,24 @@ const onClickUpload = () => {
 const onFileChange = (e) => {
   uploadedFile.value = e.target.files[0]
 }
+
+// 세금/벌금 내역 모달 관련
+const isHistoryModalOpen = ref(false)
+const historyTitle = ref('')
+const historyList = ref([])
+
+const openHistoryModal = async (type) => {
+  historyTitle.value = type === 'tax' ? '세금 내역' : '벌금 내역'
+  const res = await apiPost('bank.php', {
+    mode: 'historyByType',
+    idnt_code: sessionStorage.getItem('t_idnt_code'),
+    type // 'tax' or 'penalty'
+  })
+  historyList.value = res.data || []
+  isHistoryModalOpen.value = true
+}
+
+
 </script>
 
 <template>
@@ -395,7 +419,8 @@ const onFileChange = (e) => {
                 teacherInfo?.currency_name }}</span>
             </p>
           </div>
-          <UButton label="내역" color="white" class="text-orange-800 bg-white bg-opacity-90 hover:bg-opacity-100" />
+          <UButton label="내역" color="white" class="text-orange-800 bg-white bg-opacity-90 hover:bg-opacity-100"
+            @click="openHistoryModal('tax')" />
         </div>
 
         <!-- 카드 2: 누적 벌금 -->
@@ -409,7 +434,43 @@ const onFileChange = (e) => {
                 {{ teacherInfo?.currency_name }}</span>
             </p>
           </div>
-          <UButton label="내역" color="white" class="text-rose-800 bg-white bg-opacity-90 hover:bg-opacity-100" />
+          <UButton label="내역" color="white" class="text-rose-800 bg-white bg-opacity-90 hover:bg-opacity-100"
+            @click="openHistoryModal('penalty')" />
+        </div>
+      </div>
+      <div v-if="false" class="flex gap-4 mt-4">
+        <!-- 카드 3: 누적 기부 -->
+        <div
+          class="flex-1 rounded-2xl shadow-md p-4 bg-gradient-to-r from-teal-400 to-cyan-500 text-white flex justify-between items-center">
+          <div class="flex flex-col justify-center">
+            <div class="flex items-center gap-2">
+              <p class="text-sm opacity-80">2주 적금</p>
+              <div class="relative group">
+                <span
+                  class="cursor-pointer text-white bg-white bg-opacity-30 hover:bg-opacity-50 rounded-full px-2 py-0.5 text-xs font-bold">?</span>
+                <div
+                  class="absolute z-10 hidden group-hover:block bg-white text-gray-800 text-xs p-2 rounded shadow-lg top-full left-0 mt-1 w-48">
+                  매 2주마다 자동 적금되는 금액입니다. 출금 없이 유지하면 지급됩니다.
+                </div>
+              </div>
+            </div>
+            <p class="text-2xl font-bold">
+              🎁 0 <span class="text-sm font-normal align-middle">{{ teacherInfo?.currency_name }}</span>
+            </p>
+          </div>
+          <UButton label="활성화 하기" color="white" class="text-teal-800 bg-white bg-opacity-90 hover:bg-opacity-100" />
+        </div>
+
+        <!-- 카드 4: 누적 상벌점 -->
+        <div
+          class="flex-1 rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-fuchsia-500 text-white flex justify-between items-center">
+          <div class="flex flex-col justify-center">
+            <p class="text-sm opacity-80">4주 적금</p>
+            <p class="text-2xl font-bold">
+              ⭐ 0 <span class="text-sm font-normal align-middle">{{ teacherInfo?.currency_name }}</span>
+            </p>
+          </div>
+          <UButton label="활성화 하기" color="white" class="text-purple-800 bg-white bg-opacity-90 hover:bg-opacity-100" />
         </div>
       </div>
     </div>
@@ -418,9 +479,48 @@ const onFileChange = (e) => {
       <div class="space-y-2 mb-10">
         <p class="text-lg font-semibold text-gray-700">우리반 설정</p>
         <div class="flex gap-4 items-center">
-          <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 젤리)" class="flex-1" />
-          <UInput v-model="teacherInfo.currency_name" placeholder="화폐이름 (예: 젤리코인)" class="flex-1" />
-          <UButton label="저장" color="blue" @click="saveClassSettings" />
+          <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 젤리)" class="flex-1" size="lg" />
+          <UInput v-model="teacherInfo.currency_name" placeholder="화폐이름 (예: 젤리코인)" class="flex-1" size="lg" />
+          <UButton label="저장" color="blue" @click="saveClassSettings" size="lg" />
+        </div>
+      </div>
+      <!-- <div class="space-y-2 mb-10">
+        <p class="text-lg font-semibold text-gray-700">적금 설정</p>
+        <div class="flex gap-4 items-center">
+          <USelect v-model="selectedStudent" :options="studentOptions" placeholder="적금 사용여부" class="w-40" size="lg" />
+          <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 젤리)" class="flex-1" size="lg" />
+          <UInput v-model="teacherInfo.currency_name" placeholder="화폐이름 (예: 젤리코인)" class="flex-1" size="lg" />
+          <UButton label="저장" color="blue" @click="saveClassSettings" size="lg" />
+        </div>
+      </div> -->
+      <div class="space-y-2 mb-10">
+        <div class="flex items-center gap-2">
+          <p class="text-lg font-semibold text-gray-700">적금 설정</p>
+          <div class="relative group">
+            <span
+              class="cursor-pointer text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-full px-2 py-0.5 text-xs font-bold">?</span>
+            <div
+              class="absolute z-10 hidden group-hover:block bg-white text-gray-800 text-xs p-2 rounded shadow-lg top-full left-0 mt-1 w-64">
+              2주 또는 4주 만기의 적금을 설정할 수 있습니다. 설정한 금액은 1회만 입금되며, 만기 시 설정한 이율에 따라 원금과 이자가 함께 지급됩니다.
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-4 items-center">
+          <USelect v-model="teacherInfo.deposit_cycle" :options="[
+            { label: '사용안함', value: '' },
+            { label: '2주 적금', value: '2' },
+            { label: '4주 적금', value: '4' }
+          ]" placeholder="적금 주기 선택" class="w-40" size="lg" />
+
+          <UInput v-model="teacherInfo.deposit_interest" placeholder="이율 (%)" class="w-40" type="number" size="lg" />
+
+          <UInput v-model="teacherInfo.deposit_min" placeholder="최소 금액" type="number" class="w-40" size="lg" />
+
+          <!-- 최대 금액 -->
+          <UInput v-model="teacherInfo.deposit_max" placeholder="최대 금액" type="number" class="w-40" size="lg"
+            :min="teacherInfo.deposit_min || 0" />
+
+          <UButton label="저장" color="blue" @click="saveClassSettings" size="lg" />
         </div>
       </div>
       <div class="flex justify-between items-center">
@@ -480,6 +580,22 @@ const onFileChange = (e) => {
         </div>
       </div>
     </div>
+    <!-- 세금/벌금 내역 모달 -->
+    <UModal v-model="isHistoryModalOpen">
+      <div class="p-4 space-y-4">
+        <h2 class="text-lg font-bold">{{ historyTitle }}</h2>
+        <div v-if="historyList.length === 0" class="text-gray-500 text-sm">내역이 없습니다.</div>
+        <ul v-else class="space-y-2 max-h-60 overflow-auto text-sm">
+          <li v-for="item in historyList" :key="item.idx" class="flex justify-between border-b pb-1">
+            <span>{{ item.description }}</span>
+            <span>{{ item.point.toLocaleString() }}P</span>
+          </li>
+        </ul>
+        <div class="flex justify-end">
+          <UButton label="닫기" color="gray" @click="isHistoryModalOpen = false" />
+        </div>
+      </div>
+    </UModal>
   </div>
 </template>
 

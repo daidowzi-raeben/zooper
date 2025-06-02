@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div\n    class=\"min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white px-4\">\n    <div class=\"bg-white rounded-xl shadow-xl p-8 max-w-sm w-full text-center\">\n      <h1 class=\"text-2xl font-bold text-gray-800 mb-4\">QR 코드 로그인</h1>\n      <p class=\"text-sm text-gray-600 mb-6\">QR 코드를 스캔해주세요</p>\n\n      <button v-if=\"!isScanning && !isScanningTeacher\"\n        class=\"bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition\"\n        @click=\"startScan\">\n        QR코드로 로그인\n      </button>\n\n      <div class=\"mt-6 mb-6\">\n        <button v-if=\"!isScanning && !isScanningTeacher\" @click=\"startScanTeacher\"\n          class=\"text-blue-600 underline text-sm hover:text-blue-800\">\n          선생님이신가요?\n        </button>\n      </div>\n\n      <qrcode-stream v-if=\"isScanning\" @detect=\"onDetect\" @error=\"onError\" />\n      <button v-if=\"isScanning\"\n        class=\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\"\n        @click=\"isScanning = false\">취소</button>\n      <div v-if=\"isScanningTeacher\" class=\"mt-6 space-y-4 text-left\">\n        <div>\n          <label for=\"userId\" class=\"block text-sm font-medium text-gray-700\">이메일</label>\n          <input v-model=\"mb_email\" type=\"text\" id=\"userId\" name=\"userId\"\n            class=\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\" />\n        </div>\n        <div>\n          <label for=\"password\" class=\"block text-sm font-medium text-gray-700\">비밀번호</label>\n          <input v-model=\"mb_pw\" type=\"password\" id=\"password\" name=\"password\"\n            class=\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\" />\n        </div>\n        <div>\n          <button class=\"w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition\"\n            @click=\"onClickLogin\">로그인</button>\n          <button\n            class=\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\"\n            @click=\"isScanningTeacher = false\">취소</button>\n          <div class=\"text-center mt-4\">\n            <router-link to=\"/signUp\" class=\"text-sm text-blue-600 underline hover:text-blue-800\">가입하기</router-link>\n          </div>\n        </div>\n      </div>\n      <!-- <qrcode-stream\n        v-if=\"isScanningTeacher\"\n        @detect=\"onDetectTeacher\"\n        @error=\"onErrorTeacher\"\n      /> -->\n\n      <p v-if=\"error\" class=\"text-red-500 text-sm mt-4\">{{ error }}</p>\n    </div>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nimport { useRouter } from 'vue-router'\nimport { QrcodeStream } from 'vue-qrcode-reader'\nimport { apiPost } from '@/common/api';\n\nconst isScanning = ref(false)\nconst isScanningTeacher = ref(false)\nconst error = ref('')\nconst errorTeacher = ref('')\nconst mb_email = ref('')\nconst mb_pw = ref('')\nconst router = useRouter()\n\nconst startScan = () => {\n  isScanning.value = true\n  error.value = ''\n}\nconst startScanTeacher = () => {\n  isScanningTeacher.value = true\n  errorTeacher.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\nconst onDetectTeacher = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/teacher/' + url)\n}\n\nconst onErrorTeacher = (err) => {\n  errorTeacher.value = '카메라 접근 실패'\n  console.error(err)\n  isScanningTeacher.value = false\n}\n\nconst onClickLogin = async () => {\n  if (!mb_email.value || !mb_pw.value) return alert('이메일과 비밀번호를 모두 입력해 주세요.')\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'login',\n      mb_email: mb_email.value,\n      mb_pw: mb_pw.value,\n    });\n    console.log(res?.data)\n    if (res?.result == 'SUCCESS') {\n\n      sessionStorage.setItem('t_idnt_code', res?.data?.idnt_code)\n      sessionStorage.setItem('idnt_code', 'teacher')\n      sessionStorage.setItem('teacher', JSON.stringify(res?.data))\n      window.location.href = '/teacher'\n\n    } else {\n      if (res?.result == 'NOT_APPROVED') {\n        return alert('승인되지 않은 계정입니다. 관리자에게 문의하세요.')\n      }\n\n      return alert('로그인에 실패했습니다.')\n    }\n\n  } catch (err) {\n    console.error(err);\n  }\n\n}\n</script>\n\n<script>\nexport default {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n</script>",
-      "start": 1748577042009,
-      "end": 1748577042064,
+      "start": 1748835745856,
+      "end": 1748835745919,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748577042064,
-      "end": 1748577042064,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748577042065,
-      "end": 1748577042065,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748577042065,
-      "end": 1748577042065,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748577042065,
-      "end": 1748577042065,
+      "start": 1748835745919,
+      "end": 1748835745919,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createTextVNode as _createTextVNode, mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttr as _ssrRenderAttr, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\"\n\nimport { ref } from 'vue'\nimport { useRouter } from 'vue-router'\nimport { QrcodeStream } from 'vue-qrcode-reader'\nimport { apiPost } from '@/common/api';\n\n\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n\n\nconst _sfc_main = /*@__PURE__*/Object.assign(__default__, {\n  __name: 'login',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst isScanning = ref(false)\nconst isScanningTeacher = ref(false)\nconst error = ref('')\nconst errorTeacher = ref('')\nconst mb_email = ref('')\nconst mb_pw = ref('')\nconst router = useRouter()\n\nconst startScan = () => {\n  isScanning.value = true\n  error.value = ''\n}\nconst startScanTeacher = () => {\n  isScanningTeacher.value = true\n  errorTeacher.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\nconst onDetectTeacher = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/teacher/' + url)\n}\n\nconst onErrorTeacher = (err) => {\n  errorTeacher.value = '카메라 접근 실패'\n  console.error(err)\n  isScanningTeacher.value = false\n}\n\nconst onClickLogin = async () => {\n  if (!mb_email.value || !mb_pw.value) return alert('이메일과 비밀번호를 모두 입력해 주세요.')\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'login',\n      mb_email: mb_email.value,\n      mb_pw: mb_pw.value,\n    });\n    console.log(res?.data)\n    if (res?.result == 'SUCCESS') {\n\n      sessionStorage.setItem('t_idnt_code', res?.data?.idnt_code)\n      sessionStorage.setItem('idnt_code', 'teacher')\n      sessionStorage.setItem('teacher', JSON.stringify(res?.data))\n      window.location.href = '/teacher'\n\n    } else {\n      if (res?.result == 'NOT_APPROVED') {\n        return alert('승인되지 않은 계정입니다. 관리자에게 문의하세요.')\n      }\n\n      return alert('로그인에 실패했습니다.')\n    }\n\n  } catch (err) {\n    console.error(err);\n  }\n\n}\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_router_link = _resolveComponent(\"router-link\")\n\n  _push(`<div${_ssrRenderAttrs(_mergeProps({ class: \"min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white px-4\" }, _attrs))}><div class=\"bg-white rounded-xl shadow-xl p-8 max-w-sm w-full text-center\"><h1 class=\"text-2xl font-bold text-gray-800 mb-4\">QR 코드 로그인</h1><p class=\"text-sm text-gray-600 mb-6\">QR 코드를 스캔해주세요</p>`)\n  if (!isScanning.value && !isScanningTeacher.value) {\n    _push(`<button class=\"bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition\"> QR코드로 로그인 </button>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`<div class=\"mt-6 mb-6\">`)\n  if (!isScanning.value && !isScanningTeacher.value) {\n    _push(`<button class=\"text-blue-600 underline text-sm hover:text-blue-800\"> 선생님이신가요? </button>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div>`)\n  if (isScanning.value) {\n    _push(_ssrRenderComponent(_unref(QrcodeStream), {\n      onDetect: onDetect,\n      onError: onError\n    }, null, _parent))\n  } else {\n    _push(`<!---->`)\n  }\n  if (isScanning.value) {\n    _push(`<button class=\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\">취소</button>`)\n  } else {\n    _push(`<!---->`)\n  }\n  if (isScanningTeacher.value) {\n    _push(`<div class=\"mt-6 space-y-4 text-left\"><div><label for=\"userId\" class=\"block text-sm font-medium text-gray-700\">이메일</label><input${\n      _ssrRenderAttr(\"value\", mb_email.value)\n    } type=\"text\" id=\"userId\" name=\"userId\" class=\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\"></div><div><label for=\"password\" class=\"block text-sm font-medium text-gray-700\">비밀번호</label><input${\n      _ssrRenderAttr(\"value\", mb_pw.value)\n    } type=\"password\" id=\"password\" name=\"password\" class=\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\"></div><div><button class=\"w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition\">로그인</button><button class=\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\">취소</button><div class=\"text-center mt-4\">`)\n    _push(_ssrRenderComponent(_component_router_link, {\n      to: \"/signUp\",\n      class: \"text-sm text-blue-600 underline hover:text-blue-800\"\n    }, {\n      default: _withCtx((_, _push, _parent, _scopeId) => {\n        if (_push) {\n          _push(`가입하기`)\n        } else {\n          return [\n            _createTextVNode(\"가입하기\")\n          ]\n        }\n      }),\n      _: 1\n    }, _parent))\n    _push(`</div></div></div>`)\n  } else {\n    _push(`<!---->`)\n  }\n  if (error.value) {\n    _push(`<p class=\"text-red-500 text-sm mt-4\">${_ssrInterpolate(error.value)}</p>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div></div>`)\n}\n}\n\n})\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"pages/login.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748577042065,
-      "end": 1748577042070,
+      "start": 1748835745919,
+      "end": 1748835745924,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,143 +94,143 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748577042070,
-      "end": 1748577042070,
+      "start": 1748835745924,
+      "end": 1748835745924,
       "order": "normal"
     },
     {
       "name": "vite:define",
       "result": "import { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createTextVNode as _createTextVNode, mergeProps as _mergeProps } from \"vue\";\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttr as _ssrRenderAttr, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \"vue/server-renderer\";\nimport { ref } from \"vue\";\nimport { useRouter } from \"vue-router\";\nimport { QrcodeStream } from \"vue-qrcode-reader\";\nimport { apiPost } from \"@/common/api\";\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import(\"vue-qrcode-reader\").then((m) => m.QrcodeStream)\n  }\n};\nconst _sfc_main = /* @__PURE__ */ Object.assign(__default__, {\n  __name: \"login\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const isScanning = ref(false);\n    const isScanningTeacher = ref(false);\n    const error = ref(\"\");\n    const errorTeacher = ref(\"\");\n    const mb_email = ref(\"\");\n    const mb_pw = ref(\"\");\n    const router = useRouter();\n    const startScan = () => {\n      isScanning.value = true;\n      error.value = \"\";\n    };\n    const startScanTeacher = () => {\n      isScanningTeacher.value = true;\n      errorTeacher.value = \"\";\n    };\n    const onDetect = (detectedCodes) => {\n      const url = detectedCodes[0]?.rawValue;\n      if (!url)\n        return;\n      isScanning.value = false;\n      router.push(\"/sign/\" + url);\n    };\n    const onError = (err) => {\n      error.value = \"카메라 접근 실패\";\n      console.error(err);\n      isScanning.value = false;\n    };\n    const onDetectTeacher = (detectedCodes) => {\n      const url = detectedCodes[0]?.rawValue;\n      if (!url)\n        return;\n      isScanning.value = false;\n      router.push(\"/teacher/\" + url);\n    };\n    const onErrorTeacher = (err) => {\n      errorTeacher.value = \"카메라 접근 실패\";\n      console.error(err);\n      isScanningTeacher.value = false;\n    };\n    const onClickLogin = async () => {\n      if (!mb_email.value || !mb_pw.value)\n        return alert(\"이메일과 비밀번호를 모두 입력해 주세요.\");\n      try {\n        const res = await apiPost(\"teacher.php\", {\n          mode: \"login\",\n          mb_email: mb_email.value,\n          mb_pw: mb_pw.value\n        });\n        console.log(res?.data);\n        if (res?.result == \"SUCCESS\") {\n          sessionStorage.setItem(\"t_idnt_code\", res?.data?.idnt_code);\n          sessionStorage.setItem(\"idnt_code\", \"teacher\");\n          sessionStorage.setItem(\"teacher\", JSON.stringify(res?.data));\n          (void 0).location.href = \"/teacher\";\n        } else {\n          if (res?.result == \"NOT_APPROVED\") {\n            return alert(\"승인되지 않은 계정입니다. 관리자에게 문의하세요.\");\n          }\n          return alert(\"로그인에 실패했습니다.\");\n        }\n      } catch (err) {\n        console.error(err);\n      }\n    };\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_router_link = _resolveComponent(\"router-link\");\n      _push(`<div${_ssrRenderAttrs(_mergeProps({ class: \"min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white px-4\" }, _attrs))}><div class=\"bg-white rounded-xl shadow-xl p-8 max-w-sm w-full text-center\"><h1 class=\"text-2xl font-bold text-gray-800 mb-4\">QR 코드 로그인</h1><p class=\"text-sm text-gray-600 mb-6\">QR 코드를 스캔해주세요</p>`);\n      if (!isScanning.value && !isScanningTeacher.value) {\n        _push(`<button class=\"bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition\"> QR코드로 로그인 </button>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`<div class=\"mt-6 mb-6\">`);\n      if (!isScanning.value && !isScanningTeacher.value) {\n        _push(`<button class=\"text-blue-600 underline text-sm hover:text-blue-800\"> 선생님이신가요? </button>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</div>`);\n      if (isScanning.value) {\n        _push(_ssrRenderComponent(_unref(QrcodeStream), {\n          onDetect,\n          onError\n        }, null, _parent));\n      } else {\n        _push(`<!---->`);\n      }\n      if (isScanning.value) {\n        _push(`<button class=\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\">취소</button>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (isScanningTeacher.value) {\n        _push(`<div class=\"mt-6 space-y-4 text-left\"><div><label for=\"userId\" class=\"block text-sm font-medium text-gray-700\">이메일</label><input${_ssrRenderAttr(\"value\", mb_email.value)} type=\"text\" id=\"userId\" name=\"userId\" class=\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\"></div><div><label for=\"password\" class=\"block text-sm font-medium text-gray-700\">비밀번호</label><input${_ssrRenderAttr(\"value\", mb_pw.value)} type=\"password\" id=\"password\" name=\"password\" class=\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\"></div><div><button class=\"w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition\">로그인</button><button class=\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\">취소</button><div class=\"text-center mt-4\">`);\n        _push(_ssrRenderComponent(_component_router_link, {\n          to: \"/signUp\",\n          class: \"text-sm text-blue-600 underline hover:text-blue-800\"\n        }, {\n          default: _withCtx((_, _push2, _parent2, _scopeId) => {\n            if (_push2) {\n              _push2(`가입하기`);\n            } else {\n              return [\n                _createTextVNode(\"가입하기\")\n              ];\n            }\n          }),\n          _: 1\n        }, _parent));\n        _push(`</div></div></div>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (error.value) {\n        _push(`<p class=\"text-red-500 text-sm mt-4\">${_ssrInterpolate(error.value)}</p>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</div></div>`);\n    };\n  }\n});\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"pages/login.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748577042070,
-      "end": 1748577042496,
+      "start": 1748835745924,
+      "end": 1748835746462,
       "order": "normal",
       "sourcemaps": "{\n  \"version\": 3,\n  \"sources\": [\"/Users/jang-yeong-ug/Documents/zooper/pages/login.vue?macro=true\"],\n  \"sourcesContent\": [\"import { unref as _unref, resolveComponent as _resolveComponent, withCtx as _withCtx, createTextVNode as _createTextVNode, mergeProps as _mergeProps } from \\\"vue\\\"\\nimport { ssrRenderComponent as _ssrRenderComponent, ssrRenderAttr as _ssrRenderAttr, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate } from \\\"vue/server-renderer\\\"\\n\\nimport { ref } from 'vue'\\nimport { useRouter } from 'vue-router'\\nimport { QrcodeStream } from 'vue-qrcode-reader'\\nimport { apiPost } from '@/common/api';\\n\\n\\nconst __default__ = {\\n  components: {\\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\\n  }\\n}\\n\\n\\nconst _sfc_main = /*@__PURE__*/Object.assign(__default__, {\\n  __name: 'login',\\n  __ssrInlineRender: true,\\n  setup(__props) {\\n\\nconst isScanning = ref(false)\\nconst isScanningTeacher = ref(false)\\nconst error = ref('')\\nconst errorTeacher = ref('')\\nconst mb_email = ref('')\\nconst mb_pw = ref('')\\nconst router = useRouter()\\n\\nconst startScan = () => {\\n  isScanning.value = true\\n  error.value = ''\\n}\\nconst startScanTeacher = () => {\\n  isScanningTeacher.value = true\\n  errorTeacher.value = ''\\n}\\n\\nconst onDetect = (detectedCodes) => {\\n  const url = detectedCodes[0]?.rawValue\\n  if (!url) return\\n\\n  isScanning.value = false\\n  router.push('/sign/' + url)\\n}\\n\\nconst onError = (err) => {\\n  error.value = '카메라 접근 실패'\\n  console.error(err)\\n  isScanning.value = false\\n}\\n\\n\\nconst onDetectTeacher = (detectedCodes) => {\\n  const url = detectedCodes[0]?.rawValue\\n  if (!url) return\\n\\n  isScanning.value = false\\n  router.push('/teacher/' + url)\\n}\\n\\nconst onErrorTeacher = (err) => {\\n  errorTeacher.value = '카메라 접근 실패'\\n  console.error(err)\\n  isScanningTeacher.value = false\\n}\\n\\nconst onClickLogin = async () => {\\n  if (!mb_email.value || !mb_pw.value) return alert('이메일과 비밀번호를 모두 입력해 주세요.')\\n  try {\\n    const res = await apiPost('teacher.php', {\\n      mode: 'login',\\n      mb_email: mb_email.value,\\n      mb_pw: mb_pw.value,\\n    });\\n    console.log(res?.data)\\n    if (res?.result == 'SUCCESS') {\\n\\n      sessionStorage.setItem('t_idnt_code', res?.data?.idnt_code)\\n      sessionStorage.setItem('idnt_code', 'teacher')\\n      sessionStorage.setItem('teacher', JSON.stringify(res?.data))\\n      window.location.href = '/teacher'\\n\\n    } else {\\n      if (res?.result == 'NOT_APPROVED') {\\n        return alert('승인되지 않은 계정입니다. 관리자에게 문의하세요.')\\n      }\\n\\n      return alert('로그인에 실패했습니다.')\\n    }\\n\\n  } catch (err) {\\n    console.error(err);\\n  }\\n\\n}\\n\\nreturn (_ctx, _push, _parent, _attrs) => {\\n  const _component_router_link = _resolveComponent(\\\"router-link\\\")\\n\\n  _push(`<div${_ssrRenderAttrs(_mergeProps({ class: \\\"min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white px-4\\\" }, _attrs))}><div class=\\\"bg-white rounded-xl shadow-xl p-8 max-w-sm w-full text-center\\\"><h1 class=\\\"text-2xl font-bold text-gray-800 mb-4\\\">QR 코드 로그인</h1><p class=\\\"text-sm text-gray-600 mb-6\\\">QR 코드를 스캔해주세요</p>`)\\n  if (!isScanning.value && !isScanningTeacher.value) {\\n    _push(`<button class=\\\"bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition\\\"> QR코드로 로그인 </button>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  _push(`<div class=\\\"mt-6 mb-6\\\">`)\\n  if (!isScanning.value && !isScanningTeacher.value) {\\n    _push(`<button class=\\\"text-blue-600 underline text-sm hover:text-blue-800\\\"> 선생님이신가요? </button>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  _push(`</div>`)\\n  if (isScanning.value) {\\n    _push(_ssrRenderComponent(_unref(QrcodeStream), {\\n      onDetect: onDetect,\\n      onError: onError\\n    }, null, _parent))\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  if (isScanning.value) {\\n    _push(`<button class=\\\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\\\">취소</button>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  if (isScanningTeacher.value) {\\n    _push(`<div class=\\\"mt-6 space-y-4 text-left\\\"><div><label for=\\\"userId\\\" class=\\\"block text-sm font-medium text-gray-700\\\">이메일</label><input${\\n      _ssrRenderAttr(\\\"value\\\", mb_email.value)\\n    } type=\\\"text\\\" id=\\\"userId\\\" name=\\\"userId\\\" class=\\\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\\\"></div><div><label for=\\\"password\\\" class=\\\"block text-sm font-medium text-gray-700\\\">비밀번호</label><input${\\n      _ssrRenderAttr(\\\"value\\\", mb_pw.value)\\n    } type=\\\"password\\\" id=\\\"password\\\" name=\\\"password\\\" class=\\\"mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500\\\"></div><div><button class=\\\"w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition\\\">로그인</button><button class=\\\"w-full bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition mt-2\\\">취소</button><div class=\\\"text-center mt-4\\\">`)\\n    _push(_ssrRenderComponent(_component_router_link, {\\n      to: \\\"/signUp\\\",\\n      class: \\\"text-sm text-blue-600 underline hover:text-blue-800\\\"\\n    }, {\\n      default: _withCtx((_, _push, _parent, _scopeId) => {\\n        if (_push) {\\n          _push(`가입하기`)\\n        } else {\\n          return [\\n            _createTextVNode(\\\"가입하기\\\")\\n          ]\\n        }\\n      }),\\n      _: 1\\n    }, _parent))\\n    _push(`</div></div></div>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  if (error.value) {\\n    _push(`<p class=\\\"text-red-500 text-sm mt-4\\\">${_ssrInterpolate(error.value)}</p>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  _push(`</div></div>`)\\n}\\n}\\n\\n})\\n\\n\\n\\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\\nconst _sfc_setup = _sfc_main.setup\\n_sfc_main.setup = (props, ctx) => {\\n  const ssrContext = __vite_useSSRContext()\\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\\\"pages/login.vue\\\")\\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\\n}\\nexport default _sfc_main\"],\n  \"mappings\": \"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\",\n  \"names\": [\"_push\", \"_parent\"]\n}\n"
     },
     {
       "name": "vite:css-post",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748577042496,
-      "end": 1748577042496,
+      "start": 1748835746462,
+      "end": 1748835746462,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748577042496,
-      "end": 1748577042498,
+      "start": 1748835746462,
+      "end": 1748835746465,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748577042496,
-      "end": 1748577042498,
+      "start": 1748835746462,
+      "end": 1748835746465,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748577042498,
-      "end": 1748577042498,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748577042498,
-      "end": 1748577042498,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1748577042498,
-      "end": 1748577042499,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -244,8 +244,8 @@
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1748577042498,
-      "end": 1748577042499,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -258,32 +258,32 @@
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748577042499,
-      "end": 1748577042499,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748577042499,
-      "end": 1748577042499,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748577042499,
-      "end": 1748577042499,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748577042499,
-      "end": 1748577042499,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748577042499,
-      "end": 1748577042499,
+      "start": 1748835746465,
+      "end": 1748835746465,
       "order": "normal"
     }
   ]

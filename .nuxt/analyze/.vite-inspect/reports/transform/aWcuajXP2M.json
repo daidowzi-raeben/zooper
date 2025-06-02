@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nimport { ref, reactive, computed } from 'vue';\nimport { apiPost } from '@/common/api';\nimport { nextTick } from 'vue';\n\nconst form = reactive({\n  mb_name: '',\n  mb_id: '',\n  mb_email: '',\n  mb_pw: '',\n  mb_pw_check: '',\n  mb_school: '',\n  mb_school_idx: null,\n});\n\nconst emailStatus = ref('');\nconst isValidEmail = ref(false);\nconst isSchoolSelected = ref(false);\nconst searchKeyword = ref('');\nconst searchResults = ref([]);\nconst showResults = ref(false);\n\nconst resetSchool = () => {\n  form.mb_school = '';\n  form.mb_school_idx = null;\n  searchKeyword.value = '';\n  searchResults.value = [];\n  isSchoolSelected.value = false;\n};\n\nconst searchSchool = async () => {\n  if (searchKeyword.value.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'schoolList',\n        school: searchKeyword.value,\n      });\n      searchResults.value = res.data || [];\n      showResults.value = true;\n    } catch (err) {\n      console.error(err);\n    }\n  } else {\n    showResults.value = false;\n  }\n};\n\nconst selectSchool = (school) => {\n  form.mb_school = school.school;\n  form.mb_school_idx = school.idx;\n  searchKeyword.value = school.school;\n  showResults.value = false;\n  isSchoolSelected.value = true;\n};\n\nconst checkEmail = async () => {\n  await nextTick(); // form.mb_id 최신값 반영 보장\n\n  const emailFull = `${form.mb_id}@korea.kr`;\n  form.mb_email = emailFull;\n\n  if (form.mb_id.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'checkEmail',\n        email: emailFull,\n      });\n      console.log(res.result)\n      if (res?.result === 'DUPLICATE') {\n        emailStatus.value = '이미 사용 중인 이메일입니다.';\n        isValidEmail.value = false;\n      } else {\n        emailStatus.value = '사용 가능한 이메일입니다.';\n        isValidEmail.value = true;\n      }\n    } catch (e) {\n      console.error(e);\n      emailStatus.value = '오류가 발생했습니다.';\n      isValidEmail.value = false;\n    }\n  } else {\n    emailStatus.value = '아이디를 입력해주세요';\n    isValidEmail.value = false;\n  }\n};\n\nconst isFormValid = computed(() => {\n  return (\n    form.mb_name &&\n    form.mb_id &&\n    form.mb_pw &&\n    form.mb_pw_check &&\n    form.mb_pw === form.mb_pw_check &&\n    isValidEmail.value &&\n    form.mb_school_idx\n  );\n});\n\nconst submit = async () => {\n  if (form.mb_pw !== form.mb_pw_check) {\n    alert('비밀번호가 일치하지 않습니다.');\n    return;\n  }\n\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'insert',\n      ...form\n    });\n\n    if (res.result === 'SUCCESS') {\n      alert('가입이 완료되었습니다.');\n      location.href = '/login';\n    } else if (res.result === 'DUPLICATE') {\n      alert('이미 등록된 이메일입니다.');\n    } else {\n      alert('가입에 실패했습니다.');\n    }\n  } catch (e) {\n    console.error(e);\n    alert('오류가 발생했습니다.');\n  }\n};\n</script>\n\n<template>\n  <div class=\"max-w-md mx-auto mt-10 p-6 bg-white rounded shadow\">\n    <h2 class=\"text-2xl font-bold mb-4\">교사 회원가입</h2>\n    <form @submit.prevent=\"submit\" class=\"space-y-4\">\n      <div>\n        <label for=\"mb_name\" class=\"block mb-1 font-medium\">이름</label>\n        <input v-model=\"form.mb_name\" id=\"mb_name\" type=\"text\" class=\"w-full border rounded px-3 py-2\" required />\n      </div>\n      <div>\n        <label for=\"mb_id\" class=\"block mb-1 font-medium\">이메일</label>\n        <div class=\"flex items-center space-x-2\">\n          <input v-model=\"form.mb_id\" @blur=\"checkEmail\" id=\"mb_id\" type=\"text\"\n            class=\"flex-grow border rounded px-3 py-2\" placeholder=\"아이디 입력\" required />\n          <span class=\"text-gray-700\">@korea.kr</span>\n        </div>\n        <p class=\"text-sm mt-1\" :class=\"isValidEmail ? 'text-green-600' : 'text-red-600'\">\n          {{ emailStatus }}\n        </p>\n      </div>\n      <div>\n        <label for=\"mb_pw\" class=\"block mb-1 font-medium\">비밀번호</label>\n        <input v-model=\"form.mb_pw\" id=\"mb_pw\" type=\"password\" class=\"w-full border rounded px-3 py-2\" required />\n      </div>\n      <div>\n        <label for=\"mb_pw_check\" class=\"block mb-1 font-medium\">비밀번호 확인</label>\n        <input v-model=\"form.mb_pw_check\" id=\"mb_pw_check\" type=\"password\" class=\"w-full border rounded px-3 py-2\"\n          required />\n      </div>\n      <div>\n        <label for=\"mb_school\" class=\"block mb-1 font-medium\">\n          학교명 <span class=\"text-sm text-gray-500\">(키워드 입력 후 엔터로 검색할 수 있습니다.)</span>\n        </label>\n        <div class=\"relative\">\n          <input v-model=\"searchKeyword\" id=\"mb_school\" type=\"search\" placeholder=\"학교명을 검색하세요\"\n            class=\"w-full border rounded px-3 py-2 pr-10\" :disabled=\"isSchoolSelected\" @keyup.enter=\"searchSchool\" />\n          <button type=\"button\" class=\"absolute inset-y-0 right-0 flex items-center px-3 text-gray-500\"\n            @click=\"searchSchool\" v-if=\"!isSchoolSelected\">\n            <i class=\"fas fa-search\"></i>\n          </button>\n          <ul v-if=\"showResults\"\n            class=\"absolute z-10 w-full bg-white border mt-1 max-h-40 overflow-auto shadow rounded\">\n            <li v-for=\"school in searchResults\" :key=\"school.idx\" @click=\"selectSchool(school)\"\n              class=\"px-3 py-2 hover:bg-gray-100 cursor-pointer\">\n              {{ school.school }} <span class=\"text-sm text-gray-500\">({{ school.addr }})</span>\n            </li>\n          </ul>\n          <div v-if=\"isSchoolSelected\" class=\"mt-1 text-sm text-blue-600 underline cursor-pointer\" @click=\"resetSchool\">\n            다시 검색\n          </div>\n        </div>\n        <div class=\"mt-6 mb-4 text-sm text-gray-600 leading-relaxed\">\n          <p class=\"text-red-600 font-semibold mb-2\">\n            ※ 선생님이 아닌 학생이 장난으로 가입할 경우, 해당 선생님에게 즉시 보고됩니다.\n          </p>\n          <p class=\"mb-2\">회원가입은 선생님 인증 후에 사용이 가능합니다.</p>\n          <p class=\"mb-1\">- 이용약관: 본 서비스는 교육 목적으로만 제공되며, 무단 사용 시 제재를 받을 수 있습니다.</p>\n          <p>- 개인정보처리방침: 수집된 정보는 수업 및 교육 운영 이외의 용도로 사용되지 않습니다.</p>\n        </div>\n      </div>\n      <button type=\"button\" @click=\"submit\" :disabled=\"!isFormValid\"\n        class=\"w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50\">\n        가입하기\n      </button>\n    </form>\n  </div>\n</template>",
-      "start": 1748577034806,
-      "end": 1748577034881,
+      "start": 1748835737875,
+      "end": 1748835737926,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748577034881,
-      "end": 1748577034881,
+      "start": 1748835737926,
+      "end": 1748835737926,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { createElementVNode as _createElementVNode, vModelText as _vModelText, withDirectives as _withDirectives, toDisplayString as _toDisplayString, normalizeClass as _normalizeClass, createTextVNode as _createTextVNode, withKeys as _withKeys, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode, renderList as _renderList, Fragment as _Fragment, withModifiers as _withModifiers } from \"vue\"\n\nconst _hoisted_1 = { class: \"max-w-md mx-auto mt-10 p-6 bg-white rounded shadow\" }\nconst _hoisted_2 = { class: \"flex items-center space-x-2\" }\nconst _hoisted_3 = { class: \"relative\" }\nconst _hoisted_4 = [\"disabled\"]\nconst _hoisted_5 = {\n  key: 1,\n  class: \"absolute z-10 w-full bg-white border mt-1 max-h-40 overflow-auto shadow rounded\"\n}\nconst _hoisted_6 = [\"onClick\"]\nconst _hoisted_7 = { class: \"text-sm text-gray-500\" }\nconst _hoisted_8 = [\"disabled\"]\n\nimport { ref, reactive, computed } from 'vue';\nimport { apiPost } from '@/common/api';\nimport { nextTick } from 'vue';\n\n\nconst _sfc_main = {\n  __name: 'signUp',\n  setup(__props) {\n\nconst form = reactive({\n  mb_name: '',\n  mb_id: '',\n  mb_email: '',\n  mb_pw: '',\n  mb_pw_check: '',\n  mb_school: '',\n  mb_school_idx: null,\n});\n\nconst emailStatus = ref('');\nconst isValidEmail = ref(false);\nconst isSchoolSelected = ref(false);\nconst searchKeyword = ref('');\nconst searchResults = ref([]);\nconst showResults = ref(false);\n\nconst resetSchool = () => {\n  form.mb_school = '';\n  form.mb_school_idx = null;\n  searchKeyword.value = '';\n  searchResults.value = [];\n  isSchoolSelected.value = false;\n};\n\nconst searchSchool = async () => {\n  if (searchKeyword.value.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'schoolList',\n        school: searchKeyword.value,\n      });\n      searchResults.value = res.data || [];\n      showResults.value = true;\n    } catch (err) {\n      console.error(err);\n    }\n  } else {\n    showResults.value = false;\n  }\n};\n\nconst selectSchool = (school) => {\n  form.mb_school = school.school;\n  form.mb_school_idx = school.idx;\n  searchKeyword.value = school.school;\n  showResults.value = false;\n  isSchoolSelected.value = true;\n};\n\nconst checkEmail = async () => {\n  await nextTick(); // form.mb_id 최신값 반영 보장\n\n  const emailFull = `${form.mb_id}@korea.kr`;\n  form.mb_email = emailFull;\n\n  if (form.mb_id.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'checkEmail',\n        email: emailFull,\n      });\n      console.log(res.result)\n      if (res?.result === 'DUPLICATE') {\n        emailStatus.value = '이미 사용 중인 이메일입니다.';\n        isValidEmail.value = false;\n      } else {\n        emailStatus.value = '사용 가능한 이메일입니다.';\n        isValidEmail.value = true;\n      }\n    } catch (e) {\n      console.error(e);\n      emailStatus.value = '오류가 발생했습니다.';\n      isValidEmail.value = false;\n    }\n  } else {\n    emailStatus.value = '아이디를 입력해주세요';\n    isValidEmail.value = false;\n  }\n};\n\nconst isFormValid = computed(() => {\n  return (\n    form.mb_name &&\n    form.mb_id &&\n    form.mb_pw &&\n    form.mb_pw_check &&\n    form.mb_pw === form.mb_pw_check &&\n    isValidEmail.value &&\n    form.mb_school_idx\n  );\n});\n\nconst submit = async () => {\n  if (form.mb_pw !== form.mb_pw_check) {\n    alert('비밀번호가 일치하지 않습니다.');\n    return;\n  }\n\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'insert',\n      ...form\n    });\n\n    if (res.result === 'SUCCESS') {\n      alert('가입이 완료되었습니다.');\n      location.href = '/login';\n    } else if (res.result === 'DUPLICATE') {\n      alert('이미 등록된 이메일입니다.');\n    } else {\n      alert('가입에 실패했습니다.');\n    }\n  } catch (e) {\n    console.error(e);\n    alert('오류가 발생했습니다.');\n  }\n};\n\nreturn (_ctx, _cache) => {\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    _cache[13] || (_cache[13] = _createElementVNode(\"h2\", { class: \"text-2xl font-bold mb-4\" }, \"교사 회원가입\", -1)),\n    _createElementVNode(\"form\", {\n      onSubmit: _withModifiers(submit, [\"prevent\"]),\n      class: \"space-y-4\"\n    }, [\n      _createElementVNode(\"div\", null, [\n        _cache[5] || (_cache[5] = _createElementVNode(\"label\", {\n          for: \"mb_name\",\n          class: \"block mb-1 font-medium\"\n        }, \"이름\", -1)),\n        _withDirectives(_createElementVNode(\"input\", {\n          \"onUpdate:modelValue\": _cache[0] || (_cache[0] = $event => ((form.mb_name) = $event)),\n          id: \"mb_name\",\n          type: \"text\",\n          class: \"w-full border rounded px-3 py-2\",\n          required: \"\"\n        }, null, 512), [\n          [_vModelText, form.mb_name]\n        ])\n      ]),\n      _createElementVNode(\"div\", null, [\n        _cache[7] || (_cache[7] = _createElementVNode(\"label\", {\n          for: \"mb_id\",\n          class: \"block mb-1 font-medium\"\n        }, \"이메일\", -1)),\n        _createElementVNode(\"div\", _hoisted_2, [\n          _withDirectives(_createElementVNode(\"input\", {\n            \"onUpdate:modelValue\": _cache[1] || (_cache[1] = $event => ((form.mb_id) = $event)),\n            onBlur: checkEmail,\n            id: \"mb_id\",\n            type: \"text\",\n            class: \"flex-grow border rounded px-3 py-2\",\n            placeholder: \"아이디 입력\",\n            required: \"\"\n          }, null, 544), [\n            [_vModelText, form.mb_id]\n          ]),\n          _cache[6] || (_cache[6] = _createElementVNode(\"span\", { class: \"text-gray-700\" }, \"@korea.kr\", -1))\n        ]),\n        _createElementVNode(\"p\", {\n          class: _normalizeClass([\"text-sm mt-1\", isValidEmail.value ? 'text-green-600' : 'text-red-600'])\n        }, _toDisplayString(emailStatus.value), 3)\n      ]),\n      _createElementVNode(\"div\", null, [\n        _cache[8] || (_cache[8] = _createElementVNode(\"label\", {\n          for: \"mb_pw\",\n          class: \"block mb-1 font-medium\"\n        }, \"비밀번호\", -1)),\n        _withDirectives(_createElementVNode(\"input\", {\n          \"onUpdate:modelValue\": _cache[2] || (_cache[2] = $event => ((form.mb_pw) = $event)),\n          id: \"mb_pw\",\n          type: \"password\",\n          class: \"w-full border rounded px-3 py-2\",\n          required: \"\"\n        }, null, 512), [\n          [_vModelText, form.mb_pw]\n        ])\n      ]),\n      _createElementVNode(\"div\", null, [\n        _cache[9] || (_cache[9] = _createElementVNode(\"label\", {\n          for: \"mb_pw_check\",\n          class: \"block mb-1 font-medium\"\n        }, \"비밀번호 확인\", -1)),\n        _withDirectives(_createElementVNode(\"input\", {\n          \"onUpdate:modelValue\": _cache[3] || (_cache[3] = $event => ((form.mb_pw_check) = $event)),\n          id: \"mb_pw_check\",\n          type: \"password\",\n          class: \"w-full border rounded px-3 py-2\",\n          required: \"\"\n        }, null, 512), [\n          [_vModelText, form.mb_pw_check]\n        ])\n      ]),\n      _createElementVNode(\"div\", null, [\n        _cache[11] || (_cache[11] = _createElementVNode(\"label\", {\n          for: \"mb_school\",\n          class: \"block mb-1 font-medium\"\n        }, [\n          _createTextVNode(\" 학교명 \"),\n          _createElementVNode(\"span\", { class: \"text-sm text-gray-500\" }, \"(키워드 입력 후 엔터로 검색할 수 있습니다.)\")\n        ], -1)),\n        _createElementVNode(\"div\", _hoisted_3, [\n          _withDirectives(_createElementVNode(\"input\", {\n            \"onUpdate:modelValue\": _cache[4] || (_cache[4] = $event => ((searchKeyword).value = $event)),\n            id: \"mb_school\",\n            type: \"search\",\n            placeholder: \"학교명을 검색하세요\",\n            class: \"w-full border rounded px-3 py-2 pr-10\",\n            disabled: isSchoolSelected.value,\n            onKeyup: _withKeys(searchSchool, [\"enter\"])\n          }, null, 40, _hoisted_4), [\n            [_vModelText, searchKeyword.value]\n          ]),\n          (!isSchoolSelected.value)\n            ? (_openBlock(), _createElementBlock(\"button\", {\n                key: 0,\n                type: \"button\",\n                class: \"absolute inset-y-0 right-0 flex items-center px-3 text-gray-500\",\n                onClick: searchSchool\n              }, _cache[10] || (_cache[10] = [\n                _createElementVNode(\"i\", { class: \"fas fa-search\" }, null, -1)\n              ])))\n            : _createCommentVNode(\"\", true),\n          (showResults.value)\n            ? (_openBlock(), _createElementBlock(\"ul\", _hoisted_5, [\n                (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(searchResults.value, (school) => {\n                  return (_openBlock(), _createElementBlock(\"li\", {\n                    key: school.idx,\n                    onClick: $event => (selectSchool(school)),\n                    class: \"px-3 py-2 hover:bg-gray-100 cursor-pointer\"\n                  }, [\n                    _createTextVNode(_toDisplayString(school.school) + \" \", 1),\n                    _createElementVNode(\"span\", _hoisted_7, \"(\" + _toDisplayString(school.addr) + \")\", 1)\n                  ], 8, _hoisted_6))\n                }), 128))\n              ]))\n            : _createCommentVNode(\"\", true),\n          (isSchoolSelected.value)\n            ? (_openBlock(), _createElementBlock(\"div\", {\n                key: 2,\n                class: \"mt-1 text-sm text-blue-600 underline cursor-pointer\",\n                onClick: resetSchool\n              }, \" 다시 검색 \"))\n            : _createCommentVNode(\"\", true)\n        ]),\n        _cache[12] || (_cache[12] = _createElementVNode(\"div\", { class: \"mt-6 mb-4 text-sm text-gray-600 leading-relaxed\" }, [\n          _createElementVNode(\"p\", { class: \"text-red-600 font-semibold mb-2\" }, \" ※ 선생님이 아닌 학생이 장난으로 가입할 경우, 해당 선생님에게 즉시 보고됩니다. \"),\n          _createElementVNode(\"p\", { class: \"mb-2\" }, \"회원가입은 선생님 인증 후에 사용이 가능합니다.\"),\n          _createElementVNode(\"p\", { class: \"mb-1\" }, \"- 이용약관: 본 서비스는 교육 목적으로만 제공되며, 무단 사용 시 제재를 받을 수 있습니다.\"),\n          _createElementVNode(\"p\", null, \"- 개인정보처리방침: 수집된 정보는 수업 및 교육 운영 이외의 용도로 사용되지 않습니다.\")\n        ], -1))\n      ]),\n      _createElementVNode(\"button\", {\n        type: \"button\",\n        onClick: submit,\n        disabled: !isFormValid.value,\n        class: \"w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50\"\n      }, \" 가입하기 \", 8, _hoisted_8)\n    ], 32)\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748577034881,
-      "end": 1748577034883,
+      "start": 1748835737926,
+      "end": 1748835737928,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,117 +74,117 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748577034883,
-      "end": 1748577034883,
+      "start": 1748835737928,
+      "end": 1748835737928,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748577034883,
-      "end": 1748577034894,
+      "start": 1748835737928,
+      "end": 1748835737931,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748577034894,
-      "end": 1748577034894,
+      "start": 1748835737931,
+      "end": 1748835737931,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1748577034894,
-      "end": 1748577034895,
+      "start": 1748835737931,
+      "end": 1748835737932,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -197,38 +197,38 @@
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748577034895,
-      "end": 1748577034895,
+      "start": 1748835737932,
+      "end": 1748835737932,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748577034895,
-      "end": 1748577034895,
+      "start": 1748835737932,
+      "end": 1748835737932,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748577034895,
-      "end": 1748577034895,
+      "start": 1748835737932,
+      "end": 1748835737932,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748577034895,
-      "end": 1748577034895,
+      "start": 1748835737932,
+      "end": 1748835737932,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748577034895,
-      "end": 1748577034895,
+      "start": 1748835737932,
+      "end": 1748835737932,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748577034895,
-      "end": 1748577034895,
+      "start": 1748835737932,
+      "end": 1748835737932,
       "order": "normal"
     }
   ]

@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nimport { onMounted, ref } from 'vue'\nimport { apiPost,apiPoint } from '@/common/api'\n\n//  QR\nimport { QrcodeStream } from 'vue-qrcode-reader'\n\nconst isScanning = ref(false)\nconst error = ref('')\n\nconst startScan = () => {\n\nif (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n\n  if(amountInput.value > memberPoint.value) {\n    alert('잔액이 부족합니다.')\n    return\n}\n\n  isScanning.value = true\n  error.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  if (studentRoleIdntCode.value.includes(url)) {\n    handleDeposit()\n  } else {\n      alert('인증오류')\n    }\n    isScanning.value = false\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\n//  QR\nconst points = ref([])\nconst page = ref(1)\nconst isLoading = ref(false)\nconst hasMore = ref(true)\n\nconst studentOptions = ref([])\nconst studentRole = ref([])\nconst studentRoleIdntCode = ref([])\nconst selectedStudent = ref(null)\nconst amountInput = ref(null)\n\nconst fetchPoints = async (v) => {\n  if (isLoading.value || !hasMore.value) return\n\n  const idnt_code = sessionStorage.getItem('idnt_code')\n  if (!idnt_code) return\n\n  isLoading.value = true\n\n  try {\n    const res = await apiPost('bank.php', {\n      mode: 'history',\n      idnt_code,\n      page: v || page.value,\n      rows: 10,\n    })\n\n    if (res.result === 'SUCCESS' && Array.isArray(res.data)) {\n      if (res.data.length === 0) {\n        hasMore.value = false\n      } else {\n        points.value.push(...res.data)\n        page.value++\n      }\n    } else {\n      hasMore.value = false\n    }\n  } catch (error) {\n    console.error('포인트 조회 실패:', error)\n    hasMore.value = false\n  } finally {\n    isLoading.value = false\n  }\n}\n\nconst fetchStudents = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n\n  const res = await apiPost('member.php', {\n    mode: 'studentList',\n    teacher\n  })\n\n  if (res.result === 'SUCCESS') {\n    memberPoint.value = await apiPoint()\n    studentOptions.value = res.data.map(s => ({\n      label: s.student_name,\n      value: s.idnt_code\n    }))\n  }\n}\n\n\n\nconst roleStudent = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n\n  const res = await apiPost('member.php', {\n    mode: 'studentRoleList',\n    teacher\n  })\n\n\n  if (res.result === 'SUCCESS') {\n    // 이름만 추출해서 문자열로 변환\n    studentRole.value = res.data.map(s => s.student_name).join(', ')\n    studentRoleIdntCode.value = res.data.map(s => s.idnt_code)\n  }\n}\n\nonMounted(async () => {\n\n  fetchPoints()\n  fetchStudents()\n  roleStudent()\n  window.addEventListener('scroll', handleScroll)\n\n  const point = await apiPoint()\n  memberPoint.value = point\n  console.log('내 포인트:', point)\n})\n\nconst handleScroll = () => {\n  const scrollPosition = window.scrollY + window.innerHeight\n  const bottomPosition = document.body.offsetHeight - 50\n  if (scrollPosition >= bottomPosition) {\n    fetchPoints()\n  }\n}\n\n\nconst memberPoint = ref(0)\nconst handleDeposit = async () => {\n  if (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n  const res = await apiPost('bank.php', {\n    mode: 'expense',\n    idnt_code: sessionStorage.getItem('idnt_code'),\n    point: parseInt(amountInput.value)\n  })\n\n  if (res.result === 'SUCCESS') {\n    alert('출금 완료')\n\n    // 리스트 초기화 및 다시 조회\n    page.value = 1\n    points.value = []\n    hasMore.value = true\n    await fetchPoints(1)\n\n    amountInput.value = null\n    selectedStudent.value = null\n    memberPoint.value = await apiPoint()\n  } else {\n    alert(res.message || '출금에 실패했습니다.')\n  }\n}\n\n</script>\n\n<template>\n  <div>\n    <h2 class=\"mb-3 font-bold\">출금하기</h2>\n      <div>\n        <div class=\"mb-6 flex items-center gap-3\">\n        <div\n            class=\"flex-none rounded-full p-1 text-primary-500 bg-primary-500/10\"\n        >\n            <div class=\"h-1.5 w-1.5 rounded-full bg-current\"></div>\n        </div>\n        <h2 class=\"uppercase text-xs font-semibold text-gray-400\">\n            나의 잔액 {{ memberPoint }}\n        </h2>\n        </div>\n        <p class=\"mt-2 text-sm text-gray-600 dark:text-gray-400\">\n        출금을 하기 위해선 <span style=\"font-weight:bold; color:red\">은행원의 승인</span>이 필요합니다. <br>\n       은행원 친구와 함께 오세요.\n        </p>\n        <div class=\"flex items-center gap-3 mt-6\">\n       <!-- <USelect\n          v-model=\"selectedStudent\"\n          :options=\"studentOptions\"\n          placeholder=\"학생 선택\"\n          class=\"w-40\"\n          size=\"lg\"\n        /> -->\n        <UInput\n            v-model=\"amountInput\"\n            placeholder=\"출금액을 입력하세요\"\n            icon=\"i-heroicons-currency-dollar\"\n            class=\"flex-1 text-right\"\n            input-class=\"text-right\"\n            type=\"tel\"\n            size=\"lg\"\n        />\n        <UButton label=\"출금하기\" size=\"lg\" color=\"black\" @click=\"startScan()\"/>\n        </div>\n        <div v-if=\"isScanning\">\n            <div style=\"background-color: #000; position: fixed; top:0; left:0; width:100%; height:100%; z-index:99; opacity: 0.6;\"></div>\n            <div style=\" z-index:100; top:50%; left:50%; color:#fff; font-size:30px; position: fixed; transform: translate(-50%,-50%); margin-top:-250px;\">\n              {{ amountInput }} <span style=\"font-size:16px;\">돌멩이 출금!</span>\n            </div>\n             <qrcode-stream\n             style=\"top:50%; left:50%; z-index:99; position: fixed; transform: translate(-50%,-50%); max-width:400px; max-height:400px;\"\n            @detect=\"onDetect\"\n            @error=\"onError\"\n        />\n        </div>\n    </div>\n    <div class=\"mt-10\">\n      <h2 class=\"uppercase text-xs font-semibold text-gray-400 mb-4\">최근 입출금내역</h2>\n      <div class=\"space-y-5\">\n        <div\n        v-for=\"item in points\"\n        :key=\"item.idx\"\n        class=\"flex items-center gap-4 dark:hover:text-gray-300 group\"\n        >\n        <span class=\"text-sm leading-none\">\n            {{ item.description }} ({{ item.point_type === 'save' ? '+' : '-' }}{{ item.point.toLocaleString() }} 돌멩이)\n        </span>\n        <div class=\"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5\"></div>\n        <span class=\"text-xs text-gray-500 leading-none\">\n            {{ item.c_datetime }}\n        </span>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n</script>",
-      "start": 1748577042038,
-      "end": 1748577042117,
+      "start": 1748835745885,
+      "end": 1748835745995,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { resolveComponent as _resolveComponent, unref as _unref } from \"vue\"\nimport { ssrRenderStyle as _ssrRenderStyle, ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \"vue/server-renderer\"\n\nimport { onMounted, ref } from 'vue'\nimport { apiPost,apiPoint } from '@/common/api'\n\n//  QR\nimport { QrcodeStream } from 'vue-qrcode-reader'\n\n\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n\n\nconst _sfc_main = /*@__PURE__*/Object.assign(__default__, {\n  __name: 'expense',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst isScanning = ref(false)\nconst error = ref('')\n\nconst startScan = () => {\n\nif (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n\n  if(amountInput.value > memberPoint.value) {\n    alert('잔액이 부족합니다.')\n    return\n}\n\n  isScanning.value = true\n  error.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  if (studentRoleIdntCode.value.includes(url)) {\n    handleDeposit()\n  } else {\n      alert('인증오류')\n    }\n    isScanning.value = false\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\n//  QR\nconst points = ref([])\nconst page = ref(1)\nconst isLoading = ref(false)\nconst hasMore = ref(true)\n\nconst studentOptions = ref([])\nconst studentRole = ref([])\nconst studentRoleIdntCode = ref([])\nconst selectedStudent = ref(null)\nconst amountInput = ref(null)\n\nconst fetchPoints = async (v) => {\n  if (isLoading.value || !hasMore.value) return\n\n  const idnt_code = sessionStorage.getItem('idnt_code')\n  if (!idnt_code) return\n\n  isLoading.value = true\n\n  try {\n    const res = await apiPost('bank.php', {\n      mode: 'history',\n      idnt_code,\n      page: v || page.value,\n      rows: 10,\n    })\n\n    if (res.result === 'SUCCESS' && Array.isArray(res.data)) {\n      if (res.data.length === 0) {\n        hasMore.value = false\n      } else {\n        points.value.push(...res.data)\n        page.value++\n      }\n    } else {\n      hasMore.value = false\n    }\n  } catch (error) {\n    console.error('포인트 조회 실패:', error)\n    hasMore.value = false\n  } finally {\n    isLoading.value = false\n  }\n}\n\nconst fetchStudents = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n\n  const res = await apiPost('member.php', {\n    mode: 'studentList',\n    teacher\n  })\n\n  if (res.result === 'SUCCESS') {\n    memberPoint.value = await apiPoint()\n    studentOptions.value = res.data.map(s => ({\n      label: s.student_name,\n      value: s.idnt_code\n    }))\n  }\n}\n\n\n\nconst roleStudent = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n\n  const res = await apiPost('member.php', {\n    mode: 'studentRoleList',\n    teacher\n  })\n\n\n  if (res.result === 'SUCCESS') {\n    // 이름만 추출해서 문자열로 변환\n    studentRole.value = res.data.map(s => s.student_name).join(', ')\n    studentRoleIdntCode.value = res.data.map(s => s.idnt_code)\n  }\n}\n\nonMounted(async () => {\n\n  fetchPoints()\n  fetchStudents()\n  roleStudent()\n  window.addEventListener('scroll', handleScroll)\n\n  const point = await apiPoint()\n  memberPoint.value = point\n  console.log('내 포인트:', point)\n})\n\nconst handleScroll = () => {\n  const scrollPosition = window.scrollY + window.innerHeight\n  const bottomPosition = document.body.offsetHeight - 50\n  if (scrollPosition >= bottomPosition) {\n    fetchPoints()\n  }\n}\n\n\nconst memberPoint = ref(0)\nconst handleDeposit = async () => {\n  if (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n  const res = await apiPost('bank.php', {\n    mode: 'expense',\n    idnt_code: sessionStorage.getItem('idnt_code'),\n    point: parseInt(amountInput.value)\n  })\n\n  if (res.result === 'SUCCESS') {\n    alert('출금 완료')\n\n    // 리스트 초기화 및 다시 조회\n    page.value = 1\n    points.value = []\n    hasMore.value = true\n    await fetchPoints(1)\n\n    amountInput.value = null\n    selectedStudent.value = null\n    memberPoint.value = await apiPoint()\n  } else {\n    alert(res.message || '출금에 실패했습니다.')\n  }\n}\n\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  const _component_UInput = _resolveComponent(\"UInput\")\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  _push(`<div${\n    _ssrRenderAttrs(_attrs)\n  }><h2 class=\"mb-3 font-bold\">출금하기</h2><div><div class=\"mb-6 flex items-center gap-3\"><div class=\"flex-none rounded-full p-1 text-primary-500 bg-primary-500/10\"><div class=\"h-1.5 w-1.5 rounded-full bg-current\"></div></div><h2 class=\"uppercase text-xs font-semibold text-gray-400\"> 나의 잔액 ${\n    _ssrInterpolate(memberPoint.value)\n  }</h2></div><p class=\"mt-2 text-sm text-gray-600 dark:text-gray-400\"> 출금을 하기 위해선 <span style=\"${\n    _ssrRenderStyle({\"font-weight\":\"bold\",\"color\":\"red\"})\n  }\">은행원의 승인</span>이 필요합니다. <br> 은행원 친구와 함께 오세요. </p><div class=\"flex items-center gap-3 mt-6\">`)\n  _push(_ssrRenderComponent(_component_UInput, {\n    modelValue: amountInput.value,\n    \"onUpdate:modelValue\": $event => ((amountInput).value = $event),\n    placeholder: \"출금액을 입력하세요\",\n    icon: \"i-heroicons-currency-dollar\",\n    class: \"flex-1 text-right\",\n    \"input-class\": \"text-right\",\n    type: \"tel\",\n    size: \"lg\"\n  }, null, _parent))\n  _push(_ssrRenderComponent(_component_UButton, {\n    label: \"출금하기\",\n    size: \"lg\",\n    color: \"black\",\n    onClick: $event => (startScan())\n  }, null, _parent))\n  _push(`</div>`)\n  if (isScanning.value) {\n    _push(`<div><div style=\"${\n      _ssrRenderStyle({\"background-color\":\"#000\",\"position\":\"fixed\",\"top\":\"0\",\"left\":\"0\",\"width\":\"100%\",\"height\":\"100%\",\"z-index\":\"99\",\"opacity\":\"0.6\"})\n    }\"></div><div style=\"${\n      _ssrRenderStyle({\"z-index\":\"100\",\"top\":\"50%\",\"left\":\"50%\",\"color\":\"#fff\",\"font-size\":\"30px\",\"position\":\"fixed\",\"transform\":\"translate(-50%,-50%)\",\"margin-top\":\"-250px\"})\n    }\">${\n      _ssrInterpolate(amountInput.value)\n    } <span style=\"${\n      _ssrRenderStyle({\"font-size\":\"16px\"})\n    }\">돌멩이 출금!</span></div>`)\n    _push(_ssrRenderComponent(_unref(QrcodeStream), {\n      style: {\"top\":\"50%\",\"left\":\"50%\",\"z-index\":\"99\",\"position\":\"fixed\",\"transform\":\"translate(-50%,-50%)\",\"max-width\":\"400px\",\"max-height\":\"400px\"},\n      onDetect: onDetect,\n      onError: onError\n    }, null, _parent))\n    _push(`</div>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div><div class=\"mt-10\"><h2 class=\"uppercase text-xs font-semibold text-gray-400 mb-4\">최근 입출금내역</h2><div class=\"space-y-5\"><!--[-->`)\n  _ssrRenderList(points.value, (item) => {\n    _push(`<div class=\"flex items-center gap-4 dark:hover:text-gray-300 group\"><span class=\"text-sm leading-none\">${\n      _ssrInterpolate(item.description)\n    } (${\n      _ssrInterpolate(item.point_type === 'save' ? '+' : '-')\n    }${\n      _ssrInterpolate(item.point.toLocaleString())\n    } 돌멩이) </span><div class=\"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5\"></div><span class=\"text-xs text-gray-500 leading-none\">${\n      _ssrInterpolate(item.c_datetime)\n    }</span></div>`)\n  })\n  _push(`<!--]--></div></div></div>`)\n}\n}\n\n})\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"pages/expense.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,161 +94,161 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745995,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745995,
+      "end": 1748835745996,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748577042117,
-      "end": 1748577042117,
+      "start": 1748835745996,
+      "end": 1748835745996,
       "order": "normal"
     },
     {
       "name": "vite:define",
       "result": "import { resolveComponent as _resolveComponent, unref as _unref } from \"vue\";\nimport { ssrRenderStyle as _ssrRenderStyle, ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \"vue/server-renderer\";\nimport { onMounted, ref } from \"vue\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nimport { QrcodeStream } from \"vue-qrcode-reader\";\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import(\"vue-qrcode-reader\").then((m) => m.QrcodeStream)\n  }\n};\nconst _sfc_main = /* @__PURE__ */ Object.assign(__default__, {\n  __name: \"expense\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const isScanning = ref(false);\n    const error = ref(\"\");\n    const startScan = () => {\n      if (!amountInput.value) {\n        alert(\"출금액을 입력해주세요\");\n        return;\n      }\n      if (amountInput.value > memberPoint.value) {\n        alert(\"잔액이 부족합니다.\");\n        return;\n      }\n      isScanning.value = true;\n      error.value = \"\";\n    };\n    const onDetect = (detectedCodes) => {\n      const url = detectedCodes[0]?.rawValue;\n      if (!url)\n        return;\n      if (studentRoleIdntCode.value.includes(url)) {\n        handleDeposit();\n      } else {\n        alert(\"인증오류\");\n      }\n      isScanning.value = false;\n    };\n    const onError = (err) => {\n      error.value = \"카메라 접근 실패\";\n      console.error(err);\n      isScanning.value = false;\n    };\n    const points = ref([]);\n    const page = ref(1);\n    const isLoading = ref(false);\n    const hasMore = ref(true);\n    const studentOptions = ref([]);\n    const studentRole = ref([]);\n    const studentRoleIdntCode = ref([]);\n    const selectedStudent = ref(null);\n    const amountInput = ref(null);\n    const fetchPoints = async (v) => {\n      if (isLoading.value || !hasMore.value)\n        return;\n      const idnt_code = sessionStorage.getItem(\"idnt_code\");\n      if (!idnt_code)\n        return;\n      isLoading.value = true;\n      try {\n        const res = await apiPost(\"bank.php\", {\n          mode: \"history\",\n          idnt_code,\n          page: v || page.value,\n          rows: 10\n        });\n        if (res.result === \"SUCCESS\" && Array.isArray(res.data)) {\n          if (res.data.length === 0) {\n            hasMore.value = false;\n          } else {\n            points.value.push(...res.data);\n            page.value++;\n          }\n        } else {\n          hasMore.value = false;\n        }\n      } catch (error2) {\n        console.error(\"포인트 조회 실패:\", error2);\n        hasMore.value = false;\n      } finally {\n        isLoading.value = false;\n      }\n    };\n    const fetchStudents = async () => {\n      const teacher = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      if (!teacher)\n        return;\n      const res = await apiPost(\"member.php\", {\n        mode: \"studentList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        memberPoint.value = await apiPoint();\n        studentOptions.value = res.data.map((s) => ({\n          label: s.student_name,\n          value: s.idnt_code\n        }));\n      }\n    };\n    const roleStudent = async () => {\n      const teacher = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      if (!teacher)\n        return;\n      const res = await apiPost(\"member.php\", {\n        mode: \"studentRoleList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        studentRole.value = res.data.map((s) => s.student_name).join(\", \");\n        studentRoleIdntCode.value = res.data.map((s) => s.idnt_code);\n      }\n    };\n    onMounted(async () => {\n      fetchPoints();\n      fetchStudents();\n      roleStudent();\n      (void 0).addEventListener(\"scroll\", handleScroll);\n      const point = await apiPoint();\n      memberPoint.value = point;\n      console.log(\"내 포인트:\", point);\n    });\n    const handleScroll = () => {\n      const scrollPosition = (void 0).scrollY + (void 0).innerHeight;\n      const bottomPosition = (void 0).body.offsetHeight - 50;\n      if (scrollPosition >= bottomPosition) {\n        fetchPoints();\n      }\n    };\n    const memberPoint = ref(0);\n    const handleDeposit = async () => {\n      if (!amountInput.value) {\n        alert(\"출금액을 입력해주세요\");\n        return;\n      }\n      const res = await apiPost(\"bank.php\", {\n        mode: \"expense\",\n        idnt_code: sessionStorage.getItem(\"idnt_code\"),\n        point: parseInt(amountInput.value)\n      });\n      if (res.result === \"SUCCESS\") {\n        alert(\"출금 완료\");\n        page.value = 1;\n        points.value = [];\n        hasMore.value = true;\n        await fetchPoints(1);\n        amountInput.value = null;\n        selectedStudent.value = null;\n        memberPoint.value = await apiPoint();\n      } else {\n        alert(res.message || \"출금에 실패했습니다.\");\n      }\n    };\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UInput = _resolveComponent(\"UInput\");\n      const _component_UButton = _resolveComponent(\"UButton\");\n      _push(`<div${_ssrRenderAttrs(_attrs)}><h2 class=\"mb-3 font-bold\">출금하기</h2><div><div class=\"mb-6 flex items-center gap-3\"><div class=\"flex-none rounded-full p-1 text-primary-500 bg-primary-500/10\"><div class=\"h-1.5 w-1.5 rounded-full bg-current\"></div></div><h2 class=\"uppercase text-xs font-semibold text-gray-400\"> 나의 잔액 ${_ssrInterpolate(memberPoint.value)}</h2></div><p class=\"mt-2 text-sm text-gray-600 dark:text-gray-400\"> 출금을 하기 위해선 <span style=\"${_ssrRenderStyle({ \"font-weight\": \"bold\", \"color\": \"red\" })}\">은행원의 승인</span>이 필요합니다. <br> 은행원 친구와 함께 오세요. </p><div class=\"flex items-center gap-3 mt-6\">`);\n      _push(_ssrRenderComponent(_component_UInput, {\n        modelValue: amountInput.value,\n        \"onUpdate:modelValue\": ($event) => amountInput.value = $event,\n        placeholder: \"출금액을 입력하세요\",\n        icon: \"i-heroicons-currency-dollar\",\n        class: \"flex-1 text-right\",\n        \"input-class\": \"text-right\",\n        type: \"tel\",\n        size: \"lg\"\n      }, null, _parent));\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"출금하기\",\n        size: \"lg\",\n        color: \"black\",\n        onClick: ($event) => startScan()\n      }, null, _parent));\n      _push(`</div>`);\n      if (isScanning.value) {\n        _push(`<div><div style=\"${_ssrRenderStyle({ \"background-color\": \"#000\", \"position\": \"fixed\", \"top\": \"0\", \"left\": \"0\", \"width\": \"100%\", \"height\": \"100%\", \"z-index\": \"99\", \"opacity\": \"0.6\" })}\"></div><div style=\"${_ssrRenderStyle({ \"z-index\": \"100\", \"top\": \"50%\", \"left\": \"50%\", \"color\": \"#fff\", \"font-size\": \"30px\", \"position\": \"fixed\", \"transform\": \"translate(-50%,-50%)\", \"margin-top\": \"-250px\" })}\">${_ssrInterpolate(amountInput.value)} <span style=\"${_ssrRenderStyle({ \"font-size\": \"16px\" })}\">돌멩이 출금!</span></div>`);\n        _push(_ssrRenderComponent(_unref(QrcodeStream), {\n          style: { \"top\": \"50%\", \"left\": \"50%\", \"z-index\": \"99\", \"position\": \"fixed\", \"transform\": \"translate(-50%,-50%)\", \"max-width\": \"400px\", \"max-height\": \"400px\" },\n          onDetect,\n          onError\n        }, null, _parent));\n        _push(`</div>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</div><div class=\"mt-10\"><h2 class=\"uppercase text-xs font-semibold text-gray-400 mb-4\">최근 입출금내역</h2><div class=\"space-y-5\"><!--[-->`);\n      _ssrRenderList(points.value, (item) => {\n        _push(`<div class=\"flex items-center gap-4 dark:hover:text-gray-300 group\"><span class=\"text-sm leading-none\">${_ssrInterpolate(item.description)} (${_ssrInterpolate(item.point_type === \"save\" ? \"+\" : \"-\")}${_ssrInterpolate(item.point.toLocaleString())} 돌멩이) </span><div class=\"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5\"></div><span class=\"text-xs text-gray-500 leading-none\">${_ssrInterpolate(item.c_datetime)}</span></div>`);\n      });\n      _push(`<!--]--></div></div></div>`);\n    };\n  }\n});\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"pages/expense.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748577042117,
-      "end": 1748577042604,
+      "start": 1748835745996,
+      "end": 1748835746633,
       "order": "normal",
       "sourcemaps": "{\n  \"version\": 3,\n  \"sources\": [\"/Users/jang-yeong-ug/Documents/zooper/pages/expense.vue\"],\n  \"sourcesContent\": [\"import { resolveComponent as _resolveComponent, unref as _unref } from \\\"vue\\\"\\nimport { ssrRenderStyle as _ssrRenderStyle, ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \\\"vue/server-renderer\\\"\\n\\nimport { onMounted, ref } from 'vue'\\nimport { apiPost,apiPoint } from '@/common/api'\\n\\n//  QR\\nimport { QrcodeStream } from 'vue-qrcode-reader'\\n\\n\\nconst __default__ = {\\n  components: {\\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\\n  }\\n}\\n\\n\\nconst _sfc_main = /*@__PURE__*/Object.assign(__default__, {\\n  __name: 'expense',\\n  __ssrInlineRender: true,\\n  setup(__props) {\\n\\nconst isScanning = ref(false)\\nconst error = ref('')\\n\\nconst startScan = () => {\\n\\nif (!amountInput.value) {\\n    alert('출금액을 입력해주세요')\\n    return\\n  }\\n\\n  if(amountInput.value > memberPoint.value) {\\n    alert('잔액이 부족합니다.')\\n    return\\n}\\n\\n  isScanning.value = true\\n  error.value = ''\\n}\\n\\nconst onDetect = (detectedCodes) => {\\n  const url = detectedCodes[0]?.rawValue\\n  if (!url) return\\n\\n  if (studentRoleIdntCode.value.includes(url)) {\\n    handleDeposit()\\n  } else {\\n      alert('인증오류')\\n    }\\n    isScanning.value = false\\n}\\n\\nconst onError = (err) => {\\n  error.value = '카메라 접근 실패'\\n  console.error(err)\\n  isScanning.value = false\\n}\\n\\n\\n//  QR\\nconst points = ref([])\\nconst page = ref(1)\\nconst isLoading = ref(false)\\nconst hasMore = ref(true)\\n\\nconst studentOptions = ref([])\\nconst studentRole = ref([])\\nconst studentRoleIdntCode = ref([])\\nconst selectedStudent = ref(null)\\nconst amountInput = ref(null)\\n\\nconst fetchPoints = async (v) => {\\n  if (isLoading.value || !hasMore.value) return\\n\\n  const idnt_code = sessionStorage.getItem('idnt_code')\\n  if (!idnt_code) return\\n\\n  isLoading.value = true\\n\\n  try {\\n    const res = await apiPost('bank.php', {\\n      mode: 'history',\\n      idnt_code,\\n      page: v || page.value,\\n      rows: 10,\\n    })\\n\\n    if (res.result === 'SUCCESS' && Array.isArray(res.data)) {\\n      if (res.data.length === 0) {\\n        hasMore.value = false\\n      } else {\\n        points.value.push(...res.data)\\n        page.value++\\n      }\\n    } else {\\n      hasMore.value = false\\n    }\\n  } catch (error) {\\n    console.error('포인트 조회 실패:', error)\\n    hasMore.value = false\\n  } finally {\\n    isLoading.value = false\\n  }\\n}\\n\\nconst fetchStudents = async () => {\\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\\n  if (!teacher) return\\n\\n  const res = await apiPost('member.php', {\\n    mode: 'studentList',\\n    teacher\\n  })\\n\\n  if (res.result === 'SUCCESS') {\\n    memberPoint.value = await apiPoint()\\n    studentOptions.value = res.data.map(s => ({\\n      label: s.student_name,\\n      value: s.idnt_code\\n    }))\\n  }\\n}\\n\\n\\n\\nconst roleStudent = async () => {\\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\\n  if (!teacher) return\\n\\n  const res = await apiPost('member.php', {\\n    mode: 'studentRoleList',\\n    teacher\\n  })\\n\\n\\n  if (res.result === 'SUCCESS') {\\n    // 이름만 추출해서 문자열로 변환\\n    studentRole.value = res.data.map(s => s.student_name).join(', ')\\n    studentRoleIdntCode.value = res.data.map(s => s.idnt_code)\\n  }\\n}\\n\\nonMounted(async () => {\\n\\n  fetchPoints()\\n  fetchStudents()\\n  roleStudent()\\n  window.addEventListener('scroll', handleScroll)\\n\\n  const point = await apiPoint()\\n  memberPoint.value = point\\n  console.log('내 포인트:', point)\\n})\\n\\nconst handleScroll = () => {\\n  const scrollPosition = window.scrollY + window.innerHeight\\n  const bottomPosition = document.body.offsetHeight - 50\\n  if (scrollPosition >= bottomPosition) {\\n    fetchPoints()\\n  }\\n}\\n\\n\\nconst memberPoint = ref(0)\\nconst handleDeposit = async () => {\\n  if (!amountInput.value) {\\n    alert('출금액을 입력해주세요')\\n    return\\n  }\\n  const res = await apiPost('bank.php', {\\n    mode: 'expense',\\n    idnt_code: sessionStorage.getItem('idnt_code'),\\n    point: parseInt(amountInput.value)\\n  })\\n\\n  if (res.result === 'SUCCESS') {\\n    alert('출금 완료')\\n\\n    // 리스트 초기화 및 다시 조회\\n    page.value = 1\\n    points.value = []\\n    hasMore.value = true\\n    await fetchPoints(1)\\n\\n    amountInput.value = null\\n    selectedStudent.value = null\\n    memberPoint.value = await apiPoint()\\n  } else {\\n    alert(res.message || '출금에 실패했습니다.')\\n  }\\n}\\n\\n\\nreturn (_ctx, _push, _parent, _attrs) => {\\n  const _component_UInput = _resolveComponent(\\\"UInput\\\")\\n  const _component_UButton = _resolveComponent(\\\"UButton\\\")\\n\\n  _push(`<div${\\n    _ssrRenderAttrs(_attrs)\\n  }><h2 class=\\\"mb-3 font-bold\\\">출금하기</h2><div><div class=\\\"mb-6 flex items-center gap-3\\\"><div class=\\\"flex-none rounded-full p-1 text-primary-500 bg-primary-500/10\\\"><div class=\\\"h-1.5 w-1.5 rounded-full bg-current\\\"></div></div><h2 class=\\\"uppercase text-xs font-semibold text-gray-400\\\"> 나의 잔액 ${\\n    _ssrInterpolate(memberPoint.value)\\n  }</h2></div><p class=\\\"mt-2 text-sm text-gray-600 dark:text-gray-400\\\"> 출금을 하기 위해선 <span style=\\\"${\\n    _ssrRenderStyle({\\\"font-weight\\\":\\\"bold\\\",\\\"color\\\":\\\"red\\\"})\\n  }\\\">은행원의 승인</span>이 필요합니다. <br> 은행원 친구와 함께 오세요. </p><div class=\\\"flex items-center gap-3 mt-6\\\">`)\\n  _push(_ssrRenderComponent(_component_UInput, {\\n    modelValue: amountInput.value,\\n    \\\"onUpdate:modelValue\\\": $event => ((amountInput).value = $event),\\n    placeholder: \\\"출금액을 입력하세요\\\",\\n    icon: \\\"i-heroicons-currency-dollar\\\",\\n    class: \\\"flex-1 text-right\\\",\\n    \\\"input-class\\\": \\\"text-right\\\",\\n    type: \\\"tel\\\",\\n    size: \\\"lg\\\"\\n  }, null, _parent))\\n  _push(_ssrRenderComponent(_component_UButton, {\\n    label: \\\"출금하기\\\",\\n    size: \\\"lg\\\",\\n    color: \\\"black\\\",\\n    onClick: $event => (startScan())\\n  }, null, _parent))\\n  _push(`</div>`)\\n  if (isScanning.value) {\\n    _push(`<div><div style=\\\"${\\n      _ssrRenderStyle({\\\"background-color\\\":\\\"#000\\\",\\\"position\\\":\\\"fixed\\\",\\\"top\\\":\\\"0\\\",\\\"left\\\":\\\"0\\\",\\\"width\\\":\\\"100%\\\",\\\"height\\\":\\\"100%\\\",\\\"z-index\\\":\\\"99\\\",\\\"opacity\\\":\\\"0.6\\\"})\\n    }\\\"></div><div style=\\\"${\\n      _ssrRenderStyle({\\\"z-index\\\":\\\"100\\\",\\\"top\\\":\\\"50%\\\",\\\"left\\\":\\\"50%\\\",\\\"color\\\":\\\"#fff\\\",\\\"font-size\\\":\\\"30px\\\",\\\"position\\\":\\\"fixed\\\",\\\"transform\\\":\\\"translate(-50%,-50%)\\\",\\\"margin-top\\\":\\\"-250px\\\"})\\n    }\\\">${\\n      _ssrInterpolate(amountInput.value)\\n    } <span style=\\\"${\\n      _ssrRenderStyle({\\\"font-size\\\":\\\"16px\\\"})\\n    }\\\">돌멩이 출금!</span></div>`)\\n    _push(_ssrRenderComponent(_unref(QrcodeStream), {\\n      style: {\\\"top\\\":\\\"50%\\\",\\\"left\\\":\\\"50%\\\",\\\"z-index\\\":\\\"99\\\",\\\"position\\\":\\\"fixed\\\",\\\"transform\\\":\\\"translate(-50%,-50%)\\\",\\\"max-width\\\":\\\"400px\\\",\\\"max-height\\\":\\\"400px\\\"},\\n      onDetect: onDetect,\\n      onError: onError\\n    }, null, _parent))\\n    _push(`</div>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  _push(`</div><div class=\\\"mt-10\\\"><h2 class=\\\"uppercase text-xs font-semibold text-gray-400 mb-4\\\">최근 입출금내역</h2><div class=\\\"space-y-5\\\"><!--[-->`)\\n  _ssrRenderList(points.value, (item) => {\\n    _push(`<div class=\\\"flex items-center gap-4 dark:hover:text-gray-300 group\\\"><span class=\\\"text-sm leading-none\\\">${\\n      _ssrInterpolate(item.description)\\n    } (${\\n      _ssrInterpolate(item.point_type === 'save' ? '+' : '-')\\n    }${\\n      _ssrInterpolate(item.point.toLocaleString())\\n    } 돌멩이) </span><div class=\\\"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5\\\"></div><span class=\\\"text-xs text-gray-500 leading-none\\\">${\\n      _ssrInterpolate(item.c_datetime)\\n    }</span></div>`)\\n  })\\n  _push(`<!--]--></div></div></div>`)\\n}\\n}\\n\\n})\\n\\n\\n\\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\\nconst _sfc_setup = _sfc_main.setup\\n_sfc_main.setup = (props, ctx) => {\\n  const ssrContext = __vite_useSSRContext()\\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\\\"pages/expense.vue\\\")\\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\\n}\\nexport default _sfc_main\"],\n  \"mappings\": \"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\",\n  \"names\": [\"error\"]\n}\n"
     },
     {
       "name": "vite:css-post",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748577042604,
-      "end": 1748577042604,
+      "start": 1748835746633,
+      "end": 1748835746633,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748577042604,
-      "end": 1748577042607,
+      "start": 1748835746633,
+      "end": 1748835746636,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748577042604,
-      "end": 1748577042607,
+      "start": 1748835746633,
+      "end": 1748835746636,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748577042607,
-      "end": 1748577042607,
+      "start": 1748835746636,
+      "end": 1748835746636,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748577042607,
-      "end": 1748577042607,
+      "start": 1748835746636,
+      "end": 1748835746636,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748577042607,
-      "end": 1748577042607,
+      "start": 1748835746636,
+      "end": 1748835746636,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748577042607,
-      "end": 1748577042607,
+      "start": 1748835746636,
+      "end": 1748835746636,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748577042607,
-      "end": 1748577042607,
+      "start": 1748835746636,
+      "end": 1748835746636,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/forms/Input.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Button.vue\";\nimport { resolveComponent as _resolveComponent, unref as _unref } from \"vue\";\nimport { ssrRenderStyle as _ssrRenderStyle, ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \"vue/server-renderer\";\nimport { onMounted, ref } from \"vue\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nimport { QrcodeStream } from \"vue-qrcode-reader\";\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import(\"vue-qrcode-reader\").then((m) => m.QrcodeStream)\n  }\n};\nconst _sfc_main = /* @__PURE__ */ Object.assign(__default__, {\n  __name: \"expense\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const isScanning = ref(false);\n    const error = ref(\"\");\n    const startScan = () => {\n      if (!amountInput.value) {\n        alert(\"출금액을 입력해주세요\");\n        return;\n      }\n      if (amountInput.value > memberPoint.value) {\n        alert(\"잔액이 부족합니다.\");\n        return;\n      }\n      isScanning.value = true;\n      error.value = \"\";\n    };\n    const onDetect = (detectedCodes) => {\n      const url = detectedCodes[0]?.rawValue;\n      if (!url)\n        return;\n      if (studentRoleIdntCode.value.includes(url)) {\n        handleDeposit();\n      } else {\n        alert(\"인증오류\");\n      }\n      isScanning.value = false;\n    };\n    const onError = (err) => {\n      error.value = \"카메라 접근 실패\";\n      console.error(err);\n      isScanning.value = false;\n    };\n    const points = ref([]);\n    const page = ref(1);\n    const isLoading = ref(false);\n    const hasMore = ref(true);\n    const studentOptions = ref([]);\n    const studentRole = ref([]);\n    const studentRoleIdntCode = ref([]);\n    const selectedStudent = ref(null);\n    const amountInput = ref(null);\n    const fetchPoints = async (v) => {\n      if (isLoading.value || !hasMore.value)\n        return;\n      const idnt_code = sessionStorage.getItem(\"idnt_code\");\n      if (!idnt_code)\n        return;\n      isLoading.value = true;\n      try {\n        const res = await apiPost(\"bank.php\", {\n          mode: \"history\",\n          idnt_code,\n          page: v || page.value,\n          rows: 10\n        });\n        if (res.result === \"SUCCESS\" && Array.isArray(res.data)) {\n          if (res.data.length === 0) {\n            hasMore.value = false;\n          } else {\n            points.value.push(...res.data);\n            page.value++;\n          }\n        } else {\n          hasMore.value = false;\n        }\n      } catch (error2) {\n        console.error(\"포인트 조회 실패:\", error2);\n        hasMore.value = false;\n      } finally {\n        isLoading.value = false;\n      }\n    };\n    const fetchStudents = async () => {\n      const teacher = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      if (!teacher)\n        return;\n      const res = await apiPost(\"member.php\", {\n        mode: \"studentList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        memberPoint.value = await apiPoint();\n        studentOptions.value = res.data.map((s) => ({\n          label: s.student_name,\n          value: s.idnt_code\n        }));\n      }\n    };\n    const roleStudent = async () => {\n      const teacher = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      if (!teacher)\n        return;\n      const res = await apiPost(\"member.php\", {\n        mode: \"studentRoleList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        studentRole.value = res.data.map((s) => s.student_name).join(\", \");\n        studentRoleIdntCode.value = res.data.map((s) => s.idnt_code);\n      }\n    };\n    onMounted(async () => {\n      fetchPoints();\n      fetchStudents();\n      roleStudent();\n      (void 0).addEventListener(\"scroll\", handleScroll);\n      const point = await apiPoint();\n      memberPoint.value = point;\n      console.log(\"내 포인트:\", point);\n    });\n    const handleScroll = () => {\n      const scrollPosition = (void 0).scrollY + (void 0).innerHeight;\n      const bottomPosition = (void 0).body.offsetHeight - 50;\n      if (scrollPosition >= bottomPosition) {\n        fetchPoints();\n      }\n    };\n    const memberPoint = ref(0);\n    const handleDeposit = async () => {\n      if (!amountInput.value) {\n        alert(\"출금액을 입력해주세요\");\n        return;\n      }\n      const res = await apiPost(\"bank.php\", {\n        mode: \"expense\",\n        idnt_code: sessionStorage.getItem(\"idnt_code\"),\n        point: parseInt(amountInput.value)\n      });\n      if (res.result === \"SUCCESS\") {\n        alert(\"출금 완료\");\n        page.value = 1;\n        points.value = [];\n        hasMore.value = true;\n        await fetchPoints(1);\n        amountInput.value = null;\n        selectedStudent.value = null;\n        memberPoint.value = await apiPoint();\n      } else {\n        alert(res.message || \"출금에 실패했습니다.\");\n      }\n    };\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UInput = __nuxt_component_0;\n      const _component_UButton = __nuxt_component_1;\n      _push(`<div${_ssrRenderAttrs(_attrs)}><h2 class=\"mb-3 font-bold\">출금하기</h2><div><div class=\"mb-6 flex items-center gap-3\"><div class=\"flex-none rounded-full p-1 text-primary-500 bg-primary-500/10\"><div class=\"h-1.5 w-1.5 rounded-full bg-current\"></div></div><h2 class=\"uppercase text-xs font-semibold text-gray-400\"> 나의 잔액 ${_ssrInterpolate(memberPoint.value)}</h2></div><p class=\"mt-2 text-sm text-gray-600 dark:text-gray-400\"> 출금을 하기 위해선 <span style=\"${_ssrRenderStyle({ \"font-weight\": \"bold\", \"color\": \"red\" })}\">은행원의 승인</span>이 필요합니다. <br> 은행원 친구와 함께 오세요. </p><div class=\"flex items-center gap-3 mt-6\">`);\n      _push(_ssrRenderComponent(_component_UInput, {\n        modelValue: amountInput.value,\n        \"onUpdate:modelValue\": ($event) => amountInput.value = $event,\n        placeholder: \"출금액을 입력하세요\",\n        icon: \"i-heroicons-currency-dollar\",\n        class: \"flex-1 text-right\",\n        \"input-class\": \"text-right\",\n        type: \"tel\",\n        size: \"lg\"\n      }, null, _parent));\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"출금하기\",\n        size: \"lg\",\n        color: \"black\",\n        onClick: ($event) => startScan()\n      }, null, _parent));\n      _push(`</div>`);\n      if (isScanning.value) {\n        _push(`<div><div style=\"${_ssrRenderStyle({ \"background-color\": \"#000\", \"position\": \"fixed\", \"top\": \"0\", \"left\": \"0\", \"width\": \"100%\", \"height\": \"100%\", \"z-index\": \"99\", \"opacity\": \"0.6\" })}\"></div><div style=\"${_ssrRenderStyle({ \"z-index\": \"100\", \"top\": \"50%\", \"left\": \"50%\", \"color\": \"#fff\", \"font-size\": \"30px\", \"position\": \"fixed\", \"transform\": \"translate(-50%,-50%)\", \"margin-top\": \"-250px\" })}\">${_ssrInterpolate(amountInput.value)} <span style=\"${_ssrRenderStyle({ \"font-size\": \"16px\" })}\">돌멩이 출금!</span></div>`);\n        _push(_ssrRenderComponent(_unref(QrcodeStream), {\n          style: { \"top\": \"50%\", \"left\": \"50%\", \"z-index\": \"99\", \"position\": \"fixed\", \"transform\": \"translate(-50%,-50%)\", \"max-width\": \"400px\", \"max-height\": \"400px\" },\n          onDetect,\n          onError\n        }, null, _parent));\n        _push(`</div>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</div><div class=\"mt-10\"><h2 class=\"uppercase text-xs font-semibold text-gray-400 mb-4\">최근 입출금내역</h2><div class=\"space-y-5\"><!--[-->`);\n      _ssrRenderList(points.value, (item) => {\n        _push(`<div class=\"flex items-center gap-4 dark:hover:text-gray-300 group\"><span class=\"text-sm leading-none\">${_ssrInterpolate(item.description)} (${_ssrInterpolate(item.point_type === \"save\" ? \"+\" : \"-\")}${_ssrInterpolate(item.point.toLocaleString())} 돌멩이) </span><div class=\"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5\"></div><span class=\"text-xs text-gray-500 leading-none\">${_ssrInterpolate(item.c_datetime)}</span></div>`);\n      });\n      _push(`<!--]--></div></div></div>`);\n    };\n  }\n});\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"pages/expense.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748577042607,
-      "end": 1748577042607,
+      "start": 1748835746636,
+      "end": 1748835746637,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -262,8 +262,8 @@
     {
       "name": "nuxt:tree-shake-composables:transform",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/forms/Input.vue\";\nimport { default as __nuxt_component_1 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Button.vue\";\nimport { resolveComponent as _resolveComponent, unref as _unref } from \"vue\";\nimport { ssrRenderStyle as _ssrRenderStyle, ssrRenderComponent as _ssrRenderComponent, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \"vue/server-renderer\";\nimport { onMounted, ref } from \"vue\";\nimport { apiPost, apiPoint } from \"@/common/api\";\nimport { QrcodeStream } from \"vue-qrcode-reader\";\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import(\"vue-qrcode-reader\").then((m) => m.QrcodeStream)\n  }\n};\nconst _sfc_main = /* @__PURE__ */ Object.assign(__default__, {\n  __name: \"expense\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const isScanning = ref(false);\n    const error = ref(\"\");\n    const startScan = () => {\n      if (!amountInput.value) {\n        alert(\"출금액을 입력해주세요\");\n        return;\n      }\n      if (amountInput.value > memberPoint.value) {\n        alert(\"잔액이 부족합니다.\");\n        return;\n      }\n      isScanning.value = true;\n      error.value = \"\";\n    };\n    const onDetect = (detectedCodes) => {\n      const url = detectedCodes[0]?.rawValue;\n      if (!url)\n        return;\n      if (studentRoleIdntCode.value.includes(url)) {\n        handleDeposit();\n      } else {\n        alert(\"인증오류\");\n      }\n      isScanning.value = false;\n    };\n    const onError = (err) => {\n      error.value = \"카메라 접근 실패\";\n      console.error(err);\n      isScanning.value = false;\n    };\n    const points = ref([]);\n    const page = ref(1);\n    const isLoading = ref(false);\n    const hasMore = ref(true);\n    const studentOptions = ref([]);\n    const studentRole = ref([]);\n    const studentRoleIdntCode = ref([]);\n    const selectedStudent = ref(null);\n    const amountInput = ref(null);\n    const fetchPoints = async (v) => {\n      if (isLoading.value || !hasMore.value)\n        return;\n      const idnt_code = sessionStorage.getItem(\"idnt_code\");\n      if (!idnt_code)\n        return;\n      isLoading.value = true;\n      try {\n        const res = await apiPost(\"bank.php\", {\n          mode: \"history\",\n          idnt_code,\n          page: v || page.value,\n          rows: 10\n        });\n        if (res.result === \"SUCCESS\" && Array.isArray(res.data)) {\n          if (res.data.length === 0) {\n            hasMore.value = false;\n          } else {\n            points.value.push(...res.data);\n            page.value++;\n          }\n        } else {\n          hasMore.value = false;\n        }\n      } catch (error2) {\n        console.error(\"포인트 조회 실패:\", error2);\n        hasMore.value = false;\n      } finally {\n        isLoading.value = false;\n      }\n    };\n    const fetchStudents = async () => {\n      const teacher = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      if (!teacher)\n        return;\n      const res = await apiPost(\"member.php\", {\n        mode: \"studentList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        memberPoint.value = await apiPoint();\n        studentOptions.value = res.data.map((s) => ({\n          label: s.student_name,\n          value: s.idnt_code\n        }));\n      }\n    };\n    const roleStudent = async () => {\n      const teacher = JSON.parse(sessionStorage.getItem(\"student\"))?.teacher;\n      if (!teacher)\n        return;\n      const res = await apiPost(\"member.php\", {\n        mode: \"studentRoleList\",\n        teacher\n      });\n      if (res.result === \"SUCCESS\") {\n        studentRole.value = res.data.map((s) => s.student_name).join(\", \");\n        studentRoleIdntCode.value = res.data.map((s) => s.idnt_code);\n      }\n    };\n     false && /*@__PURE__*/ onMounted(async () => {\n      fetchPoints();\n      fetchStudents();\n      roleStudent();\n      (void 0).addEventListener(\"scroll\", handleScroll);\n      const point = await apiPoint();\n      memberPoint.value = point;\n      console.log(\"내 포인트:\", point);\n    });\n    const handleScroll = () => {\n      const scrollPosition = (void 0).scrollY + (void 0).innerHeight;\n      const bottomPosition = (void 0).body.offsetHeight - 50;\n      if (scrollPosition >= bottomPosition) {\n        fetchPoints();\n      }\n    };\n    const memberPoint = ref(0);\n    const handleDeposit = async () => {\n      if (!amountInput.value) {\n        alert(\"출금액을 입력해주세요\");\n        return;\n      }\n      const res = await apiPost(\"bank.php\", {\n        mode: \"expense\",\n        idnt_code: sessionStorage.getItem(\"idnt_code\"),\n        point: parseInt(amountInput.value)\n      });\n      if (res.result === \"SUCCESS\") {\n        alert(\"출금 완료\");\n        page.value = 1;\n        points.value = [];\n        hasMore.value = true;\n        await fetchPoints(1);\n        amountInput.value = null;\n        selectedStudent.value = null;\n        memberPoint.value = await apiPoint();\n      } else {\n        alert(res.message || \"출금에 실패했습니다.\");\n      }\n    };\n    return (_ctx, _push, _parent, _attrs) => {\n      const _component_UInput = __nuxt_component_0;\n      const _component_UButton = __nuxt_component_1;\n      _push(`<div${_ssrRenderAttrs(_attrs)}><h2 class=\"mb-3 font-bold\">출금하기</h2><div><div class=\"mb-6 flex items-center gap-3\"><div class=\"flex-none rounded-full p-1 text-primary-500 bg-primary-500/10\"><div class=\"h-1.5 w-1.5 rounded-full bg-current\"></div></div><h2 class=\"uppercase text-xs font-semibold text-gray-400\"> 나의 잔액 ${_ssrInterpolate(memberPoint.value)}</h2></div><p class=\"mt-2 text-sm text-gray-600 dark:text-gray-400\"> 출금을 하기 위해선 <span style=\"${_ssrRenderStyle({ \"font-weight\": \"bold\", \"color\": \"red\" })}\">은행원의 승인</span>이 필요합니다. <br> 은행원 친구와 함께 오세요. </p><div class=\"flex items-center gap-3 mt-6\">`);\n      _push(_ssrRenderComponent(_component_UInput, {\n        modelValue: amountInput.value,\n        \"onUpdate:modelValue\": ($event) => amountInput.value = $event,\n        placeholder: \"출금액을 입력하세요\",\n        icon: \"i-heroicons-currency-dollar\",\n        class: \"flex-1 text-right\",\n        \"input-class\": \"text-right\",\n        type: \"tel\",\n        size: \"lg\"\n      }, null, _parent));\n      _push(_ssrRenderComponent(_component_UButton, {\n        label: \"출금하기\",\n        size: \"lg\",\n        color: \"black\",\n        onClick: ($event) => startScan()\n      }, null, _parent));\n      _push(`</div>`);\n      if (isScanning.value) {\n        _push(`<div><div style=\"${_ssrRenderStyle({ \"background-color\": \"#000\", \"position\": \"fixed\", \"top\": \"0\", \"left\": \"0\", \"width\": \"100%\", \"height\": \"100%\", \"z-index\": \"99\", \"opacity\": \"0.6\" })}\"></div><div style=\"${_ssrRenderStyle({ \"z-index\": \"100\", \"top\": \"50%\", \"left\": \"50%\", \"color\": \"#fff\", \"font-size\": \"30px\", \"position\": \"fixed\", \"transform\": \"translate(-50%,-50%)\", \"margin-top\": \"-250px\" })}\">${_ssrInterpolate(amountInput.value)} <span style=\"${_ssrRenderStyle({ \"font-size\": \"16px\" })}\">돌멩이 출금!</span></div>`);\n        _push(_ssrRenderComponent(_unref(QrcodeStream), {\n          style: { \"top\": \"50%\", \"left\": \"50%\", \"z-index\": \"99\", \"position\": \"fixed\", \"transform\": \"translate(-50%,-50%)\", \"max-width\": \"400px\", \"max-height\": \"400px\" },\n          onDetect,\n          onError\n        }, null, _parent));\n        _push(`</div>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</div><div class=\"mt-10\"><h2 class=\"uppercase text-xs font-semibold text-gray-400 mb-4\">최근 입출금내역</h2><div class=\"space-y-5\"><!--[-->`);\n      _ssrRenderList(points.value, (item) => {\n        _push(`<div class=\"flex items-center gap-4 dark:hover:text-gray-300 group\"><span class=\"text-sm leading-none\">${_ssrInterpolate(item.description)} (${_ssrInterpolate(item.point_type === \"save\" ? \"+\" : \"-\")}${_ssrInterpolate(item.point.toLocaleString())} 돌멩이) </span><div class=\"flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5\"></div><span class=\"text-xs text-gray-500 leading-none\">${_ssrInterpolate(item.c_datetime)}</span></div>`);\n      });\n      _push(`<!--]--></div></div></div>`);\n    };\n  }\n});\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"pages/expense.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748577042607,
-      "end": 1748577042608,
+      "start": 1748835746637,
+      "end": 1748835746638,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -276,14 +276,14 @@
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748577042608,
-      "end": 1748577042608,
+      "start": 1748835746638,
+      "end": 1748835746638,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748577042608,
-      "end": 1748577042608,
+      "start": 1748835746638,
+      "end": 1748835746638,
       "order": "normal"
     }
   ]

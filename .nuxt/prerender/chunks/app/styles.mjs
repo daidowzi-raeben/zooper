@@ -1,6 +1,6 @@
 const interopDefault = r => r.default || r || [];
 const styles = {
-  "node_modules/nuxt/dist/app/entry.js": () => import('./_nuxt/entry-styles.CzKxyZc5.mjs').then(interopDefault),
+  "node_modules/nuxt/dist/app/entry.js": () => import('./_nuxt/entry-styles.B8nBUGxa.mjs').then(interopDefault),
   "components/content/AnimatedCounter.vue": () => import('./_nuxt/AnimatedCounter-styles.EC6WnIPy.mjs').then(interopDefault),
   "components/content/LabCard.vue": () => import('./_nuxt/LabCard-styles.tMpFSIAF.mjs').then(interopDefault),
   "components/content/Rocket.vue": () => import('./_nuxt/Rocket-styles.D4DvrQ71.mjs').then(interopDefault),

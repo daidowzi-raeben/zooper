@@ -5,7 +5,7 @@ import cfg0 from "/Users/jang-yeong-ug/Documents/zooper/app.config"
 
 declare const inlineConfig = {
   "nuxt": {
-    "buildId": "f799e75a-97ce-421d-9592-8eeadef941e3"
+    "buildId": "f606a5a4-f097-4c67-8dbf-99319f8637b9"
   },
   "ui": {
     "primary": "green",
