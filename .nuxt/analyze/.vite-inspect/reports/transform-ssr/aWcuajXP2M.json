@@ -4,81 +4,81 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nimport { ref, reactive, computed } from 'vue';\nimport { apiPost } from '@/common/api';\nimport { nextTick } from 'vue';\n\nconst form = reactive({\n  mb_name: '',\n  mb_id: '',\n  mb_email: '',\n  mb_pw: '',\n  mb_pw_check: '',\n  mb_school: '',\n  mb_school_idx: null,\n});\n\nconst emailStatus = ref('');\nconst isValidEmail = ref(false);\nconst isSchoolSelected = ref(false);\nconst searchKeyword = ref('');\nconst searchResults = ref([]);\nconst showResults = ref(false);\n\nconst resetSchool = () => {\n  form.mb_school = '';\n  form.mb_school_idx = null;\n  searchKeyword.value = '';\n  searchResults.value = [];\n  isSchoolSelected.value = false;\n};\n\nconst searchSchool = async () => {\n  if (searchKeyword.value.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'schoolList',\n        school: searchKeyword.value,\n      });\n      searchResults.value = res.data || [];\n      showResults.value = true;\n    } catch (err) {\n      console.error(err);\n    }\n  } else {\n    showResults.value = false;\n  }\n};\n\nconst selectSchool = (school) => {\n  form.mb_school = school.school;\n  form.mb_school_idx = school.idx;\n  searchKeyword.value = school.school;\n  showResults.value = false;\n  isSchoolSelected.value = true;\n};\n\nconst checkEmail = async () => {\n  await nextTick(); // form.mb_id 최신값 반영 보장\n\n  const emailFull = `${form.mb_id}@korea.kr`;\n  form.mb_email = emailFull;\n\n  if (form.mb_id.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'checkEmail',\n        email: emailFull,\n      });\n      console.log(res.result)\n      if (res?.result === 'DUPLICATE') {\n        emailStatus.value = '이미 사용 중인 이메일입니다.';\n        isValidEmail.value = false;\n      } else {\n        emailStatus.value = '사용 가능한 이메일입니다.';\n        isValidEmail.value = true;\n      }\n    } catch (e) {\n      console.error(e);\n      emailStatus.value = '오류가 발생했습니다.';\n      isValidEmail.value = false;\n    }\n  } else {\n    emailStatus.value = '아이디를 입력해주세요';\n    isValidEmail.value = false;\n  }\n};\n\nconst isFormValid = computed(() => {\n  return (\n    form.mb_name &&\n    form.mb_id &&\n    form.mb_pw &&\n    form.mb_pw_check &&\n    form.mb_pw === form.mb_pw_check &&\n    isValidEmail.value &&\n    form.mb_school_idx\n  );\n});\n\nconst submit = async () => {\n  if (form.mb_pw !== form.mb_pw_check) {\n    alert('비밀번호가 일치하지 않습니다.');\n    return;\n  }\n\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'insert',\n      ...form\n    });\n\n    if (res.result === 'SUCCESS') {\n      alert('가입이 완료되었습니다.');\n      location.href = '/login';\n    } else if (res.result === 'DUPLICATE') {\n      alert('이미 등록된 이메일입니다.');\n    } else {\n      alert('가입에 실패했습니다.');\n    }\n  } catch (e) {\n    console.error(e);\n    alert('오류가 발생했습니다.');\n  }\n};\n</script>\n\n<template>\n  <div class=\"max-w-md mx-auto mt-10 p-6 bg-white rounded shadow\">\n    <h2 class=\"text-2xl font-bold mb-4\">교사 회원가입</h2>\n    <form @submit.prevent=\"submit\" class=\"space-y-4\">\n      <div>\n        <label for=\"mb_name\" class=\"block mb-1 font-medium\">이름</label>\n        <input v-model=\"form.mb_name\" id=\"mb_name\" type=\"text\" class=\"w-full border rounded px-3 py-2\" required />\n      </div>\n      <div>\n        <label for=\"mb_id\" class=\"block mb-1 font-medium\">이메일</label>\n        <div class=\"flex items-center space-x-2\">\n          <input v-model=\"form.mb_id\" @blur=\"checkEmail\" id=\"mb_id\" type=\"text\"\n            class=\"flex-grow border rounded px-3 py-2\" placeholder=\"아이디 입력\" required />\n          <span class=\"text-gray-700\">@korea.kr</span>\n        </div>\n        <p class=\"text-sm mt-1\" :class=\"isValidEmail ? 'text-green-600' : 'text-red-600'\">\n          {{ emailStatus }}\n        </p>\n      </div>\n      <div>\n        <label for=\"mb_pw\" class=\"block mb-1 font-medium\">비밀번호</label>\n        <input v-model=\"form.mb_pw\" id=\"mb_pw\" type=\"password\" class=\"w-full border rounded px-3 py-2\" required />\n      </div>\n      <div>\n        <label for=\"mb_pw_check\" class=\"block mb-1 font-medium\">비밀번호 확인</label>\n        <input v-model=\"form.mb_pw_check\" id=\"mb_pw_check\" type=\"password\" class=\"w-full border rounded px-3 py-2\"\n          required />\n      </div>\n      <div>\n        <label for=\"mb_school\" class=\"block mb-1 font-medium\">\n          학교명 <span class=\"text-sm text-gray-500\">(키워드 입력 후 엔터로 검색할 수 있습니다.)</span>\n        </label>\n        <div class=\"relative\">\n          <input v-model=\"searchKeyword\" id=\"mb_school\" type=\"search\" placeholder=\"학교명을 검색하세요\"\n            class=\"w-full border rounded px-3 py-2 pr-10\" :disabled=\"isSchoolSelected\" @keyup.enter=\"searchSchool\" />\n          <button type=\"button\" class=\"absolute inset-y-0 right-0 flex items-center px-3 text-gray-500\"\n            @click=\"searchSchool\" v-if=\"!isSchoolSelected\">\n            <i class=\"fas fa-search\"></i>\n          </button>\n          <ul v-if=\"showResults\"\n            class=\"absolute z-10 w-full bg-white border mt-1 max-h-40 overflow-auto shadow rounded\">\n            <li v-for=\"school in searchResults\" :key=\"school.idx\" @click=\"selectSchool(school)\"\n              class=\"px-3 py-2 hover:bg-gray-100 cursor-pointer\">\n              {{ school.school }} <span class=\"text-sm text-gray-500\">({{ school.addr }})</span>\n            </li>\n          </ul>\n          <div v-if=\"isSchoolSelected\" class=\"mt-1 text-sm text-blue-600 underline cursor-pointer\" @click=\"resetSchool\">\n            다시 검색\n          </div>\n        </div>\n        <div class=\"mt-6 mb-4 text-sm text-gray-600 leading-relaxed\">\n          <p class=\"text-red-600 font-semibold mb-2\">\n            ※ 선생님이 아닌 학생이 장난으로 가입할 경우, 해당 선생님에게 즉시 보고됩니다.\n          </p>\n          <p class=\"mb-2\">회원가입은 선생님 인증 후에 사용이 가능합니다.</p>\n          <p class=\"mb-1\">- 이용약관: 본 서비스는 교육 목적으로만 제공되며, 무단 사용 시 제재를 받을 수 있습니다.</p>\n          <p>- 개인정보처리방침: 수집된 정보는 수업 및 교육 운영 이외의 용도로 사용되지 않습니다.</p>\n        </div>\n      </div>\n      <button type=\"button\" @click=\"submit\" :disabled=\"!isFormValid\"\n        class=\"w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50\">\n        가입하기\n      </button>\n    </form>\n  </div>\n</template>",
-      "start": 1748835745858,
-      "end": 1748835745940,
+      "start": 1748836724970,
+      "end": 1748836725055,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "pre"
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748835745940,
-      "end": 1748835745940,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748835745940,
-      "end": 1748835745941,
+      "start": 1748836725055,
+      "end": 1748836725055,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { mergeProps as _mergeProps } from \"vue\"\nimport { ssrRenderAttr as _ssrRenderAttr, ssrRenderClass as _ssrRenderClass, ssrIncludeBooleanAttr as _ssrIncludeBooleanAttr, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \"vue/server-renderer\"\n\nimport { ref, reactive, computed } from 'vue';\nimport { apiPost } from '@/common/api';\nimport { nextTick } from 'vue';\n\n\nconst _sfc_main = {\n  __name: 'signUp',\n  __ssrInlineRender: true,\n  setup(__props) {\n\nconst form = reactive({\n  mb_name: '',\n  mb_id: '',\n  mb_email: '',\n  mb_pw: '',\n  mb_pw_check: '',\n  mb_school: '',\n  mb_school_idx: null,\n});\n\nconst emailStatus = ref('');\nconst isValidEmail = ref(false);\nconst isSchoolSelected = ref(false);\nconst searchKeyword = ref('');\nconst searchResults = ref([]);\nconst showResults = ref(false);\n\nconst resetSchool = () => {\n  form.mb_school = '';\n  form.mb_school_idx = null;\n  searchKeyword.value = '';\n  searchResults.value = [];\n  isSchoolSelected.value = false;\n};\n\nconst searchSchool = async () => {\n  if (searchKeyword.value.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'schoolList',\n        school: searchKeyword.value,\n      });\n      searchResults.value = res.data || [];\n      showResults.value = true;\n    } catch (err) {\n      console.error(err);\n    }\n  } else {\n    showResults.value = false;\n  }\n};\n\nconst selectSchool = (school) => {\n  form.mb_school = school.school;\n  form.mb_school_idx = school.idx;\n  searchKeyword.value = school.school;\n  showResults.value = false;\n  isSchoolSelected.value = true;\n};\n\nconst checkEmail = async () => {\n  await nextTick(); // form.mb_id 최신값 반영 보장\n\n  const emailFull = `${form.mb_id}@korea.kr`;\n  form.mb_email = emailFull;\n\n  if (form.mb_id.length > 1) {\n    try {\n      const res = await apiPost('teacher.php', {\n        mode: 'checkEmail',\n        email: emailFull,\n      });\n      console.log(res.result)\n      if (res?.result === 'DUPLICATE') {\n        emailStatus.value = '이미 사용 중인 이메일입니다.';\n        isValidEmail.value = false;\n      } else {\n        emailStatus.value = '사용 가능한 이메일입니다.';\n        isValidEmail.value = true;\n      }\n    } catch (e) {\n      console.error(e);\n      emailStatus.value = '오류가 발생했습니다.';\n      isValidEmail.value = false;\n    }\n  } else {\n    emailStatus.value = '아이디를 입력해주세요';\n    isValidEmail.value = false;\n  }\n};\n\nconst isFormValid = computed(() => {\n  return (\n    form.mb_name &&\n    form.mb_id &&\n    form.mb_pw &&\n    form.mb_pw_check &&\n    form.mb_pw === form.mb_pw_check &&\n    isValidEmail.value &&\n    form.mb_school_idx\n  );\n});\n\nconst submit = async () => {\n  if (form.mb_pw !== form.mb_pw_check) {\n    alert('비밀번호가 일치하지 않습니다.');\n    return;\n  }\n\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'insert',\n      ...form\n    });\n\n    if (res.result === 'SUCCESS') {\n      alert('가입이 완료되었습니다.');\n      location.href = '/login';\n    } else if (res.result === 'DUPLICATE') {\n      alert('이미 등록된 이메일입니다.');\n    } else {\n      alert('가입에 실패했습니다.');\n    }\n  } catch (e) {\n    console.error(e);\n    alert('오류가 발생했습니다.');\n  }\n};\n\nreturn (_ctx, _push, _parent, _attrs) => {\n  _push(`<div${\n    _ssrRenderAttrs(_mergeProps({ class: \"max-w-md mx-auto mt-10 p-6 bg-white rounded shadow\" }, _attrs))\n  }><h2 class=\"text-2xl font-bold mb-4\">교사 회원가입</h2><form class=\"space-y-4\"><div><label for=\"mb_name\" class=\"block mb-1 font-medium\">이름</label><input${\n    _ssrRenderAttr(\"value\", form.mb_name)\n  } id=\"mb_name\" type=\"text\" class=\"w-full border rounded px-3 py-2\" required></div><div><label for=\"mb_id\" class=\"block mb-1 font-medium\">이메일</label><div class=\"flex items-center space-x-2\"><input${\n    _ssrRenderAttr(\"value\", form.mb_id)\n  } id=\"mb_id\" type=\"text\" class=\"flex-grow border rounded px-3 py-2\" placeholder=\"아이디 입력\" required><span class=\"text-gray-700\">@korea.kr</span></div><p class=\"${\n    _ssrRenderClass([isValidEmail.value ? 'text-green-600' : 'text-red-600', \"text-sm mt-1\"])\n  }\">${\n    _ssrInterpolate(emailStatus.value)\n  }</p></div><div><label for=\"mb_pw\" class=\"block mb-1 font-medium\">비밀번호</label><input${\n    _ssrRenderAttr(\"value\", form.mb_pw)\n  } id=\"mb_pw\" type=\"password\" class=\"w-full border rounded px-3 py-2\" required></div><div><label for=\"mb_pw_check\" class=\"block mb-1 font-medium\">비밀번호 확인</label><input${\n    _ssrRenderAttr(\"value\", form.mb_pw_check)\n  } id=\"mb_pw_check\" type=\"password\" class=\"w-full border rounded px-3 py-2\" required></div><div><label for=\"mb_school\" class=\"block mb-1 font-medium\"> 학교명 <span class=\"text-sm text-gray-500\">(키워드 입력 후 엔터로 검색할 수 있습니다.)</span></label><div class=\"relative\"><input${\n    _ssrRenderAttr(\"value\", searchKeyword.value)\n  } id=\"mb_school\" type=\"search\" placeholder=\"학교명을 검색하세요\" class=\"w-full border rounded px-3 py-2 pr-10\"${\n    (_ssrIncludeBooleanAttr(isSchoolSelected.value)) ? \" disabled\" : \"\"\n  }>`)\n  if (!isSchoolSelected.value) {\n    _push(`<button type=\"button\" class=\"absolute inset-y-0 right-0 flex items-center px-3 text-gray-500\"><i class=\"fas fa-search\"></i></button>`)\n  } else {\n    _push(`<!---->`)\n  }\n  if (showResults.value) {\n    _push(`<ul class=\"absolute z-10 w-full bg-white border mt-1 max-h-40 overflow-auto shadow rounded\"><!--[-->`)\n    _ssrRenderList(searchResults.value, (school) => {\n      _push(`<li class=\"px-3 py-2 hover:bg-gray-100 cursor-pointer\">${\n        _ssrInterpolate(school.school)\n      } <span class=\"text-sm text-gray-500\">(${\n        _ssrInterpolate(school.addr)\n      })</span></li>`)\n    })\n    _push(`<!--]--></ul>`)\n  } else {\n    _push(`<!---->`)\n  }\n  if (isSchoolSelected.value) {\n    _push(`<div class=\"mt-1 text-sm text-blue-600 underline cursor-pointer\"> 다시 검색 </div>`)\n  } else {\n    _push(`<!---->`)\n  }\n  _push(`</div><div class=\"mt-6 mb-4 text-sm text-gray-600 leading-relaxed\"><p class=\"text-red-600 font-semibold mb-2\"> ※ 선생님이 아닌 학생이 장난으로 가입할 경우, 해당 선생님에게 즉시 보고됩니다. </p><p class=\"mb-2\">회원가입은 선생님 인증 후에 사용이 가능합니다.</p><p class=\"mb-1\">- 이용약관: 본 서비스는 교육 목적으로만 제공되며, 무단 사용 시 제재를 받을 수 있습니다.</p><p>- 개인정보처리방침: 수집된 정보는 수업 및 교육 운영 이외의 용도로 사용되지 않습니다.</p></div></div><button type=\"button\"${(_ssrIncludeBooleanAttr(!isFormValid.value)) ? \" disabled\" : \"\"} class=\"w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50\"> 가입하기 </button></form></div>`)\n}\n}\n\n}\n\n\n\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\nconst _sfc_setup = _sfc_main.setup\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext()\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\"pages/signUp.vue\")\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\n}\nexport default _sfc_main",
-      "start": 1748835745941,
-      "end": 1748835745943,
+      "start": 1748836725055,
+      "end": 1748836725058,
       "order": "normal",
       "sourcemaps": {
         "version": 3,
@@ -94,143 +94,143 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748835745944,
-      "end": 1748835745944,
+      "start": 1748836725058,
+      "end": 1748836725058,
       "order": "normal"
     },
     {
       "name": "vite:define",
       "result": "import { mergeProps as _mergeProps } from \"vue\";\nimport { ssrRenderAttr as _ssrRenderAttr, ssrRenderClass as _ssrRenderClass, ssrIncludeBooleanAttr as _ssrIncludeBooleanAttr, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \"vue/server-renderer\";\nimport { ref, reactive, computed } from \"vue\";\nimport { apiPost } from \"@/common/api\";\nimport { nextTick } from \"vue\";\nconst _sfc_main = {\n  __name: \"signUp\",\n  __ssrInlineRender: true,\n  setup(__props) {\n    const form = reactive({\n      mb_name: \"\",\n      mb_id: \"\",\n      mb_email: \"\",\n      mb_pw: \"\",\n      mb_pw_check: \"\",\n      mb_school: \"\",\n      mb_school_idx: null\n    });\n    const emailStatus = ref(\"\");\n    const isValidEmail = ref(false);\n    const isSchoolSelected = ref(false);\n    const searchKeyword = ref(\"\");\n    const searchResults = ref([]);\n    const showResults = ref(false);\n    const resetSchool = () => {\n      form.mb_school = \"\";\n      form.mb_school_idx = null;\n      searchKeyword.value = \"\";\n      searchResults.value = [];\n      isSchoolSelected.value = false;\n    };\n    const searchSchool = async () => {\n      if (searchKeyword.value.length > 1) {\n        try {\n          const res = await apiPost(\"teacher.php\", {\n            mode: \"schoolList\",\n            school: searchKeyword.value\n          });\n          searchResults.value = res.data || [];\n          showResults.value = true;\n        } catch (err) {\n          console.error(err);\n        }\n      } else {\n        showResults.value = false;\n      }\n    };\n    const selectSchool = (school) => {\n      form.mb_school = school.school;\n      form.mb_school_idx = school.idx;\n      searchKeyword.value = school.school;\n      showResults.value = false;\n      isSchoolSelected.value = true;\n    };\n    const checkEmail = async () => {\n      await nextTick();\n      const emailFull = `${form.mb_id}@korea.kr`;\n      form.mb_email = emailFull;\n      if (form.mb_id.length > 1) {\n        try {\n          const res = await apiPost(\"teacher.php\", {\n            mode: \"checkEmail\",\n            email: emailFull\n          });\n          console.log(res.result);\n          if (res?.result === \"DUPLICATE\") {\n            emailStatus.value = \"이미 사용 중인 이메일입니다.\";\n            isValidEmail.value = false;\n          } else {\n            emailStatus.value = \"사용 가능한 이메일입니다.\";\n            isValidEmail.value = true;\n          }\n        } catch (e) {\n          console.error(e);\n          emailStatus.value = \"오류가 발생했습니다.\";\n          isValidEmail.value = false;\n        }\n      } else {\n        emailStatus.value = \"아이디를 입력해주세요\";\n        isValidEmail.value = false;\n      }\n    };\n    const isFormValid = computed(() => {\n      return form.mb_name && form.mb_id && form.mb_pw && form.mb_pw_check && form.mb_pw === form.mb_pw_check && isValidEmail.value && form.mb_school_idx;\n    });\n    const submit = async () => {\n      if (form.mb_pw !== form.mb_pw_check) {\n        alert(\"비밀번호가 일치하지 않습니다.\");\n        return;\n      }\n      try {\n        const res = await apiPost(\"teacher.php\", {\n          mode: \"insert\",\n          ...form\n        });\n        if (res.result === \"SUCCESS\") {\n          alert(\"가입이 완료되었습니다.\");\n          (void 0).href = \"/login\";\n        } else if (res.result === \"DUPLICATE\") {\n          alert(\"이미 등록된 이메일입니다.\");\n        } else {\n          alert(\"가입에 실패했습니다.\");\n        }\n      } catch (e) {\n        console.error(e);\n        alert(\"오류가 발생했습니다.\");\n      }\n    };\n    return (_ctx, _push, _parent, _attrs) => {\n      _push(`<div${_ssrRenderAttrs(_mergeProps({ class: \"max-w-md mx-auto mt-10 p-6 bg-white rounded shadow\" }, _attrs))}><h2 class=\"text-2xl font-bold mb-4\">교사 회원가입</h2><form class=\"space-y-4\"><div><label for=\"mb_name\" class=\"block mb-1 font-medium\">이름</label><input${_ssrRenderAttr(\"value\", form.mb_name)} id=\"mb_name\" type=\"text\" class=\"w-full border rounded px-3 py-2\" required></div><div><label for=\"mb_id\" class=\"block mb-1 font-medium\">이메일</label><div class=\"flex items-center space-x-2\"><input${_ssrRenderAttr(\"value\", form.mb_id)} id=\"mb_id\" type=\"text\" class=\"flex-grow border rounded px-3 py-2\" placeholder=\"아이디 입력\" required><span class=\"text-gray-700\">@korea.kr</span></div><p class=\"${_ssrRenderClass([isValidEmail.value ? \"text-green-600\" : \"text-red-600\", \"text-sm mt-1\"])}\">${_ssrInterpolate(emailStatus.value)}</p></div><div><label for=\"mb_pw\" class=\"block mb-1 font-medium\">비밀번호</label><input${_ssrRenderAttr(\"value\", form.mb_pw)} id=\"mb_pw\" type=\"password\" class=\"w-full border rounded px-3 py-2\" required></div><div><label for=\"mb_pw_check\" class=\"block mb-1 font-medium\">비밀번호 확인</label><input${_ssrRenderAttr(\"value\", form.mb_pw_check)} id=\"mb_pw_check\" type=\"password\" class=\"w-full border rounded px-3 py-2\" required></div><div><label for=\"mb_school\" class=\"block mb-1 font-medium\"> 학교명 <span class=\"text-sm text-gray-500\">(키워드 입력 후 엔터로 검색할 수 있습니다.)</span></label><div class=\"relative\"><input${_ssrRenderAttr(\"value\", searchKeyword.value)} id=\"mb_school\" type=\"search\" placeholder=\"학교명을 검색하세요\" class=\"w-full border rounded px-3 py-2 pr-10\"${_ssrIncludeBooleanAttr(isSchoolSelected.value) ? \" disabled\" : \"\"}>`);\n      if (!isSchoolSelected.value) {\n        _push(`<button type=\"button\" class=\"absolute inset-y-0 right-0 flex items-center px-3 text-gray-500\"><i class=\"fas fa-search\"></i></button>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (showResults.value) {\n        _push(`<ul class=\"absolute z-10 w-full bg-white border mt-1 max-h-40 overflow-auto shadow rounded\"><!--[-->`);\n        _ssrRenderList(searchResults.value, (school) => {\n          _push(`<li class=\"px-3 py-2 hover:bg-gray-100 cursor-pointer\">${_ssrInterpolate(school.school)} <span class=\"text-sm text-gray-500\">(${_ssrInterpolate(school.addr)})</span></li>`);\n        });\n        _push(`<!--]--></ul>`);\n      } else {\n        _push(`<!---->`);\n      }\n      if (isSchoolSelected.value) {\n        _push(`<div class=\"mt-1 text-sm text-blue-600 underline cursor-pointer\"> 다시 검색 </div>`);\n      } else {\n        _push(`<!---->`);\n      }\n      _push(`</div><div class=\"mt-6 mb-4 text-sm text-gray-600 leading-relaxed\"><p class=\"text-red-600 font-semibold mb-2\"> ※ 선생님이 아닌 학생이 장난으로 가입할 경우, 해당 선생님에게 즉시 보고됩니다. </p><p class=\"mb-2\">회원가입은 선생님 인증 후에 사용이 가능합니다.</p><p class=\"mb-1\">- 이용약관: 본 서비스는 교육 목적으로만 제공되며, 무단 사용 시 제재를 받을 수 있습니다.</p><p>- 개인정보처리방침: 수집된 정보는 수업 및 교육 운영 이외의 용도로 사용되지 않습니다.</p></div></div><button type=\"button\"${_ssrIncludeBooleanAttr(!isFormValid.value) ? \" disabled\" : \"\"} class=\"w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50\"> 가입하기 </button></form></div>`);\n    };\n  }\n};\nimport { useSSRContext as __vite_useSSRContext } from \"vue\";\nconst _sfc_setup = _sfc_main.setup;\n_sfc_main.setup = (props, ctx) => {\n  const ssrContext = __vite_useSSRContext();\n  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add(\"pages/signUp.vue\");\n  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;\n};\nexport default _sfc_main;\n",
-      "start": 1748835745944,
-      "end": 1748835746502,
+      "start": 1748836725058,
+      "end": 1748836725522,
       "order": "normal",
       "sourcemaps": "{\n  \"version\": 3,\n  \"sources\": [\"/Users/jang-yeong-ug/Documents/zooper/pages/signUp.vue?macro=true\"],\n  \"sourcesContent\": [\"import { mergeProps as _mergeProps } from \\\"vue\\\"\\nimport { ssrRenderAttr as _ssrRenderAttr, ssrRenderClass as _ssrRenderClass, ssrIncludeBooleanAttr as _ssrIncludeBooleanAttr, ssrRenderAttrs as _ssrRenderAttrs, ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from \\\"vue/server-renderer\\\"\\n\\nimport { ref, reactive, computed } from 'vue';\\nimport { apiPost } from '@/common/api';\\nimport { nextTick } from 'vue';\\n\\n\\nconst _sfc_main = {\\n  __name: 'signUp',\\n  __ssrInlineRender: true,\\n  setup(__props) {\\n\\nconst form = reactive({\\n  mb_name: '',\\n  mb_id: '',\\n  mb_email: '',\\n  mb_pw: '',\\n  mb_pw_check: '',\\n  mb_school: '',\\n  mb_school_idx: null,\\n});\\n\\nconst emailStatus = ref('');\\nconst isValidEmail = ref(false);\\nconst isSchoolSelected = ref(false);\\nconst searchKeyword = ref('');\\nconst searchResults = ref([]);\\nconst showResults = ref(false);\\n\\nconst resetSchool = () => {\\n  form.mb_school = '';\\n  form.mb_school_idx = null;\\n  searchKeyword.value = '';\\n  searchResults.value = [];\\n  isSchoolSelected.value = false;\\n};\\n\\nconst searchSchool = async () => {\\n  if (searchKeyword.value.length > 1) {\\n    try {\\n      const res = await apiPost('teacher.php', {\\n        mode: 'schoolList',\\n        school: searchKeyword.value,\\n      });\\n      searchResults.value = res.data || [];\\n      showResults.value = true;\\n    } catch (err) {\\n      console.error(err);\\n    }\\n  } else {\\n    showResults.value = false;\\n  }\\n};\\n\\nconst selectSchool = (school) => {\\n  form.mb_school = school.school;\\n  form.mb_school_idx = school.idx;\\n  searchKeyword.value = school.school;\\n  showResults.value = false;\\n  isSchoolSelected.value = true;\\n};\\n\\nconst checkEmail = async () => {\\n  await nextTick(); // form.mb_id 최신값 반영 보장\\n\\n  const emailFull = `${form.mb_id}@korea.kr`;\\n  form.mb_email = emailFull;\\n\\n  if (form.mb_id.length > 1) {\\n    try {\\n      const res = await apiPost('teacher.php', {\\n        mode: 'checkEmail',\\n        email: emailFull,\\n      });\\n      console.log(res.result)\\n      if (res?.result === 'DUPLICATE') {\\n        emailStatus.value = '이미 사용 중인 이메일입니다.';\\n        isValidEmail.value = false;\\n      } else {\\n        emailStatus.value = '사용 가능한 이메일입니다.';\\n        isValidEmail.value = true;\\n      }\\n    } catch (e) {\\n      console.error(e);\\n      emailStatus.value = '오류가 발생했습니다.';\\n      isValidEmail.value = false;\\n    }\\n  } else {\\n    emailStatus.value = '아이디를 입력해주세요';\\n    isValidEmail.value = false;\\n  }\\n};\\n\\nconst isFormValid = computed(() => {\\n  return (\\n    form.mb_name &&\\n    form.mb_id &&\\n    form.mb_pw &&\\n    form.mb_pw_check &&\\n    form.mb_pw === form.mb_pw_check &&\\n    isValidEmail.value &&\\n    form.mb_school_idx\\n  );\\n});\\n\\nconst submit = async () => {\\n  if (form.mb_pw !== form.mb_pw_check) {\\n    alert('비밀번호가 일치하지 않습니다.');\\n    return;\\n  }\\n\\n  try {\\n    const res = await apiPost('teacher.php', {\\n      mode: 'insert',\\n      ...form\\n    });\\n\\n    if (res.result === 'SUCCESS') {\\n      alert('가입이 완료되었습니다.');\\n      location.href = '/login';\\n    } else if (res.result === 'DUPLICATE') {\\n      alert('이미 등록된 이메일입니다.');\\n    } else {\\n      alert('가입에 실패했습니다.');\\n    }\\n  } catch (e) {\\n    console.error(e);\\n    alert('오류가 발생했습니다.');\\n  }\\n};\\n\\nreturn (_ctx, _push, _parent, _attrs) => {\\n  _push(`<div${\\n    _ssrRenderAttrs(_mergeProps({ class: \\\"max-w-md mx-auto mt-10 p-6 bg-white rounded shadow\\\" }, _attrs))\\n  }><h2 class=\\\"text-2xl font-bold mb-4\\\">교사 회원가입</h2><form class=\\\"space-y-4\\\"><div><label for=\\\"mb_name\\\" class=\\\"block mb-1 font-medium\\\">이름</label><input${\\n    _ssrRenderAttr(\\\"value\\\", form.mb_name)\\n  } id=\\\"mb_name\\\" type=\\\"text\\\" class=\\\"w-full border rounded px-3 py-2\\\" required></div><div><label for=\\\"mb_id\\\" class=\\\"block mb-1 font-medium\\\">이메일</label><div class=\\\"flex items-center space-x-2\\\"><input${\\n    _ssrRenderAttr(\\\"value\\\", form.mb_id)\\n  } id=\\\"mb_id\\\" type=\\\"text\\\" class=\\\"flex-grow border rounded px-3 py-2\\\" placeholder=\\\"아이디 입력\\\" required><span class=\\\"text-gray-700\\\">@korea.kr</span></div><p class=\\\"${\\n    _ssrRenderClass([isValidEmail.value ? 'text-green-600' : 'text-red-600', \\\"text-sm mt-1\\\"])\\n  }\\\">${\\n    _ssrInterpolate(emailStatus.value)\\n  }</p></div><div><label for=\\\"mb_pw\\\" class=\\\"block mb-1 font-medium\\\">비밀번호</label><input${\\n    _ssrRenderAttr(\\\"value\\\", form.mb_pw)\\n  } id=\\\"mb_pw\\\" type=\\\"password\\\" class=\\\"w-full border rounded px-3 py-2\\\" required></div><div><label for=\\\"mb_pw_check\\\" class=\\\"block mb-1 font-medium\\\">비밀번호 확인</label><input${\\n    _ssrRenderAttr(\\\"value\\\", form.mb_pw_check)\\n  } id=\\\"mb_pw_check\\\" type=\\\"password\\\" class=\\\"w-full border rounded px-3 py-2\\\" required></div><div><label for=\\\"mb_school\\\" class=\\\"block mb-1 font-medium\\\"> 학교명 <span class=\\\"text-sm text-gray-500\\\">(키워드 입력 후 엔터로 검색할 수 있습니다.)</span></label><div class=\\\"relative\\\"><input${\\n    _ssrRenderAttr(\\\"value\\\", searchKeyword.value)\\n  } id=\\\"mb_school\\\" type=\\\"search\\\" placeholder=\\\"학교명을 검색하세요\\\" class=\\\"w-full border rounded px-3 py-2 pr-10\\\"${\\n    (_ssrIncludeBooleanAttr(isSchoolSelected.value)) ? \\\" disabled\\\" : \\\"\\\"\\n  }>`)\\n  if (!isSchoolSelected.value) {\\n    _push(`<button type=\\\"button\\\" class=\\\"absolute inset-y-0 right-0 flex items-center px-3 text-gray-500\\\"><i class=\\\"fas fa-search\\\"></i></button>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  if (showResults.value) {\\n    _push(`<ul class=\\\"absolute z-10 w-full bg-white border mt-1 max-h-40 overflow-auto shadow rounded\\\"><!--[-->`)\\n    _ssrRenderList(searchResults.value, (school) => {\\n      _push(`<li class=\\\"px-3 py-2 hover:bg-gray-100 cursor-pointer\\\">${\\n        _ssrInterpolate(school.school)\\n      } <span class=\\\"text-sm text-gray-500\\\">(${\\n        _ssrInterpolate(school.addr)\\n      })</span></li>`)\\n    })\\n    _push(`<!--]--></ul>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  if (isSchoolSelected.value) {\\n    _push(`<div class=\\\"mt-1 text-sm text-blue-600 underline cursor-pointer\\\"> 다시 검색 </div>`)\\n  } else {\\n    _push(`<!---->`)\\n  }\\n  _push(`</div><div class=\\\"mt-6 mb-4 text-sm text-gray-600 leading-relaxed\\\"><p class=\\\"text-red-600 font-semibold mb-2\\\"> ※ 선생님이 아닌 학생이 장난으로 가입할 경우, 해당 선생님에게 즉시 보고됩니다. </p><p class=\\\"mb-2\\\">회원가입은 선생님 인증 후에 사용이 가능합니다.</p><p class=\\\"mb-1\\\">- 이용약관: 본 서비스는 교육 목적으로만 제공되며, 무단 사용 시 제재를 받을 수 있습니다.</p><p>- 개인정보처리방침: 수집된 정보는 수업 및 교육 운영 이외의 용도로 사용되지 않습니다.</p></div></div><button type=\\\"button\\\"${(_ssrIncludeBooleanAttr(!isFormValid.value)) ? \\\" disabled\\\" : \\\"\\\"} class=\\\"w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50\\\"> 가입하기 </button></form></div>`)\\n}\\n}\\n\\n}\\n\\n\\n\\nimport { useSSRContext as __vite_useSSRContext } from 'vue'\\nconst _sfc_setup = _sfc_main.setup\\n_sfc_main.setup = (props, ctx) => {\\n  const ssrContext = __vite_useSSRContext()\\n  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(\\\"pages/signUp.vue\\\")\\n  return _sfc_setup ? _sfc_setup(props, ctx) : undefined\\n}\\nexport default _sfc_main\"],\n  \"mappings\": \"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\",\n  \"names\": []\n}\n"
     },
     {
       "name": "vite:css-post",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "post"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748835746502,
-      "end": 1748835746502,
+      "start": 1748836725522,
+      "end": 1748836725522,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748835746502,
-      "end": 1748835746504,
+      "start": 1748836725522,
+      "end": 1748836725524,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748835746502,
-      "end": 1748835746504,
+      "start": 1748836725522,
+      "end": 1748836725524,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725524,
+      "end": 1748836725524,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725524,
+      "end": 1748836725524,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725524,
+      "end": 1748836725525,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -244,8 +244,8 @@
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725524,
+      "end": 1748836725525,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -258,32 +258,32 @@
     },
     {
       "name": "nuxt:tree-shake-template",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725525,
+      "end": 1748836725525,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725525,
+      "end": 1748836725525,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725525,
+      "end": 1748836725525,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725525,
+      "end": 1748836725525,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748835746504,
-      "end": 1748835746504,
+      "start": 1748836725525,
+      "end": 1748836725525,
       "order": "normal"
     }
   ]

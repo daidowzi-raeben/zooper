@@ -7,28 +7,39 @@ const route = useRoute()
 const id = route.params.id
 const student = ref(null)
 
+
+const logout = () => {
+  sessionStorage.removeItem('idnt_code')
+  sessionStorage.removeItem('student')
+  sessionStorage.removeItem('t_idnt_code')
+  sessionStorage.removeItem('teacher')
+  window.location.href = '/login'
+}
+
 onMounted(async () => {
+  // sessionStorage.setItem('idnt_code', id)
   try {
     if (sessionStorage.getItem('idnt_code')) {
       sessionStorage.removeItem('idnt_code')
     }
 
     // idnt_code 세션 저장
-    
+
     // 학생 정보 조회
     const res = await apiPost('member.php', {
       mode: 'studentInfo',
       idnt_code: id,
     })
-    
+
     if (res.result === 'SUCCESS' && res.data) {
       student.value = res.data
-      
+
       sessionStorage.setItem('idnt_code', id)
       sessionStorage.setItem('student', JSON.stringify(student.value))
       window.location.href = '/'
 
     } else {
+      logout()
       alert('학생정보가 없습니다.')
       console.error(res.message || '학생 정보 없음')
       sessionStorage.removeItem('idnt_code')
@@ -36,6 +47,7 @@ onMounted(async () => {
       window.location.href = '/login'
     }
   } catch (err) {
+    logout()
     console.error('에러:', err)
     alert('에러가 발생했습니다.')
     sessionStorage.removeItem('idnt_code')

@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div\n    class=\"bg-gray-100 dark:bg-gray-900 relative h-40 text-sm overflow-hidden\"\n    @mousemove=\"handleOnMove\"\n    @touchmove=\"handleOnMove\"\n    ref=\"card\"\n  >\n    <div\n      ref=\"letters\"\n      class=\"absolute left-0 top-0 [--x:0] [--y:0] h-full w-full text-center text-gray-700 dark:text-gray-300\"\n      style=\"word-wrap: break-word\"\n    >\n      <p\n        class=\"absolute top-1/2 left-1/2 text-gray-500 text-xs -translate-x-1/2 -translate-y-1/2\"\n      >\n        Hover/Touch\n      </p>\n    </div>\n  </div>\n</template>\n\n<script setup>\nconst chars = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\";\nconst charsLength = chars.length;\nconst randomChar = () => chars[Math.floor(Math.random() * charsLength)];\nconst randomString = (length) => Array.from({ length }, randomChar).join(\"\");\n\nconst card = ref(null);\nconst letters = ref(null);\n\nconst updateLetters = (x, y) => {\n  requestAnimationFrame(() => {\n    letters.value.style.setProperty(\"--x\", `${x}px`);\n    letters.value.style.setProperty(\"--y\", `${y}px`);\n    letters.value.innerText = randomString(600);\n  });\n};\n\nconst handleOnMove = (e) => {\n  const rect = card.value.getBoundingClientRect();\n  updateLetters(e.clientX - rect.left, e.clientY - rect.top);\n};\n</script>\n",
-      "start": 1748835735385,
-      "end": 1748835735468,
+      "start": 1748836715203,
+      "end": 1748836715280,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748835735468,
-      "end": 1748835735468,
+      "start": 1748836715280,
+      "end": 1748836715280,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { createElementVNode as _createElementVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst chars = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\";\n\nconst _sfc_main = {\n  __name: 'Encryption',\n  setup(__props) {\n\nconst charsLength = chars.length;\nconst randomChar = () => chars[Math.floor(Math.random() * charsLength)];\nconst randomString = (length) => Array.from({ length }, randomChar).join(\"\");\n\nconst card = ref(null);\nconst letters = ref(null);\n\nconst updateLetters = (x, y) => {\n  requestAnimationFrame(() => {\n    letters.value.style.setProperty(\"--x\", `${x}px`);\n    letters.value.style.setProperty(\"--y\", `${y}px`);\n    letters.value.innerText = randomString(600);\n  });\n};\n\nconst handleOnMove = (e) => {\n  const rect = card.value.getBoundingClientRect();\n  updateLetters(e.clientX - rect.left, e.clientY - rect.top);\n};\n\nreturn (_ctx, _cache) => {\n  return (_openBlock(), _createElementBlock(\"div\", {\n    class: \"bg-gray-100 dark:bg-gray-900 relative h-40 text-sm overflow-hidden\",\n    onMousemove: handleOnMove,\n    onTouchmove: handleOnMove,\n    ref_key: \"card\",\n    ref: card\n  }, [\n    _createElementVNode(\"div\", {\n      ref_key: \"letters\",\n      ref: letters,\n      class: \"absolute left-0 top-0 [--x:0] [--y:0] h-full w-full text-center text-gray-700 dark:text-gray-300\",\n      style: {\"word-wrap\":\"break-word\"}\n    }, _cache[0] || (_cache[0] = [\n      _createElementVNode(\"p\", { class: \"absolute top-1/2 left-1/2 text-gray-500 text-xs -translate-x-1/2 -translate-y-1/2\" }, \" Hover/Touch \", -1)\n    ]), 512)\n  ], 544))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748835735468,
-      "end": 1748835735469,
+      "start": 1748836715280,
+      "end": 1748836715282,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,156 +74,156 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
       "result": "import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => import(\"/Users/jang-yeong-ug/Documents/zooper/components/content/Encryption.vue\").then(r => r.default))",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "replace",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
       "result": "import { __vitePreload } from \"\u0000vite/preload-helper.js\";import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/components/content/Encryption.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(r => r.default))",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "vite:reporter",
-      "start": 1748835735469,
-      "end": 1748835735469,
+      "start": 1748836715282,
+      "end": 1748836715282,
       "order": "normal"
     }
   ]

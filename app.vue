@@ -7,7 +7,10 @@ const router = useRouter()
 
 onMounted(() => {
   const idntCode = sessionStorage.getItem('idnt_code')
-  if (!idntCode && route.path !== '/login') {
+  const isLoginPage = route.path === '/login'
+  const isSignPage = route.path.startsWith('/sign/')
+
+  if (!idntCode && !isLoginPage && !isSignPage) {
     router.push('/login')
   }
 })
