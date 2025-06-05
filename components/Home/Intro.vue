@@ -1,7 +1,7 @@
 <script setup>
 
-import { apiPost,apiPoint } from '@/common/api'
-
+import { apiPost, apiPoint } from '@/common/api'
+import { allergyMap } from '@/common/allergy'
 const logout = () => {
   sessionStorage.removeItem('idnt_code')
   sessionStorage.removeItem('student')
@@ -28,13 +28,15 @@ const fetchStoreItems = async () => {
 }
 
 
-onMounted( async () => {
-  if(sessionStorage.getItem('student')) {
+onMounted(async () => {
+  if (sessionStorage.getItem('student')) {
     student.value = JSON.parse(sessionStorage.getItem('student'))
-  } 
+  }
   memberPoint.value = await apiPoint()
   teacher.value = JSON.parse(sessionStorage.getItem('student'))?.teacher
-   fetchStoreItems()
+  fetchStoreItems()
+  await fetchMeals()
+
 })
 
 useSeoMeta({
@@ -44,58 +46,83 @@ useSeoMeta({
 });
 
 const isMoney = ref(false)
+
+const meals = ref([])
+
+const fetchMeals = async () => {
+  const res = await apiPost('meal.php', {
+    idx: student.value?.teacher
+  })
+
+  if (res.result === 'SUCCESS' || res.result === 'CACHED') {
+    meals.value = res.data
+  }
+}
+
+
+
+// 문자열에서 알레르기 번호만 추출
+const extractAllergyNames = (text) => {
+  const match = text.match(/\(([\d.,\s]+)\)/)
+  if (!match) return []
+
+  return match[1]
+    .split(/[.,\s]+/)
+    .map(Number)
+    .filter(n => allergyMap[n])
+    .map(n => allergyMap[n])
+}
 </script>
 
 
 <template>
   <div>
-  <div class="space-y-4">
-    <!-- 환영 메시지 -->
-    <div class="flex justify-between items-center">
-      <p class="text-lg font-semibold text-gray-700">{{ student?.student_name }}친구, 환영합니다 👋</p>
-      <button
-        class="flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition"
-        @click="logout"
-      >
-        <span class="i-heroicons-arrow-right-on-rectangle w-4 h-4" />
-        로그아웃
-      </button>
-    </div>
-
-    <!-- 내 잔액 -->
-    <div class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center">
-      <div class="flex flex-col justify-center">
-        <p class="text-sm opacity-80">내 잔액</p>
-        <p class="text-2xl font-bold">
-          <span v-if="isMoney" @click="isMoney = false">
-          💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">돌멩이</span>
-          </span>
-          <span v-if="!isMoney" @click="isMoney = true">
-            나의 잔액 확인하기
-          </span>
-        </p>
+    <div class="space-y-4">
+      <!-- 환영 메시지 -->
+      <div class="flex justify-between items-center">
+        <p class="text-lg font-semibold text-gray-700">{{ student?.student_name }}친구, 환영합니다 👋</p>
+        <button
+          class="flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition"
+          @click="logout">
+          <span class="i-heroicons-arrow-right-on-rectangle w-4 h-4" />
+          로그아웃
+        </button>
       </div>
-      <UButton
-        label="이체하기"
-        color="white"
-        class="text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100"
-        @click="$router.push('/transfer')"
-      />
-    </div>
 
-    <!-- 버튼 8개 -->
-    <div class="grid grid-cols-2 gap-4">
-      <router-link to="/income">
-        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer">
-          💰 입금
+      <!-- 내 잔액 -->
+      <div
+        class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center">
+        <div class="flex flex-col justify-center">
+          <p class="text-sm opacity-80">내 잔액</p>
+          <p class="text-2xl font-bold">
+            <span v-if="isMoney" @click="isMoney = false">
+              💰 {{ Number(memberPoint || 0).toLocaleString() }} <span
+                class="text-sm font-normal align-middle">돌멩이</span>
+            </span>
+            <span v-if="!isMoney" @click="isMoney = true">
+              나의 잔액 확인하기
+            </span>
+          </p>
         </div>
-      </router-link>
-      <router-link to="/expense">
-        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer">
-          💸 출금
-        </div>
-      </router-link>
-      <!-- <router-link to="/tax">
+        <UButton label="이체하기" color="white" class="text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100"
+          @click="$router.push('/transfer')" />
+      </div>
+
+      <!-- 버튼 8개 -->
+      <div class="grid grid-cols-2 gap-4">
+        <router-link to="/income">
+          <div
+            class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer">
+            💰 입금
+          </div>
+        </router-link>
+        <router-link to="/expense">
+          <div
+            class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer">
+            💸 출금
+          </div>
+        </router-link>
+        <!-- <router-link to="/tax">
         <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
           💼 세금
         </div>
@@ -105,10 +132,23 @@ const isMoney = ref(false)
           ⚠️ 벌금
         </div>
       </router-link> -->
+      </div>
     </div>
-  </div>
-  
-      <!-- <div class="mt-10">
+
+    <!-- 오늘의 급식 -->
+    <div class="mt-8 rounded-2xl shadow-md p-4 bg-white border">
+      <p class="text-base font-semibold text-gray-800 mb-2">🍱 오늘의 급식</p>
+      <ul class="list-disc list-inside text-gray-700 space-y-1">
+        <li v-for="(meal, index) in meals" :key="index">
+          <span>{{ meal }}</span>
+          <div v-if="extractAllergyNames(meal).length" class="text-xs text-gray-500 ml-4 mt-1">
+            ⚠️ 알레르기 유발 식품: {{ extractAllergyNames(meal).join(', ') }}
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- <div class="mt-10">
           <div class="">
             <h1 class="text-2xl font-bold mb-4">상점 아이템 목록</h1>
 

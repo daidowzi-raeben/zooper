@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div class=\"px-4 py-8 flex items-center justify-center flex-col\">\n    <span\n      ref=\"target\"\n      class=\"flex tabular-nums text-slate-900 dark:text-white text-5xl font-extrabold mb-2 [counter-set:_num_var(--num)] before:content-[counter(num)] animate-counter\"\n    >\n      <span class=\"sr-only\">{{ targetNumber }}</span\n      >+\n    </span>\n    <UButton color=\"white\" @click=\"startCounter\" class=\"mt-4\" size=\"xs\">\n      Start Counter\n    </UButton>\n    <p class=\"text-xs mt-2 text-gray-500\">\n      or start the counter when this component is in the viewport\n    </p>\n  </div>\n</template>\n\n<script setup>\nconst target = ref(null);\nconst targetIsVisible = useElementVisibility(target);\n\nconst props = defineProps({\n  targetNumber: {\n    type: Number,\n    required: true,\n    default: 1234,\n  },\n});\n\nconst startCounter = () => {\n  const counter = document.querySelector(\".animate-counter\");\n  counter.animate([{ \"--num\": 0 }, { \"--num\": props.targetNumber }], {\n    duration: 1000,\n    easing: \"ease-out\",\n    fill: \"forwards\",\n  });\n};\n\nwatchOnce(targetIsVisible, () => {\n  startCounter();\n});\n</script>\n\n<style scoped>\n@property --num {\n  syntax: \"<integer>\";\n  initial-value: 0;\n  inherits: false;\n}\n\n@keyframes counter {\n  from {\n    --num: 0;\n  }\n  to {\n    --num: v-bind(props.targetNumber);\n  }\n}\n</style>\n",
-      "start": 1748836716633,
-      "end": 1748836717742,
+      "start": 1749086024917,
+      "end": 1749086026045,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026045,
+      "end": 1749086026045,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026045,
+      "end": 1749086026045,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026045,
+      "end": 1749086026045,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026045,
+      "end": 1749086026045,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026045,
+      "end": 1749086026046,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748836717742,
-      "end": 1748836717742,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { useCssVars as _useCssVars, unref as _unref } from 'vue'\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, createTextVNode as _createTextVNode, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"px-4 py-8 flex items-center justify-center flex-col\" }\nconst _hoisted_2 = { class: \"sr-only\" }\n\n\nconst _sfc_main = {\n  __name: 'AnimatedCounter',\n  props: {\n  targetNumber: {\n    type: Number,\n    required: true,\n    default: 1234,\n  },\n},\n  setup(__props) {\n\n_useCssVars(_ctx => ({\n  \"4977d1da\": (props.targetNumber)\n}))\n\nconst target = ref(null);\nconst targetIsVisible = useElementVisibility(target);\n\nconst props = __props;\n\nconst startCounter = () => {\n  const counter = document.querySelector(\".animate-counter\");\n  counter.animate([{ \"--num\": 0 }, { \"--num\": props.targetNumber }], {\n    duration: 1000,\n    easing: \"ease-out\",\n    fill: \"forwards\",\n  });\n};\n\nwatchOnce(targetIsVisible, () => {\n  startCounter();\n});\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    _createElementVNode(\"span\", {\n      ref_key: \"target\",\n      ref: target,\n      class: \"flex tabular-nums text-slate-900 dark:text-white text-5xl font-extrabold mb-2 [counter-set:_num_var(--num)] before:content-[counter(num)] animate-counter\"\n    }, [\n      _createElementVNode(\"span\", _hoisted_2, _toDisplayString(__props.targetNumber), 1),\n      _cache[0] || (_cache[0] = _createTextVNode(\"+ \"))\n    ], 512),\n    _createVNode(_component_UButton, {\n      color: \"white\",\n      onClick: startCounter,\n      class: \"mt-4\",\n      size: \"xs\"\n    }, {\n      default: _withCtx(() => _cache[1] || (_cache[1] = [\n        _createTextVNode(\" Start Counter \")\n      ])),\n      _: 1,\n      __: [1]\n    }),\n    _cache[2] || (_cache[2] = _createElementVNode(\"p\", { class: \"text-xs mt-2 text-gray-500\" }, \" or start the counter when this component is in the viewport \", -1))\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue?vue&type=style&index=0&scoped=e9f86973&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-e9f86973\"]])",
-      "start": 1748836717742,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748836717743,
-      "end": 1748836717743,
+      "start": 1749086026046,
+      "end": 1749086026046,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { ref } from 'vue';\nimport { useElementVisibility, watchOnce } from '@vueuse/core';\nimport { useCssVars as _useCssVars, unref as _unref } from 'vue'\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, createTextVNode as _createTextVNode, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"px-4 py-8 flex items-center justify-center flex-col\" }\nconst _hoisted_2 = { class: \"sr-only\" }\n\n\nconst _sfc_main = {\n  __name: 'AnimatedCounter',\n  props: {\n  targetNumber: {\n    type: Number,\n    required: true,\n    default: 1234,\n  },\n},\n  setup(__props) {\n\n_useCssVars(_ctx => ({\n  \"4977d1da\": (props.targetNumber)\n}))\n\nconst target = ref(null);\nconst targetIsVisible = useElementVisibility(target);\n\nconst props = __props;\n\nconst startCounter = () => {\n  const counter = document.querySelector(\".animate-counter\");\n  counter.animate([{ \"--num\": 0 }, { \"--num\": props.targetNumber }], {\n    duration: 1000,\n    easing: \"ease-out\",\n    fill: \"forwards\",\n  });\n};\n\nwatchOnce(targetIsVisible, () => {\n  startCounter();\n});\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    _createElementVNode(\"span\", {\n      ref_key: \"target\",\n      ref: target,\n      class: \"flex tabular-nums text-slate-900 dark:text-white text-5xl font-extrabold mb-2 [counter-set:_num_var(--num)] before:content-[counter(num)] animate-counter\"\n    }, [\n      _createElementVNode(\"span\", _hoisted_2, _toDisplayString(__props.targetNumber), 1),\n      _cache[0] || (_cache[0] = _createTextVNode(\"+ \"))\n    ], 512),\n    _createVNode(_component_UButton, {\n      color: \"white\",\n      onClick: startCounter,\n      class: \"mt-4\",\n      size: \"xs\"\n    }, {\n      default: _withCtx(() => _cache[1] || (_cache[1] = [\n        _createTextVNode(\" Start Counter \")\n      ])),\n      _: 1,\n      __: [1]\n    }),\n    _cache[2] || (_cache[2] = _createElementVNode(\"p\", { class: \"text-xs mt-2 text-gray-500\" }, \" or start the counter when this component is in the viewport \", -1))\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue?vue&type=style&index=0&scoped=e9f86973&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-e9f86973\"]])",
-      "start": 1748836717743,
-      "end": 1748836717744,
+      "start": 1749086026046,
+      "end": 1749086026047,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,51 +185,51 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Button.vue\";\nimport { ref } from 'vue';\nimport { useElementVisibility, watchOnce } from '@vueuse/core';\nimport { useCssVars as _useCssVars, unref as _unref } from 'vue'\nimport { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, createTextVNode as _createTextVNode, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = { class: \"px-4 py-8 flex items-center justify-center flex-col\" }\nconst _hoisted_2 = { class: \"sr-only\" }\n\n\nconst _sfc_main = {\n  __name: 'AnimatedCounter',\n  props: {\n  targetNumber: {\n    type: Number,\n    required: true,\n    default: 1234,\n  },\n},\n  setup(__props) {\n\n_useCssVars(_ctx => ({\n  \"4977d1da\": (props.targetNumber)\n}))\n\nconst target = ref(null);\nconst targetIsVisible = useElementVisibility(target);\n\nconst props = __props;\n\nconst startCounter = () => {\n  const counter = document.querySelector(\".animate-counter\");\n  counter.animate([{ \"--num\": 0 }, { \"--num\": props.targetNumber }], {\n    duration: 1000,\n    easing: \"ease-out\",\n    fill: \"forwards\",\n  });\n};\n\nwatchOnce(targetIsVisible, () => {\n  startCounter();\n});\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = __nuxt_component_0\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    _createElementVNode(\"span\", {\n      ref_key: \"target\",\n      ref: target,\n      class: \"flex tabular-nums text-slate-900 dark:text-white text-5xl font-extrabold mb-2 [counter-set:_num_var(--num)] before:content-[counter(num)] animate-counter\"\n    }, [\n      _createElementVNode(\"span\", _hoisted_2, _toDisplayString(__props.targetNumber), 1),\n      _cache[0] || (_cache[0] = _createTextVNode(\"+ \"))\n    ], 512),\n    _createVNode(_component_UButton, {\n      color: \"white\",\n      onClick: startCounter,\n      class: \"mt-4\",\n      size: \"xs\"\n    }, {\n      default: _withCtx(() => _cache[1] || (_cache[1] = [\n        _createTextVNode(\" Start Counter \")\n      ])),\n      _: 1,\n      __: [1]\n    }),\n    _cache[2] || (_cache[2] = _createElementVNode(\"p\", { class: \"text-xs mt-2 text-gray-500\" }, \" or start the counter when this component is in the viewport \", -1))\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/components/content/AnimatedCounter.vue?vue&type=style&index=0&scoped=e9f86973&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-e9f86973\"]])",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748836717744,
-      "end": 1748836717744,
+      "start": 1749086026047,
+      "end": 1749086026047,
       "order": "normal"
     }
   ]

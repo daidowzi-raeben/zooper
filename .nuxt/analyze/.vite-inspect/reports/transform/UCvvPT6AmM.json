@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <main class=\"min-h-screen\">\n    <AppHeader\n      class=\"mb-12\"\n      title=\"What's in my bag?\"\n      :description=\"description\"\n    />\n    <div class=\"space-y-24\">\n      <ul class=\"space-y-8\">\n        <AppUsesHeader title=\"Hardware\" />\n        <AppUsesItem v-for=\"(item, id) in hardware\" :key=\"id\" :item=\"item\" />\n      </ul>\n      <ul class=\"space-y-8\">\n        <AppUsesHeader title=\"Software\" />\n        <AppUsesItem v-for=\"(item, id) in software\" :key=\"id\" :item=\"item\" />\n      </ul>\n      <ul class=\"space-y-8\">\n        <AppUsesHeader title=\"Desk\" />\n        <AppUsesItem v-for=\"(item, id) in desk\" :key=\"id\" :item=\"item\" />\n      </ul>\n      <ul class=\"space-y-8\">\n        <AppUsesHeader title=\"Other\" />\n        <AppUsesItem v-for=\"(item, id) in other\" :key=\"id\" :item=\"item\" />\n      </ul>\n    </div>\n  </main>\n</template>\n\n<script setup>\nconst description =\n  \"Software I use, gadgets I love, and other things I recommend. Here’s a big list of all of my favorite stuff.\";\nuseSeoMeta({\n  title: \"Things I use | Fayaz Ahmed\",\n  description,\n});\nconst { data: items } = await useAsyncData(\"uses\", () =>\n  queryContent(\"/uses\").find()\n);\nconst hardware = items.value.filter((item) => item.category === \"hardware\");\nconst software = items.value.filter((item) => item.category === \"software\");\nconst desk = items.value.filter((item) => item.category === \"desk\");\nconst other = items.value.filter((item) => item.category === \"others\");\n</script>\n",
-      "start": 1748836717793,
-      "end": 1748836717891,
+      "start": 1749086026095,
+      "end": 1749086026179,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026179,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { withAsyncContext as _withAsyncContext } from 'vue'\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, createBlock as _createBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-24\" }\nconst _hoisted_3 = { class: \"space-y-8\" }\nconst _hoisted_4 = { class: \"space-y-8\" }\nconst _hoisted_5 = { class: \"space-y-8\" }\nconst _hoisted_6 = { class: \"space-y-8\" }\n\nconst description =\n  \"Software I use, gadgets I love, and other things I recommend. Here’s a big list of all of my favorite stuff.\";\n\nconst _sfc_main = {\n  __name: 'whats-in-my-bag',\n  async setup(__props) {\n\nlet __temp, __restore\n\nuseSeoMeta({\n  title: \"Things I use | Fayaz Ahmed\",\n  description,\n});\nconst { data: items } = (\n  ([__temp,__restore] = _withAsyncContext(() => useAsyncData(\"uses\", () =>\n  queryContent(\"/uses\").find()\n))),\n  __temp = await __temp,\n  __restore(),\n  __temp\n);\nconst hardware = items.value.filter((item) => item.category === \"hardware\");\nconst software = items.value.filter((item) => item.category === \"software\");\nconst desk = items.value.filter((item) => item.category === \"desk\");\nconst other = items.value.filter((item) => item.category === \"others\");\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_AppUsesHeader = _resolveComponent(\"AppUsesHeader\")\n  const _component_AppUsesItem = _resolveComponent(\"AppUsesItem\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-12\",\n      title: \"What's in my bag?\",\n      description: description\n    }),\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createElementVNode(\"ul\", _hoisted_3, [\n        _createVNode(_component_AppUsesHeader, { title: \"Hardware\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(hardware), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ]),\n      _createElementVNode(\"ul\", _hoisted_4, [\n        _createVNode(_component_AppUsesHeader, { title: \"Software\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(software), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ]),\n      _createElementVNode(\"ul\", _hoisted_5, [\n        _createVNode(_component_AppUsesHeader, { title: \"Desk\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(desk), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ]),\n      _createElementVNode(\"ul\", _hoisted_6, [\n        _createVNode(_component_AppUsesHeader, { title: \"Other\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(other), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ])\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026179,
+      "end": 1749086026180,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,105 +74,105 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1748836717891,
-      "end": 1748836717891,
+      "start": 1749086026180,
+      "end": 1749086026180,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
       "result": "import { useSeoMeta } from '@unhead/vue';\nimport { useAsyncData } from '#app/composables/asyncData';\nimport { queryContent } from '/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/content/dist/runtime/legacy/composables/query';\nimport { withAsyncContext as _withAsyncContext } from 'vue'\nimport { resolveComponent as _resolveComponent, createVNode as _createVNode, unref as _unref, renderList as _renderList, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock, createBlock as _createBlock, createElementVNode as _createElementVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen\" }\nconst _hoisted_2 = { class: \"space-y-24\" }\nconst _hoisted_3 = { class: \"space-y-8\" }\nconst _hoisted_4 = { class: \"space-y-8\" }\nconst _hoisted_5 = { class: \"space-y-8\" }\nconst _hoisted_6 = { class: \"space-y-8\" }\n\nconst description =\n  \"Software I use, gadgets I love, and other things I recommend. Here’s a big list of all of my favorite stuff.\";\n\nconst _sfc_main = {\n  __name: 'whats-in-my-bag',\n  async setup(__props) {\n\nlet __temp, __restore\n\nuseSeoMeta({\n  title: \"Things I use | Fayaz Ahmed\",\n  description,\n});\nconst { data: items } = (\n  ([__temp,__restore] = _withAsyncContext(() => useAsyncData(\"uses\", () =>\n  queryContent(\"/uses\").find()\n))),\n  __temp = await __temp,\n  __restore(),\n  __temp\n);\nconst hardware = items.value.filter((item) => item.category === \"hardware\");\nconst software = items.value.filter((item) => item.category === \"software\");\nconst desk = items.value.filter((item) => item.category === \"desk\");\nconst other = items.value.filter((item) => item.category === \"others\");\n\nreturn (_ctx, _cache) => {\n  const _component_AppHeader = _resolveComponent(\"AppHeader\")\n  const _component_AppUsesHeader = _resolveComponent(\"AppUsesHeader\")\n  const _component_AppUsesItem = _resolveComponent(\"AppUsesItem\")\n\n  return (_openBlock(), _createElementBlock(\"main\", _hoisted_1, [\n    _createVNode(_component_AppHeader, {\n      class: \"mb-12\",\n      title: \"What's in my bag?\",\n      description: description\n    }),\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createElementVNode(\"ul\", _hoisted_3, [\n        _createVNode(_component_AppUsesHeader, { title: \"Hardware\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(hardware), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ]),\n      _createElementVNode(\"ul\", _hoisted_4, [\n        _createVNode(_component_AppUsesHeader, { title: \"Software\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(software), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ]),\n      _createElementVNode(\"ul\", _hoisted_5, [\n        _createVNode(_component_AppUsesHeader, { title: \"Desk\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(desk), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ]),\n      _createElementVNode(\"ul\", _hoisted_6, [\n        _createVNode(_component_AppUsesHeader, { title: \"Other\" }),\n        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(_unref(other), (item, id) => {\n          return (_openBlock(), _createBlock(_component_AppUsesItem, {\n            key: id,\n            item: item\n          }, null, 8, [\"item\"]))\n        }), 128))\n      ])\n    ])\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1748836717891,
-      "end": 1748836717893,
+      "start": 1749086026180,
+      "end": 1749086026181,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -185,15 +185,15 @@
     },
     {
       "name": "unctx:transform",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026181,
+      "end": 1749086026181,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026181,
+      "end": 1749086026182,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -206,38 +206,38 @@
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026182,
+      "end": 1749086026182,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026182,
+      "end": 1749086026182,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026182,
+      "end": 1749086026182,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026182,
+      "end": 1749086026182,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026182,
+      "end": 1749086026182,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1748836717893,
-      "end": 1748836717893,
+      "start": 1749086026182,
+      "end": 1749086026182,
       "order": "normal"
     }
   ]

@@ -34,6 +34,11 @@ onMounted(async () => {
     if (res.result === 'SUCCESS' && res.data) {
       student.value = res.data
 
+      sessionStorage.removeItem('idnt_code')
+      sessionStorage.removeItem('student')
+      sessionStorage.removeItem('t_idnt_code')
+      sessionStorage.removeItem('teacher')
+
       sessionStorage.setItem('idnt_code', id)
       sessionStorage.setItem('student', JSON.stringify(student.value))
       window.location.href = '/'

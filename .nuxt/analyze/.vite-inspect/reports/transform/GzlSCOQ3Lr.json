@@ -4,8 +4,8 @@
     {
       "name": "commonjs",
       "result": "var slugify = {exports: {}}; export {slugify as __module}",
-      "start": 1748836718970,
-      "end": 1748836718970
+      "start": 1749086027424,
+      "end": 1749086027424
     }
   ]
 }
