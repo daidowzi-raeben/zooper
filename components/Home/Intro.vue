@@ -37,6 +37,7 @@ onMounted(async () => {
   fetchStoreItems()
   await fetchMeals()
   await isHope()
+  await isFriend()
 
 })
 
@@ -86,6 +87,16 @@ const isHope = async () => {
   hopeToday.value = res
 }
 
+const friendToday = ref({ result: "FAIL" });
+const isFriend = async () => {
+  const res = await apiPost('member.php', {
+    mode: 'studentFriend',
+    idnt_code: student.value?.idnt_code
+  })
+
+  friendToday.value = res
+}
+
 
 
 
@@ -106,6 +117,31 @@ const onClickHope = async () => {
 
     if (res.result === 'SUCCESS') {
       await isHope()
+      memberPoint.value = await apiPoint()
+    }
+
+  } else {
+    // 취소 버튼 클릭 시 실행
+    console.log("삭제 취소");
+  }
+}
+
+
+const onClickFriend = async () => {
+  if (memberPoint.value < 10) {
+    alert('포인트가 부족합니다.')
+    return;
+  }
+  if (confirm("10돌맹이로 오늘의 친구를 확인할까요?")) {
+
+    const res = await apiPost('member.php', {
+      mode: 'studentFriendInsert',
+      idnt_code: sessionStorage.getItem('idnt_code'),
+      point: 10
+    })
+
+    if (res.result === 'SUCCESS') {
+      await isFriend()
       memberPoint.value = await apiPoint()
     }
 
@@ -190,6 +226,17 @@ const onClickHope = async () => {
           </div>
         </li>
       </ul>
+    </div>
+
+    <div class="mt-8 rounded-2xl shadow-md  border">
+      <div v-if="friendToday?.result === 'FAIL'" @click="onClickFriend" class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg
+      font-bold cursor-pointer">
+        오늘 함께하면 좋을 것 같은 친구는?
+      </div>
+      <div v-else class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg
+      font-bold cursor-pointer">
+        ❤️❤️ {{ friendToday?.data?.mb_name }} ❤️❤️
+      </div>
     </div>
 
     <div class="mt-8 rounded-2xl shadow-md  border">
