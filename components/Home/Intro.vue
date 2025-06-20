@@ -36,6 +36,7 @@ onMounted(async () => {
   teacher.value = JSON.parse(sessionStorage.getItem('student'))?.teacher
   fetchStoreItems()
   await fetchMeals()
+  await isHope()
 
 })
 
@@ -71,6 +72,47 @@ const extractAllergyNames = (text) => {
     .map(Number)
     .filter(n => allergyMap[n])
     .map(n => allergyMap[n])
+}
+
+
+
+const hopeToday = ref({ result: "FAIL" });
+const isHope = async () => {
+  const res = await apiPost('member.php', {
+    mode: 'studentHope',
+    idnt_code: student.value?.idnt_code
+  })
+
+  hopeToday.value = res
+}
+
+
+
+
+
+
+const onClickHope = async () => {
+  if (memberPoint.value < 10) {
+    alert('포인트가 부족합니다.')
+    return;
+  }
+  if (confirm("10돌맹이로 오늘의 운세를 확인할까요?")) {
+
+    const res = await apiPost('member.php', {
+      mode: 'studentHopeInsert',
+      idnt_code: sessionStorage.getItem('idnt_code'),
+      point: 10
+    })
+
+    if (res.result === 'SUCCESS') {
+      await isHope()
+      memberPoint.value = await apiPoint()
+    }
+
+  } else {
+    // 취소 버튼 클릭 시 실행
+    console.log("삭제 취소");
+  }
 }
 </script>
 
@@ -132,6 +174,8 @@ const extractAllergyNames = (text) => {
           ⚠️ 벌금
         </div>
       </router-link> -->
+
+
       </div>
     </div>
 
@@ -146,6 +190,17 @@ const extractAllergyNames = (text) => {
           </div>
         </li>
       </ul>
+    </div>
+
+    <div class="mt-8 rounded-2xl shadow-md  border">
+      <div v-if="hopeToday?.result === 'FAIL'" @click="onClickHope"
+        class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
+        오늘의 운세 보기
+      </div>
+      <div v-else
+        class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
+        {{ hopeToday?.data?.result_text }}
+      </div>
     </div>
 
     <!-- <div class="mt-10">
