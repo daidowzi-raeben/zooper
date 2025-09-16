@@ -1,6 +1,7 @@
 <script setup>
 
 import { apiPost, apiPoint } from '@/common/api'
+import logo from '@/common/img/sunny_logo.png'
 import { allergyMap } from '@/common/allergy'
 const logout = () => {
   sessionStorage.removeItem('idnt_code')
@@ -16,6 +17,47 @@ const memberPoint = ref(0)
 const storeItems = ref([])
 const teacher = ref(null)
 
+const dispot = ref(null)
+const dispotTotal = ref(0)
+
+const deposit = ref(null)
+const isEndDeposit = ref(false)
+
+function isMatured(endDateStr) {
+  if (!endDateStr) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0) // 오늘 00시 기준
+
+  const endDate = new Date(endDateStr)
+  endDate.setHours(0, 0, 0, 0)
+
+  return today >= endDate   // true면 만기일 지남
+}
+
+
+function formatDate(dateStr) {
+  if (!dateStr) return ''
+  const d = new Date(dateStr)
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`
+}
+const isDepositApi = async () => {
+  const res = await apiPost('member.php', {
+    mode: 'deposit_status',
+    idnt_code: student.value?.idnt_code
+  })
+
+  if (res.result === 'SUCCESS') {
+    deposit.value = res.data
+
+    if (isMatured(deposit.value?.end_date)) {
+      isEndDeposit.value = true
+    } else {
+      isEndDeposit.value = false
+    }
+  }
+}
+
+
 const fetchStoreItems = async () => {
   const res = await apiPost('store.php', {
     mode: 'storeList',
@@ -24,6 +66,29 @@ const fetchStoreItems = async () => {
 
   if (res.result === 'SUCCESS') {
     storeItems.value = res.data
+  }
+}
+
+
+const maturityDate = ref(null)
+
+const isDispotApi = async () => {
+  const res = await apiPost('teacher.php', {
+    mode: 'dispot',
+    teacher: teacher?.value,
+  })
+
+  if (res.result === 'SUCCESS') {
+    dispot.value = res.data
+
+    // ref 안의 값에서 꺼내야 함
+    const weeks = dispot.value?.deposit_cycle || 2  // 기본값 2주
+    const today = new Date()
+    const date = new Date(today)
+    date.setDate(today.getDate() + weeks * 7)
+
+    // YYYY-MM-DD 포맷
+    maturityDate.value = date.toISOString().split('T')[0]
   }
 }
 
@@ -38,6 +103,8 @@ onMounted(async () => {
   await fetchMeals()
   await isHope()
   await isFriend()
+  await isDispotApi()
+  await isDepositApi()
 
 })
 
@@ -104,7 +171,7 @@ const isFriend = async () => {
 
 const onClickHope = async () => {
   if (memberPoint.value < 10) {
-    alert('포인트가 부족합니다.')
+    alert('금액이 부족합니다.')
     return;
   }
   if (confirm("10돌맹이로 오늘의 운세를 확인할까요?")) {
@@ -129,7 +196,7 @@ const onClickHope = async () => {
 
 const onClickFriend = async () => {
   if (memberPoint.value < 10) {
-    alert('포인트가 부족합니다.')
+    alert('금액이 부족합니다.')
     return;
   }
   if (confirm("10돌맹이로 오늘의 친구를 확인할까요?")) {
@@ -150,11 +217,112 @@ const onClickFriend = async () => {
     console.log("삭제 취소");
   }
 }
+
+
+
+const onClickEndDeposit = async () => {
+
+  if (confirm("적금을 만기해지하시겠습니까?")) {
+
+    const res = await apiPost('member.php', {
+      mode: 'depositEnd',
+      idnt_code: sessionStorage.getItem('idnt_code'),
+    })
+
+    if (res.result === 'SUCCESS') {
+      memberPoint.value = await apiPoint()
+      await isDispotApi()
+      await isDepositApi()
+    }
+
+  } else {
+    // 취소 버튼 클릭 시 실행
+    console.log("삭제 취소");
+  }
+}
+
+
+
+const router = useRouter()
+const amount = ref('')
+const submitting = ref(false)
+
+function parseAmount(raw) {
+  const n = Number(String(raw ?? '').replace(/[^\d]/g, ''))
+  return Number.isFinite(n) ? n : 0
+}
+async function createSavings() {
+  const n = parseAmount(amount.value)
+  if (!n || n < 1) {
+    alert('적금 금액을 입력해 주세요.')
+    return
+  }
+  if (dispot.value?.deposit_min > n) {
+    alert(`${dispot.value?.deposit_min} ${dispot.value?.currency_name} ~ ${dispot.value?.deposit_max} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
+    return;
+  }
+  if (dispot.value?.deposit_max < n) {
+    alert(`${dispot.value?.deposit_min} ${dispot.value?.currency_name} ~ ${dispot.value?.deposit_max} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
+    return;
+  }
+
+  if (memberPoint.value < n) {
+    alert('금액이 부족합니다.')
+    return;
+  }
+
+
+  const ok = confirm(
+    `적금 금액 ${n.toLocaleString()}원을 예치합니다.\n` +
+    `만기일 ${maturityDate.value} 전에는 출금할 수 없습니다. 진행할까요?`
+  )
+  if (!ok) return
+
+  try {
+    submitting.value = true
+    // TODO: 백엔드 연동 시 이 부분에서 API 호출
+    // await $fetch('/api/savings', { method:'POST', body: { amount: n, termDays: 14, rate: 5 } })
+
+    const res = await apiPost('member.php', {
+      mode: 'interest',
+      idnt_code: sessionStorage.getItem('idnt_code'),
+      amount: n,
+      teacher: teacher?.value,
+      amount_interest: dispotTotal?.value,
+      interest_rate: dispot.value?.deposit_interest,
+      deposit_name: "적금통장",
+      end_date: maturityDate.value
+    })
+
+    if (res.result === 'SUCCESS') {
+      // await isFriend()
+      // memberPoint.value = await apiPoint()
+      memberPoint.value = await apiPoint()
+      await isDispotApi()
+      await isDepositApi()
+    }
+
+
+  } finally {
+    submitting.value = false
+  }
+}
+
+
+watch(amount, (val) => {
+  const n = Number(String(val).replace(/[^\d]/g, '')) || 0
+  const rate = dispot.value?.deposit_interest || 0
+  // 원금 + 이자 (단순 % 계산)
+  dispotTotal.value = Math.floor(0 + (n * rate / 100))
+})
 </script>
 
 
 <template>
   <div>
+    <div class="text-center">
+      <img :src="logo" width="150" style="position: absolute; margin-top: -61px;">
+    </div>
     <div class="space-y-4">
       <!-- 환영 메시지 -->
       <div class="flex justify-between items-center">
@@ -174,8 +342,8 @@ const onClickFriend = async () => {
           <p class="text-sm opacity-80">내 잔액</p>
           <p class="text-2xl font-bold">
             <span v-if="isMoney" @click="isMoney = false">
-              💰 {{ Number(memberPoint || 0).toLocaleString() }} <span
-                class="text-sm font-normal align-middle">돌멩이</span>
+              💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">{{
+                dispot?.currency_name }}</span>
             </span>
             <span v-if="!isMoney" @click="isMoney = true">
               나의 잔액 확인하기
@@ -184,6 +352,54 @@ const onClickFriend = async () => {
         </div>
         <UButton label="이체하기" color="white" class="text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100"
           @click="$router.push('/transfer')" />
+      </div>
+
+      <div v-if="!deposit?.amount_interest"
+        class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+        <!-- 좌측: 타이틀/설명 -->
+        <div class="flex flex-col justify-center">
+          <p class="text-sm opacity-80">단기 적금</p>
+          <p class="text-2xl font-bold"> {{ dispot?.deposit_cycle }}주 적금통장 만들기</p>
+          <p class="text-xs opacity-90 mt-1">{{ dispot?.deposit_interest }}% 이자받기 · {{ maturityDate }}일 만기 ·
+            중도해지 불가 · 최소 {{
+              dispot?.deposit_min }} ~ 최대 {{ dispot?.deposit_max }} </p>
+        </div>
+        <!-- 우측: 입력/버튼 -->
+        <div v-if="!deposit?.amount_interest" class="flex items-center gap-2 w-full md:w-auto">
+          <UInput v-model="amount" type="tel" inputmode="numeric" placeholder="얼마를 적금할까요? (원)"
+            :ui="{ base: 'text-blue-900' }" class="bg-white/90 text-blue-900 rounded-xl w-full md:w-56"
+            @keyup.enter="createSavings" />
+          <UButton label="만들기" color="secondary" class="rounded-xl" :loading="submitting" @click="createSavings" />
+        </div>
+        <div>예상이자 : {{ dispotTotal }} {{ dispot?.currency_name }} </div>
+      </div>
+
+
+      <div
+        class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white flex justify-between items-center">
+        <!-- 적금 있음 -->
+        <div v-if="deposit?.deposit_exists">
+          <p class="text-sm opacity-80">내 적금통장</p>
+          <p class="text-xl font-bold">
+            {{ Number(deposit?.amount).toLocaleString() }}<span class="text-sm font-normal">(원금)</span> + {{
+              Number(deposit?.amount_interest).toLocaleString()
+            }}<span class="text-sm font-normal">(이자)</span>
+            = {{ Number(deposit?.amount + deposit?.amount_interest).toLocaleString() }}
+            <span class="text-sm font-normal">{{ dispot?.currency_name }}</span>
+          </p>
+          <p class="text-sm mt-1">만기일 : {{ formatDate(deposit?.end_date) }}</p>
+        </div>
+
+        <!-- 적금 없음 -->
+        <div v-else>
+          <p class="text-sm opacity-80">내 적금통장</p>
+          <p class="text-lg font-bold">아직 개설된 적금이 없습니다</p>
+        </div>
+
+        <!-- 버튼 -->
+
+        <UButton label="원금+이자 받기" :disabled="!isEndDeposit" color="secondary"
+          class="rounded-xl bg-white text-purple-600" @click="onClickEndDeposit()" />
       </div>
 
       <!-- 버튼 8개 -->

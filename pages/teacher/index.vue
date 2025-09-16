@@ -206,11 +206,11 @@ const saveClassSettings = async () => {
     class_name: teacherInfo.value.class_name || '',
     currency_name: teacherInfo.value.currency_name || '',
     deposit_cycle: teacherInfo.value.deposit_cycle || '',
-    deposit_interest: teacherInfo.value.deposit_interest || '',
-    deposit_amount: teacherInfo.value.deposit_amount || '',
+    deposit_interest: teacherInfo.value.deposit_interest || 0,
+    deposit_amount: teacherInfo.value.deposit_amount || 0,
     // 🔽 여기에 추가
-    deposit_min: teacherInfo.value.deposit_min || '',
-    deposit_max: teacherInfo.value.deposit_max || ''
+    deposit_min: teacherInfo.value.deposit_min || 0,
+    deposit_max: teacherInfo.value.deposit_max || 0
   })
 
   if (res.result === 'SUCCESS') {
