@@ -625,7 +625,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-LKW4gPPW.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-BVL1CwGh.js").then((m) => m.default || m)
   },
   {
     name: "lab",
@@ -697,7 +697,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-Boasiz5R.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-Ckp3d-27.js").then((m) => m.default || m)
   },
   {
     name: "teacher-login",
@@ -856,7 +856,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "68078e27-22a1-48a5-a5f9-925a02ecec27"
+    "buildId": "accc5957-23a5-4118-a549-e334498592c7"
   },
   "ui": {
     "primary": "green",

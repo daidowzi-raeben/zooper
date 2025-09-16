@@ -109,9 +109,9 @@ onMounted(async () => {
 })
 
 useSeoMeta({
-  title: "Fayaz Ahmed",
+  title: "Jelly School-OS",
   description:
-    "I'm Fayaz, your friendly neighborhood software, product engineer and designer from Bengaluru, India. I specialize in building web applications and sites using Javascript, React, Vue & Node.",
+    "젤리에서 경제,화폐 경험을 누려보세요.",
 });
 
 const isMoney = ref(false)

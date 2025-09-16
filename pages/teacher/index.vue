@@ -126,7 +126,8 @@ const fetchStudents = async () => {
     memberPoint.value = await apiPoint()
     studentOptions.value = res.data.map(s => ({
       label: s.student_name,
-      value: s.idnt_code
+      value: s.idnt_code,
+      mb_point: s.mb_point
     }))
   }
 }
@@ -537,7 +538,7 @@ const openHistoryModal = async (type) => {
           <div v-for="student in studentOptions" :key="student.value"
             @click="handleStudentClick(student.value, student.label)"
             class="px-4 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm cursor-pointer transition">
-            {{ student.label }}
+            {{ student.label }}({{ student?.mb_point }})
           </div>
         </div>
       </div>
