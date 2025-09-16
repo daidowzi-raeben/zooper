@@ -609,7 +609,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/expense-nWnlvRi-.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/expense-Be7kSK-t.js").then((m) => m.default || m)
   },
   {
     name: "income",
@@ -617,7 +617,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/income-D2cMzdZ2.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/income-BptzI79B.js").then((m) => m.default || m)
   },
   {
     name: "index",
@@ -625,7 +625,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-B8fINAkq.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-cC57KgJ9.js").then((m) => m.default || m)
   },
   {
     name: "lab",
@@ -641,7 +641,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/login-DztIOOr4.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/login-CcEUpybS.js").then((m) => m.default || m)
   },
   {
     name: "penalty",
@@ -649,7 +649,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/penalty-DU0lb-oN.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/penalty-BBFqVp68.js").then((m) => m.default || m)
   },
   {
     name: "projects",
@@ -665,7 +665,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/_id_-kUnwxwFz.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/_id_-9n8P3Pov.js").then((m) => m.default || m)
   },
   {
     name: "signUp",
@@ -673,7 +673,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/signUp-BcKorEJa.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/signUp-Cym7-cLE.js").then((m) => m.default || m)
   },
   {
     name: "tax",
@@ -681,7 +681,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/tax-B5i_56Io.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/tax-DkJ4rCHC.js").then((m) => m.default || m)
   },
   {
     name: "teacher-id",
@@ -689,7 +689,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/_id_-CmAShDNV.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/_id_-CokJ1VvY.js").then((m) => m.default || m)
   },
   {
     name: "teacher",
@@ -697,7 +697,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-f0y_4fO3.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-AnpmELG4.js").then((m) => m.default || m)
   },
   {
     name: "transfer",
@@ -705,7 +705,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/transfer-C_P10n6O.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/transfer-CQ8KpKDG.js").then((m) => m.default || m)
   },
   {
     name: "whats-in-my-bag",
@@ -848,7 +848,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "7cb370fa-721d-484d-a059-22f3b2dd17db"
+    "buildId": "11cbf991-5823-47dc-b336-3ceebaeaf904"
   },
   "ui": {
     "primary": "green",
