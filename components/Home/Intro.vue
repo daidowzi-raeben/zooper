@@ -273,7 +273,7 @@ async function createSavings() {
 
 
   const ok = confirm(
-    `적금 금액 ${n.toLocaleString()}원을 예치합니다.\n` +
+    `적금 금액 ${n.toLocaleString()} ${dispot.value?.currency_name} 예치하기.\n` +
     `만기일 ${maturityDate.value} 전에는 출금할 수 없습니다. 진행할까요?`
   )
   if (!ok) return
