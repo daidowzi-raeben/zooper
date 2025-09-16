@@ -697,7 +697,15 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-AnpmELG4.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-Boasiz5R.js").then((m) => m.default || m)
+  },
+  {
+    name: "teacher-login",
+    path: "/teacher/login",
+    meta: {},
+    alias: [],
+    redirect: void 0,
+    component: () => import("./_nuxt/login-D4jdo-wR.js").then((m) => m.default || m)
   },
   {
     name: "transfer",
@@ -848,7 +856,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "574cca9d-b977-496a-acbc-666266f175ee"
+    "buildId": "68078e27-22a1-48a5-a5f9-925a02ecec27"
   },
   "ui": {
     "primary": "green",

@@ -233,7 +233,7 @@ const printStudentQR = () => {
 
 const onClickLogin = () => {
 
-  window.open('/sign/' + selectedStudent.value)
+  window.open('/teacher/login?id=' + selectedStudent.value)
 }
 
 
