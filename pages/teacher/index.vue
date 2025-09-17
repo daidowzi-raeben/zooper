@@ -70,6 +70,7 @@ const onError = (err) => {
 
 //  QR
 const points = ref([])
+const deposits = ref([])
 const page = ref(1)
 const isLoading = ref(false)
 const hasMore = ref(true)
@@ -113,6 +114,20 @@ const fetchPoints = async (v) => {
   }
 }
 
+
+
+const depositsApi = async (v) => {
+  const teacher = JSON.parse(sessionStorage.getItem('teacher'))?.idx
+  const res = await apiPost('bank.php', {
+    mode: 'interestList',
+    teacher
+  })
+
+  if (res.result === 'SUCCESS') {
+    deposits.value = res.data
+  }
+}
+
 const fetchStudents = async () => {
   const teacher = JSON.parse(sessionStorage.getItem('teacher'))?.idx
   if (!teacher) return
@@ -140,6 +155,7 @@ onMounted(async () => {
   }
   // fetchPoints()
   fetchStudents()
+  depositsApi()
   window.addEventListener('scroll', handleScroll)
 
   const point = await apiPoint()
@@ -151,7 +167,7 @@ onMounted(async () => {
 
 const handleScroll = () => {
   const scrollPosition = window.scrollY + window.innerHeight
-  const bottomPosition = document.body.offsetHeight - 50
+  const bottomPosition = document.body.offsetHeight - 100
   if (scrollPosition >= bottomPosition) {
     fetchPoints()
   }
@@ -192,8 +208,13 @@ const handleDeposit = async () => {
   }
 }
 const handleStudentClick = (idnt_code, mb_name) => {
+  points.value = []
+  isLoading.value = false
+  hasMore.value = true
+  page.value = 1
   selectedStudent.value = idnt_code;
   selectedStudentName.value = mb_name;
+  console.log(selectedStudent.value)
   fetchPoints()
   // console.log('선택된 학생:', idnt_code);
   // window.open('/sign/' + idnt_code)
@@ -523,7 +544,25 @@ const openHistoryModal = async (type) => {
 
           <UButton label="저장" color="blue" @click="saveClassSettings" size="lg" />
         </div>
+        <div class="mt-10">
+          <h2 class="uppercase text-xs font-semibold text-gray-400 mb-4">적금내역</h2>
+          <div class="space-y-5">
+            <div v-for="item in deposits" :key="item.idx"
+              class="flex items-center gap-4 dark:hover:text-gray-300 group">
+              <span class="text-sm leading-none">
+                {{ item?.student_name }} (원금 : {{ item?.amount }} , 이자 : {{ item?.amount_interest }} )
+              </span>
+              <div
+                class="flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5">
+              </div>
+              <span class="text-xs text-gray-500 leading-none">
+                {{ item?.start_date }} ~ {{ item?.end_date }}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="flex justify-between items-center">
         <p class="text-lg font-semibold text-gray-700">
           우리반 학생
@@ -543,7 +582,6 @@ const openHistoryModal = async (type) => {
         </div>
       </div>
       <div style="height:30px;">
-
         <UButton v-if="selectedStudentName" :label="`${selectedStudentName} 학생으로 로그인 하기`" color="blue"
           class="w-full justify-center text-center" @click="onClickLogin" />
       </div>

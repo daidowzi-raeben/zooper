@@ -697,7 +697,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/index-Ckp3d-27.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/index-BU9eHsCv.js").then((m) => m.default || m)
   },
   {
     name: "teacher-login",
@@ -856,7 +856,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "accc5957-23a5-4118-a549-e334498592c7"
+    "buildId": "99d5b274-e4a3-4269-888e-95042cfa32b0"
   },
   "ui": {
     "primary": "green",
