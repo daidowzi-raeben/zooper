@@ -609,7 +609,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/expense-Be7kSK-t.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/expense-D5NWsEeL.js").then((m) => m.default || m)
   },
   {
     name: "income",
@@ -617,7 +617,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/income-BptzI79B.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/income-DlDlWTWD.js").then((m) => m.default || m)
   },
   {
     name: "index",
@@ -713,7 +713,7 @@ const _routes = [
     meta: {},
     alias: [],
     redirect: void 0,
-    component: () => import("./_nuxt/transfer-CQ8KpKDG.js").then((m) => m.default || m)
+    component: () => import("./_nuxt/transfer-DV43ZCH5.js").then((m) => m.default || m)
   },
   {
     name: "whats-in-my-bag",
@@ -856,7 +856,7 @@ const cfg0 = defineAppConfig({
 });
 const inlineConfig = {
   "nuxt": {
-    "buildId": "99d5b274-e4a3-4269-888e-95042cfa32b0"
+    "buildId": "5dffd079-9932-4a37-ad0c-1a2bfa36d418"
   },
   "ui": {
     "primary": "green",

@@ -9,7 +9,10 @@ const isScanning = ref(false)
 const error = ref('')
 
 const startScan = () => {
-
+  if (amountInput.value < 1) {
+    alert('장난 안돼요 ^^')
+    return
+  }
   if (!amountInput.value) {
     alert('출금액을 입력해주세요')
     return

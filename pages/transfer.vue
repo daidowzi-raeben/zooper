@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { apiPost,apiPoint } from '@/common/api'
+import { apiPost, apiPoint } from '@/common/api'
 
 //  QR
 import { QrcodeStream } from 'vue-qrcode-reader'
@@ -10,7 +10,13 @@ const error = ref('')
 
 const startScan = () => {
 
-if (!amountInput.value) {
+  if (amountInput.value < 1) {
+    alert('장난 안돼요 ^^')
+    return
+  }
+
+
+  if (!amountInput.value) {
     alert('출금액을 입력해주세요')
     return
   }
@@ -19,27 +25,27 @@ if (!amountInput.value) {
     return
   }
 
-  if(amountInput.value > memberPoint.value) {
+  if (amountInput.value > memberPoint.value) {
     alert('잔액이 부족합니다.')
     return
-}
-  
+  }
+
   isScanning.value = true
   error.value = ''
 }
 
 const onDetect = (detectedCodes) => {
   const url = detectedCodes[0]?.rawValue
-if(url === sessionStorage.getItem('idnt_code')) {
-  handleDeposit()
+  if (url === sessionStorage.getItem('idnt_code')) {
+    handleDeposit()
   } else {
     isScanning.value = false
-      return alert('인증오류')
-    }
+    return alert('인증오류')
+  }
   if (!url) return
 
   isScanning.value = false
-//   router.push('/sign/' + url)
+  //   router.push('/sign/' + url)
 }
 
 const onError = (err) => {
@@ -169,63 +175,46 @@ const handleDeposit = async () => {
 
 <template>
   <div>
-      <div>
-        <div class="mb-6 flex items-center gap-3">
-        <div
-            class="flex-none rounded-full p-1 text-primary-500 bg-primary-500/10"
-        >
-            <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+    <div>
+      <div class="mb-6 flex items-center gap-3">
+        <div class="flex-none rounded-full p-1 text-primary-500 bg-primary-500/10">
+          <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
         </div>
         <h2 class="uppercase text-xs font-semibold text-gray-400">
-            나의 잔액 {{ memberPoint }}
+          나의 잔액 {{ memberPoint }}
         </h2>
-        </div>
-        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+      </div>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
         입금 할 친구를 선택하고 금액을 입력하세요
-        </p>
-        <div class="flex items-center gap-3 mt-6">
-       <USelect
-          v-model="selectedStudent"
-          :options="studentOptions"
-          placeholder="학생 선택"
-          class="w-40"
-          size="lg"
-        />
-        <UInput
-            v-model="amountInput"
-            placeholder="입금액을 입력하세요"
-            icon="i-heroicons-currency-dollar"
-            class="flex-1 text-right"
-            input-class="text-right"
-            type="tel"
-            size="lg"
-        />
-        <UButton label="이체하기" size="lg" color="black" @click="startScan()"/>
+      </p>
+      <div class="flex items-center gap-3 mt-6">
+        <USelect v-model="selectedStudent" :options="studentOptions" placeholder="학생 선택" class="w-40" size="lg" />
+        <UInput v-model="amountInput" placeholder="입금액을 입력하세요" icon="i-heroicons-currency-dollar"
+          class="flex-1 text-right" input-class="text-right" type="tel" size="lg" />
+        <UButton label="이체하기" size="lg" color="black" @click="startScan()" />
+      </div>
+      <div v-if="isScanning">
+        <div
+          style="background-color: #000; position: fixed; top:0; left:0; width:100%; height:100%; z-index:99; opacity: 0.6;">
         </div>
-        <div v-if="isScanning">
-            <div style="background-color: #000; position: fixed; top:0; left:0; width:100%; height:100%; z-index:99; opacity: 0.6;"></div>
-             <qrcode-stream
-             style="top:50%; left:50%; z-index:99; position: fixed; transform: translate(-50%,-50%); max-width:400px; max-height:400px;"
-            @detect="onDetect"
-            @error="onError"
-        />
-        </div>
+        <qrcode-stream
+          style="top:50%; left:50%; z-index:99; position: fixed; transform: translate(-50%,-50%); max-width:400px; max-height:400px;"
+          @detect="onDetect" @error="onError" />
+      </div>
     </div>
     <div class="mt-10">
       <h2 class="uppercase text-xs font-semibold text-gray-400 mb-4">최근 입출금내역</h2>
       <div class="space-y-5">
-        <div
-        v-for="item in points"
-        :key="item.idx"
-        class="flex items-center gap-4 dark:hover:text-gray-300 group"
-        >
-        <span class="text-sm leading-none">
+        <div v-for="item in points" :key="item.idx" class="flex items-center gap-4 dark:hover:text-gray-300 group">
+          <span class="text-sm leading-none">
             {{ item.description }} ({{ item.point_type === 'save' ? '+' : '-' }}{{ item.point.toLocaleString() }} 돌멩이)
-        </span>
-        <div class="flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5"></div>
-        <span class="text-xs text-gray-500 leading-none">
+          </span>
+          <div
+            class="flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5">
+          </div>
+          <span class="text-xs text-gray-500 leading-none">
             {{ item.c_datetime }}
-        </span>
+          </span>
         </div>
       </div>
     </div>
