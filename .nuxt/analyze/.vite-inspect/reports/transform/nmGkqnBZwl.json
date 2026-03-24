@@ -1,0 +1,17 @@
+{
+  "resolvedId": "/Users/jang-yeong-ug/Documents/zooper/.nuxt/font-fallbacks.css",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": "",
+      "start": 1774366448086,
+      "end": 1774366448086
+    },
+    {
+      "name": "vite:reporter",
+      "start": 1774366448086,
+      "end": 1774366448086,
+      "order": "normal"
+    }
+  ]
+}
