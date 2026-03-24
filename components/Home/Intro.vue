@@ -1,6 +1,6 @@
 <script setup>
 
-import { apiPost, apiPoint } from '@/common/api'
+import { apiPost, apiPoint, hostUrl } from '@/common/api'
 import logo from '@/common/img/sunny_logo.png'
 import { allergyMap } from '@/common/allergy'
 const logout = () => {
@@ -271,6 +271,8 @@ async function createSavings() {
     return;
   }
 
+  if (submitting.value) return;
+
 
   const ok = confirm(
     `적금 금액 ${n.toLocaleString()} ${dispot.value?.currency_name} 예치하기.\n` +
@@ -321,7 +323,7 @@ watch(amount, (val) => {
 <template>
   <div>
     <div class="text-center">
-      <img :src="logo" width="150" style="position: absolute; margin-top: -61px;">
+      <img :src="dispot?.qr_bg ? (dispot.qr_bg.startsWith('http') ? dispot.qr_bg : hostUrl + dispot.qr_bg) : logo" alt="Logo" class="w-[150px] absolute -mt-[61px] left-1/2 -ml-[75px] rounded-xl object-cover shadow-sm bg-white p-1">
     </div>
     <div class="space-y-4">
       <!-- 환영 메시지 -->
@@ -354,24 +356,57 @@ watch(amount, (val) => {
           @click="$router.push('/transfer')" />
       </div>
 
+      <!-- 단기 적금 카드 (만들기) -->
       <div v-if="!deposit?.amount_interest"
-        class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white flex flex-col md:flex-row md:justify-between md:items-center gap-3">
-        <!-- 좌측: 타이틀/설명 -->
-        <div class="flex flex-col justify-center">
-          <p class="text-sm opacity-80">단기 적금</p>
-          <p class="text-2xl font-bold"> {{ dispot?.deposit_cycle }}주 적금통장 만들기</p>
-          <p class="text-xs opacity-90 mt-1">{{ dispot?.deposit_interest }}% 이자받기 · {{ maturityDate }}일 만기 ·
-            중도해지 불가 · 최소 {{
-              dispot?.deposit_min }} ~ 최대 {{ dispot?.deposit_max }} </p>
+        class="relative overflow-hidden col-span-2 rounded-2xl shadow-lg p-5 bg-white border border-purple-100 flex flex-col md:flex-row md:justify-between md:items-center gap-4 group transition-all duration-300 hover:shadow-xl">
+        <!-- 배경 데코레이션 -->
+        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+        <div class="absolute -left-5 -top-5 w-20 h-20 bg-pink-50 rounded-full opacity-30"></div>
+
+        <!-- 좌측: 레이블 및 설명 -->
+        <div class="relative z-10 flex flex-col justify-center">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 bg-purple-100 text-purple-600 text-[10px] font-bold rounded-full uppercase tracking-wider">Timed Deposit</span>
+            <p class="text-xs font-semibold text-purple-400">연 {{ dispot?.deposit_interest }}% 고금리</p>
+          </div>
+          <p class="text-2xl font-extrabold text-gray-800 tracking-tight">
+            {{ dispot?.deposit_cycle }}주 적금통장 <span class="text-purple-600">만들기</span>
+          </p>
+          <div class="flex items-center gap-3 mt-2 text-[11px] text-gray-500 font-medium">
+            <span class="flex items-center gap-1">
+              <span class="i-heroicons-calendar w-3 h-3 text-purple-400" />
+              {{ maturityDate }} 만기
+            </span>
+            <span class="flex items-center gap-1">
+              <span class="i-heroicons-exclamation-circle w-3 h-3 text-red-400" />
+              중도해지 불가
+            </span>
+            <span class="flex items-center gap-1">
+              <span class="i-heroicons-banknotes w-3 h-3 text-green-400" />
+              최소 {{ Number(dispot?.deposit_min || 0).toLocaleString() }} {{ dispot?.currency_name }}
+            </span>
+          </div>
         </div>
-        <!-- 우측: 입력/버튼 -->
-        <div v-if="!deposit?.amount_interest" class="flex items-center gap-2 w-full md:w-auto">
-          <UInput v-model="amount" type="tel" inputmode="numeric" placeholder="얼마를 적금할까요? (원)"
-            :ui="{ base: 'text-blue-900' }" class="bg-white/90 text-blue-900 rounded-xl w-full md:w-56"
-            @keyup.enter="createSavings" />
-          <UButton label="만들기" color="secondary" class="rounded-xl" :loading="submitting" @click="createSavings" />
+
+        <!-- 우측: 입력 및 버튼 -->
+        <div class="relative z-10 flex flex-col items-end gap-2 w-full md:w-auto">
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <div class="relative flex-1 md:w-48">
+              <UInput v-model="amount" type="tel" inputmode="numeric" placeholder="적금할 금액"
+                variant="none"
+                class="bg-gray-50 hover:bg-gray-100 focus-within:bg-white text-gray-900 rounded-xl transition-all border border-gray-200 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
+                @keyup.enter="createSavings" />
+            </div>
+            <UButton label="만들기" 
+              class="rounded-xl px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-md shadow-purple-200 transition-all hover:-translate-y-0.5 active:translate-y-0"
+              :loading="submitting" 
+              :disabled="submitting"
+              @click="createSavings" />
+          </div>
+          <p v-if="dispotTotal > 0" class="text-xs font-bold text-purple-500 animate-pulse">
+            ✨ 만기 시 예상 이자: {{ Number(dispotTotal).toLocaleString() }} {{ dispot?.currency_name }}
+          </p>
         </div>
-        <div>예상이자 : {{ dispotTotal }} {{ dispot?.currency_name }} </div>
       </div>
 
 

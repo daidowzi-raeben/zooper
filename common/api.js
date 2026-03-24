@@ -1,9 +1,10 @@
 // /common/api.js
 import axios from 'axios'
 
+export const hostUrl = 'http://localhost:3095/jelly/'
 const api = axios.create({
-    baseURL: 'https://api.school-os.net/jelly/',
-    // baseURL: 'http://localhost:3095/jelly/',
+    baseURL: hostUrl,
+
     headers: {
         'Content-Type': 'application/json',
     },

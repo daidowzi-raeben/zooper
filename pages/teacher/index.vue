@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { apiPost, apiPoint, apiTeacher } from '@/common/api'
+import api, { apiPost, apiPoint, apiTeacher, hostUrl } from '@/common/api'
 import * as XLSX from 'xlsx/dist/xlsx.full.min.js'
 //  QR
 import { QrcodeStream } from 'vue-qrcode-reader'
@@ -230,10 +230,18 @@ const saveClassSettings = async () => {
     deposit_cycle: teacherInfo.value.deposit_cycle || '',
     deposit_interest: teacherInfo.value.deposit_interest || 0,
     deposit_amount: teacherInfo.value.deposit_amount || 0,
-    // 🔽 여기에 추가
     deposit_min: teacherInfo.value.deposit_min || 0,
-    deposit_max: teacherInfo.value.deposit_max || 0
+    deposit_max: teacherInfo.value.deposit_max || 0,
+    mb_grade: teacherInfo.value.mb_grade || '',
+    mb_class: teacherInfo.value.mb_class || '',
+    mb_school: teacherInfo.value.mb_school || '',
+    mb_school_code: teacherInfo.value.mb_school_code || '',
+    qr_bg: teacherInfo.value.qr_bg || '',
+    qr_top: qrTop.value,
+    qr_left: qrLeft.value,
+    qr_width: qrWidth.value
   })
+
 
   if (res.result === 'SUCCESS') {
     alert('저장되었습니다.');
@@ -241,6 +249,24 @@ const saveClassSettings = async () => {
     alert('저장에 실패했습니다.');
   }
 }
+
+const onClickReset = async () => {
+  if (confirm("정말로 초기화 하시겠습니까?\n선생님 데이터를 제외하고 모든 데이터(학생, 포인트 등)가 삭제됩니다.\n(삭제 전 백업이 생성됩니다.)")) {
+    const res = await apiPost('teacher.php', {
+      mode: 'resetAllData',
+      idnt_code: sessionStorage.getItem('t_idnt_code')
+    })
+
+
+    if (res.result === 'SUCCESS') {
+      alert('초기화가 완료되었습니다.')
+      window.location.reload()
+    } else {
+      alert('초기화 실패: ' + (res.message || '알 수 없는 오류'))
+    }
+  }
+}
+
 
 const onClickDownload = () => {
   window.open('http://api.school-os.net/jelly/data/class.xlsx')
@@ -379,8 +405,83 @@ const openHistoryModal = async (type) => {
   isHistoryModalOpen.value = true
 }
 
+const isQRDesignModalOpen = ref(false)
+const uploadedQRBg = ref(null)
+const previewQRBg = ref(null)
 
+const onQRBgChange = (e) => {
+  const file = e.target.files[0]
+  if (!file) return
+  uploadedQRBg.value = file
+  previewQRBg.value = URL.createObjectURL(file)
+}
+
+
+
+const qrTop = ref(0)
+const qrLeft = ref(0)
+const qrWidth = ref(100)
+
+watch(teacherInfo, (newVal) => {
+  if (newVal) {
+    qrTop.value = newVal.qr_top || 0
+    qrLeft.value = newVal.qr_left || 0
+    qrWidth.value = newVal.qr_width || 100
+  }
+}, { immediate: true })
+
+const handleQRBgUpload = async () => {
+  if (!uploadedQRBg.value && !teacherInfo.value.qr_bg) return alert('이미지를 선택해주세요.')
+  
+  const formData = new FormData()
+  if (uploadedQRBg.value) formData.append('file', uploadedQRBg.value)
+  formData.append('mode', 'uploadQRBg')
+  formData.append('idnt_code', sessionStorage.getItem('t_idnt_code'))
+  formData.append('qr_top', qrTop.value)
+  formData.append('qr_left', qrLeft.value)
+  formData.append('qr_width', qrWidth.value)
+
+  try {
+    const res = await api.post('teacher.php', formData)
+
+    if (res.result === 'SUCCESS') {
+      if (res.url) teacherInfo.value.qr_bg = res.url
+      alert('저장되었습니다.')
+      isQRDesignModalOpen.value = false
+    } else {
+
+      alert('업로드 실패: ' + (res.message || '알 수 없는 오류'))
+    }
+  } catch (e) {
+    console.error('QR배경 업로드 실패:', e)
+    alert('업로드 오류 발생: ' + (e.message || '네트워크 상태를 확인해주세요.'))
+  }
+}
+
+const fetchSchools = async (q) => {
+  if (!q) return []
+  const res = await apiPost('teacher.php', {
+    mode: 'schoolList',
+    school: q
+  })
+  if (res.result === 'SUCCESS') {
+    return res.data.map(item => ({
+      label: item.school,
+      value: item.idx
+    }))
+  }
+  return []
+}
+
+const onSelectSchool = (school) => {
+  if (school) {
+     teacherInfo.value.mb_school = school.label
+     teacherInfo.value.mb_school_code = school.value
+  }
+}
 </script>
+
+
 
 <template>
   <div class="mt-4">
@@ -401,7 +502,8 @@ const openHistoryModal = async (type) => {
         <UButton label="엑셀샘플 다운로드" color="gray" @click="onClickDownload" />
         <UButton label="엑셀업로드" color="gray" @click="onClickUpload" />
         <UButton label="학생 QR카드 인쇄하기" color="gray" @click="printStudentQR" />
-        <UButton label="초기화" color="red" @click="printStudentQR" style="margin-left:auto;" />
+        <UButton label="QR카드 디자인하기" color="purple" @click="isQRDesignModalOpen = true" />
+        <UButton label="초기화" color="red" @click="onClickReset" style="margin-left:auto;" />
       </div>
       <div class="flex justify-between items-center">
         <p class="text-lg font-semibold text-gray-700">
@@ -498,12 +600,51 @@ const openHistoryModal = async (type) => {
     </div>
     <div class="mt-10">
       <!-- 우리반 설정 -->
-      <div class="space-y-2 mb-10">
-        <p class="text-lg font-semibold text-gray-700">우리반 설정</p>
-        <div class="flex gap-4 items-center">
-          <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 젤리)" class="flex-1" size="lg" />
-          <UInput v-model="teacherInfo.currency_name" placeholder="화폐이름 (예: 젤리코인)" class="flex-1" size="lg" />
-          <UButton label="저장" color="blue" @click="saveClassSettings" size="lg" />
+      <div class="space-y-4 mb-10 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <p class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
+          <span class="i-heroicons-cog-6-tooth w-5 h-5 text-blue-500" />
+          우리반 기본 정보 설정
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="space-y-1">
+            <p class="text-xs font-semibold text-gray-500 ml-1">학교 검색</p>
+            <USelectMenu 
+              v-model="teacherInfo.mb_school" 
+              :searchable="fetchSchools" 
+              placeholder="학교를 검색하세요 (예: 젤리초)" 
+              size="lg"
+              @update:modelValue="(val) => { 
+                if (typeof val === 'object') {
+                  onSelectSchool(val)
+                } 
+              }"
+            />
+          </div>
+          <div class="space-y-1">
+            <p class="text-xs font-semibold text-gray-500 ml-1">학년</p>
+            <UInput v-model="teacherInfo.mb_grade" placeholder="학년 (예: 6)" type="number" size="lg" />
+          </div>
+          <div class="space-y-1">
+            <p class="text-xs font-semibold text-gray-500 ml-1">반</p>
+            <UInput v-model="teacherInfo.mb_class" placeholder="반 (예: 3)" type="number" size="lg" />
+          </div>
+          <div class="space-y-1">
+            <p class="text-xs font-semibold text-gray-500 ml-1">학급칭호</p>
+            <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 젤리)" size="lg" />
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-center mt-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100 gap-4">
+          <div class="flex items-center gap-3">
+             <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+               <span class="i-heroicons-banknotes w-6 h-6" />
+             </div>
+             <div>
+               <p class="text-xs text-gray-500 font-semibold">사용 화폐 단위</p>
+               <p class="text-sm font-bold text-gray-800">{{ teacherInfo.currency_name || '마일리지를 설정해 주세요' }}</p>
+             </div>
+             <UInput v-model="teacherInfo.currency_name" placeholder="화폐이름 (예: 젤리코인)" size="sm" class="w-32" />
+          </div>
+          <UButton label="모든 설정 저장하기" color="blue" @click="saveClassSettings" size="lg" class="px-12 font-bold shadow-lg shadow-blue-200" />
         </div>
       </div>
       <!-- <div class="space-y-2 mb-10">
@@ -620,18 +761,89 @@ const openHistoryModal = async (type) => {
       </div>
     </div>
     <!-- 세금/벌금 내역 모달 -->
+    <!-- 세금/벌금 내역 모달 -->
     <UModal v-model="isHistoryModalOpen">
-      <div class="p-4 space-y-4">
-        <h2 class="text-lg font-bold">{{ historyTitle }}</h2>
-        <div v-if="historyList.length === 0" class="text-gray-500 text-sm">내역이 없습니다.</div>
-        <ul v-else class="space-y-2 max-h-60 overflow-auto text-sm">
-          <li v-for="item in historyList" :key="item.idx" class="flex justify-between border-b pb-1">
-            <span>{{ item.description }}</span>
-            <span>{{ item.point.toLocaleString() }}P</span>
-          </li>
-        </ul>
-        <div class="flex justify-end">
-          <UButton label="닫기" color="gray" @click="isHistoryModalOpen = false" />
+      ... (no changes)
+    </UModal>
+
+    <!-- QR 카드 디자인 모달 -->
+    <UModal v-model="isQRDesignModalOpen">
+      <div class="p-6 space-y-6">
+        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+          <span class="i-heroicons-swatch w-6 h-6 text-purple-500" />
+          QR 카드 디자인 설정
+        </h2>
+        
+        <div class="space-y-2">
+          <p class="text-sm font-semibold text-gray-700">배경 이미지 등록</p>
+          <p class="text-xs text-gray-500">인쇄용 QR 카드의 배경 이미지를 업로드하고 위치를 조정하세요.</p>
+          
+          <!-- 카드 미리보기 레이아웃 -->
+          <div class="mt-4 relative mx-auto w-full max-w-[350px] aspect-[1.6/1] border border-gray-200 rounded-lg overflow-hidden bg-white shadow-inner">
+             <!-- 커스텀 배경 미리보기 -->
+             <img v-if="previewQRBg || teacherInfo.qr_bg" 
+                  :src="previewQRBg || (teacherInfo.qr_bg.startsWith('http') ? teacherInfo.qr_bg : hostUrl + teacherInfo.qr_bg)" 
+                  :style="{ 
+                    position: 'absolute', 
+                    top: qrTop + 'px', 
+                    left: qrLeft + 'px', 
+                    width: qrWidth + '%',
+                    zIndex: 0
+                  }" />
+             
+             <!-- 기본 레이아웃 가이드 (비투과 오버레이) -->
+             <div class="absolute inset-0 z-10 pointer-events-none p-4 flex flex-col justify-between border border-gray-100">
+               <div class="flex justify-between items-start">
+                  <div class="w-16 h-4 bg-gray-200/50 rounded animate-pulse"></div>
+                  <div class="text-[10px] font-bold text-gray-400">1번 홍길동</div>
+               </div>
+               <div class="text-[8px] text-gray-300 leading-tight">
+                 입출금은 은행원 승인이 필요합니다.<br>이체는 개인 QR코드로 가능합니다.
+               </div>
+               <div class="absolute bottom-2 right-2 w-12 h-12 border border-gray-200 bg-white/80 flex items-center justify-center">
+                 <span class="i-heroicons-qr-code w-8 h-8 text-gray-300" />
+               </div>
+             </div>
+
+             <input type="file" @change="onQRBgChange" class="absolute inset-0 opacity-0 cursor-pointer z-20" accept="image/*" />
+          </div>
+
+          <!-- 위치 컨트롤 슬라이더 -->
+          <div class="mt-6 space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold text-gray-600">
+                <span>상단 위치 (Top Offset)</span>
+                <span>{{ qrTop }}px</span>
+              </div>
+              <input type="range" v-model="qrTop" min="-200" max="200" class="w-full accent-purple-600" />
+            </div>
+            
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold text-gray-600">
+                <span>좌측 위치 (Left Offset)</span>
+                <span>{{ qrLeft }}px</span>
+              </div>
+              <input type="range" v-model="qrLeft" min="-200" max="200" class="w-full accent-purple-600" />
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold text-gray-600">
+                <span>이미지 너비 (Width)</span>
+                <span>{{ qrWidth }}%</span>
+              </div>
+              <input type="range" v-model="qrWidth" min="10" max="300" class="w-full accent-purple-600" />
+            </div>
+          </div>
+        </div>
+
+        <div v-if="teacherInfo.qr_bg" class="bg-purple-50 p-3 rounded-xl border border-purple-100 text-center">
+          <p class="text-[10px] text-purple-700 font-medium">현재 등록된 배경이 있습니다. 파일을 새로 선택하지 않으면 위치 설정만 저장됩니다.</p>
+        </div>
+
+
+        <div class="flex justify-end gap-2">
+          <UButton label="취소" color="gray" variant="ghost" @click="isQRDesignModalOpen = false" />
+          <UButton label="배경으로 등록하고 저장" color="purple" class="px-6" @click="handleQRBgUpload" />
         </div>
       </div>
     </UModal>

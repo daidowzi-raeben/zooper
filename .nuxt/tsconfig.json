@@ -74,16 +74,19 @@
         "../node_modules/@nuxt/ui/dist/runtime/*"
       ],
       "#ui-colors": [
-        "./ui.colors.mjs"
+        "./ui.colors"
       ],
       "#icon-collections": [
-        "./icon-collections.mjs"
+        "./icon-collections"
       ],
       "#color-mode-options": [
         "./color-mode-options.mjs"
       ],
       "#tailwind-config": [
         "./tailwind.config"
+      ],
+      "#tailwind-config/*": [
+        "./tailwind.config/*"
       ],
       "#image": [
         "../node_modules/@nuxt/image/dist/runtime"
@@ -92,19 +95,13 @@
         "../node_modules/@nuxt/image/dist/runtime/*"
       ],
       "#mdc-configs": [
-        "./mdc-configs.mjs"
+        "./mdc-configs"
       ],
       "#mdc-highlighter": [
-        "./mdc-highlighter.mjs"
+        "./mdc-highlighter"
       ],
       "#mdc-imports": [
-        "./mdc-imports.mjs"
-      ],
-      "#nuxt-component-meta": [
-        "./component-meta.mjs"
-      ],
-      "#nuxt-component-meta/types": [
-        "./component-meta.d.ts"
+        "./mdc-imports"
       ],
       "#vue-router": [
         "./vue-router-stub"
@@ -143,10 +140,6 @@
     "../node_modules/@nuxtjs/mdc/dist/runtime",
     "../node_modules/@nuxt/content/runtime",
     "../node_modules/@nuxt/content/dist/runtime",
-    "../node_modules/nuxt-config-schema/runtime",
-    "../node_modules/nuxt-config-schema/dist/runtime",
-    "../node_modules/nuxt-component-meta/runtime",
-    "../node_modules/nuxt-component-meta/dist/runtime",
     "../node_modules/@nuxthq/studio/runtime",
     "../node_modules/@nuxthq/studio/dist/runtime",
     "../node_modules/@vueuse/nuxt/runtime",
@@ -166,8 +159,6 @@
     "../node_modules/@nuxtjs/color-mode/node_modules",
     "../node_modules/@nuxtjs/tailwindcss/node_modules",
     "../node_modules/@nuxtjs/mdc/node_modules",
-    "../node_modules/nuxt-config-schema/node_modules",
-    "../node_modules/nuxt-component-meta/node_modules",
     "../node_modules/nuxt-icon/runtime/server",
     "../node_modules/nuxt-icon/dist/runtime/server",
     "../node_modules/@nuxtjs/color-mode/runtime/server",
@@ -186,10 +177,6 @@
     "../node_modules/@nuxtjs/mdc/dist/runtime/server",
     "../node_modules/@nuxt/content/runtime/server",
     "../node_modules/@nuxt/content/dist/runtime/server",
-    "../node_modules/nuxt-config-schema/runtime/server",
-    "../node_modules/nuxt-config-schema/dist/runtime/server",
-    "../node_modules/nuxt-component-meta/runtime/server",
-    "../node_modules/nuxt-component-meta/dist/runtime/server",
     "../node_modules/@nuxthq/studio/runtime/server",
     "../node_modules/@nuxthq/studio/dist/runtime/server",
     "../node_modules/@vueuse/nuxt/runtime/server",
