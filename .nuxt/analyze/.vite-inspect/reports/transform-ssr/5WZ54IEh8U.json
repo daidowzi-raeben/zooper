@@ -1,0 +1,300 @@
+{
+  "resolvedId": "/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue?vue&type=style&index=0&scoped=eb2b8226&lang.css",
+  "transforms": [
+    {
+      "name": "vite:vue",
+      "result": "\n@keyframes typing {\n  from {\n    opacity: 0;\n    transform: translateY(10px);\n  }\n\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n\n.animate-typing {\n  animation: typing 1s ease-out forwards;\n}\n",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "sourcemaps": {
+        "version": 3,
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue"
+        ],
+        "names": [],
+        "mappings": ";AAkxBA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE;EAChB,CAAC,CAAC,CAAC,EAAE;IACH,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC;IACV,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;EAC7B;;EAEA,CAAC,EAAE;IACD,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC;IACV,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;EAC1B;AACF;;AAEA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE;EACd,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACxC",
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue",
+        "sourceRoot": "",
+        "sourcesContent": [
+          "<script setup>\n\nimport { apiPost, apiPoint, hostUrl } from '@/common/api'\nimport logo from '@/common/img/sunny_logo.png'\nimport { allergyMap } from '@/common/allergy'\nconst logout = () => {\n  sessionStorage.removeItem('idnt_code')\n  sessionStorage.removeItem('student')\n  sessionStorage.removeItem('t_idnt_code')\n  sessionStorage.removeItem('teacher')\n  window.location.href = '/login'\n}\n\nconst student = ref({});\nconst memberPoint = ref(0)\n\nconst storeItems = ref([])\nconst teacher = ref(null)\n\nconst dispot = ref(null)\nconst dispotTotal = ref(0)\n\nconst deposit = ref(null)\nconst isEndDeposit = ref(false)\n\nfunction isMatured(endDateStr) {\n  if (!endDateStr) return false\n  const today = new Date()\n  today.setHours(0, 0, 0, 0) // 오늘 00시 기준\n\n  const endDate = new Date(endDateStr)\n  endDate.setHours(0, 0, 0, 0)\n\n  return today >= endDate   // true면 만기일 지남\n}\n\n\nfunction formatDate(dateStr) {\n  if (!dateStr) return ''\n  const d = new Date(dateStr)\n  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`\n}\nconst isDepositApi = async () => {\n  const res = await apiPost('member.php', {\n    mode: 'deposit_status',\n    idnt_code: student.value?.idnt_code\n  })\n\n  if (res.result === 'SUCCESS') {\n    deposit.value = res.data\n\n    if (isMatured(deposit.value?.end_date)) {\n      isEndDeposit.value = true\n    } else {\n      isEndDeposit.value = false\n    }\n  }\n}\n\n\nconst fetchStoreItems = async () => {\n  const res = await apiPost('store.php', {\n    mode: 'storeList',\n    teacher: teacher,\n  })\n\n  if (res.result === 'SUCCESS') {\n    storeItems.value = res.data\n  }\n}\n\n\nconst maturityDate = ref(null)\n\nconst isDispotApi = async () => {\n  const res = await apiPost('teacher.php', {\n    mode: 'dispot',\n    teacher: teacher?.value,\n  })\n\n  if (res.result === 'SUCCESS') {\n    dispot.value = res.data\n\n    // ref 안의 값에서 꺼내야 함\n    const weeks = dispot.value?.deposit_cycle || 2  // 기본값 2주\n    const today = new Date()\n    const date = new Date(today)\n    date.setDate(today.getDate() + weeks * 7)\n\n    // YYYY-MM-DD 포맷\n    maturityDate.value = date.toISOString().split('T')[0]\n  }\n}\n\n\nonMounted(async () => {\n  student.value = JSON.parse(sessionStorage.getItem('student')) || {}\n  teacher.value = student.value?.teacher\n  memberPoint.value = await apiPoint()\n  fetchStoreItems()\n  await fetchMeals()\n  await isHope()\n  await isFriend()\n  await isDispotApi()\n  await isDepositApi()\n  await fetchPoints()\n})\n\nuseSeoMeta({\n  title: \"Jelly School-OS\",\n  description:\n    \"젤리에서 경제,화폐 경험을 누려보세요.\",\n});\n\nconst isMoney = ref(false)\n\nconst meals = ref([])\n\nconst fetchMeals = async () => {\n  const res = await apiPost('meal.php', {\n    idx: student.value?.teacher\n  })\n\n  if (res.result === 'SUCCESS' || res.result === 'CACHED') {\n    meals.value = res.data || []\n  }\n}\n\nconst points = ref([])\nconst page = ref(1)\nconst hasMore = ref(true)\nconst isLoading = ref(false)\n\nconst fetchPoints = async () => {\n  if (isLoading.value || !hasMore.value) return\n  isLoading.value = true\n  try {\n    const res = await apiPost('member.php', {\n      mode: 'pointList',\n      idnt_code: student.value?.idnt_code || sessionStorage.getItem('idnt_code'),\n      page: page.value\n    })\n\n    if (res.result === 'SUCCESS' && Array.isArray(res.data)) {\n      if (res.data.length < 10) {\n        hasMore.value = false\n      }\n      points.value = [...points.value, ...res.data]\n      page.value++\n    } else {\n      hasMore.value = false\n    }\n  } catch (e) {\n    console.error(e)\n    hasMore.value = false\n  } finally {\n    isLoading.value = false\n  }\n}\n\n\n\n// 문자열에서 알레르기 번호만 추출\nconst extractAllergyNames = (text) => {\n  const match = text.match(/\\(([\\d.,\\s]+)\\)/)\n  if (!match) return []\n\n  return match[1]\n    .split(/[.,\\s]+/)\n    .map(Number)\n    .filter(n => allergyMap[n])\n    .map(n => allergyMap[n])\n}\n\n\n\nconst isOpenHopeModal = ref(false);\nconst hopeToday = ref({ result: \"FAIL\" });\n\nconst isHope = async () => {\n  const res = await apiPost('member.php', {\n    mode: 'studentHope',\n    idnt_code: student.value?.idnt_code\n  })\n\n  hopeToday.value = res\n}\n\nconst isOpenFriendModal = ref(false);\nconst friendToday = ref({ result: \"FAIL\" });\nconst isFriend = async () => {\n  const res = await apiPost('member.php', {\n    mode: 'studentFriend',\n    idnt_code: student.value?.idnt_code\n  })\n\n  friendToday.value = res\n}\n\n\n\n\n\n\nconst onClickHope = async () => {\n  if (hopeToday.value?.result === 'SUCCESS') {\n    isOpenHopeModal.value = true\n    return;\n  }\n\n  if (memberPoint.value < 10) {\n    alert('금액이 부족합니다.')\n    return;\n  }\n\n  if (confirm(`10${dispot.value?.currency_name || '돌맹이'}로 오늘의 운세를 확인할까요?`)) {\n    const res = await apiPost('member.php', {\n      mode: 'studentHopeInsert',\n      idnt_code: sessionStorage.getItem('idnt_code'),\n      point: 10\n    })\n\n    if (res.result === 'SUCCESS') {\n      await isHope()\n      memberPoint.value = await apiPoint()\n      isOpenHopeModal.value = true\n    }\n  }\n}\n\n\nconst handleBankerToggle = async () => {\n    // This is teacher page logic\n}\n\nconst fireConfetti = async () => {\n  if (typeof window === 'undefined') return\n  \n  const script = document.createElement('script')\n  script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js'\n  script.onload = () => {\n    // Initial big burst\n    window.confetti({\n      particleCount: 150,\n      spread: 70,\n      origin: { y: 0.6 },\n      colors: ['#3b82f6', '#fbbf24', '#ffffff']\n    });\n\n    const end = Date.now() + (3 * 1000);\n    const colors = ['#3b82f6', '#fbbf24', '#ffffff'];\n\n    (function frame() {\n      window.confetti({\n        particleCount: 5,\n        angle: 60,\n        spread: 55,\n        origin: { x: 0 },\n        colors: colors\n      });\n      window.confetti({\n        particleCount: 5,\n        angle: 120,\n        spread: 55,\n        origin: { x: 1 },\n        colors: colors\n      });\n\n      if (Date.now() < end) {\n        requestAnimationFrame(frame);\n      }\n    }());\n  }\n  document.body.appendChild(script)\n}\n\nconst onClickFriend = async () => {\n  if (friendToday.value?.result === 'SUCCESS') {\n    isOpenFriendModal.value = true\n    if (friendToday.value.data.is_soulmate) fireConfetti()\n    return;\n  }\n\n  if (memberPoint.value < 10) {\n    alert('금액이 부족합니다.')\n    return;\n  }\n  if (confirm(`10${dispot.value?.currency_name || '돌멩이'}로 오늘의 친구를 확인할까요?`)) {\n\n    const res = await apiPost('member.php', {\n      mode: 'studentFriendInsert',\n      idnt_code: sessionStorage.getItem('idnt_code'),\n      point: 10\n    })\n\n    if (res.result === 'SUCCESS') {\n      await isFriend()\n      memberPoint.value = await apiPoint()\n      isOpenFriendModal.value = true\n      if (friendToday.value.data.is_soulmate) fireConfetti()\n    }\n\n  }\n}\n\n\n\nconst onClickEndDeposit = async () => {\n\n  if (confirm(\"적금을 만기해지하시겠습니까?\")) {\n\n    const res = await apiPost('member.php', {\n      mode: 'depositEnd',\n      idnt_code: sessionStorage.getItem('idnt_code'),\n    })\n\n    if (res.result === 'SUCCESS') {\n      memberPoint.value = await apiPoint()\n      await isDispotApi()\n      await isDepositApi()\n    }\n\n  } else {\n    // 취소 버튼 클릭 시 실행\n    console.log(\"삭제 취소\");\n  }\n}\n\n\n\nconst router = useRouter()\nconst amount = ref('')\nconst submitting = ref(false)\n\nfunction parseAmount(raw) {\n  const n = Number(String(raw ?? '').replace(/[^\\d]/g, ''))\n  return Number.isFinite(n) ? n : 0\n}\nasync function createSavings() {\n  const n = parseAmount(amount.value)\n  if (!n || n < 1) {\n    alert('적금 금액을 입력해 주세요.')\n    return\n  }\n  if (dispot.value?.deposit_min > n) {\n    alert(`${dispot.value?.deposit_min} ${dispot.value?.currency_name} ~ ${dispot.value?.deposit_max} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)\n    return;\n  }\n  if (dispot.value?.deposit_max < n) {\n    alert(`${dispot.value?.deposit_min} ${dispot.value?.currency_name} ~ ${dispot.value?.deposit_max} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)\n    return;\n  }\n\n  if (memberPoint.value < n) {\n    alert('금액이 부족합니다.')\n    return;\n  }\n\n  if (submitting.value) return;\n\n\n  const ok = confirm(\n    `적금 금액 ${n.toLocaleString()} ${dispot.value?.currency_name} 예치하기.\\n` +\n    `만기일 ${maturityDate.value} 전에는 출금할 수 없습니다. 진행할까요?`\n  )\n  if (!ok) return\n\n  try {\n    submitting.value = true\n    // TODO: 백엔드 연동 시 이 부분에서 API 호출\n    // await $fetch('/api/savings', { method:'POST', body: { amount: n, termDays: 14, rate: 5 } })\n\n    const res = await apiPost('member.php', {\n      mode: 'interest',\n      idnt_code: sessionStorage.getItem('idnt_code'),\n      amount: n,\n      teacher: teacher?.value,\n      amount_interest: dispotTotal?.value,\n      interest_rate: dispot.value?.deposit_interest,\n      deposit_name: \"적금통장\",\n      end_date: maturityDate.value\n    })\n\n    if (res.result === 'SUCCESS') {\n      // await isFriend()\n      // memberPoint.value = await apiPoint()\n      memberPoint.value = await apiPoint()\n      await isDispotApi()\n      await isDepositApi()\n    }\n\n\n  } finally {\n    submitting.value = false\n  }\n}\n\n\nwatch(amount, (val) => {\n  const n = Number(String(val).replace(/[^\\d]/g, '')) || 0\n  const rate = dispot.value?.deposit_interest || 0\n  // 원금 + 이자 (단순 % 계산)\n  dispotTotal.value = Math.floor(0 + (n * rate / 100))\n})\n</script>\n\n\n<template>\n  <div class=\"pb-12 space-y-10\">\n    <!-- 👑 프리미엄 스마트 지갑 (Header) -->\n    <div\n      class=\"relative bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-500 rounded-[40px] shadow-2xl shadow-blue-200 overflow-hidden transition-all hover:scale-[1.01]\">\n      <!-- 배경 장식 -->\n      <div class=\"absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl\"></div>\n      <div class=\"absolute -bottom-10 -left-10 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl\"></div>\n\n      <div class=\"relative z-10 p-8 flex flex-col items-center\">\n        <!-- 프로필 섹션 -->\n        <div class=\"mb-6 relative group\">\n          <div\n            class=\"absolute inset-0 bg-white/30 blur-2xl rounded-full scale-125 opacity-0 group-hover:opacity-100 transition-opacity\">\n          </div>\n          <img :src=\"dispot?.qr_bg ? (dispot.qr_bg.startsWith('http') ? dispot.qr_bg : hostUrl + dispot.qr_bg) : logo\"\n            alt=\"Class Logo\"\n            class=\"w-24 h-24 rounded-full object-cover border-4 border-white shadow-2xl bg-white p-1 relative z-10\">\n        </div>\n\n        <div class=\"text-center space-y-1 mb-8\">\n          <p class=\"text-white/60 text-[10px] font-black tracking-[0.3em] uppercase\">{{ dispot?.mb_school ||\n            'JellySchool' }} {{ dispot?.mb_grade }}-{{ dispot?.mb_class }}</p>\n          <h2 class=\"text-white text-3xl font-black tracking-tight\">{{ student?.student_name }}<span\n              class=\"text-blue-200 text-xl ml-1\">친구</span></h2>\n        </div>\n\n        <!-- 잔액 카드 -->\n        <div @click=\"isMoney = !isMoney\"\n          class=\"cursor-pointer group bg-white/10 backdrop-blur-xl rounded-[32px] p-8 w-full max-w-sm border border-white/20 shadow-inner flex flex-col items-center transition-all hover:bg-white/15 active:scale-95\">\n          <p class=\"text-white/60 text-[9px] font-bold uppercase tracking-[0.2em] mb-3\">내 {{ dispot?.currency_name ||\n            '지갑' }} 총 잔액</p>\n          <div v-if=\"isMoney\" class=\"flex items-baseline gap-2 transform transition-all\">\n            <span class=\"text-white text-5xl font-black tabular-nums\">{{ Number(memberPoint || 0).toLocaleString()\n            }}</span>\n            <span class=\"text-white/70 text-lg font-bold\">{{ dispot?.currency_name }}</span>\n          </div>\n          <div v-else class=\"flex items-center gap-3 py-2 opacity-80\">\n            <span class=\"i-heroicons-eye-solid w-6 h-6 text-white/50\" />\n            <span class=\"text-white text-xl font-black\">잔액 확인하기</span>\n          </div>\n        </div>\n      </div>\n\n      <!-- 로그아웃 (우상단) -->\n      <button @click=\"logout\"\n        class=\"absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white/50 hover:text-white transition-all shadow-lg backdrop-blur-md\">\n        <span class=\"i-heroicons-arrow-right-on-rectangle w-5 h-5\" />\n      </button>\n    </div>\n\n    <!-- 🏦 적금 센터 (Savings) -->\n    <div class=\"space-y-6\">\n      <!-- 적금 가입 안했을 때 -->\n      <section v-if=\"!deposit?.deposit_exists\" class=\"relative group\">\n        <div class=\"p-8 rounded-[40px] bg-white border border-gray-100 shadow-xl overflow-hidden\">\n          <div\n            class=\"absolute -right-10 -top-10 w-32 h-32 bg-emerald-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-700\">\n          </div>\n\n          <div class=\"relative z-10 space-y-6\">\n            <div class=\"flex justify-between items-start\">\n              <div class=\"space-y-1\">\n                <div\n                  class=\"inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-wider\">\n                  <span class=\"i-heroicons-sparkles-solid w-3 h-3\" />\n                  Lucky Savings\n                </div>\n                <h3 class=\"text-2xl font-black text-gray-800\">\n                  {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주약속적금 개설') }}</h3>\n                <p class=\"text-sm text-gray-400 font-medium\">만기에 <span class=\"text-orange-500 font-bold\">{{\n                  dispot?.deposit_interest || 0 }}%의 엄청난 이자</span>가 기다려요!</p>\n              </div>\n              <div class=\"w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500\">\n                <span class=\"i-heroicons-gift-solid w-7 h-7 animate-bounce\" />\n              </div>\n            </div>\n\n            <!-- 가입 입력 섹션 -->\n            <div class=\"flex flex-col sm:flex-row gap-4\">\n              <div class=\"flex-1 relative\">\n                <UInput v-model=\"amount\" placeholder=\"저금할 금액 입력\" size=\"xl\" type=\"number\"\n                  input-class=\"h-16 font-black text-xl pl-12 rounded-[24px] border-2 border-gray-50 focus:border-emerald-400 bg-gray-50/50\" />\n                <span\n                  class=\"absolute left-5 top-1/2 -translate-y-1/2 i-heroicons-banknotes-solid w-6 h-6 text-gray-300\" />\n              </div>\n              <UButton label=\"적금 가입하기\" size=\"xl\" color=\"emerald\"\n                class=\"px-10 rounded-[24px] h-16 font-black text-lg shadow-xl shadow-emerald-100 transition-all hover:-translate-y-1 active:scale-95\"\n                :loading=\"submitting\" @click=\"createSavings\" />\n            </div>\n\n            <div\n              class=\"flex items-center justify-between text-[11px] font-black text-gray-400 px-2 tracking-widest uppercase\">\n              <span class=\"flex items-center gap-1.5\"><span class=\"i-heroicons-information-circle w-4 h-4\" />최소 {{\n                Number(dispot?.deposit_min || 0).toLocaleString() }}원</span>\n              <span v-if=\"dispotTotal > 0\" class=\"text-emerald-500 flex items-center gap-1.5 animate-pulse\">\n                <span class=\"i-heroicons-check-badge w-4 h-4\" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}원\n              </span>\n            </div>\n          </div>\n        </div>\n      </section>\n\n      <!-- 적금 가입 중일 때 -->\n      <section v-else\n        class=\"relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600 p-8 rounded-[40px] text-white shadow-2xl shadow-emerald-100\">\n        <div class=\"absolute -right-20 -bottom-20 w-64 h-64 bg-white/10 rounded-full blur-3xl\"></div>\n\n        <div class=\"relative z-10\">\n          <div class=\"flex justify-between items-start mb-10\">\n            <div>\n              <h3 class=\"text-2xl font-black flex items-center gap-2\">\n                {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주 약속 적금') }}\n                <span\n                  class=\"text-[10px] bg-white/20 px-3 py-1 rounded-full font-black uppercase tracking-widest backdrop-blur-sm\">Active</span>\n              </h3>\n              <p class=\"text-sm text-white/70 font-medium\">목표를 위해 열심히 모으는 중! 대단해요 👍</p>\n            </div>\n            <div class=\"p-4 bg-white/20 rounded-2xl backdrop-blur-sm\">\n              <span class=\"i-heroicons-rocket-launch-solid w-7 h-7\" />\n            </div>\n          </div>\n\n          <div class=\"grid grid-cols-2 gap-8 bg-black/10 rounded-[32px] p-8 border border-white/10 shadow-inner\">\n            <div class=\"space-y-1\">\n              <p class=\"text-[10px] font-black uppercase opacity-60 tracking-[0.2em]\">모은 원금</p>\n              <p class=\"text-3xl font-black tabular-nums\">{{ Number(deposit?.amount || 0).toLocaleString() }}<span\n                  class=\"text-sm ml-1 opacity-70\">{{ dispot?.currency_name }}</span></p>\n            </div>\n            <div class=\"space-y-1 text-right border-l border-white/10 pl-8\">\n              <p class=\"text-[10px] font-black uppercase opacity-60 tracking-[0.2em]\">이자 혜택</p>\n              <p class=\"text-3xl font-black text-yellow-300 tabular-nums\">+{{ Number(deposit?.amount_interest ||\n                0).toLocaleString() }}<span class=\"text-sm ml-1 opacity-70\">{{ dispot?.currency_name }}</span></p>\n            </div>\n          </div>\n\n          <div class=\"mt-8 flex flex-col sm:flex-row justify-between items-center gap-6\">\n            <div class=\"text-xs font-bold text-white/70 space-y-1\">\n              <p class=\"flex items-center gap-2\"><span class=\"w-1.5 h-1.5 rounded-full bg-blue-300\"></span>{{\n                formatDate(deposit?.start_date) }} 가입됨</p>\n              <p class=\"flex items-center gap-2 text-white\"><span\n                  class=\"w-1.5 h-1.5 rounded-full bg-yellow-400\"></span>{{ formatDate(deposit?.end_date) }} 만기 선물 증정</p>\n            </div>\n            <UButton label=\"원금 + 이자 모두 받기\" :disabled=\"!isEndDeposit\" color=\"white\" size=\"xl\"\n              class=\"px-12 rounded-[24px] font-black text-emerald-600 shadow-2xl transition-transform hover:-translate-y-1 active:scale-95 disabled:opacity-40\"\n              @click=\"onClickEndDeposit()\" />\n          </div>\n        </div>\n      </section>\n    </div>\n\n    <!-- ⚡️ 빠른 메뉴 (Quick Menu) -->\n    <div class=\"grid grid-cols-2 gap-4\">\n      <router-link to=\"/income\"\n        class=\"group relative overflow-hidden bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm transition-all hover:shadow-2xl hover:-translate-y-2\">\n        <div\n          class=\"absolute -right-6 -bottom-6 w-24 h-24 bg-blue-50 rounded-full opacity-50 group-hover:scale-150 transition-transform\">\n        </div>\n        <div\n          class=\"w-14 h-14 bg-blue-100 rounded-3xl flex items-center justify-center text-blue-600 mb-6 group-hover:rotate-12 transition-transform\">\n          <span class=\"i-heroicons-plus-circle-solid w-8 h-8\" />\n        </div>\n        <p class=\"text-xl font-black text-gray-800\">{{ dispot?.currency_name || '지갑' }} 채우기</p>\n        <p class=\"text-xs font-bold text-gray-400 uppercase tracking-widest\">Income History</p>\n      </router-link>\n\n      <router-link to=\"/expense\"\n        class=\"group relative overflow-hidden bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm transition-all hover:shadow-2xl hover:-translate-y-2\">\n        <div\n          class=\"absolute -right-6 -bottom-6 w-24 h-24 bg-rose-50 rounded-full opacity-50 group-hover:scale-150 transition-transform\">\n        </div>\n        <div\n          class=\"w-14 h-14 bg-rose-100 rounded-3xl flex items-center justify-center text-rose-600 mb-6 group-hover:rotate-12 transition-transform\">\n          <span class=\"i-heroicons-minus-circle-solid w-8 h-8\" />\n        </div>\n        <p class=\"text-xl font-black text-gray-800\">{{ dispot?.currency_name || '지갑' }} 쓰기</p>\n        <p class=\"text-xs font-bold text-gray-400 uppercase tracking-widest\">Expense Plan</p>\n      </router-link>\n    </div>\n\n    <!-- 🍱 오늘의 소식 (Daily Highlights) -->\n    <section class=\"space-y-6\">\n      <div class=\"flex items-center gap-2 px-2\">\n        <span class=\"i-heroicons-sparkles-solid w-5 h-5 text-yellow-500 animate-pulse\" />\n        <h3 class=\"text-sm font-black text-gray-400 uppercase tracking-[0.3em]\">Today's Special News</h3>\n      </div>\n\n      <div class=\"grid grid-cols-1 md:grid-cols-3 gap-4\">\n        <!-- 식단표 -->\n        <div class=\"bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm space-y-4\">\n          <div class=\"flex justify-between items-center\">\n            <span class=\"text-xs font-black text-gray-400 uppercase tracking-widest\">Lunch Menu</span>\n            <span class=\"i-heroicons-cake w-5 h-5 text-orange-400\" />\n          </div>\n          <ul v-if=\"meals?.length\" class=\"space-y-2\">\n            <li v-for=\"(meal, index) in meals\" :key=\"index\" class=\"text-sm font-bold text-gray-700 flex flex-col\">\n              {{ meal }}\n              <span v-if=\"extractAllergyNames(meal).length\" class=\"text-[9px] text-red-400 mt-0.5 font-medium\">⚠️ 알레르기\n                주의: {{ extractAllergyNames(meal).join(', ') }}</span>\n            </li>\n          </ul>\n          <p v-else class=\"text-sm text-gray-300 font-bold py-4\">식단 정보가 없습니다.</p>\n        </div>\n\n        <!-- 단짝 친구 -->\n        <div @click=\"onClickFriend\"\n          :class=\"['p-6 rounded-[32px] border shadow-sm transition-all cursor-pointer flex flex-col justify-between h-full',\n            friendToday?.result === 'FAIL' ? 'bg-gray-50 border-gray-100 hover:bg-blue-50' : 'bg-blue-500 border-blue-400 text-white shadow-blue-100']\">\n          <div class=\"flex justify-between items-center\">\n            <span\n              :class=\"['text-[10px] font-black uppercase tracking-widest', friendToday?.result === 'FAIL' ? 'text-gray-400' : 'text-blue-200']\">Today's\n              Friend</span>\n            <span\n              :class=\"['i-heroicons-sparkles-solid w-5 h-5', friendToday?.result === 'FAIL' ? 'text-gray-200' : (friendToday?.data?.is_soulmate ? 'text-yellow-300 animate-pulse' : 'text-white animate-ping')]\" />\n          </div>\n          <div class=\"py-4\">\n            <p v-if=\"friendToday?.result === 'FAIL'\" class=\"text-base font-black text-gray-400\">오늘의 단짝을<br>확인해보세요!</p>\n            <div v-else class=\"space-y-1\">\n              <p class=\"text-xs font-bold opacity-80\">오늘 최고의 파트너는</p>\n              <p class=\"text-2xl font-black\">{{ friendToday?.data?.mb_name }}</p>\n            </div>\n          </div>\n          <div v-if=\"friendToday?.result === 'FAIL'\" class=\"text-xs font-bold text-blue-500 flex items-center gap-1\">탭하여\n            확인 <span class=\"i-heroicons-chevron-right w-3 h-3\" /></div>\n        </div>\n\n        <!-- 행운의 운세 -->\n        <div @click=\"onClickHope\"\n          :class=\"['p-6 rounded-[32px] border shadow-sm transition-all cursor-pointer flex flex-col justify-between h-full',\n            hopeToday?.result === 'FAIL' ? 'bg-gray-50 border-gray-100 hover:bg-purple-50' : 'bg-purple-600 border-purple-400 text-white shadow-purple-100']\">\n          <div class=\"flex justify-between items-center\">\n            <span\n              :class=\"['text-[10px] font-black uppercase tracking-widest', hopeToday?.result === 'FAIL' ? 'text-gray-400' : 'text-purple-200']\">Today's\n              Fortune</span>\n            <span\n              :class=\"['i-heroicons-moon-solid w-5 h-5', hopeToday?.result === 'FAIL' ? 'text-gray-200' : 'text-yellow-300 animate-pulse']\" />\n          </div>\n          <div class=\"py-4\">\n            <p v-if=\"hopeToday?.result === 'FAIL'\" class=\"text-base font-black text-gray-400\">오늘의 운세는<br>과연 어떨까요?</p>\n            <p v-else class=\"text-sm font-bold leading-relaxed line-clamp-3\">{{ hopeToday?.data?.result_text }}</p>\n          </div>\n          <div v-if=\"hopeToday?.result === 'FAIL'\" class=\"text-xs font-bold text-purple-500 flex items-center gap-1\">탭하여\n            확인 <span class=\"i-heroicons-chevron-right w-3 h-3\" /></div>\n        </div>\n      </div>\n    </section>\n\n    <!-- 📝 지갑 히스토리 (History) -->\n    <section>\n      <div class=\"flex items-center justify-between mb-4 px-3\">\n        <h3 class=\"text-xs font-black text-gray-400 flex items-center gap-2 uppercase tracking-[0.3em]\">\n          <span class=\"i-heroicons-list-bullet-solid w-5 h-5 text-blue-500\" />\n          Realtime History\n        </h3>\n      </div>\n\n      <div class=\"bg-white rounded-[40px] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50/50\">\n        <div v-if=\"points?.length > 0\">\n          <div v-for=\"item in points\" :key=\"item.idx\"\n            class=\"flex items-center justify-between p-8 hover:bg-gray-50/50 transition-all group\">\n            <div class=\"flex items-center gap-5\">\n              <div :class=\"['w-14 h-14 rounded-3xl flex items-center justify-center font-black transition-all group-hover:scale-110',\n                item.point_type === 'save' ? 'bg-blue-50 text-blue-600' : 'bg-rose-50 text-rose-600']\">\n                <span v-if=\"item.point_type === 'save'\" class=\"i-heroicons-plus-circle-solid w-8 h-8\" />\n                <span v-else class=\"i-heroicons-minus-circle-solid w-8 h-8\" />\n              </div>\n              <div>\n                <p class=\"text-base font-black text-gray-800 leading-tight\">{{ item.description }}</p>\n                <p class=\"text-[10px] text-gray-400 font-bold uppercase tracking-tight mt-1\">{{ item.c_datetime }}</p>\n              </div>\n            </div>\n            <div class=\"text-right\">\n              <p\n                :class=\"['text-xl font-black tabular-nums', item.point_type === 'save' ? 'text-blue-600' : 'text-rose-600']\">\n                {{ item.point_type === 'save' ? '+' : '-' }}{{ Number(item.point).toLocaleString() }}\n              </p>\n              <p class=\"text-[9px] text-gray-300 font-black uppercase tracking-widest mt-0.5\">{{ item.point_type ===\n                'save' ? 'Received' : 'Paid Out' }}</p>\n            </div>\n          </div>\n\n          <div v-if=\"hasMore\" class=\"p-10 text-center bg-gray-50/20\">\n            <UButton label=\"과거 활동 내역 더 불러오기\" color=\"gray\" variant=\"ghost\" icon=\"i-heroicons-chevron-down\"\n              class=\"rounded-[24px] px-12 h-14 font-black transition-all hover:bg-white border border-gray-100\"\n              @click=\"fetchPoints\" :loading=\"isLoading\" />\n          </div>\n        </div>\n        <div v-else class=\"py-32 text-center\">\n          <div\n            class=\"w-24 h-24 bg-gray-50 rounded-[40px] flex items-center justify-center mx-auto mb-6 border border-dashed border-gray-200 shadow-inner\">\n            <span class=\"i-heroicons-clipboard-document-check-solid w-12 h-12 text-gray-200\" />\n          </div>\n          <p class=\"text-base font-black text-gray-300\">내역이 깨끗합니다!</p>\n        </div>\n      </div>\n    </section>\n\n    <!-- ✨ 오늘의 운세 프리미엄 모달 -->\n    <UModal v-model=\"isOpenHopeModal\"\n      :ui=\"{ width: 'max-w-md', rounded: 'rounded-[40px]', padding: 'p-0', background: 'bg-transparent' }\">\n      <div\n        class=\"relative overflow-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-black p-8 text-center min-h-[400px] flex flex-col justify-center border border-white/10 shadow-2xl\">\n        <!-- 배경 우주 애니메이션 효과 (단순) -->\n        <div\n          class=\"absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,0,255,0.15),transparent)] animate-pulse\">\n        </div>\n\n        <div class=\"relative z-10 space-y-8\">\n          <div class=\"flex flex-col items-center\">\n            <div\n              class=\"w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-4 backdrop-blur-md border border-white/20 shadow-xl animate-bounce\">\n              <span class=\"i-heroicons-moon-solid w-12 h-12 text-yellow-300\" />\n            </div>\n            <p class=\"text-xs font-black text-purple-300 uppercase tracking-[0.4em] mb-2\">Today's Prophecy</p>\n            <h3 class=\"text-white text-2xl font-black\">오늘의 운세가 도달했습니다</h3>\n          </div>\n\n          <div class=\"bg-white/5 backdrop-blur-lg rounded-[32px] p-8 border border-white/10 shadow-inner\">\n            <p class=\"text-lg font-bold text-white leading-relaxed animate-typing overflow-hidden whitespace-normal\">\n              {{ hopeToday?.data?.result_text }}\n            </p>\n          </div>\n\n          <UButton label=\"확인했습니다\" size=\"xl\" color=\"white\" variant=\"solid\"\n            class=\"w-full rounded-[24px] h-14 font-black text-indigo-900 shadow-xl shadow-purple-900/50 hover:bg-gray-100 transition-all active:scale-95\"\n            @click=\"isOpenHopeModal = false\" />\n        </div>\n      </div>\n    </UModal>\n    <!-- 🌈 오늘의 친구 모달 (Friend Modal) -->\n    <UModal v-model=\"isOpenFriendModal\">\n      <div\n        class=\"relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-800 p-10 rounded-[40px] shadow-2xl\">\n        <div class=\"absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse\"></div>\n        <div class=\"absolute -left-20 -bottom-20 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl\"></div>\n\n        <div class=\"relative z-10 space-y-8 text-center pt-10\">\n          <div class=\"relative inline-block mb-4\">\n            <div v-if=\"friendToday?.data?.is_soulmate\" class=\"absolute inset-0 bg-pink-500/20 blur-3xl animate-pulse rounded-full\"></div>\n            <div\n              class=\"w-32 h-32 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl mx-auto animate-bounce overflow-hidden relative\">\n              <Icon name=\"solar:users-group-rounded-bold-duotone\" class=\"w-16 h-16 text-white\" />\n            </div>\n            <div\n              class=\"absolute -top-2 -right-2 bg-yellow-400 p-2 rounded-full shadow-lg border-2 border-white animate-pulse\">\n              <span class=\"i-heroicons-sparkles-solid w-5 h-5 text-white\" />\n            </div>\n          </div>\n\n          <div class=\"space-y-2\">\n            <p class=\"text-xs font-black text-blue-200 uppercase tracking-[0.4em]\">\n              {{ friendToday?.data?.is_soulmate ? 'Legendary Partners' : 'The Chosen Partner' }}\n            </p>\n            <div v-if=\"friendToday?.data?.is_soulmate\" class=\"inline-flex items-center gap-2 bg-blue-500/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md mb-2\">\n                 <span class=\"i-heroicons-hand-thumb-up-solid w-3 h-3 text-blue-300\" />\n                 서로 통했다! 찐친 인증\n            </div>\n            <h3 class=\"text-white text-3xl font-black\">\n              {{ friendToday?.data?.is_soulmate ? '와! 서로가 서로를 선택했어요!' : '오늘의 최고 단짝은?' }}\n            </h3>\n          </div>\n\n          <div class=\"bg-white/10 backdrop-blur-xl rounded-[32px] p-8 border border-white/10 shadow-inner group\">\n            <h2 class=\"text-5xl font-black text-white tracking-widest animate-typing\">\n              {{ friendToday?.data?.mb_name }}\n            </h2>\n            <p class=\"text-blue-100 text-sm mt-4 font-bold opacity-60\">오늘은 이 친구와 함께하면 <br>더 즐거운 일이 생길 거예요! ✨</p>\n          </div>\n\n          <!-- <UButton label=\"함께 모험 떠나기\" size=\"xl\" color=\"white\" variant=\"solid\"\n            class=\"w-full rounded-[24px] h-16 font-black text-blue-900 shadow-xl shadow-indigo-900/50 hover:bg-white transition-all active:scale-95\"\n            @click=\"isOpenFriendModal = false\" /> -->\n        </div>\n      </div>\n    </UModal>\n  </div>\n</template>\n\n<style scoped>\n@keyframes typing {\n  from {\n    opacity: 0;\n    transform: translateY(10px);\n  }\n\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n\n.animate-typing {\n  animation: typing 1s ease-out forwards;\n}\n</style>"
+        ]
+      }
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:layer-aliasing",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:server-devonly:transform",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "order": "pre"
+    },
+    {
+      "name": "content-slot",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "order": "pre"
+    },
+    {
+      "name": "nuxt:client-fallback-auto-id",
+      "start": 1774365218384,
+      "end": 1774365218384,
+      "order": "pre"
+    },
+    {
+      "name": "vite:css",
+      "result": "@keyframes typing{0%{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.animate-typing{animation:typing 1s ease-out forwards}",
+      "start": 1774365218384,
+      "end": 1774365218400,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue",
+        "mappings": "AACA,kBACE,GACE,SAAU,CACV,0BACF,CAEA,GACE,SAAU,CACV,uBACF,CACF,CAEA,gBACE,qCACF",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue"
+        ],
+        "sourcesContent": [
+          "\n@keyframes typing {\n  from {\n    opacity: 0;\n    transform: translateY(10px);\n  }\n\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n\n.animate-typing {\n  animation: typing 1s ease-out forwards;\n}\n"
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:esbuild",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:json",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:vue",
+      "result": "@keyframes typing-eb2b8226{0%{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.animate-typing[data-v-eb2b8226]{animation:typing-eb2b8226 1s ease-out forwards}",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal",
+      "sourcemaps": {
+        "file": "/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue",
+        "mappings": "AAAA,2BAAkB,GAAG,SAAS,CAAC,0BAA0B,CAAC,GAAG,SAAS,CAAC,uBAAuB,CAAC,CAAC,iCAAgB,8CAAqC",
+        "names": [],
+        "sources": [
+          "/Users/jang-yeong-ug/Documents/zooper/components/Home/Intro.vue"
+        ],
+        "sourcesContent": [
+          null
+        ],
+        "version": 3
+      }
+    },
+    {
+      "name": "vite:vue-jsx",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:remove-plugin-metadata",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:components:imports",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "replace",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "ssr-styles",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:define",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:css-post",
+      "result": "",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal",
+      "sourcemaps": {
+        "mappings": ""
+      }
+    },
+    {
+      "name": "vite:build-html",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:worker-import-meta-url",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:asset-import-meta-url",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "commonjs",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:dynamic-import-vars",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-glob",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:composable-keys",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:imports-transform",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "unctx:transform",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:pages-macros-transform",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-template",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:components-loader",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "nuxt:tree-shake-composables:transform",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "post"
+    },
+    {
+      "name": "vite:build-import-analysis",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    },
+    {
+      "name": "vite:reporter",
+      "start": 1774365218400,
+      "end": 1774365218400,
+      "order": "normal"
+    }
+  ]
+}

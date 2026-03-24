@@ -1,7 +1,7 @@
 // /common/api.js
 import axios from 'axios'
 
-export const hostUrl = 'http://localhost:3095/jelly/'
+export const hostUrl = import.meta.env.DEV ? 'http://localhost:3095/jelly/' : 'https://api.school-os.net/jelly/'
 const api = axios.create({
     baseURL: hostUrl,
 

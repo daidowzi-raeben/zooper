@@ -94,18 +94,16 @@ const isDispotApi = async () => {
 
 
 onMounted(async () => {
-  if (sessionStorage.getItem('student')) {
-    student.value = JSON.parse(sessionStorage.getItem('student'))
-  }
+  student.value = JSON.parse(sessionStorage.getItem('student')) || {}
+  teacher.value = student.value?.teacher
   memberPoint.value = await apiPoint()
-  teacher.value = JSON.parse(sessionStorage.getItem('student'))?.teacher
   fetchStoreItems()
   await fetchMeals()
   await isHope()
   await isFriend()
   await isDispotApi()
   await isDepositApi()
-
+  await fetchPoints()
 })
 
 useSeoMeta({
@@ -124,7 +122,39 @@ const fetchMeals = async () => {
   })
 
   if (res.result === 'SUCCESS' || res.result === 'CACHED') {
-    meals.value = res.data
+    meals.value = res.data || []
+  }
+}
+
+const points = ref([])
+const page = ref(1)
+const hasMore = ref(true)
+const isLoading = ref(false)
+
+const fetchPoints = async () => {
+  if (isLoading.value || !hasMore.value) return
+  isLoading.value = true
+  try {
+    const res = await apiPost('member.php', {
+      mode: 'pointList',
+      idnt_code: student.value?.idnt_code || sessionStorage.getItem('idnt_code'),
+      page: page.value
+    })
+
+    if (res.result === 'SUCCESS' && Array.isArray(res.data)) {
+      if (res.data.length < 10) {
+        hasMore.value = false
+      }
+      points.value = [...points.value, ...res.data]
+      page.value++
+    } else {
+      hasMore.value = false
+    }
+  } catch (e) {
+    console.error(e)
+    hasMore.value = false
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -144,7 +174,9 @@ const extractAllergyNames = (text) => {
 
 
 
+const isOpenHopeModal = ref(false);
 const hopeToday = ref({ result: "FAIL" });
+
 const isHope = async () => {
   const res = await apiPost('member.php', {
     mode: 'studentHope',
@@ -154,6 +186,7 @@ const isHope = async () => {
   hopeToday.value = res
 }
 
+const isOpenFriendModal = ref(false);
 const friendToday = ref({ result: "FAIL" });
 const isFriend = async () => {
   const res = await apiPost('member.php', {
@@ -170,12 +203,17 @@ const isFriend = async () => {
 
 
 const onClickHope = async () => {
+  if (hopeToday.value?.result === 'SUCCESS') {
+    isOpenHopeModal.value = true
+    return;
+  }
+
   if (memberPoint.value < 10) {
     alert('금액이 부족합니다.')
     return;
   }
-  if (confirm("10돌맹이로 오늘의 운세를 확인할까요?")) {
 
+  if (confirm(`10${dispot.value?.currency_name || '돌맹이'}로 오늘의 운세를 확인할까요?`)) {
     const res = await apiPost('member.php', {
       mode: 'studentHopeInsert',
       idnt_code: sessionStorage.getItem('idnt_code'),
@@ -185,21 +223,69 @@ const onClickHope = async () => {
     if (res.result === 'SUCCESS') {
       await isHope()
       memberPoint.value = await apiPoint()
+      isOpenHopeModal.value = true
     }
-
-  } else {
-    // 취소 버튼 클릭 시 실행
-    console.log("삭제 취소");
   }
 }
 
 
+const handleBankerToggle = async () => {
+    // This is teacher page logic
+}
+
+const fireConfetti = async () => {
+  if (typeof window === 'undefined') return
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js'
+  script.onload = () => {
+    // Initial big burst
+    window.confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#3b82f6', '#fbbf24', '#ffffff']
+    });
+
+    const end = Date.now() + (3 * 1000);
+    const colors = ['#3b82f6', '#fbbf24', '#ffffff'];
+
+    (function frame() {
+      window.confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors
+      });
+      window.confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
+  }
+  document.body.appendChild(script)
+}
+
 const onClickFriend = async () => {
+  if (friendToday.value?.result === 'SUCCESS') {
+    isOpenFriendModal.value = true
+    if (friendToday.value.data.is_soulmate) fireConfetti()
+    return;
+  }
+
   if (memberPoint.value < 10) {
     alert('금액이 부족합니다.')
     return;
   }
-  if (confirm("10돌맹이로 오늘의 친구를 확인할까요?")) {
+  if (confirm(`10${dispot.value?.currency_name || '돌멩이'}로 오늘의 친구를 확인할까요?`)) {
 
     const res = await apiPost('member.php', {
       mode: 'studentFriendInsert',
@@ -210,11 +296,10 @@ const onClickFriend = async () => {
     if (res.result === 'SUCCESS') {
       await isFriend()
       memberPoint.value = await apiPoint()
+      isOpenFriendModal.value = true
+      if (friendToday.value.data.is_soulmate) fireConfetti()
     }
 
-  } else {
-    // 취소 버튼 클릭 시 실행
-    console.log("삭제 취소");
   }
 }
 
@@ -321,208 +406,397 @@ watch(amount, (val) => {
 
 
 <template>
-  <div>
-    <div class="text-center">
-      <img :src="dispot?.qr_bg ? (dispot.qr_bg.startsWith('http') ? dispot.qr_bg : hostUrl + dispot.qr_bg) : logo" alt="Logo" class="w-[150px] absolute -mt-[61px] left-1/2 -ml-[75px] rounded-xl object-cover shadow-sm bg-white p-1">
+  <div class="pb-12 space-y-10">
+    <!-- 👑 프리미엄 스마트 지갑 (Header) -->
+    <div
+      class="relative bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-500 rounded-[40px] shadow-2xl shadow-blue-200 overflow-hidden transition-all hover:scale-[1.01]">
+      <!-- 배경 장식 -->
+      <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl"></div>
+
+      <div class="relative z-10 p-8 flex flex-col items-center">
+        <!-- 프로필 섹션 -->
+        <div class="mb-6 relative group">
+          <div
+            class="absolute inset-0 bg-white/30 blur-2xl rounded-full scale-125 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <img :src="dispot?.qr_bg ? (dispot.qr_bg.startsWith('http') ? dispot.qr_bg : hostUrl + dispot.qr_bg) : logo"
+            alt="Class Logo"
+            class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-2xl bg-white p-1 relative z-10">
+        </div>
+
+        <div class="text-center space-y-1 mb-8">
+          <p class="text-white/60 text-[10px] font-black tracking-[0.3em] uppercase">{{ dispot?.mb_school ||
+            'JellySchool' }} {{ dispot?.mb_grade }}-{{ dispot?.mb_class }}</p>
+          <h2 class="text-white text-3xl font-black tracking-tight">{{ student?.student_name }}<span
+              class="text-blue-200 text-xl ml-1">친구</span></h2>
+        </div>
+
+        <!-- 잔액 카드 -->
+        <div @click="isMoney = !isMoney"
+          class="cursor-pointer group bg-white/10 backdrop-blur-xl rounded-[32px] p-8 w-full max-w-sm border border-white/20 shadow-inner flex flex-col items-center transition-all hover:bg-white/15 active:scale-95">
+          <p class="text-white/60 text-[9px] font-bold uppercase tracking-[0.2em] mb-3">내 {{ dispot?.currency_name ||
+            '지갑' }} 총 잔액</p>
+          <div v-if="isMoney" class="flex items-baseline gap-2 transform transition-all">
+            <span class="text-white text-5xl font-black tabular-nums">{{ Number(memberPoint || 0).toLocaleString()
+            }}</span>
+            <span class="text-white/70 text-lg font-bold">{{ dispot?.currency_name }}</span>
+          </div>
+          <div v-else class="flex items-center gap-3 py-2 opacity-80">
+            <span class="i-heroicons-eye-solid w-6 h-6 text-white/50" />
+            <span class="text-white text-xl font-black">잔액 확인하기</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 로그아웃 (우상단) -->
+      <button @click="logout"
+        class="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white/50 hover:text-white transition-all shadow-lg backdrop-blur-md">
+        <span class="i-heroicons-arrow-right-on-rectangle w-5 h-5" />
+      </button>
     </div>
-    <div class="space-y-4">
-      <!-- 환영 메시지 -->
-      <div class="flex justify-between items-center">
-        <p class="text-lg font-semibold text-gray-700">{{ student?.student_name }}친구, 환영합니다 👋</p>
-        <button
-          class="flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition"
-          @click="logout">
-          <span class="i-heroicons-arrow-right-on-rectangle w-4 h-4" />
-          로그아웃
-        </button>
-      </div>
 
-      <!-- 내 잔액 -->
-      <div
-        class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center">
-        <div class="flex flex-col justify-center">
-          <p class="text-sm opacity-80">내 잔액</p>
-          <p class="text-2xl font-bold">
-            <span v-if="isMoney" @click="isMoney = false">
-              💰 {{ Number(memberPoint || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">{{
-                dispot?.currency_name }}</span>
-            </span>
-            <span v-if="!isMoney" @click="isMoney = true">
-              나의 잔액 확인하기
-            </span>
-          </p>
-        </div>
-        <UButton label="이체하기" color="white" class="text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100"
-          @click="$router.push('/transfer')" />
-      </div>
-
-      <!-- 단기 적금 카드 (만들기) -->
-      <div v-if="!deposit?.amount_interest"
-        class="relative overflow-hidden col-span-2 rounded-2xl shadow-lg p-5 bg-white border border-purple-100 flex flex-col md:flex-row md:justify-between md:items-center gap-4 group transition-all duration-300 hover:shadow-xl">
-        <!-- 배경 데코레이션 -->
-        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
-        <div class="absolute -left-5 -top-5 w-20 h-20 bg-pink-50 rounded-full opacity-30"></div>
-
-        <!-- 좌측: 레이블 및 설명 -->
-        <div class="relative z-10 flex flex-col justify-center">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="px-2 py-0.5 bg-purple-100 text-purple-600 text-[10px] font-bold rounded-full uppercase tracking-wider">Timed Deposit</span>
-            <p class="text-xs font-semibold text-purple-400">연 {{ dispot?.deposit_interest }}% 고금리</p>
+    <!-- 🏦 적금 센터 (Savings) -->
+    <div class="space-y-6">
+      <!-- 적금 가입 안했을 때 -->
+      <section v-if="!deposit?.deposit_exists" class="relative group">
+        <div class="p-8 rounded-[40px] bg-white border border-gray-100 shadow-xl overflow-hidden">
+          <div
+            class="absolute -right-10 -top-10 w-32 h-32 bg-emerald-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-700">
           </div>
-          <p class="text-2xl font-extrabold text-gray-800 tracking-tight">
-            {{ dispot?.deposit_cycle }}주 적금통장 <span class="text-purple-600">만들기</span>
-          </p>
-          <div class="flex items-center gap-3 mt-2 text-[11px] text-gray-500 font-medium">
-            <span class="flex items-center gap-1">
-              <span class="i-heroicons-calendar w-3 h-3 text-purple-400" />
-              {{ maturityDate }} 만기
-            </span>
-            <span class="flex items-center gap-1">
-              <span class="i-heroicons-exclamation-circle w-3 h-3 text-red-400" />
-              중도해지 불가
-            </span>
-            <span class="flex items-center gap-1">
-              <span class="i-heroicons-banknotes w-3 h-3 text-green-400" />
-              최소 {{ Number(dispot?.deposit_min || 0).toLocaleString() }} {{ dispot?.currency_name }}
-            </span>
-          </div>
-        </div>
 
-        <!-- 우측: 입력 및 버튼 -->
-        <div class="relative z-10 flex flex-col items-end gap-2 w-full md:w-auto">
-          <div class="flex items-center gap-2 w-full md:w-auto">
-            <div class="relative flex-1 md:w-48">
-              <UInput v-model="amount" type="tel" inputmode="numeric" placeholder="적금할 금액"
-                variant="none"
-                class="bg-gray-50 hover:bg-gray-100 focus-within:bg-white text-gray-900 rounded-xl transition-all border border-gray-200 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
-                @keyup.enter="createSavings" />
+          <div class="relative z-10 space-y-6">
+            <div class="flex justify-between items-start">
+              <div class="space-y-1">
+                <div
+                  class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-wider">
+                  <span class="i-heroicons-sparkles-solid w-3 h-3" />
+                  Lucky Savings
+                </div>
+                <h3 class="text-2xl font-black text-gray-800">
+                  {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주약속적금 개설') }}</h3>
+                <p class="text-sm text-gray-400 font-medium">만기에 <span class="text-orange-500 font-bold">{{
+                  dispot?.deposit_interest || 0 }}%의 엄청난 이자</span>가 기다려요!</p>
+              </div>
+              <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500">
+                <span class="i-heroicons-gift-solid w-7 h-7 animate-bounce" />
+              </div>
             </div>
-            <UButton label="만들기" 
-              class="rounded-xl px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-md shadow-purple-200 transition-all hover:-translate-y-0.5 active:translate-y-0"
-              :loading="submitting" 
-              :disabled="submitting"
-              @click="createSavings" />
+
+            <!-- 가입 입력 섹션 -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <div class="flex-1 relative">
+                <UInput v-model="amount" placeholder="저금할 금액 입력" size="xl" type="number"
+                  input-class="h-16 font-black text-xl pl-12 rounded-[24px] border-2 border-gray-50 focus:border-emerald-400 bg-gray-50/50" />
+                <span
+                  class="absolute left-5 top-1/2 -translate-y-1/2 i-heroicons-banknotes-solid w-6 h-6 text-gray-300" />
+              </div>
+              <UButton label="적금 가입하기" size="xl" color="emerald"
+                class="px-10 rounded-[24px] h-16 font-black text-lg shadow-xl shadow-emerald-100 transition-all hover:-translate-y-1 active:scale-95"
+                :loading="submitting" @click="createSavings" />
+            </div>
+
+            <div
+              class="flex items-center justify-between text-[11px] font-black text-gray-400 px-2 tracking-widest uppercase">
+              <span class="flex items-center gap-1.5"><span class="i-heroicons-information-circle w-4 h-4" />최소 {{
+                Number(dispot?.deposit_min || 0).toLocaleString() }}원</span>
+              <span v-if="dispotTotal > 0" class="text-emerald-500 flex items-center gap-1.5 animate-pulse">
+                <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}원
+              </span>
+            </div>
           </div>
-          <p v-if="dispotTotal > 0" class="text-xs font-bold text-purple-500 animate-pulse">
-            ✨ 만기 시 예상 이자: {{ Number(dispotTotal).toLocaleString() }} {{ dispot?.currency_name }}
-          </p>
         </div>
-      </div>
+      </section>
 
+      <!-- 적금 가입 중일 때 -->
+      <section v-else
+        class="relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600 p-8 rounded-[40px] text-white shadow-2xl shadow-emerald-100">
+        <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
 
-      <div
-        class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white flex justify-between items-center">
-        <!-- 적금 있음 -->
-        <div v-if="deposit?.deposit_exists">
-          <p class="text-sm opacity-80">내 적금통장</p>
-          <p class="text-xl font-bold">
-            {{ Number(deposit?.amount).toLocaleString() }}<span class="text-sm font-normal">(원금)</span> + {{
-              Number(deposit?.amount_interest).toLocaleString()
-            }}<span class="text-sm font-normal">(이자)</span>
-            = {{ Number(deposit?.amount + deposit?.amount_interest).toLocaleString() }}
-            <span class="text-sm font-normal">{{ dispot?.currency_name }}</span>
-          </p>
-          <p class="text-sm mt-1">만기일 : {{ formatDate(deposit?.end_date) }}</p>
-        </div>
-
-        <!-- 적금 없음 -->
-        <div v-else>
-          <p class="text-sm opacity-80">내 적금통장</p>
-          <p class="text-lg font-bold">아직 개설된 적금이 없습니다</p>
-        </div>
-
-        <!-- 버튼 -->
-
-        <UButton label="원금+이자 받기" :disabled="!isEndDeposit" color="secondary"
-          class="rounded-xl bg-white text-purple-600" @click="onClickEndDeposit()" />
-      </div>
-
-      <!-- 버튼 8개 -->
-      <div class="grid grid-cols-2 gap-4">
-        <router-link to="/income">
-          <div
-            class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-pink-400 to-red-400 text-white text-center text-lg font-bold cursor-pointer">
-            💰 입금
+        <div class="relative z-10">
+          <div class="flex justify-between items-start mb-10">
+            <div>
+              <h3 class="text-2xl font-black flex items-center gap-2">
+                {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주 약속 적금') }}
+                <span
+                  class="text-[10px] bg-white/20 px-3 py-1 rounded-full font-black uppercase tracking-widest backdrop-blur-sm">Active</span>
+              </h3>
+              <p class="text-sm text-white/70 font-medium">목표를 위해 열심히 모으는 중! 대단해요 👍</p>
+            </div>
+            <div class="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <span class="i-heroicons-rocket-launch-solid w-7 h-7" />
+            </div>
           </div>
-        </router-link>
-        <router-link to="/expense">
-          <div
-            class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-300 to-orange-400 text-white text-center text-lg font-bold cursor-pointer">
-            💸 출금
+
+          <div class="grid grid-cols-2 gap-8 bg-black/10 rounded-[32px] p-8 border border-white/10 shadow-inner">
+            <div class="space-y-1">
+              <p class="text-[10px] font-black uppercase opacity-60 tracking-[0.2em]">모은 원금</p>
+              <p class="text-3xl font-black tabular-nums">{{ Number(deposit?.amount || 0).toLocaleString() }}<span
+                  class="text-sm ml-1 opacity-70">{{ dispot?.currency_name }}</span></p>
+            </div>
+            <div class="space-y-1 text-right border-l border-white/10 pl-8">
+              <p class="text-[10px] font-black uppercase opacity-60 tracking-[0.2em]">이자 혜택</p>
+              <p class="text-3xl font-black text-yellow-300 tabular-nums">+{{ Number(deposit?.amount_interest ||
+                0).toLocaleString() }}<span class="text-sm ml-1 opacity-70">{{ dispot?.currency_name }}</span></p>
+            </div>
           </div>
-        </router-link>
-        <!-- <router-link to="/tax">
-        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
-          💼 세금
+
+          <div class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="text-xs font-bold text-white/70 space-y-1">
+              <p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-300"></span>{{
+                formatDate(deposit?.start_date) }} 가입됨</p>
+              <p class="flex items-center gap-2 text-white"><span
+                  class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>{{ formatDate(deposit?.end_date) }} 만기 선물 증정</p>
+            </div>
+            <UButton label="원금 + 이자 모두 받기" :disabled="!isEndDeposit" color="white" size="xl"
+              class="px-12 rounded-[24px] font-black text-emerald-600 shadow-2xl transition-transform hover:-translate-y-1 active:scale-95 disabled:opacity-40"
+              @click="onClickEndDeposit()" />
+          </div>
         </div>
+      </section>
+    </div>
+
+    <!-- ⚡️ 빠른 메뉴 (Quick Menu) -->
+    <div class="grid grid-cols-2 gap-4">
+      <router-link to="/income"
+        class="group relative overflow-hidden bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm transition-all hover:shadow-2xl hover:-translate-y-2">
+        <div
+          class="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-50 rounded-full opacity-50 group-hover:scale-150 transition-transform">
+        </div>
+        <div
+          class="w-14 h-14 bg-blue-100 rounded-3xl flex items-center justify-center text-blue-600 mb-6 group-hover:rotate-12 transition-transform">
+          <span class="i-heroicons-plus-circle-solid w-8 h-8" />
+        </div>
+        <p class="text-xl font-black text-gray-800">{{ dispot?.currency_name || '지갑' }} 채우기</p>
+        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Income History</p>
       </router-link>
-      <router-link to="/penalty">
-        <div class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg font-bold cursor-pointer">
-          ⚠️ 벌금
+
+      <router-link to="/expense"
+        class="group relative overflow-hidden bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm transition-all hover:shadow-2xl hover:-translate-y-2">
+        <div
+          class="absolute -right-6 -bottom-6 w-24 h-24 bg-rose-50 rounded-full opacity-50 group-hover:scale-150 transition-transform">
         </div>
-      </router-link> -->
-
-
-      </div>
+        <div
+          class="w-14 h-14 bg-rose-100 rounded-3xl flex items-center justify-center text-rose-600 mb-6 group-hover:rotate-12 transition-transform">
+          <span class="i-heroicons-minus-circle-solid w-8 h-8" />
+        </div>
+        <p class="text-xl font-black text-gray-800">{{ dispot?.currency_name || '지갑' }} 쓰기</p>
+        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Expense Plan</p>
+      </router-link>
     </div>
 
-    <!-- 오늘의 급식 -->
-    <div class="mt-8 rounded-2xl shadow-md p-4 bg-white border">
-      <p class="text-base font-semibold text-gray-800 mb-2">🍱 오늘의 급식</p>
-      <ul class="list-disc list-inside text-gray-700 space-y-1">
-        <li v-for="(meal, index) in meals" :key="index">
-          <span>{{ meal }}</span>
-          <div v-if="extractAllergyNames(meal).length" class="text-xs text-gray-500 ml-4 mt-1">
-            ⚠️ 알레르기 유발 식품: {{ extractAllergyNames(meal).join(', ') }}
+    <!-- 🍱 오늘의 소식 (Daily Highlights) -->
+    <section class="space-y-6">
+      <div class="flex items-center gap-2 px-2">
+        <span class="i-heroicons-sparkles-solid w-5 h-5 text-yellow-500 animate-pulse" />
+        <h3 class="text-sm font-black text-gray-400 uppercase tracking-[0.3em]">Today's Special News</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 식단표 -->
+        <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-black text-gray-400 uppercase tracking-widest">Lunch Menu</span>
+            <span class="i-heroicons-cake w-5 h-5 text-orange-400" />
           </div>
-        </li>
-      </ul>
-    </div>
+          <ul v-if="meals?.length" class="space-y-2">
+            <li v-for="(meal, index) in meals" :key="index" class="text-sm font-bold text-gray-700 flex flex-col">
+              {{ meal }}
+              <span v-if="extractAllergyNames(meal).length" class="text-[9px] text-red-400 mt-0.5 font-medium">⚠️ 알레르기
+                주의: {{ extractAllergyNames(meal).join(', ') }}</span>
+            </li>
+          </ul>
+          <p v-else class="text-sm text-gray-300 font-bold py-4">식단 정보가 없습니다.</p>
+        </div>
 
-    <div class="mt-8 rounded-2xl shadow-md  border">
-      <div v-if="friendToday?.result === 'FAIL'" @click="onClickFriend" class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg
-      font-bold cursor-pointer">
-        오늘 함께하면 좋을 것 같은 친구는?
-      </div>
-      <div v-else class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-blue-300 to-indigo-400 text-white text-center text-lg
-      font-bold cursor-pointer">
-        ❤️❤️ {{ friendToday?.data?.mb_name }} ❤️❤️
-      </div>
-    </div>
-
-    <div class="mt-8 rounded-2xl shadow-md  border">
-      <div v-if="hopeToday?.result === 'FAIL'" @click="onClickHope"
-        class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
-        오늘의 운세 보기
-      </div>
-      <div v-else
-        class="rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-center text-lg font-bold cursor-pointer">
-        {{ hopeToday?.data?.result_text }}
-      </div>
-    </div>
-
-    <!-- <div class="mt-10">
-          <div class="">
-            <h1 class="text-2xl font-bold mb-4">상점 아이템 목록</h1>
-
-            <div v-if="storeItems.length > 0">
-              <ul>
-                <li
-                  v-for="(item, index) in storeItems"
-                  :key="index"
-                  class="mb-4 p-4 border rounded-lg"
-                >
-                  <div class="text-lg font-semibold">{{ item.item_name }}</div>
-                  <div class="text-sm text-gray-600">{{ item.item_desc }}</div>
-                  <div class="text-right font-bold text-blue-600">
-                    {{ item.price.toLocaleString() }} 포인트
-                  </div>
-                </li>
-              </ul>
+        <!-- 단짝 친구 -->
+        <div @click="onClickFriend"
+          :class="['p-6 rounded-[32px] border shadow-sm transition-all cursor-pointer flex flex-col justify-between h-full',
+            friendToday?.result === 'FAIL' ? 'bg-gray-50 border-gray-100 hover:bg-blue-50' : 'bg-blue-500 border-blue-400 text-white shadow-blue-100']">
+          <div class="flex justify-between items-center">
+            <span
+              :class="['text-[10px] font-black uppercase tracking-widest', friendToday?.result === 'FAIL' ? 'text-gray-400' : 'text-blue-200']">Today's
+              Friend</span>
+            <span
+              :class="['i-heroicons-sparkles-solid w-5 h-5', friendToday?.result === 'FAIL' ? 'text-gray-200' : (friendToday?.data?.is_soulmate ? 'text-yellow-300 animate-pulse' : 'text-white animate-ping')]" />
+          </div>
+          <div class="py-4">
+            <p v-if="friendToday?.result === 'FAIL'" class="text-base font-black text-gray-400">오늘의 단짝을<br>확인해보세요!</p>
+            <div v-else class="space-y-1">
+              <p class="text-xs font-bold opacity-80">오늘 최고의 파트너는</p>
+              <p class="text-2xl font-black">{{ friendToday?.data?.mb_name }}</p>
             </div>
-
-            <div v-else class="text-gray-500">불러올 아이템이 없습니다.</div>
           </div>
-      </div> -->
+          <div v-if="friendToday?.result === 'FAIL'" class="text-xs font-bold text-blue-500 flex items-center gap-1">탭하여
+            확인 <span class="i-heroicons-chevron-right w-3 h-3" /></div>
+        </div>
+
+        <!-- 행운의 운세 -->
+        <div @click="onClickHope"
+          :class="['p-6 rounded-[32px] border shadow-sm transition-all cursor-pointer flex flex-col justify-between h-full',
+            hopeToday?.result === 'FAIL' ? 'bg-gray-50 border-gray-100 hover:bg-purple-50' : 'bg-purple-600 border-purple-400 text-white shadow-purple-100']">
+          <div class="flex justify-between items-center">
+            <span
+              :class="['text-[10px] font-black uppercase tracking-widest', hopeToday?.result === 'FAIL' ? 'text-gray-400' : 'text-purple-200']">Today's
+              Fortune</span>
+            <span
+              :class="['i-heroicons-moon-solid w-5 h-5', hopeToday?.result === 'FAIL' ? 'text-gray-200' : 'text-yellow-300 animate-pulse']" />
+          </div>
+          <div class="py-4">
+            <p v-if="hopeToday?.result === 'FAIL'" class="text-base font-black text-gray-400">오늘의 운세는<br>과연 어떨까요?</p>
+            <p v-else class="text-sm font-bold leading-relaxed line-clamp-3">{{ hopeToday?.data?.result_text }}</p>
+          </div>
+          <div v-if="hopeToday?.result === 'FAIL'" class="text-xs font-bold text-purple-500 flex items-center gap-1">탭하여
+            확인 <span class="i-heroicons-chevron-right w-3 h-3" /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 📝 지갑 히스토리 (History) -->
+    <section>
+      <div class="flex items-center justify-between mb-4 px-3">
+        <h3 class="text-xs font-black text-gray-400 flex items-center gap-2 uppercase tracking-[0.3em]">
+          <span class="i-heroicons-list-bullet-solid w-5 h-5 text-blue-500" />
+          Realtime History
+        </h3>
+      </div>
+
+      <div class="bg-white rounded-[40px] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50/50">
+        <div v-if="points?.length > 0">
+          <div v-for="item in points" :key="item.idx"
+            class="flex items-center justify-between p-8 hover:bg-gray-50/50 transition-all group">
+            <div class="flex items-center gap-5">
+              <div :class="['w-14 h-14 rounded-3xl flex items-center justify-center font-black transition-all group-hover:scale-110',
+                item.point_type === 'save' ? 'bg-blue-50 text-blue-600' : 'bg-rose-50 text-rose-600']">
+                <span v-if="item.point_type === 'save'" class="i-heroicons-plus-circle-solid w-8 h-8" />
+                <span v-else class="i-heroicons-minus-circle-solid w-8 h-8" />
+              </div>
+              <div>
+                <p class="text-base font-black text-gray-800 leading-tight">{{ item.description }}</p>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tight mt-1">{{ item.c_datetime }}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p
+                :class="['text-xl font-black tabular-nums', item.point_type === 'save' ? 'text-blue-600' : 'text-rose-600']">
+                {{ item.point_type === 'save' ? '+' : '-' }}{{ Number(item.point).toLocaleString() }}
+              </p>
+              <p class="text-[9px] text-gray-300 font-black uppercase tracking-widest mt-0.5">{{ item.point_type ===
+                'save' ? 'Received' : 'Paid Out' }}</p>
+            </div>
+          </div>
+
+          <div v-if="hasMore" class="p-10 text-center bg-gray-50/20">
+            <UButton label="과거 활동 내역 더 불러오기" color="gray" variant="ghost" icon="i-heroicons-chevron-down"
+              class="rounded-[24px] px-12 h-14 font-black transition-all hover:bg-white border border-gray-100"
+              @click="fetchPoints" :loading="isLoading" />
+          </div>
+        </div>
+        <div v-else class="py-32 text-center">
+          <div
+            class="w-24 h-24 bg-gray-50 rounded-[40px] flex items-center justify-center mx-auto mb-6 border border-dashed border-gray-200 shadow-inner">
+            <span class="i-heroicons-clipboard-document-check-solid w-12 h-12 text-gray-200" />
+          </div>
+          <p class="text-base font-black text-gray-300">내역이 깨끗합니다!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✨ 오늘의 운세 프리미엄 모달 -->
+    <UModal v-model="isOpenHopeModal"
+      :ui="{ width: 'max-w-md', rounded: 'rounded-[40px]', padding: 'p-0', background: 'bg-transparent' }">
+      <div
+        class="relative overflow-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-black p-8 text-center min-h-[400px] flex flex-col justify-center border border-white/10 shadow-2xl">
+        <!-- 배경 우주 애니메이션 효과 (단순) -->
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,0,255,0.15),transparent)] animate-pulse">
+        </div>
+
+        <div class="relative z-10 space-y-8">
+          <div class="flex flex-col items-center">
+            <div
+              class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-4 backdrop-blur-md border border-white/20 shadow-xl animate-bounce">
+              <span class="i-heroicons-moon-solid w-12 h-12 text-yellow-300" />
+            </div>
+            <p class="text-xs font-black text-purple-300 uppercase tracking-[0.4em] mb-2">Today's Prophecy</p>
+            <h3 class="text-white text-2xl font-black">오늘의 운세가 도달했습니다</h3>
+          </div>
+
+          <div class="bg-white/5 backdrop-blur-lg rounded-[32px] p-8 border border-white/10 shadow-inner">
+            <p class="text-lg font-bold text-white leading-relaxed animate-typing overflow-hidden whitespace-normal">
+              {{ hopeToday?.data?.result_text }}
+            </p>
+          </div>
+
+          <UButton label="확인했습니다" size="xl" color="white" variant="solid"
+            class="w-full rounded-[24px] h-14 font-black text-indigo-900 shadow-xl shadow-purple-900/50 hover:bg-gray-100 transition-all active:scale-95"
+            @click="isOpenHopeModal = false" />
+        </div>
+      </div>
+    </UModal>
+    <!-- 🌈 오늘의 친구 모달 (Friend Modal) -->
+    <UModal v-model="isOpenFriendModal">
+      <div
+        class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-800 p-10 rounded-[40px] shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -left-20 -bottom-20 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl"></div>
+
+        <div class="relative z-10 space-y-8 text-center pt-10">
+          <div class="relative inline-block mb-4">
+            <div v-if="friendToday?.data?.is_soulmate" class="absolute inset-0 bg-pink-500/20 blur-3xl animate-pulse rounded-full"></div>
+            <div
+              class="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl mx-auto animate-bounce overflow-hidden relative">
+              <Icon name="solar:users-group-rounded-bold-duotone" class="w-16 h-16 text-white" />
+            </div>
+            <div
+              class="absolute -top-2 -right-2 bg-yellow-400 p-2 rounded-full shadow-lg border-2 border-white animate-pulse">
+              <span class="i-heroicons-sparkles-solid w-5 h-5 text-white" />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <p class="text-xs font-black text-blue-200 uppercase tracking-[0.4em]">
+              {{ friendToday?.data?.is_soulmate ? 'Legendary Partners' : 'The Chosen Partner' }}
+            </p>
+            <div v-if="friendToday?.data?.is_soulmate" class="inline-flex items-center gap-2 bg-blue-500/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md mb-2">
+                 <span class="i-heroicons-hand-thumb-up-solid w-3 h-3 text-blue-300" />
+                 서로 통했다! 찐친 인증
+            </div>
+            <h3 class="text-white text-3xl font-black">
+              {{ friendToday?.data?.is_soulmate ? '와! 서로가 서로를 선택했어요!' : '오늘의 최고 단짝은?' }}
+            </h3>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-xl rounded-[32px] p-8 border border-white/10 shadow-inner group">
+            <h2 class="text-5xl font-black text-white tracking-widest animate-typing">
+              {{ friendToday?.data?.mb_name }}
+            </h2>
+            <p class="text-blue-100 text-sm mt-4 font-bold opacity-60">오늘은 이 친구와 함께하면 <br>더 즐거운 일이 생길 거예요! ✨</p>
+          </div>
+
+          <!-- <UButton label="함께 모험 떠나기" size="xl" color="white" variant="solid"
+            class="w-full rounded-[24px] h-16 font-black text-blue-900 shadow-xl shadow-indigo-900/50 hover:bg-white transition-all active:scale-95"
+            @click="isOpenFriendModal = false" /> -->
+        </div>
+      </div>
+    </UModal>
   </div>
 </template>
+
+<style scoped>
+@keyframes typing {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-typing {
+  animation: typing 1s ease-out forwards;
+}
+</style>

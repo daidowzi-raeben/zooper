@@ -78,6 +78,8 @@ const hasMore = ref(true)
 const studentOptions = ref([])
 const selectedStudent = ref(null)
 const selectedStudentName = ref(null)
+const selectedStudentData = ref(null)
+const bankerRoleIdx = ref(null)
 const amountInput = ref(null)
 
 const fetchPoints = async (v) => {
@@ -140,9 +142,9 @@ const fetchStudents = async () => {
   if (res.result === 'SUCCESS') {
     memberPoint.value = await apiPoint()
     studentOptions.value = res.data.map(s => ({
+      ...s,
       label: s.student_name,
       value: s.idnt_code,
-      mb_point: s.mb_point
     }))
   }
 }
@@ -163,6 +165,28 @@ onMounted(async () => {
   console.log('내 포인트:', point)
 
   teacherInfo.value = await apiTeacher()
+  
+  // Fetch Banker Role Idx
+  const roleRes = await apiPost('teacher.php', {
+    mode: 'teacherInfo',
+    idnt_code: sessionStorage.getItem('t_idnt_code')
+  })
+  // Let's add a quick helper in teacher.php to get role_idx or just fetch all roles
+  const rolesRes = await apiPost('teacher.php', {
+    mode: 'dispot',
+    teacher: teacherInfo.value.idx
+  })
+  // I'll just use the dispot mode which returns teacher row, 
+  // but I need the role idx. I'll add a new mode 'getBankerRole' or similar.
+  // Actually, I'll just use a direct query for now or update teacherInfo to include it.
+  const rRes = await apiPost('teacher.php', {
+    mode: 'updateStudentRole', // I can reuse this or add a new one
+    action: 'get_banker_role',
+    teacher_idx: JSON.parse(sessionStorage.getItem('teacher'))?.idx
+  })
+  if (rRes.result === 'SUCCESS') {
+    bankerRoleIdx.value = rRes.role_idx
+  }
 })
 
 const handleScroll = () => {
@@ -214,11 +238,31 @@ const handleStudentClick = (idnt_code, mb_name) => {
   page.value = 1
   selectedStudent.value = idnt_code;
   selectedStudentName.value = mb_name;
-  console.log(selectedStudent.value)
+  selectedStudentData.value = studentOptions.value.find(s => s.value === idnt_code)
   fetchPoints()
-  // console.log('선택된 학생:', idnt_code);
-  // window.open('/sign/' + idnt_code)
 };
+
+const handleBankerToggle = async () => {
+  if (!selectedStudentData.value) return
+  
+  const teacher = JSON.parse(sessionStorage.getItem('teacher'))?.idx
+  const isCurrentlyBanker = Number(selectedStudentData.value.role_code) === Number(bankerRoleIdx.value)
+  
+  const res = await apiPost('teacher.php', {
+    mode: 'updateStudentRole',
+    student_idx: selectedStudentData.value.idx,
+    teacher_idx: teacher,
+    action: isCurrentlyBanker ? 'unset' : 'set'
+  })
+
+  if (res.result === 'SUCCESS') {
+    alert(isCurrentlyBanker ? '은행원 권한이 해제되었습니다.' : '은행원으로 등록되었습니다.')
+    await fetchStudents()
+    selectedStudentData.value = studentOptions.value.find(s => s.value === selectedStudent.value)
+  } else {
+    alert(res.message || '업데이트 실패')
+  }
+}
 
 // 우리반 설정 저장 함수
 const saveClassSettings = async () => {
@@ -227,6 +271,7 @@ const saveClassSettings = async () => {
     idnt_code: sessionStorage.getItem('t_idnt_code'),
     class_name: teacherInfo.value.class_name || '',
     currency_name: teacherInfo.value.currency_name || '',
+    deposit_name: teacherInfo.value.deposit_name || '',
     deposit_cycle: teacherInfo.value.deposit_cycle || '',
     deposit_interest: teacherInfo.value.deposit_interest || 0,
     deposit_amount: teacherInfo.value.deposit_amount || 0,
@@ -236,6 +281,7 @@ const saveClassSettings = async () => {
     mb_class: teacherInfo.value.mb_class || '',
     mb_school: teacherInfo.value.mb_school || '',
     mb_school_code: teacherInfo.value.mb_school_code || '',
+    mb_tel: teacherInfo.value.mb_tel || '',
     qr_bg: teacherInfo.value.qr_bg || '',
     qr_top: qrTop.value,
     qr_left: qrLeft.value,
@@ -496,269 +542,322 @@ const onSelectSchool = (school) => {
         </div>
       </div>
     </UModal>
-    <div class="space-y-4">
-      <!-- 환영 메시지 -->
-      <div class="flex gap-2">
-        <UButton label="엑셀샘플 다운로드" color="gray" @click="onClickDownload" />
-        <UButton label="엑셀업로드" color="gray" @click="onClickUpload" />
-        <UButton label="학생 QR카드 인쇄하기" color="gray" @click="printStudentQR" />
-        <UButton label="QR카드 디자인하기" color="purple" @click="isQRDesignModalOpen = true" />
-        <UButton label="초기화" color="red" @click="onClickReset" style="margin-left:auto;" />
-      </div>
-      <div class="flex justify-between items-center">
-        <p class="text-lg font-semibold text-gray-700">
-          {{ teacherInfo?.mb_name }}
-          선생님, 환영합니다 👋</p>
-        <button
-          class="flex items-center gap-2 bg-white text-red-500 border border-red-300 px-3 py-1 rounded-full shadow-sm hover:bg-red-50 transition"
-          @click="logout">
-          <span class="i-heroicons-arrow-right-on-rectangle w-4 h-4" />
-          로그아웃
-        </button>
-      </div>
-      <!-- 내 잔액 -->
-      <div
-        class="col-span-2 rounded-2xl shadow-md p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white flex justify-between items-center">
-        <div class="flex flex-col justify-center">
-          <p class="text-sm opacity-80">국고 잔액</p>
-          <p class="text-2xl font-bold">
-            <span>
-              💰 {{ Number(teacherInfo?.mb_point || 0).toLocaleString() }} <span
-                class="text-sm font-normal align-middle">{{ teacherInfo?.currency_name }}</span>
-            </span>
-          </p>
+    <div class="space-y-6">
+      <!-- 👑 상단 헤더 & 컨트롤 -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+        <div>
+          <h1 class="text-2xl font-black text-gray-800 flex items-center gap-2">
+            <span class="text-3xl">👋</span>
+            {{ teacherInfo?.mb_name }} <span class="text-blue-500 text-lg font-bold">선생님</span>
+          </h1>
+          <p class="text-sm text-gray-400 font-medium ml-10">귀염둥이 6학년 친구들과 함께하는 경제 교실</p>
         </div>
-        <!-- <UButton label="이체하기" color="white" class="text-blue-800 bg-white bg-opacity-90 hover:bg-opacity-100"
-          @click="$router.push('/transfer')" /> -->
+        <div class="flex items-center gap-2">
+          <UButton label="로그아웃" color="gray" variant="ghost" icon="i-heroicons-arrow-right-on-rectangle" @click="logout" />
+          <UButton label="DB 초기화" color="red" variant="soft" icon="i-heroicons-trash" @click="onClickReset" />
+        </div>
       </div>
-      <!-- 추가 카드 영역: 누적 세금 + 누적 벌금 -->
-      <div class="flex gap-4 mt-4">
-        <!-- 카드 1: 누적 세금 -->
-        <div
-          class="flex-1 rounded-2xl shadow-md p-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white flex justify-between items-center">
-          <div class="flex flex-col justify-center">
-            <p class="text-sm opacity-80">누적 세금</p>
-            <p class="text-2xl font-bold">
-              🧾 {{ Number(teacherInfo?.tax || 0).toLocaleString() }} <span class="text-sm font-normal align-middle">{{
-                teacherInfo?.currency_name }}</span>
-            </p>
+
+      <!-- 🛠️ 퀵 액션 바 -->
+      <div class="flex flex-wrap gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <UButton label="엑셀 샘플" icon="i-heroicons-document-arrow-down" color="white" variant="solid" @click="onClickDownload" class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
+        <UButton label="엑셀 업로드" icon="i-heroicons-cloud-arrow-up" color="white" variant="solid" @click="onClickUpload" class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
+        <UButton label="학생 QR 전체 인쇄" icon="i-heroicons-printer" color="white" variant="solid" @click="printStudentQR" class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
+        <UButton label="QR 카드 디자인" icon="i-heroicons-paint-brush" color="purple" @click="isQRDesignModalOpen = true" class="rounded-xl px-6 py-2 shadow-md shadow-purple-100 font-bold" />
+      </div>
+
+      <!-- 📊 핵심 대시보드 카드 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 국고 잔액 -->
+        <div class="relative overflow-hidden group rounded-3xl bg-gradient-to-br from-indigo-500 via-blue-600 to-blue-700 p-6 text-white shadow-xl shadow-blue-200 transition-all hover:-translate-y-1">
+          <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
+            <span class="i-heroicons-banknotes w-32 h-32" />
           </div>
-          <UButton label="내역" color="white" class="text-orange-800 bg-white bg-opacity-90 hover:bg-opacity-100"
-            @click="openHistoryModal('tax')" />
+          <div class="flex justify-between items-start mb-4">
+            <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+              <span class="i-heroicons-building-library-solid w-6 h-6" />
+            </div>
+            <span class="text-[10px] font-bold tracking-widest uppercase opacity-60">National Treasury</span>
+          </div>
+          <p class="text-sm font-medium opacity-80 mb-1">현재 국고 잔액</p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-3xl font-black">{{ Number(teacherInfo?.mb_point || 0).toLocaleString() }}</span>
+            <span class="text-sm font-bold opacity-70">{{ teacherInfo?.currency_name }}</span>
+          </div>
         </div>
 
-        <!-- 카드 2: 누적 벌금 -->
-        <div
-          class="flex-1 rounded-2xl shadow-md p-4 bg-gradient-to-r from-red-400 to-rose-500 text-white flex justify-between items-center">
-          <div class="flex flex-col justify-center">
-            <p class="text-sm opacity-80">누적 벌금</p>
-            <p class="text-2xl font-bold">
-              🚨 {{ Number(teacherInfo?.penalty || 0).toLocaleString() }} <span
-                class="text-sm font-normal align-middle">
-                {{ teacherInfo?.currency_name }}</span>
-            </p>
+        <!-- 누적 세금 -->
+        <div class="relative overflow-hidden group rounded-3xl bg-gradient-to-br from-amber-400 via-orange-500 to-orange-600 p-6 text-white shadow-xl shadow-orange-200 transition-all hover:-translate-y-1">
+          <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
+            <span class="i-heroicons-document-text-solid w-32 h-32" />
           </div>
-          <UButton label="내역" color="white" class="text-rose-800 bg-white bg-opacity-90 hover:bg-opacity-100"
-            @click="openHistoryModal('penalty')" />
+          <div class="flex justify-between items-start mb-4">
+            <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+              <span class="i-heroicons-receipt-percent-solid w-6 h-6" />
+            </div>
+            <UButton label="내역 확인" size="2xs" color="white" variant="soft" class="bg-white/10 hover:bg-white/20 border-0" @click="openHistoryModal('tax')" />
+          </div>
+          <p class="text-sm font-medium opacity-80 mb-1">우리반 누적 세금</p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-3xl font-black">{{ Number(teacherInfo?.tax || 0).toLocaleString() }}</span>
+            <span class="text-sm font-bold opacity-70">{{ teacherInfo?.currency_name }}</span>
+          </div>
+        </div>
+
+        <!-- 누적 벌금 -->
+        <div class="relative overflow-hidden group rounded-3xl bg-gradient-to-br from-rose-400 via-red-500 to-red-600 p-6 text-white shadow-xl shadow-red-200 transition-all hover:-translate-y-1">
+          <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
+            <span class="i-heroicons-exclamation-triangle-solid w-32 h-32" />
+          </div>
+          <div class="flex justify-between items-start mb-4">
+            <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+              <span class="i-heroicons-shield-exclamation-solid w-6 h-6" />
+            </div>
+            <UButton label="벌금 관리" size="2xs" color="white" variant="soft" class="bg-white/10 hover:bg-white/20 border-0" @click="openHistoryModal('penalty')" />
+          </div>
+          <p class="text-sm font-medium opacity-80 mb-1">우리반 누적 벌금</p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-3xl font-black">{{ Number(teacherInfo?.penalty || 0).toLocaleString() }}</span>
+            <span class="text-sm font-bold opacity-70">{{ teacherInfo?.currency_name }}</span>
+          </div>
         </div>
       </div>
-      <div v-if="false" class="flex gap-4 mt-4">
-        <!-- 카드 3: 누적 기부 -->
-        <div
-          class="flex-1 rounded-2xl shadow-md p-4 bg-gradient-to-r from-teal-400 to-cyan-500 text-white flex justify-between items-center">
-          <div class="flex flex-col justify-center">
-            <div class="flex items-center gap-2">
-              <p class="text-sm opacity-80">2주 적금</p>
-              <div class="relative group">
-                <span
-                  class="cursor-pointer text-white bg-white bg-opacity-30 hover:bg-opacity-50 rounded-full px-2 py-0.5 text-xs font-bold">?</span>
-                <div
-                  class="absolute z-10 hidden group-hover:block bg-white text-gray-800 text-xs p-2 rounded shadow-lg top-full left-0 mt-1 w-48">
-                  매 2주마다 자동 적금되는 금액입니다. 출금 없이 유지하면 지급됩니다.
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+      <!-- 🏠 우리반 설정 레이아웃 -->
+      <div class="space-y-6">
+        <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 h-full flex flex-col">
+          <h2 class="text-lg font-black text-gray-800 mb-6 flex items-center gap-2">
+            <div class="p-1.5 bg-blue-100 rounded-lg">
+               <span class="i-heroicons-home-solid w-5 h-5 text-blue-600 outline-none" />
+            </div>
+            우리반 기본 정보 설정
+          </h2>
+          
+          <div class="flex-1 space-y-6">
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">소속 학교</label>
+              <USelectMenu 
+                v-model="teacherInfo.mb_school" 
+                :searchable="fetchSchools" 
+                placeholder="학교를 검색하세요..." 
+                size="lg"
+                class="rounded-xl"
+                @update:modelValue="onSelectSchool"
+              />
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">학년</label>
+                <UInput v-model="teacherInfo.mb_grade" placeholder="학년" type="number" size="xl" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">반</label>
+                <UInput v-model="teacherInfo.mb_class" placeholder="반" type="number" size="xl" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">학급명</label>
+                <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 6-1 젤리반)" size="xl" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">우리반 화폐단위</label>
+                <UInput v-model="teacherInfo.currency_name" placeholder="단위 (예: 젤리)" size="xl" />
+              </div>
+            </div>
+          </div>
+          
+          <UButton label="위 정보 모두 저장하기" color="blue" size="xl" block class="mt-8 font-black rounded-2xl py-4 shadow-lg shadow-blue-100" @click="saveClassSettings" />
+        </section>
+      </div>
+
+      <!-- 💰 적금 마스터 설정 -->
+      <div class="space-y-6">
+        <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 h-full flex flex-col">
+          <h2 class="text-lg font-black text-gray-800 mb-2 flex items-center gap-2">
+            <div class="p-1.5 bg-emerald-100 rounded-lg">
+               <span class="i-heroicons-banknotes-solid w-5 h-5 text-emerald-600 outline-none" />
+            </div>
+            적금 예금 상품 관리
+          </h2>
+          <p class="text-xs text-gray-400 mb-6 ml-10">아이들이 목돈을 모을 수 있는 적금 상품을 설정하세요.</p>
+          
+          <div class="flex-1 space-y-4">
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-gray-400 ml-1 uppercase tracking-wider">적금 상품명</label>
+              <UInput v-model="teacherInfo.deposit_name" placeholder="예: 2주 단기 적금" size="lg" />
+            </div>
+            <div class="bg-gray-50 p-4 rounded-2xl space-y-4">
+               <div class="flex justify-between items-center">
+                 <span class="text-sm font-bold text-gray-600">적금 주기</span>
+                 <USelect v-model="teacherInfo.deposit_cycle" :options="[
+                    { label: '사용안함', value: '' },
+                    { label: '2주 단기 적금', value: '2' },
+                    { label: '4주 장기 적금', value: '4' }
+                  ]" size="lg" class="w-48" />
+               </div>
+               <div class="flex justify-between items-center">
+                 <span class="text-sm font-bold text-gray-600">이자율 (%)</span>
+                 <div class="flex items-center gap-2">
+                    <UInput v-model="teacherInfo.deposit_interest" type="number" size="lg" class="w-24 text-right" />
+                    <span class="text-sm font-bold text-gray-500">%</span>
+                 </div>
+               </div>
+               <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
+                  <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">최소 입금액</label>
+                    <UInput v-model="teacherInfo.deposit_min" type="number" size="lg" />
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">최대 입금액</label>
+                    <UInput v-model="teacherInfo.deposit_max" type="number" size="lg" />
+                  </div>
+               </div>
+            </div>
+
+            <!-- 적금 내역 (스크롤) -->
+            <div class="p-2">
+              <h3 class="text-xs font-black text-gray-400 mb-3 ml-1 uppercase tracking-widest">실시간 신청 현황</h3>
+              <div v-if="deposits.length > 0" class="max-h-[160px] overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                <div v-for="item in deposits" :key="item.idx" class="flex items-center justify-between p-3 bg-emerald-50/50 rounded-xl border border-emerald-100">
+                  <div class="flex items-center gap-3">
+                    <div class="bg-white p-1 rounded-full text-xs font-bold text-emerald-600 shadow-sm border border-emerald-100">
+                      {{ item?.student_name.substring(0,1) }}
+                    </div>
+                    <div>
+                      <p class="text-xs font-black text-gray-800">{{ item?.student_name }}</p>
+                      <p class="text-[9px] text-gray-500 font-medium">{{ item?.start_date }} 가입</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-xs font-black text-emerald-600">{{ Number(item?.amount).toLocaleString() }}원금</p>
+                    <p class="text-[9px] text-gray-400">+{{ Number(item?.amount_interest).toLocaleString() }}이자 예정</p>
+                  </div>
                 </div>
               </div>
+              <div v-else class="text-center py-6 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                <p class="text-xs text-gray-400">신청된 적금 상품이 없습니다.</p>
+              </div>
             </div>
-            <p class="text-2xl font-bold">
-              🎁 0 <span class="text-sm font-normal align-middle">{{ teacherInfo?.currency_name }}</span>
-            </p>
           </div>
-          <UButton label="활성화 하기" color="white" class="text-teal-800 bg-white bg-opacity-90 hover:bg-opacity-100" />
-        </div>
-
-        <!-- 카드 4: 누적 상벌점 -->
-        <div
-          class="flex-1 rounded-2xl shadow-md p-4 bg-gradient-to-r from-purple-400 to-fuchsia-500 text-white flex justify-between items-center">
-          <div class="flex flex-col justify-center">
-            <p class="text-sm opacity-80">4주 적금</p>
-            <p class="text-2xl font-bold">
-              ⭐ 0 <span class="text-sm font-normal align-middle">{{ teacherInfo?.currency_name }}</span>
-            </p>
-          </div>
-          <UButton label="활성화 하기" color="white" class="text-purple-800 bg-white bg-opacity-90 hover:bg-opacity-100" />
-        </div>
+          
+          <UButton label="적금 설정 업데이트" color="emerald" size="xl" block class="mt-6 font-black rounded-2xl py-4 shadow-lg shadow-emerald-100" @click="saveClassSettings" />
+        </section>
       </div>
     </div>
-    <div class="mt-10">
-      <!-- 우리반 설정 -->
-      <div class="space-y-4 mb-10 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-        <p class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
-          <span class="i-heroicons-cog-6-tooth w-5 h-5 text-blue-500" />
-          우리반 기본 정보 설정
-        </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="space-y-1">
-            <p class="text-xs font-semibold text-gray-500 ml-1">학교 검색</p>
-            <USelectMenu 
-              v-model="teacherInfo.mb_school" 
-              :searchable="fetchSchools" 
-              placeholder="학교를 검색하세요 (예: 젤리초)" 
-              size="lg"
-              @update:modelValue="(val) => { 
-                if (typeof val === 'object') {
-                  onSelectSchool(val)
-                } 
-              }"
-            />
-          </div>
-          <div class="space-y-1">
-            <p class="text-xs font-semibold text-gray-500 ml-1">학년</p>
-            <UInput v-model="teacherInfo.mb_grade" placeholder="학년 (예: 6)" type="number" size="lg" />
-          </div>
-          <div class="space-y-1">
-            <p class="text-xs font-semibold text-gray-500 ml-1">반</p>
-            <UInput v-model="teacherInfo.mb_class" placeholder="반 (예: 3)" type="number" size="lg" />
-          </div>
-          <div class="space-y-1">
-            <p class="text-xs font-semibold text-gray-500 ml-1">학급칭호</p>
-            <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 젤리)" size="lg" />
+
+    <!-- 👥 우리반 학생 관리 & 실시간 로그 -->
+    <div class="grid grid-cols-1 gap-8 mt-8">
+      <section class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div>
+            <h2 class="text-2xl font-black text-gray-800 flex items-center gap-2">
+              우리반 <span class="text-blue-600">경제 전사들</span>
+              <span class="text-sm font-bold bg-blue-100 text-blue-600 px-3 py-1 rounded-full">{{ studentOptions.length }}명</span>
+            </h2>
+            <p class="text-sm text-gray-400 mt-1">학생을 클릭하여 상세 정보를 보거나 해당 계정으로 대리 로그인할 수 있습니다.</p>
           </div>
         </div>
-        <div class="flex flex-col md:flex-row justify-between items-center mt-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100 gap-4">
-          <div class="flex items-center gap-3">
-             <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-               <span class="i-heroicons-banknotes w-6 h-6" />
-             </div>
-             <div>
-               <p class="text-xs text-gray-500 font-semibold">사용 화폐 단위</p>
-               <p class="text-sm font-bold text-gray-800">{{ teacherInfo.currency_name || '마일리지를 설정해 주세요' }}</p>
-             </div>
-             <UInput v-model="teacherInfo.currency_name" placeholder="화폐이름 (예: 젤리코인)" size="sm" class="w-32" />
-          </div>
-          <UButton label="모든 설정 저장하기" color="blue" @click="saveClassSettings" size="lg" class="px-12 font-bold shadow-lg shadow-blue-200" />
-        </div>
-      </div>
-      <!-- <div class="space-y-2 mb-10">
-        <p class="text-lg font-semibold text-gray-700">적금 설정</p>
-        <div class="flex gap-4 items-center">
-          <USelect v-model="selectedStudent" :options="studentOptions" placeholder="적금 사용여부" class="w-40" size="lg" />
-          <UInput v-model="teacherInfo.class_name" placeholder="학급명 (예: 젤리)" class="flex-1" size="lg" />
-          <UInput v-model="teacherInfo.currency_name" placeholder="화폐이름 (예: 젤리코인)" class="flex-1" size="lg" />
-          <UButton label="저장" color="blue" @click="saveClassSettings" size="lg" />
-        </div>
-      </div> -->
-      <div class="space-y-2 mb-10">
-        <div class="flex items-center gap-2">
-          <p class="text-lg font-semibold text-gray-700">적금 설정</p>
-          <div class="relative group">
-            <span
-              class="cursor-pointer text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-full px-2 py-0.5 text-xs font-bold">?</span>
-            <div
-              class="absolute z-10 hidden group-hover:block bg-white text-gray-800 text-xs p-2 rounded shadow-lg top-full left-0 mt-1 w-64">
-              2주 또는 4주 만기의 적금을 설정할 수 있습니다. 설정한 금액은 1회만 입금되며, 만기 시 설정한 이율에 따라 원금과 이자가 함께 지급됩니다.
-            </div>
-          </div>
-        </div>
-        <div class="flex gap-4 items-center">
-          <USelect v-model="teacherInfo.deposit_cycle" :options="[
-            { label: '사용안함', value: '' },
-            { label: '2주 적금', value: '2' },
-            { label: '4주 적금', value: '4' }
-          ]" placeholder="적금 주기 선택" class="w-40" size="lg" />
 
-          <UInput v-model="teacherInfo.deposit_interest" placeholder="이율 (%)" class="w-40" type="number" size="lg" />
-
-          <UInput v-model="teacherInfo.deposit_min" placeholder="최소 금액" type="number" class="w-40" size="lg" />
-
-          <!-- 최대 금액 -->
-          <UInput v-model="teacherInfo.deposit_max" placeholder="최대 금액" type="number" class="w-40" size="lg"
-            :min="teacherInfo.deposit_min || 0" />
-
-          <UButton label="저장" color="blue" @click="saveClassSettings" size="lg" />
-        </div>
-        <div class="mt-10">
-          <h2 class="uppercase text-xs font-semibold text-gray-400 mb-4">적금내역</h2>
-          <div class="space-y-5">
-            <div v-for="item in deposits" :key="item.idx"
-              class="flex items-center gap-4 dark:hover:text-gray-300 group">
-              <span class="text-sm leading-none">
-                {{ item?.student_name }} (원금 : {{ item?.amount }} , 이자 : {{ item?.amount_interest }} )
-              </span>
-              <div
-                class="flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5">
-              </div>
-              <span class="text-xs text-gray-500 leading-none">
-                {{ item?.start_date }} ~ {{ item?.end_date }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-between items-center">
-        <p class="text-lg font-semibold text-gray-700">
-          우리반 학생
-        </p>
-        <!-- http://api.school-os.net/jelly/data/class.xlsx -->
-
-      </div>
-      <div class="mb-6 flex items-center gap-3">
-        <!-- studentOptions 출력: 해시태그 스타일 -->
-        <div class="flex flex-wrap gap-2 mt-4">
-
+        <!-- 학생 태그 그리드 -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
           <div v-for="student in studentOptions" :key="student.value"
             @click="handleStudentClick(student.value, student.label)"
-            class="px-4 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm cursor-pointer transition">
-            {{ student.label }}({{ student?.mb_point }})
+            :class="[
+              'group relative flex flex-col items-center justify-center p-4 rounded-3xl cursor-pointer transition-all duration-300 border-2',
+              selectedStudent === student.value ? 'bg-blue-600 border-blue-600 shadow-lg shadow-blue-200 -translate-y-1' : 'bg-white border-gray-50 hover:border-blue-200 hover:bg-blue-50/30'
+            ]">
+            <div :class="['w-12 h-12 flex items-center justify-center rounded-2xl mb-2 text-lg font-black transition-colors', 
+                 selectedStudent === student.value ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-400 group-hover:bg-blue-100 group-hover:text-blue-500']">
+              {{ student.label.substring(0, 1) }}
+            </div>
+            <p :class="['text-xs font-black truncate w-full text-center', selectedStudent === student.value ? 'text-white' : 'text-gray-700']">
+              {{ student.label }}
+            </p>
+            <p :class="['text-[10px] mt-0.5 font-bold', selectedStudent === student.value ? 'text-white/70' : 'text-gray-400']">
+              {{ Number(student?.mb_point).toLocaleString() }}P
+            </p>
+            
+            <!-- 로그인 가이드 뱃지 -->
+            <div v-if="selectedStudent === student.value" class="absolute -top-2 -right-2 bg-yellow-400 text-white p-1 rounded-full shadow-md animate-bounce">
+              <span class="i-heroicons-key-solid w-3 h-3" />
+            </div>
           </div>
         </div>
-      </div>
-      <div style="height:30px;">
-        <UButton v-if="selectedStudentName" :label="`${selectedStudentName} 학생으로 로그인 하기`" color="blue"
-          class="w-full justify-center text-center" @click="onClickLogin" />
-      </div>
-      <!-- <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-        입금 할 친구를 선택하고 금액을 입력하세요
-      </p>
-      <div class="flex items-center gap-3 mt-6">
-        <USelect v-model="selectedStudent" :options="studentOptions" placeholder="학생 선택" class="w-40" size="lg" />
-        <UInput v-model="amountInput" placeholder="입금액을 입력하세요" icon="i-heroicons-currency-dollar"
-          class="flex-1 text-right" input-class="text-right" type="tel" size="lg" />
-        <UButton label="이체하기" size="lg" color="black" @click="startScan()" />
-      </div>
-      <div v-if="isScanning">
-        <div
-          style="background-color: #000; position: fixed; top:0; left:0; width:100%; height:100%; z-index:99; opacity: 0.6;">
-        </div>
-        <qrcode-stream
-          style="top:50%; left:50%; z-index:99; position: fixed; transform: translate(-50%,-50%); max-width:400px; max-height:400px;"
-          @detect="onDetect" @error="onError" />
-      </div> -->
-    </div>
-    <div class="mt-10">
-      <h2 class="uppercase text-xs font-semibold text-gray-400 mb-4">최근 입출금내역</h2>
-      <div class="space-y-5">
-        <div v-for="item in points" :key="item.idx" class="flex items-center gap-4 dark:hover:text-gray-300 group">
-          <span class="text-sm leading-none">
-            {{ item.description }} ({{ item.point_type === 'save' ? '+' : '-' }}{{ item.point.toLocaleString() }}P)
-          </span>
-          <div
-            class="flex-1 border-b border-dashed border-gray-300 dark:border-gray-800 group-hover:border-gray-700 mt-1.5">
+
+        <!-- 선택된 학생 상세 액션 -->
+        <Transition name="fade-slide">
+          <div v-if="selectedStudentName" class="mt-10 p-6 bg-gray-50 rounded-3xl border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 bg-blue-600 text-white flex items-center justify-center rounded-3xl text-2xl font-black shadow-xl shadow-blue-200">
+                {{ selectedStudentName.substring(0,1) }}
+              </div>
+              <div>
+                <h3 class="text-xl font-black text-gray-800">{{ selectedStudentName }} <span class="text-sm font-bold text-gray-400 italic">Student Session</span></h3>
+                <p class="text-sm text-gray-500">학생의 지갑을 직접 관리하거나 활동 내역을 감시할 수 있습니다.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <UButton 
+                :label="Number(selectedStudentData?.role_code) === Number(bankerRoleIdx) ? '은행원 해제' : '은행원 등록'" 
+                size="xl" 
+                :color="Number(selectedStudentData?.role_code) === Number(bankerRoleIdx) ? 'rose' : 'blue'" 
+                variant="soft"
+                class="rounded-2xl px-8 font-black transition-all hover:scale-105" 
+                @click="handleBankerToggle" 
+              />
+              <UButton :label="`${selectedStudentName} 친구로 로그인하기`" size="xl" color="black" class="rounded-2xl px-10 font-bold hover:scale-105 active:scale-95 transition-transform" @click="onClickLogin" />
+            </div>
           </div>
-          <span class="text-xs text-gray-500 leading-none">
-            {{ item.c_datetime }}
-          </span>
+        </Transition>
+
+        <!-- 활동 피드 (테이블형) -->
+        <div class="mt-12">
+          <div class="flex items-center justify-between mb-4 px-2">
+            <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+              <span class="i-heroicons-list-bullet w-5 h-5" />
+              최근 활동 타임라인
+            </h3>
+            <span v-if="points.length > 0" class="text-xs font-bold text-gray-300">{{ selectedStudentName }}의 기록</span>
+          </div>
+          
+          <div class="overflow-hidden bg-white rounded-3xl border border-gray-100 shadow-sm">
+            <div v-if="points.length > 0" class="divide-y divide-gray-50">
+              <div v-for="item in points" :key="item.idx" class="flex items-center justify-between p-5 hover:bg-gray-50/80 transition-colors">
+                <div class="flex items-center gap-4">
+                   <div :class="['p-2 rounded-2xl flex items-center justify-center', 
+                        item.point_type === 'save' ? 'bg-blue-100 text-blue-600' : 'bg-red-100 text-red-600']">
+                     <span :class="item.point_type === 'save' ? 'i-heroicons-plus-circle-solid' : 'i-heroicons-minus-circle-solid'" class="w-6 h-6" />
+                   </div>
+                   <div>
+                     <p class="text-sm font-black text-gray-800">{{ item.description }}</p>
+                     <p class="text-xs text-gray-400 font-medium">{{ item.c_datetime }}</p>
+                   </div>
+                </div>
+                <div class="text-right">
+                   <p :class="['text-sm font-black', item.point_type === 'save' ? 'text-blue-600' : 'text-red-600']">
+                     {{ item.point_type === 'save' ? '+' : '-' }}{{ Number(item.point).toLocaleString() }} 
+                     <span class="text-[10px]">P</span>
+                   </p>
+                </div>
+              </div>
+              <div v-if="isLoading" class="p-10 text-center text-gray-400">
+                <span class="i-heroicons-arrow-path w-6 h-6 animate-spin mx-auto block mb-2" />
+                로딩 중...
+              </div>
+            </div>
+            <div v-else class="py-20 text-center">
+               <div class="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                 <span class="i-heroicons-clipboard-document-list w-10 h-10 text-gray-300" />
+               </div>
+               <p class="text-sm font-bold text-gray-400">학생을 선택하면 최근 활동 내역이 표시됩니다.</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
     <!-- 세금/벌금 내역 모달 -->
     <!-- 세금/벌금 내역 모달 -->

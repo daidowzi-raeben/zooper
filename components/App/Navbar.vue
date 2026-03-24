@@ -1,35 +1,31 @@
 <template>
-  <div ref="headerRef" :style="styles" class="fixed top-0 w-full z-50">
-    <nav class="mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
-      <ul
-        class="flex items-center my-4 px-3 text-sm font-medium text-gray-800 rounded-full shadow-lg bg-white/90 shadow-gray-800/5 ring-1 backdrop-blur dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/20 ring-gray-900/5"
-      >
-        <li v-for="item in items" :key="item.path">
-          <UTooltip
-            :text="item.name"
-            :ui="{ popper: { strategy: 'absolute' } }"
+  <div class="fixed bottom-6 left-0 right-0 z-[100] px-6">
+    <nav class="mx-auto max-w-lg">
+      <ul class="flex items-center justify-around px-4 py-3 bg-white/80 backdrop-blur-2xl rounded-[32px] shadow-2xl shadow-indigo-200/50 border border-white/50 ring-1 ring-black/5">
+        <li v-for="item in items" :key="item.path" class="flex-1">
+          <ULink
+            :to="item.path"
+            class="relative flex flex-col items-center justify-center gap-1 transition-all duration-300 py-1"
+            :class="[$route.path === item.path ? 'text-indigo-600' : 'text-gray-400 hover:text-gray-600']"
+            active-class="active-nav-item"
           >
-            <ULink
-              :to="item.path"
-              class="relative px-3 py-4 flex items-center justify-center transition hover:text-primary-500 dark:hover:text-primary-400"
-              active-class="text-primary-600 dark:text-primary-400"
-            >
-              <Icon aria-hidden="true" :name="item.icon" class="w-5 h-5 z-10" />
-              <span
-                v-if="$route.path === item.path"
-                class="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-primary-500/0 via-primary-500/70 to-primary-500/0 dark:from-primary-400/0 dark:via-primary-400/40 dark:to-primary-400/0"
-              ></span>
-              <span
-                v-if="$route.path === item.path"
-                class="absolute h-8 w-8 z-0 rounded-full bg-gray-100 dark:bg-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              ></span>
-              <span class="sr-only">{{ item.name }}</span>
-            </ULink>
-          </UTooltip>
-        </li>
-        <li class="flex-1"></li>
-        <li>
-          <AppThemeToggle />
+            <!-- 활성화 배경 효과 -->
+            <div v-if="$route.path === item.path" class="absolute inset-0 bg-indigo-50 rounded-2xl scale-110 -z-10 animate-pulse"></div>
+            
+            <div class="relative">
+              <Icon :name="item.icon" class="w-7 h-7 transition-transform group-hover:scale-110" />
+              <!-- 점 알림 (데코용) -->
+              <span v-if="$route.path === item.path" class="absolute -top-1 -right-1 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+            </div>
+            
+            <span class="text-[10px] font-black tracking-tight uppercase">{{ item.name }}</span>
+            
+            <!-- 하단 인디케이터 라인 -->
+            <span
+              v-if="$route.path === item.path"
+              class="w-1 h-1 bg-indigo-600 rounded-full mt-0.5"
+            ></span>
+          </ULink>
         </li>
       </ul>
     </nav>
@@ -37,22 +33,21 @@
 </template>
 
 <script setup>
-import { useFixedHeader } from 'vue-use-fixed-header'
-const headerRef = ref(null);
-const { styles } = useFixedHeader(headerRef);
-
-// const items = [
-//   { name: "Home", path: "/", icon: "solar:home-2-outline" },
-//   { name: "이체", path: "/transfer", icon: "solar:exchange-bold" },
-//   { name: "입금", path: "/income", icon: "solar:wallet-2-outline" },
-//   { name: "출금", path: "/expense", icon: "solar:money-bag-outline" }, // 예: 교체됨
-//   { name: "세금", path: "/tax", icon: "solar:bill-list-outline" },
-//   { name: "벌금", path: "/penalty", icon: "solar:danger-triangle-outline" },
-// ]
 const items = [
-  { name: "Home", path: "/", icon: "solar:home-2-outline" },
-  { name: "이체", path: "/transfer", icon: "mdi:bank-transfer" }, // 변경됨
-  { name: "입금", path: "/income", icon: "solar:wallet-2-outline" },
-  { name: "출금", path: "/expense", icon: "solar:money-bag-outline" },
+  { name: "Home", path: "/", icon: "solar:home-2-bold-duotone" },
+  { name: "이체", path: "/transfer", icon: "solar:banknote-2-bold-duotone" },
+  { name: "입금", path: "/income", icon: "solar:card-2-bold-duotone" },
+  { name: "출금", path: "/expense", icon: "solar:wallet-money-bold-duotone" },
 ]
 </script>
+
+<style scoped>
+.active-nav-item {
+  transform: translateY(-4px);
+}
+
+nav {
+  /* 모바일 접근성 고려 가로 모드 대응 */
+  max-width: min(100%, 480px);
+}
+</style>
