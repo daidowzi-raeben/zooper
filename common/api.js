@@ -6,7 +6,7 @@ const api = axios.create({
     baseURL: hostUrl,
 
     headers: {
-        'Content-Type': 'application/json',
+        // Axios will automatically set the Content-Type based on the data type (JSON vs FormData)
     },
     timeout: 10000,
 })
