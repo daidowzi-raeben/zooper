@@ -12,6 +12,7 @@ const logout = () => {
 }
 
 const student = ref({});
+const isGrade1 = computed(() => Number(student.value?.credit_score) === 1)
 const memberPoint = ref(0)
 
 const storeItems = ref([])
@@ -93,18 +94,34 @@ const isDispotApi = async () => {
 }
 
 
+const fetchStudentInfo = async () => {
+  const res = await apiPost('member.php', {
+    mode: 'studentInfo',
+    idnt_code: student.value?.idnt_code || sessionStorage.getItem('idnt_code')
+  })
+  if (res.result === 'SUCCESS') {
+    student.value = res.data
+    sessionStorage.setItem('student', JSON.stringify(res.data))
+  }
+}
+
 onMounted(async () => {
   student.value = JSON.parse(sessionStorage.getItem('student')) || {}
   teacher.value = student.value?.teacher
+  await fetchStudentInfo()
   memberPoint.value = await apiPoint()
   fetchStoreItems()
-  await fetchMeals()
   await isHope()
   await isFriend()
   await isDispotApi()
   await isDepositApi()
   await fetchPoints()
 })
+
+const handleLogout = () => {
+  sessionStorage.clear()
+  window.location.href = '/login'
+}
 
 useSeoMeta({
   title: "Jelly School-OS",
@@ -132,7 +149,7 @@ const hasMore = ref(true)
 const isLoading = ref(false)
 
 const fetchPoints = async () => {
-  if (isLoading.value || !hasMore.value) return
+  if (isLoading.value || (!hasMore.value && page.value > 1)) return
   isLoading.value = true
   try {
     const res = await apiPost('member.php', {
@@ -156,6 +173,13 @@ const fetchPoints = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+const refreshPoints = async () => {
+  points.value = []
+  page.value = 1
+  hasMore.value = true
+  await fetchPoints()
 }
 
 
@@ -208,21 +232,23 @@ const onClickHope = async () => {
     return;
   }
 
-  if (memberPoint.value < 10) {
+  const cost = Number(student.value?.credit_score) === 1 ? (Number(dispot.value?.grade1_hope_price) || 0) : 10;
+  if (memberPoint.value < cost) {
     alert('금액이 부족합니다.')
     return;
   }
 
-  if (confirm(`10${dispot.value?.currency_name || '돌맹이'}로 오늘의 운세를 확인할까요?`)) {
+  if (confirm(`${cost}${dispot.value?.currency_name || '돌멩이'}로 오늘의 운세를 확인할까요?`)) {
     const res = await apiPost('member.php', {
       mode: 'studentHopeInsert',
       idnt_code: sessionStorage.getItem('idnt_code'),
-      point: 10
+      point: cost
     })
 
     if (res.result === 'SUCCESS') {
       await isHope()
       memberPoint.value = await apiPoint()
+      await refreshPoints()
       isOpenHopeModal.value = true
     }
   }
@@ -281,21 +307,24 @@ const onClickFriend = async () => {
     return;
   }
 
-  if (memberPoint.value < 10) {
+  const cost = Number(student.value?.credit_score) === 1 ? (Number(dispot.value?.grade1_soulmate_price) || 0) : 10;
+
+  if (memberPoint.value < cost) {
     alert('금액이 부족합니다.')
     return;
   }
-  if (confirm(`10${dispot.value?.currency_name || '돌멩이'}로 오늘의 친구를 확인할까요?`)) {
+  if (confirm(`${cost}${dispot.value?.currency_name || '돌멩이'}로 오늘의 친구를 확인할까요?`)) {
 
     const res = await apiPost('member.php', {
       mode: 'studentFriendInsert',
       idnt_code: sessionStorage.getItem('idnt_code'),
-      point: 10
+      point: cost
     })
 
     if (res.result === 'SUCCESS') {
       await isFriend()
       memberPoint.value = await apiPoint()
+      await refreshPoints()
       isOpenFriendModal.value = true
       if (friendToday.value.data.is_soulmate) fireConfetti()
     }
@@ -318,6 +347,7 @@ const onClickEndDeposit = async () => {
       memberPoint.value = await apiPoint()
       await isDispotApi()
       await isDepositApi()
+      await refreshPoints()
     }
 
   } else {
@@ -342,12 +372,18 @@ async function createSavings() {
     alert('적금 금액을 입력해 주세요.')
     return
   }
-  if (dispot.value?.deposit_min > n) {
-    alert(`${dispot.value?.deposit_min} ${dispot.value?.currency_name} ~ ${dispot.value?.deposit_max} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
+  const isGrade1 = Number(student.value?.credit_score) === 1
+  const baseMax = Number(dispot.value?.deposit_max) || 0
+  const bonusMax = isGrade1 ? (Number(dispot.value?.grade1_deposit_max) || 0) : 0
+  const maxLimit = baseMax + bonusMax
+  const minLimit = Number(dispot.value?.deposit_min || 0)
+
+  if (minLimit > n) {
+    alert(`${minLimit} ${dispot.value?.currency_name} ~ ${maxLimit} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
     return;
   }
-  if (dispot.value?.deposit_max < n) {
-    alert(`${dispot.value?.deposit_min} ${dispot.value?.currency_name} ~ ${dispot.value?.deposit_max} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
+  if (maxLimit < n) {
+    alert(`${minLimit} ${dispot.value?.currency_name} ~ ${maxLimit} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
     return;
   }
 
@@ -387,6 +423,7 @@ async function createSavings() {
       memberPoint.value = await apiPoint()
       await isDispotApi()
       await isDepositApi()
+      await refreshPoints()
     }
 
 
@@ -398,7 +435,11 @@ async function createSavings() {
 
 watch(amount, (val) => {
   const n = Number(String(val).replace(/[^\d]/g, '')) || 0
-  const rate = dispot.value?.deposit_interest || 0
+  const isGrade1 = Number(student.value?.credit_score) === 1
+  const baseRate = Number(dispot.value?.deposit_interest) || 0
+  const bonusRate = isGrade1 ? (Number(dispot.value?.grade1_deposit_interest) || 0) : 0
+  const rate = baseRate + bonusRate
+  
   // 원금 + 이자 (단순 % 계산)
   dispotTotal.value = Math.floor(0 + (n * rate / 100))
 })
@@ -430,6 +471,9 @@ watch(amount, (val) => {
             'JellySchool' }} {{ dispot?.mb_grade }}-{{ dispot?.mb_class }}</p>
           <h2 class="text-white text-3xl font-black tracking-tight">{{ student?.student_name }}<span
               class="text-blue-200 text-xl ml-1">친구</span></h2>
+          <div v-if="student?.badges" class="flex flex-wrap gap-1 mt-1 justify-center">
+            <span v-for="(badge, bIdx) in student.badges.split(',')" :key="bIdx" class="text-2xl drop-shadow-lg animate-bounce" :style="{ animationDelay: (bIdx * 0.1) + 's' }">{{ badge }}</span>
+          </div>
         </div>
 
         <!-- 잔액 카드 -->
@@ -476,7 +520,7 @@ watch(amount, (val) => {
                 <h3 class="text-2xl font-black text-gray-800">
                   {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주약속적금 개설') }}</h3>
                 <p class="text-sm text-gray-400 font-medium">만기에 <span class="text-orange-500 font-bold">{{
-                  dispot?.deposit_interest || 0 }}%의 엄청난 이자</span>가 기다려요!</p>
+                  (Number(dispot?.deposit_interest || 0) + (isGrade1 ? Number(dispot?.grade1_deposit_interest || 0) : 0)) }}%의 엄청난 이자</span>가 기다려요!</p>
               </div>
               <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500">
                 <span class="i-heroicons-gift-solid w-7 h-7 animate-bounce" />
@@ -499,9 +543,9 @@ watch(amount, (val) => {
             <div
               class="flex items-center justify-between text-[11px] font-black text-gray-400 px-2 tracking-widest uppercase">
               <span class="flex items-center gap-1.5"><span class="i-heroicons-information-circle w-4 h-4" />최소 {{
-                Number(dispot?.deposit_min || 0).toLocaleString() }}원</span>
+                Number(dispot?.deposit_min || 0).toLocaleString() }}{{ dispot?.currency_name || '원' }}</span>
               <span v-if="dispotTotal > 0" class="text-emerald-500 flex items-center gap-1.5 animate-pulse">
-                <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}원
+                <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}{{ dispot?.currency_name || '원' }}
               </span>
             </div>
           </div>
@@ -536,8 +580,9 @@ watch(amount, (val) => {
             </div>
             <div class="space-y-1 text-right border-l border-white/10 pl-8">
               <p class="text-[10px] font-black uppercase opacity-60 tracking-[0.2em]">이자 혜택</p>
-              <p class="text-3xl font-black text-yellow-300 tabular-nums">+{{ Number(deposit?.amount_interest ||
-                0).toLocaleString() }}<span class="text-sm ml-1 opacity-70">{{ dispot?.currency_name }}</span></p>
+              <p class="text-3xl font-black text-yellow-300 tabular-nums">+{{ 
+                (Math.floor(Number(deposit?.amount || 0) * (Number(dispot?.deposit_interest || 0) + (isGrade1 ? Number(dispot?.grade1_deposit_interest || 0) : 0)) / 100)).toLocaleString() 
+                }}<span class="text-sm ml-1 opacity-70">{{ dispot?.currency_name }}</span></p>
             </div>
           </div>
 
@@ -593,20 +638,24 @@ watch(amount, (val) => {
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- 식단표 -->
+        <!-- 스템프 보드 -->
         <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-black text-gray-400 uppercase tracking-widest">Lunch Menu</span>
-            <span class="i-heroicons-cake w-5 h-5 text-orange-400" />
+            <span class="text-xs font-black text-gray-400 uppercase tracking-widest">My Stamp Board</span>
+            <div class="flex items-center gap-1">
+              <span class="text-xs font-black text-orange-500">{{ student?.stamp_count || 0 }}</span>
+              <span class="text-[10px] text-gray-300">/ 10</span>
+            </div>
           </div>
-          <ul v-if="meals?.length" class="space-y-2">
-            <li v-for="(meal, index) in meals" :key="index" class="text-sm font-bold text-gray-700 flex flex-col">
-              {{ meal }}
-              <span v-if="extractAllergyNames(meal).length" class="text-[9px] text-red-400 mt-0.5 font-medium">⚠️ 알레르기
-                주의: {{ extractAllergyNames(meal).join(', ') }}</span>
-            </li>
-          </ul>
-          <p v-else class="text-sm text-gray-300 font-bold py-4">식단 정보가 없습니다.</p>
+          
+          <div class="grid grid-cols-5 gap-2 pb-2">
+            <div v-for="i in 10" :key="i" 
+              :class="['aspect-square rounded-xl flex items-center justify-center border-2 transition-all', 
+                i <= (student?.stamp_count || 0) ? 'bg-orange-50 border-orange-200 text-orange-500 shadow-inner' : 'bg-gray-50/50 border-gray-100 text-gray-200']">
+              <span :class="[i <= (student?.stamp_count || 0) ? 'i-heroicons-hand-raised-solid' : 'i-heroicons-hand-raised', 'w-6 h-6']"></span>
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-400 font-bold text-center">스템프 10개를 모으면 <span class="text-indigo-500">랜덤 뱃지</span>가 지급됩니다!</p>
         </div>
 
         <!-- 단짝 친구 -->
@@ -627,8 +676,10 @@ watch(amount, (val) => {
               <p class="text-2xl font-black">{{ friendToday?.data?.mb_name }}</p>
             </div>
           </div>
-          <div v-if="friendToday?.result === 'FAIL'" class="text-xs font-bold text-blue-500 flex items-center gap-1">탭하여
-            확인 <span class="i-heroicons-chevron-right w-3 h-3" /></div>
+          <div v-if="friendToday?.result === 'FAIL'" class="text-xs font-bold text-blue-500 flex items-center gap-1">
+            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_soulmate_price) || 0) : 10 }}{{ dispot?.currency_name || '원' }})
+            <span class="i-heroicons-chevron-right w-3 h-3" />
+          </div>
         </div>
 
         <!-- 행운의 운세 -->
@@ -646,8 +697,10 @@ watch(amount, (val) => {
             <p v-if="hopeToday?.result === 'FAIL'" class="text-base font-black text-gray-400">오늘의 운세는<br>과연 어떨까요?</p>
             <p v-else class="text-sm font-bold leading-relaxed line-clamp-3">{{ hopeToday?.data?.result_text }}</p>
           </div>
-          <div v-if="hopeToday?.result === 'FAIL'" class="text-xs font-bold text-purple-500 flex items-center gap-1">탭하여
-            확인 <span class="i-heroicons-chevron-right w-3 h-3" /></div>
+          <div v-if="hopeToday?.result === 'FAIL'" class="text-xs font-bold text-purple-500 flex items-center gap-1">
+            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_hope_price) || 0) : 10 }}{{ dispot?.currency_name || '원' }})
+            <span class="i-heroicons-chevron-right w-3 h-3" />
+          </div>
         </div>
       </div>
     </section>

@@ -33,12 +33,31 @@
 </template>
 
 <script setup>
-const items = [
-  { name: "Home", path: "/", icon: "solar:home-2-bold-duotone" },
-  { name: "이체", path: "/transfer", icon: "solar:banknote-2-bold-duotone" },
-  { name: "입금", path: "/income", icon: "solar:card-2-bold-duotone" },
-  { name: "출금", path: "/expense", icon: "solar:wallet-money-bold-duotone" },
-]
+import { computed, onMounted, ref } from 'vue'
+
+const student = ref(null)
+
+onMounted(() => {
+  const stored = sessionStorage.getItem('student')
+  if (stored) {
+    student.value = JSON.parse(stored)
+  }
+})
+
+const items = computed(() => {
+  const base = [
+    { name: "Home", path: "/", icon: "solar:home-2-bold-duotone" },
+    { name: "이체", path: "/transfer", icon: "solar:banknote-2-bold-duotone" },
+    { name: "입금", path: "/income", icon: "solar:card-2-bold-duotone" },
+    { name: "출금", path: "/expense", icon: "solar:wallet-money-bold-duotone" },
+  ]
+  
+  if (student.value?.role_code_str === 'CREDIT_MANAGER') {
+    base.push({ name: "신용관리", path: "/credit", icon: "solar:shield-check-bold-duotone" })
+  }
+  
+  return base
+})
 </script>
 
 <style scoped>

@@ -51,6 +51,12 @@
       /> -->
 
       <p v-if="error" class="text-red-500 text-sm mt-4">{{ error }}</p>
+
+      <div class="mt-10 pt-6 border-t border-gray-100">
+        <router-link to="/information" class="text-xs font-black text-gray-400 uppercase tracking-widest hover:text-blue-600 transition-colors">
+          ✨ 프로그램 알아보기
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
