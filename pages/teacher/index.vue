@@ -904,8 +904,12 @@ const onSelectSchool = (school) => {
                     </div>
                   </div>
                   <div class="text-right">
-                    <p class="text-xs font-black text-emerald-600">{{ Number(item?.amount).toLocaleString() }}원금</p>
-                    <p class="text-[9px] text-gray-400">+{{ Number(item?.amount_interest).toLocaleString() }}이자 예정</p>
+                    <p class="text-xs font-black text-emerald-600">{{ Number(item?.amount).toLocaleString() }}{{ teacherInfo.currency_name || '원' }}</p>
+                    <p class="text-[9px] text-gray-400">
+                      +{{ 
+                        Math.floor(Number(item?.amount) * (Number(teacherInfo.deposit_interest || 0) + (Number(item?.credit_score) === 1 ? Number(teacherInfo.grade1_deposit_interest || 0) : 0)) / 100).toLocaleString() 
+                      }}이자 예정
+                    </p>
                   </div>
                 </div>
               </div>

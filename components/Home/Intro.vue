@@ -256,12 +256,12 @@ const onClickHope = async () => {
 
 
 const handleBankerToggle = async () => {
-    // This is teacher page logic
+  // This is teacher page logic
 }
 
 const fireConfetti = async () => {
   if (typeof window === 'undefined') return
-  
+
   const script = document.createElement('script')
   script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js'
   script.onload = () => {
@@ -439,7 +439,7 @@ watch(amount, (val) => {
   const baseRate = Number(dispot.value?.deposit_interest) || 0
   const bonusRate = isGrade1 ? (Number(dispot.value?.grade1_deposit_interest) || 0) : 0
   const rate = baseRate + bonusRate
-  
+
   // 원금 + 이자 (단순 % 계산)
   dispotTotal.value = Math.floor(0 + (n * rate / 100))
 })
@@ -472,7 +472,9 @@ watch(amount, (val) => {
           <h2 class="text-white text-3xl font-black tracking-tight">{{ student?.student_name }}<span
               class="text-blue-200 text-xl ml-1">친구</span></h2>
           <div v-if="student?.badges" class="flex flex-wrap gap-1 mt-1 justify-center">
-            <span v-for="(badge, bIdx) in student.badges.split(',')" :key="bIdx" class="text-2xl drop-shadow-lg animate-bounce" :style="{ animationDelay: (bIdx * 0.1) + 's' }">{{ badge }}</span>
+            <span v-for="(badge, bIdx) in student.badges.split(',')" :key="bIdx"
+              class="text-2xl drop-shadow-lg animate-bounce" :style="{ animationDelay: (bIdx * 0.1) + 's' }">{{ badge
+              }}</span>
           </div>
         </div>
 
@@ -483,7 +485,7 @@ watch(amount, (val) => {
             '지갑' }} 총 잔액</p>
           <div v-if="isMoney" class="flex items-baseline gap-2 transform transition-all">
             <span class="text-white text-5xl font-black tabular-nums">{{ Number(memberPoint || 0).toLocaleString()
-            }}</span>
+              }}</span>
             <span class="text-white/70 text-lg font-bold">{{ dispot?.currency_name }}</span>
           </div>
           <div v-else class="flex items-center gap-3 py-2 opacity-80">
@@ -520,7 +522,8 @@ watch(amount, (val) => {
                 <h3 class="text-2xl font-black text-gray-800">
                   {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주약속적금 개설') }}</h3>
                 <p class="text-sm text-gray-400 font-medium">만기에 <span class="text-orange-500 font-bold">{{
-                  (Number(dispot?.deposit_interest || 0) + (isGrade1 ? Number(dispot?.grade1_deposit_interest || 0) : 0)) }}%의 엄청난 이자</span>가 기다려요!</p>
+                  (Number(dispot?.deposit_interest || 0) + (isGrade1 ? Number(dispot?.grade1_deposit_interest || 0) :
+                    0)) }}%의 엄청난 이자</span>가 기다려요!</p>
               </div>
               <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500">
                 <span class="i-heroicons-gift-solid w-7 h-7 animate-bounce" />
@@ -545,7 +548,8 @@ watch(amount, (val) => {
               <span class="flex items-center gap-1.5"><span class="i-heroicons-information-circle w-4 h-4" />최소 {{
                 Number(dispot?.deposit_min || 0).toLocaleString() }}{{ dispot?.currency_name || '원' }}</span>
               <span v-if="dispotTotal > 0" class="text-emerald-500 flex items-center gap-1.5 animate-pulse">
-                <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}{{ dispot?.currency_name || '원' }}
+                <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}{{
+                  dispot?.currency_name || '원' }}
               </span>
             </div>
           </div>
@@ -580,8 +584,9 @@ watch(amount, (val) => {
             </div>
             <div class="space-y-1 text-right border-l border-white/10 pl-8">
               <p class="text-[10px] font-black uppercase opacity-60 tracking-[0.2em]">이자 혜택</p>
-              <p class="text-3xl font-black text-yellow-300 tabular-nums">+{{ 
-                (Math.floor(Number(deposit?.amount || 0) * (Number(dispot?.deposit_interest || 0) + (isGrade1 ? Number(dispot?.grade1_deposit_interest || 0) : 0)) / 100)).toLocaleString() 
+              <p class="text-3xl font-black text-yellow-300 tabular-nums">+{{
+                (Math.floor(Number(deposit?.amount || 0) * (Number(dispot?.deposit_interest || 0) + (isGrade1 ?
+                  Number(dispot?.grade1_deposit_interest || 0) : 0)) / 100)).toLocaleString()
                 }}<span class="text-sm ml-1 opacity-70">{{ dispot?.currency_name }}</span></p>
             </div>
           </div>
@@ -591,7 +596,7 @@ watch(amount, (val) => {
               <p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-300"></span>{{
                 formatDate(deposit?.start_date) }} 가입됨</p>
               <p class="flex items-center gap-2 text-white"><span
-                  class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>{{ formatDate(deposit?.end_date) }} 만기 선물 증정</p>
+                  class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>{{ formatDate(deposit?.end_date) }} 만기</p>
             </div>
             <UButton label="원금 + 이자 모두 받기" :disabled="!isEndDeposit" color="white" size="xl"
               class="px-12 rounded-[24px] font-black text-emerald-600 shadow-2xl transition-transform hover:-translate-y-1 active:scale-95 disabled:opacity-40"
@@ -647,15 +652,17 @@ watch(amount, (val) => {
               <span class="text-[10px] text-gray-300">/ 10</span>
             </div>
           </div>
-          
+
           <div class="grid grid-cols-5 gap-2 pb-2">
-            <div v-for="i in 10" :key="i" 
-              :class="['aspect-square rounded-xl flex items-center justify-center border-2 transition-all', 
+            <div v-for="i in 10" :key="i"
+              :class="['aspect-square rounded-xl flex items-center justify-center border-2 transition-all',
                 i <= (student?.stamp_count || 0) ? 'bg-orange-50 border-orange-200 text-orange-500 shadow-inner' : 'bg-gray-50/50 border-gray-100 text-gray-200']">
-              <span :class="[i <= (student?.stamp_count || 0) ? 'i-heroicons-hand-raised-solid' : 'i-heroicons-hand-raised', 'w-6 h-6']"></span>
+              <span
+                :class="[i <= (student?.stamp_count || 0) ? 'i-heroicons-hand-raised-solid' : 'i-heroicons-hand-raised', 'w-6 h-6']"></span>
             </div>
           </div>
-          <p class="text-[11px] text-gray-400 font-bold text-center">스템프 10개를 모으면 <span class="text-indigo-500">랜덤 뱃지</span>가 지급됩니다!</p>
+          <p class="text-[11px] text-gray-400 font-bold text-center">스템프 10개를 모으면 <span class="text-indigo-500">랜덤
+              뱃지</span>가 지급됩니다!</p>
         </div>
 
         <!-- 단짝 친구 -->
@@ -677,7 +684,8 @@ watch(amount, (val) => {
             </div>
           </div>
           <div v-if="friendToday?.result === 'FAIL'" class="text-xs font-bold text-blue-500 flex items-center gap-1">
-            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_soulmate_price) || 0) : 10 }}{{ dispot?.currency_name || '원' }})
+            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_soulmate_price) || 0) : 10 }}{{ dispot?.currency_name || '원'
+            }})
             <span class="i-heroicons-chevron-right w-3 h-3" />
           </div>
         </div>
@@ -796,7 +804,8 @@ watch(amount, (val) => {
 
         <div class="relative z-10 space-y-8 text-center pt-10">
           <div class="relative inline-block mb-4">
-            <div v-if="friendToday?.data?.is_soulmate" class="absolute inset-0 bg-pink-500/20 blur-3xl animate-pulse rounded-full"></div>
+            <div v-if="friendToday?.data?.is_soulmate"
+              class="absolute inset-0 bg-pink-500/20 blur-3xl animate-pulse rounded-full"></div>
             <div
               class="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl mx-auto animate-bounce overflow-hidden relative">
               <Icon name="solar:users-group-rounded-bold-duotone" class="w-16 h-16 text-white" />
@@ -811,9 +820,10 @@ watch(amount, (val) => {
             <p class="text-xs font-black text-blue-200 uppercase tracking-[0.4em]">
               {{ friendToday?.data?.is_soulmate ? 'Legendary Partners' : 'The Chosen Partner' }}
             </p>
-            <div v-if="friendToday?.data?.is_soulmate" class="inline-flex items-center gap-2 bg-blue-500/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md mb-2">
-                 <span class="i-heroicons-hand-thumb-up-solid w-3 h-3 text-blue-300" />
-                 서로 통했다! 찐친 인증
+            <div v-if="friendToday?.data?.is_soulmate"
+              class="inline-flex items-center gap-2 bg-blue-500/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md mb-2">
+              <span class="i-heroicons-hand-thumb-up-solid w-3 h-3 text-blue-300" />
+              서로 통했다! 찐친 인증
             </div>
             <h3 class="text-white text-3xl font-black">
               {{ friendToday?.data?.is_soulmate ? '와! 서로가 서로를 선택했어요!' : '오늘의 최고 단짝은?' }}
