@@ -19,7 +19,7 @@
           <a href="#roles" class="hover:text-blue-600 transition">직업 시스템</a>
           <a href="#kiosk" class="hover:text-blue-600 transition">키오스크</a>
         </div>
-        <UButton to="/login" label="무료 체험" color="black" variant="solid"
+        <UButton to="/guide" label="사용 가이드" color="black" variant="solid"
           class="rounded-full px-8 py-3 font-black shadow-xl hover:scale-105 transition active:scale-95" />
       </div>
     </nav>
@@ -456,7 +456,7 @@
           <div class="space-y-4">
             <h5 class="font-black text-white uppercase tracking-widest text-xs">Resources</h5>
             <ul class="space-y-3 font-bold">
-              <li><a href="#" class="hover:text-blue-400 transition">운영 가이드</a></li>
+              <li><router-link to="/guide" class="hover:text-blue-400 transition">운영 가이드</router-link></li>
               <li><a href="#" class="hover:text-blue-400 transition">학급 통화 연동법</a></li>
               <li><a href="#" class="hover:text-blue-400 transition">문의하기</a></li>
             </ul>

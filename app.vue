@@ -12,9 +12,10 @@ const checkAuth = () => {
   const isLoginPage = path === '/login'
   const isSignPage = path.startsWith('/sign/')
   const isInformationPage = path === '/information'
+  const isGuidePage = path === '/guide'
   const isSignUpPage = path === '/signUp'
 
-  if (!idntCode && !isLoginPage && !isSignPage && !isInformationPage && !isSignUpPage) {
+  if (!idntCode && !isLoginPage && !isSignPage && !isInformationPage && !isGuidePage && !isSignUpPage) {
     router.push('/login')
   }
 }
@@ -32,7 +33,7 @@ watch(() => route.path, () => {
 <template>
   <NuxtLoadingIndicator color="#14b8a6" />
 
-  <template v-if="!route.path.startsWith('/information')">
+  <template v-if="!route.path.startsWith('/information') && !route.path.startsWith('/guide')">
     <!-- 로그인/교사인쇄 페이지가 아닐 때만 표시 -->
     <AppNavbar v-if="route.path !== '/login' && route.path !== '/signUp' && !route.path.startsWith('/teacher')" />
     <div class="h-10" v-if="route.path !== '/login' && route.path !== '/signUp' && !route.path.startsWith('/teacher')"></div>

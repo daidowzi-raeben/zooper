@@ -36,6 +36,9 @@ export default defineNuxtConfig({
       },
       meta: [
         { name: 'naver-site-verification', content: 'b8dbb07e71898bf11dc03c4aadd77e29c065ddb9' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' }
       ]
     },
   },
