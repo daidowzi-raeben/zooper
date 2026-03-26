@@ -4,11 +4,10 @@ import { apiPost, apiPoint, hostUrl } from '@/common/api'
 import logo from '@/common/img/sunny_logo.png'
 import { allergyMap } from '@/common/allergy'
 const logout = () => {
-  sessionStorage.removeItem('idnt_code')
-  sessionStorage.removeItem('student')
-  sessionStorage.removeItem('t_idnt_code')
-  sessionStorage.removeItem('teacher')
-  window.location.href = '/login'
+  if (confirm('로그아웃 하시겠습니까?')) {
+    sessionStorage.clear()
+    window.location.href = '/login'
+  }
 }
 
 const student = ref({});
@@ -73,6 +72,9 @@ const fetchStoreItems = async () => {
 
 const maturityDate = ref(null)
 
+const selectedDepositIdx = ref(0)
+const selectedDeposit = computed(() => dispot.value?.deposit_types?.[selectedDepositIdx.value] || null)
+
 const isDispotApi = async () => {
   const res = await apiPost('teacher.php', {
     mode: 'dispot',
@@ -81,17 +83,21 @@ const isDispotApi = async () => {
 
   if (res.result === 'SUCCESS') {
     dispot.value = res.data
-
-    // ref 안의 값에서 꺼내야 함
-    const weeks = dispot.value?.deposit_cycle || 2  // 기본값 2주
-    const today = new Date()
-    const date = new Date(today)
-    date.setDate(today.getDate() + weeks * 7)
-
-    // YYYY-MM-DD 포맷
-    maturityDate.value = date.toISOString().split('T')[0]
+    updateMaturityDate()
   }
 }
+
+const updateMaturityDate = () => {
+  const days = Number(selectedDeposit.value?.deposit_day) || 30
+  const today = new Date()
+  const date = new Date(today)
+  date.setDate(today.getDate() + days)
+  maturityDate.value = date.toISOString().split('T')[0]
+}
+
+watch(selectedDepositIdx, () => {
+  updateMaturityDate()
+})
 
 
 const fetchStudentInfo = async () => {
@@ -118,10 +124,6 @@ onMounted(async () => {
   await fetchPoints()
 })
 
-const handleLogout = () => {
-  sessionStorage.clear()
-  window.location.href = '/login'
-}
 
 useSeoMeta({
   title: "Jelly School-OS",
@@ -344,6 +346,9 @@ const onClickEndDeposit = async () => {
     })
 
     if (res.result === 'SUCCESS') {
+      await fireConfetti()
+      alert(`🎉 축하합니다! 적금이 만기되어 원금과 이자가 지갑에 듬뿍 들어왔어요!`)
+      
       memberPoint.value = await apiPoint()
       await isDispotApi()
       await isDepositApi()
@@ -372,18 +377,22 @@ async function createSavings() {
     alert('적금 금액을 입력해 주세요.')
     return
   }
+  const product = selectedDeposit.value
+  if (!product) return alert('상품을 선택해주세요.')
+
   const isGrade1 = Number(student.value?.credit_score) === 1
-  const baseMax = Number(dispot.value?.deposit_max) || 0
+  const baseMax = Number(product.deposit_max) || 0
   const bonusMax = isGrade1 ? (Number(dispot.value?.grade1_deposit_max) || 0) : 0
   const maxLimit = baseMax + bonusMax
-  const minLimit = Number(dispot.value?.deposit_min || 0)
+  const minLimit = 0 // Assuming 0 for now as previously it used dispot.deposit_min which we might not have per product or it's global
 
-  if (minLimit > n) {
-    alert(`${minLimit} ${dispot.value?.currency_name} ~ ${maxLimit} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
-    return;
+  if (n < 1) {
+    alert('금액을 입력해 주세요.')
+    return
   }
-  if (maxLimit < n) {
-    alert(`${minLimit} ${dispot.value?.currency_name} ~ ${maxLimit} ${dispot.value?.currency_name} 의 금액만 가능합니다.`)
+
+  if (maxLimit > 0 && maxLimit < n) {
+    alert(`최대 ${maxLimit.toLocaleString()} ${dispot.value?.currency_name} 까지만 납입 가능합니다.`)
     return;
   }
 
@@ -406,14 +415,19 @@ async function createSavings() {
     // TODO: 백엔드 연동 시 이 부분에서 API 호출
     // await $fetch('/api/savings', { method:'POST', body: { amount: n, termDays: 14, rate: 5 } })
 
+    const baseRate = Number(selectedDeposit.value?.deposit_interest) || 0
+    const prodBonus = isGrade1 ? (Number(selectedDeposit.value?.grade1_deposit_interest) || 0) : 0
+    const globBonus = isGrade1 ? (Number(dispot.value?.grade1_deposit_interest) || 0) : 0
+    const totalRate = baseRate + prodBonus + globBonus
+
     const res = await apiPost('member.php', {
       mode: 'interest',
       idnt_code: sessionStorage.getItem('idnt_code'),
       amount: n,
       teacher: teacher?.value,
       amount_interest: dispotTotal?.value,
-      interest_rate: dispot.value?.deposit_interest,
-      deposit_name: "적금통장",
+      interest_rate: totalRate,
+      deposit_name: selectedDeposit.value?.deposit_name || "적금통장",
       end_date: maturityDate.value
     })
 
@@ -433,15 +447,18 @@ async function createSavings() {
 }
 
 
-watch(amount, (val) => {
-  const n = Number(String(val).replace(/[^\d]/g, '')) || 0
+watch([amount, selectedDepositIdx], () => {
+  const n = parseAmount(amount.value)
   const isGrade1 = Number(student.value?.credit_score) === 1
-  const baseRate = Number(dispot.value?.deposit_interest) || 0
-  const bonusRate = isGrade1 ? (Number(dispot.value?.grade1_deposit_interest) || 0) : 0
-  const rate = baseRate + bonusRate
+  const product = selectedDeposit.value
+  if (!product) return
 
-  // 원금 + 이자 (단순 % 계산)
-  dispotTotal.value = Math.floor(0 + (n * rate / 100))
+  const baseRate = Number(product.deposit_interest) || 0
+  const productBonus = isGrade1 ? (Number(product.grade1_deposit_interest) || 0) : 0
+  const globalBonus = isGrade1 ? (Number(dispot.value?.grade1_deposit_interest) || 0) : 0
+  const rate = baseRate + productBonus + globalBonus
+
+  dispotTotal.value = Math.floor(n * rate / 100)
 })
 </script>
 
@@ -496,64 +513,86 @@ watch(amount, (val) => {
       </div>
 
       <!-- 로그아웃 (우상단) -->
-      <button @click="logout"
+      <button @click="logout" style="position:absolute; z-index:99999;"
         class="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white/50 hover:text-white transition-all shadow-lg backdrop-blur-md">
         <span class="i-heroicons-arrow-right-on-rectangle w-5 h-5" />
       </button>
     </div>
 
     <!-- 🏦 적금 센터 (Savings) -->
-    <div class="space-y-6">
+    <div class="space-y-8">
       <!-- 적금 가입 안했을 때 -->
-      <section v-if="!deposit?.deposit_exists" class="relative group">
-        <div class="p-8 rounded-[40px] bg-white border border-gray-100 shadow-xl overflow-hidden">
-          <div
-            class="absolute -right-10 -top-10 w-32 h-32 bg-emerald-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-700">
+      <section v-if="!deposit?.deposit_exists" class="space-y-6">
+        <div class="flex items-center justify-between px-2">
+          <div class="flex items-center gap-2">
+            <span class="i-heroicons-banknotes-solid w-6 h-6 text-emerald-500" />
+            <h3 class="text-lg font-black text-gray-800">우리반 적금 상품</h3>
           </div>
+          <p class="text-[11px] font-bold text-gray-400">하나를 선택하여 가입하세요.</p>
+        </div>
 
-          <div class="relative z-10 space-y-6">
-            <div class="flex justify-between items-start">
-              <div class="space-y-1">
-                <div
-                  class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-wider">
-                  <span class="i-heroicons-sparkles-solid w-3 h-3" />
-                  Lucky Savings
-                </div>
-                <h3 class="text-2xl font-black text-gray-800">
-                  {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주약속적금 개설') }}</h3>
-                <p class="text-sm text-gray-400 font-medium">만기에 <span class="text-orange-500 font-bold">{{
-                  (Number(dispot?.deposit_interest || 0) + (isGrade1 ? Number(dispot?.grade1_deposit_interest || 0) :
-                    0)) }}%의 엄청난 이자</span>가 기다려요!</p>
+        <!-- 상품 리스트 -->
+        <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-1 px-1">
+          <div v-for="(type, idx) in dispot?.deposit_types" :key="idx" 
+            @click="selectedDepositIdx = idx"
+            :class="['min-w-[200px] p-6 rounded-[32px] border-2 transition-all cursor-pointer relative overflow-hidden',
+              selectedDepositIdx === idx ? 'bg-emerald-50 border-emerald-500 shadow-lg shadow-emerald-100' : 'bg-white border-gray-100 hover:border-emerald-200 shadow-sm']">
+            
+            <div v-if="selectedDepositIdx === idx" class="absolute -right-2 -top-2">
+              <span class="i-heroicons-check-circle-solid w-8 h-8 text-emerald-500" />
+            </div>
+
+            <div class="space-y-4">
+              <p class="text-xs font-black text-emerald-600 uppercase tracking-widest">{{ type.deposit_day }}일 만기</p>
+              <div>
+                <h4 class="text-lg font-black text-gray-800 truncate">{{ type.deposit_name }}</h4>
+                <p class="text-[10px] text-gray-400 font-bold mt-1 tracking-tighter">
+                  이율 {{ type.deposit_interest }}% + 우대 {{ type.grade1_deposit_interest }}%
+                  <span v-if="dispot?.grade1_deposit_interest > 0" class="text-indigo-500 font-black">
+                    (+1등급 {{ dispot.grade1_deposit_interest }}%)
+                  </span>
+                </p>
               </div>
-              <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500">
-                <span class="i-heroicons-gift-solid w-7 h-7 animate-bounce" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 가입 입력 섹션 -->
+        <Transition name="fade-slide">
+          <div v-if="selectedDeposit" class="p-8 rounded-[40px] bg-white border border-gray-100 shadow-2xl shadow-emerald-50 space-y-6">
+            <div class="flex justify-between items-center bg-gray-50/50 p-4 rounded-3xl border border-gray-100">
+              <div>
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">선택된 상품</p>
+                <p class="text-base font-black text-gray-800">{{ selectedDeposit.deposit_name }}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">만기 예정일</p>
+                <p class="text-base font-black text-emerald-600">{{ formatDate(maturityDate) }}</p>
               </div>
             </div>
 
-            <!-- 가입 입력 섹션 -->
             <div class="flex flex-col sm:flex-row gap-4">
               <div class="flex-1 relative">
                 <UInput v-model="amount" placeholder="저금할 금액 입력" size="xl" type="number"
-                  input-class="h-16 font-black text-xl pl-12 rounded-[24px] border-2 border-gray-50 focus:border-emerald-400 bg-gray-50/50" />
-                <span
-                  class="absolute left-5 top-1/2 -translate-y-1/2 i-heroicons-banknotes-solid w-6 h-6 text-gray-300" />
+                  input-class="h-16 font-black text-xl pl-12 rounded-[24px] border-2 border-gray-50 focus:border-emerald-400 bg-gray-100/30" />
+                <span class="absolute left-5 top-1/2 -translate-y-1/2 i-heroicons-banknotes-solid w-6 h-6 text-gray-300" />
               </div>
               <UButton label="적금 가입하기" size="xl" color="emerald"
                 class="px-10 rounded-[24px] h-16 font-black text-lg shadow-xl shadow-emerald-100 transition-all hover:-translate-y-1 active:scale-95"
                 :loading="submitting" @click="createSavings" />
             </div>
 
-            <div
-              class="flex items-center justify-between text-[11px] font-black text-gray-400 px-2 tracking-widest uppercase">
-              <span class="flex items-center gap-1.5"><span class="i-heroicons-information-circle w-4 h-4" />최소 {{
-                Number(dispot?.deposit_min || 0).toLocaleString() }}{{ dispot?.currency_name || '원' }}</span>
+            <div class="flex items-center justify-between text-[11px] font-black text-gray-400 px-2 tracking-widest uppercase">
+              <span class="flex items-center gap-1.5">
+                <span class="i-heroicons-information-circle w-4 h-4" />
+                최대 {{ (Number(selectedDeposit.deposit_max) + (isGrade1 ? (Number(selectedDeposit.grade1_deposit_max || 0) + Number(dispot?.grade1_deposit_max || 0)) : 0)).toLocaleString() }}{{ dispot?.currency_name }}
+              </span>
               <span v-if="dispotTotal > 0" class="text-emerald-500 flex items-center gap-1.5 animate-pulse">
-                <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}{{
-                  dispot?.currency_name || '원' }}
+                <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}{{ dispot?.currency_name }}
               </span>
             </div>
           </div>
-        </div>
+        </Transition>
       </section>
 
       <!-- 적금 가입 중일 때 -->
@@ -565,7 +604,7 @@ watch(amount, (val) => {
           <div class="flex justify-between items-start mb-10">
             <div>
               <h3 class="text-2xl font-black flex items-center gap-2">
-                {{ dispot?.deposit_name || (dispot?.deposit_cycle + '주 약속 적금') }}
+                {{ deposit?.deposit_name || '진행 중인 적금' }}
                 <span
                   class="text-[10px] bg-white/20 px-3 py-1 rounded-full font-black uppercase tracking-widest backdrop-blur-sm">Active</span>
               </h3>
@@ -587,7 +626,7 @@ watch(amount, (val) => {
               <p class="text-3xl font-black text-yellow-300 tabular-nums">+{{
                 (Math.floor(Number(deposit?.amount || 0) * (Number(dispot?.deposit_interest || 0) + (isGrade1 ?
                   Number(dispot?.grade1_deposit_interest || 0) : 0)) / 100)).toLocaleString()
-                }}<span class="text-sm ml-1 opacity-70">{{ dispot?.currency_name }}</span></p>
+              }}<span class="text-sm ml-1 opacity-70">{{ dispot?.currency_name }}</span></p>
             </div>
           </div>
 

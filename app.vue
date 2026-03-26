@@ -31,16 +31,16 @@ watch(() => route.path, () => {
   <NuxtLoadingIndicator color="#14b8a6" />
 
   <template v-if="route.path !== '/information'">
-    <!-- 로그인 페이지가 아닐 때만 표시 -->
-    <AppNavbar v-if="route.path !== '/login' && route.path !== '/signUp' && route.path !== '/teacher'" />
-    <div class="h-10" v-if="route.path !== '/login' && route.path !== '/signUp' && route.path !== '/teacher'"></div>
+    <!-- 로그인/교사인쇄 페이지가 아닐 때만 표시 -->
+    <AppNavbar v-if="route.path !== '/login' && route.path !== '/signUp' && !route.path.startsWith('/teacher')" />
+    <div class="h-10" v-if="route.path !== '/login' && route.path !== '/signUp' && !route.path.startsWith('/teacher')"></div>
 
     <UContainer :class="[route.path.startsWith('/teacher') ? 'max-w-none px-4 md:px-8' : 'max-w-2xl']">
       <NuxtPage />
     </UContainer>
 
-    <div class="h-32"></div>
-    <AppFooter />
+    <div class="h-32" v-if="!route.path.startsWith('/teacher')"></div>
+    <AppFooter v-if="!route.path.startsWith('/teacher')" />
   </template>
   <template v-else>
     <NuxtPage />

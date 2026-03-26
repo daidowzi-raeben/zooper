@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 text-gray-900 selection:bg-blue-200">
+  <div
+    class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 text-gray-900 selection:bg-blue-200">
     <!-- Fixed Navbar -->
     <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
       <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -24,8 +25,10 @@
           QR 실물 카드를 활용해 Chromebook/브라우저에서 즉시 이체·출금·적금을 체험하고, 체크카드 같은 디자인으로 학습 효과를 높입니다.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-          <UButton to="/" size="xl" label="무료 체험 시작" color="blue" class="rounded-xl shadow-lg hover:scale-105 transition" />
-          <UButton label="자세히 보기" variant="ghost" icon="i-heroicons-chevron-down" @click="scrollToFeatures" class="text-gray-600 font-medium" />
+          <UButton to="/" size="xl" label="무료 체험 시작" color="blue"
+            class="rounded-xl shadow-lg hover:scale-105 transition" />
+          <UButton label="자세히 보기" variant="ghost" icon="i-heroicons-chevron-down" @click="scrollToFeatures"
+            class="text-gray-600 font-medium" />
         </div>
       </div>
     </section>
@@ -34,17 +37,20 @@
     <section id="features" class="py-20 px-6">
       <div class="max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-3">
         <!-- Feature 1: QR 실물 카드 거래 -->
-        <div class="group p-8 bg-white/70 backdrop-blur-md rounded-2xl border border-transparent hover:border-blue-200 hover:shadow-xl transition-all duration-300">
+        <div
+          class="group p-8 bg-white/70 backdrop-blur-md rounded-2xl border border-transparent hover:border-blue-200 hover:shadow-xl transition-all duration-300">
           <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg mb-4">
             <Icon name="solar:qr-code-bold-duotone" class="w-8 h-8" />
           </div>
           <h3 class="text-2xl font-black text-gray-800 mb-2">QR 실물 카드 거래</h3>
           <p class="text-gray-600 leading-relaxed">
-            Chromebook 혹은 브라우저 기반 키오스크에서 QR 카드를 스캔해 <span class="text-blue-600 font-bold">실시간 이체·출금·적금</span>을 할 수 있습니다. 학생들은 직접 디자인한 카드를 체크카드처럼 사용합니다.
+            Chromebook 혹은 브라우저 기반 키오스크에서 QR 카드를 스캔해 <span class="text-blue-600 font-bold">실시간 이체·출금·적금</span>을 할 수 있습니다.
+            학생들은 직접 디자인한 카드를 체크카드처럼 사용합니다.
           </p>
         </div>
         <!-- Feature 2: 금융 습관 형성 -->
-        <div class="group p-8 bg-white/70 backdrop-blur-md rounded-2xl border border-transparent hover:border-emerald-200 hover:shadow-xl transition-all duration-300">
+        <div
+          class="group p-8 bg-white/70 backdrop-blur-md rounded-2xl border border-transparent hover:border-emerald-200 hover:shadow-xl transition-all duration-300">
           <div class="w-16 h-16 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg mb-4">
             <Icon name="solar:graph-up-bold-duotone" class="w-8 h-8" />
           </div>
@@ -54,7 +60,8 @@
           </p>
         </div>
         <!-- Feature 3: 학급 운영 자동화 -->
-        <div class="group p-8 bg-white/70 backdrop-blur-md rounded-2xl border border-transparent hover:border-purple-200 hover:shadow-xl transition-all duration-300">
+        <div
+          class="group p-8 bg-white/70 backdrop-blur-md rounded-2xl border border-transparent hover:border-purple-200 hover:shadow-xl transition-all duration-300">
           <div class="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg mb-4">
             <Icon name="solar:users-group-rounded-bold-duotone" class="w-8 h-8" />
           </div>
@@ -94,8 +101,10 @@
           </div>
         </div>
         <div class="flex-1">
-          <div class="relative w-full max-w-[350px] mx-auto aspect-[9/16] bg-gray-900 rounded-2xl border-8 border-gray-800 shadow-2xl overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-blue-600 to-indigo-800 flex flex-col items-center justify-center p-8 text-white">
+          <div
+            class="relative w-full max-w-[350px] mx-auto aspect-[9/16] bg-gray-900 rounded-2xl border-8 border-gray-800 shadow-2xl overflow-hidden">
+            <div
+              class="absolute inset-0 bg-gradient-to-b from-blue-600 to-indigo-800 flex flex-col items-center justify-center p-8 text-white">
               <div class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-4 animate-bounce">
                 <Icon name="solar:qr-code-bold" class="w-12 h-12" />
               </div>
@@ -136,9 +145,15 @@ const scrollToFeatures = () => {
 
 <style scoped>
 @keyframes progress {
-  0% { width: 0% }
-  100% { width: 100% }
+  0% {
+    width: 0%
+  }
+
+  100% {
+    width: 100%
+  }
 }
+
 .animate-[progress_3s_infinite_linear] {
   animation: progress 3s infinite linear;
 }
