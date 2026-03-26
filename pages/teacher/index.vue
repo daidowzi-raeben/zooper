@@ -1338,7 +1338,7 @@ const onSelectSchool = (school) => {
         <div class="space-y-4">
           <!-- 카드 미리보기 레이아웃 -->
           <div
-            class="mt-4 relative mx-auto w-full max-w-[350px] aspect-[1.6/1] border border-gray-200 rounded-[28px] overflow-hidden bg-white shadow-2xl transition-all"
+            class="mt-4 relative mx-auto w-[86mm] aspect-[1.6/1] border border-gray-200 rounded-[28px] overflow-hidden bg-white shadow-2xl transition-all scale-110 origin-center mb-6"
             :style="{ backgroundColor: qrColor }">
             <!-- 커스텀 배경 미리보기 -->
             <img v-if="previewQRBg || teacherInfo.qr_bg"
@@ -1347,7 +1347,7 @@ const onSelectSchool = (school) => {
                 position: 'absolute',
                 top: qrTop + 'px',
                 left: qrLeft + 'px',
-                width: qrWidth + '%',
+                width: (Number(qrWidth) + 4) + '%',
                 zIndex: 0
               }" />
 
@@ -1368,7 +1368,7 @@ const onSelectSchool = (school) => {
 
               <div class="flex justify-between items-end">
                 <div class="text-[9px] leading-relaxed font-bold opacity-60">
-                  입출금은 은행원 승인이 필요합니다.<br>이체는 개인 QR코드로 가능합니다.
+                  입출금은 은행원 승인이 필요합니다.<br>이체는 개인 QR코드로 가능합니다.<br>QR코드를 타인에게 노출하지 마세요.
                 </div>
                 <div
                   class="w-14 h-14 border-2 border-current opacity-20 bg-white/50 backdrop-blur-sm rounded-lg flex items-center justify-center">

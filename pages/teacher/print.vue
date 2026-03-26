@@ -101,7 +101,7 @@ const handleClose = () => {
           <!-- 배경 이미지 (절대 경로 보장) -->
           <img v-if="teacherInfo.qr_bg"
             :src="teacherInfo.qr_bg.startsWith('http') ? teacherInfo.qr_bg : hostUrl + teacherInfo.qr_bg"
-            class="absolute pointer-events-none" :style="{
+            class="absolute pointer-events-none object-contain" :style="{
               top: (teacherInfo.qr_top) + 'px',
               left: (teacherInfo.qr_left) + 'px',
               width: teacherInfo.qr_width + '%',
@@ -127,10 +127,8 @@ const handleClose = () => {
             <!-- 하단: 안내 문구 & QR 코드 -->
             <div class="flex justify-between items-end gap-2">
               <div class="space-y-1.5 text-left flex-1">
-                <div class="text-[9px] leading-tight font-bold opacity-60">
-                  <p>• 입출금은 은행원 승인이 필요합니다.</p>
-                  <p>• 계좌 이체는 개인 QR코드로 가능합니다.</p>
-                  <p>• QR코드를 타인에게 노출하지 마세요.</p>
+                <div class="text-[9px] leading-relaxed font-bold opacity-60">
+                  입출금은 은행원 승인이 필요합니다.<br>이체는 개인 QR코드로 가능합니다.<br>QR코드를 타인에게 노출하지 마세요.
                 </div>
                 <div
                   class="px-2 py-0.5 rounded border border-current opacity-20 text-[7px] font-black italic inline-block mt-2">
@@ -161,13 +159,15 @@ const handleClose = () => {
 }
 
 .qr-card {
-  aspect-ratio: 1.6 / 1;
+  width: 86mm;
+  height: 54mm;
   border-radius: 20px;
-  width: 100%;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   -webkit-print-color-adjust: exact !important;
   color-adjust: exact !important;
   print-color-adjust: exact !important;
+  position: relative;
+  overflow: hidden;
 }
 
 @media print {
