@@ -454,6 +454,28 @@ const submitFeatureRequest = async () => {
     }
 }
 
+const isPasswordModalOpen = ref(false)
+const passwordForm = ref({ newPassword: '', confirmPassword: '' })
+
+const submitChangePassword = async () => {
+    if (!passwordForm.value.newPassword) return alert('새 비밀번호를 입력해주세요.')
+    if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) return alert('비밀번호가 일치하지 않습니다.')
+
+    const res = await apiPost('teacher.php', {
+        mode: 'changePassword',
+        teacher_idx: teacherInfo.value.idx,
+        new_pw: passwordForm.value.newPassword
+    })
+
+    if (res.result === 'SUCCESS') {
+        alert('비밀번호가 변경되었습니다.')
+        passwordForm.value = { newPassword: '', confirmPassword: '' }
+        isPasswordModalOpen.value = false
+    } else {
+        alert(res.message || '변경 실패')
+    }
+}
+
 const isTransferModalOpen = ref(false)
 const transferForm = ref({ amount: '', memo: '국고 지원금' })
 const handleTreasuryTransfer = () => {
@@ -883,9 +905,11 @@ const onSelectSchool = (school) => {
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
         <div>
-          <h1 class="text-2xl font-black text-gray-800 flex items-center gap-2">
+          <h1 class="text-2xl font-black text-gray-800 flex flex-wrap items-center gap-2">
             <span class="text-3xl">👋</span>
             {{ teacherInfo?.mb_name }} <span class="text-blue-500 text-lg font-bold">선생님</span>
+            <UButton label="패스워드 변경" size="xs" color="gray" variant="soft"
+              class="ml-2 rounded-lg font-bold" @click="isPasswordModalOpen = true" />
           </h1>
           <p class="text-sm text-gray-400 font-medium ml-10">귀염둥이 6학년 친구들과 함께하는 경제 교실</p>
         </div>
@@ -1641,6 +1665,38 @@ const onSelectSchool = (school) => {
               @click="isFeatureRequestModalOpen = false" />
             <UButton label="의견 보내기" color="yellow" variant="solid" block size="xl"
               class="flex-1 rounded-2xl font-black h-16 shadow-xl shadow-yellow-100" @click="submitFeatureRequest" />
+          </div>
+        </div>
+      </div>
+    </UModal>
+    <!-- 패스워드 변경 모달 -->
+    <UModal v-model="isPasswordModalOpen">
+      <div class="p-8 space-y-6">
+        <div class="space-y-2">
+          <h2 class="text-2xl font-black text-gray-800 flex items-center gap-2">
+            <span class="i-heroicons-lock-closed-solid w-7 h-7 text-gray-400" />
+            선생님 비밀번호 변경
+          </h2>
+          <p class="text-sm font-medium text-gray-400">보안을 위해 강력한 비밀번호를 사용해 주세요.</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="space-y-1">
+            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">New Password</label>
+            <UInput v-model="passwordForm.newPassword" type="password" placeholder="새 비밀번호 입력" size="xl"
+              class="rounded-2xl" icon="i-heroicons-key" />
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Confirm Password</label>
+            <UInput v-model="passwordForm.confirmPassword" type="password" placeholder="비밀번호 확인" size="xl"
+              class="rounded-2xl" icon="i-heroicons-shield-check" />
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <UButton label="취소" color="gray" variant="soft" block size="xl" class="flex-1 rounded-2xl font-black h-16"
+              @click="isPasswordModalOpen = false" />
+            <UButton label="비밀번호 변경" color="black" variant="solid" block size="xl"
+              class="flex-1 rounded-2xl font-black h-16 shadow-xl" @click="submitChangePassword" />
           </div>
         </div>
       </div>
