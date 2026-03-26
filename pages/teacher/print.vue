@@ -137,9 +137,9 @@ const handleClose = () => {
               </div>
 
               <!-- QR 코드 영역 -->
-              <div class="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 shrink-0">
+              <div class="bg-white p-2 rounded-xl shadow-sm border border-gray-100 shrink-0">
                 <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.idnt_code}`"
-                  class="w-16 h-16" alt="QR Code" />
+                  class="w-14 h-14" alt="QR Code" />
               </div>
             </div>
           </div>
@@ -160,13 +160,14 @@ const handleClose = () => {
 }
 
 .qr-card {
-  aspect-ratio: 1.6 / 1;
-  border-radius: 20px;
-  width: 100%;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  width: 86mm;
+  height: 54mm;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
   -webkit-print-color-adjust: exact !important;
-  color-adjust: exact !important;
   print-color-adjust: exact !important;
+  background-size: cover;
+  background-position: center;
 }
 
 @media print {
@@ -194,13 +195,9 @@ const handleClose = () => {
     page-break-inside: avoid;
     break-inside: avoid;
     border: 1px solid #eee !important;
-    border-radius: 12px !important;
     box-shadow: none !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  img {
+    width: 86mm !important;
+    height: 54mm !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

@@ -129,7 +129,7 @@ function createServerHead(options = {}) {
 
 const unheadPlugins = [];
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"en","class":"h-full"},"bodyAttrs":{"class":"antialiased bg-gray-50 dark:bg-black min-h-screen"}};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"naver-site-verification","content":"b8dbb07e71898bf11dc03c4aadd77e29c065ddb9"}],"link":[],"style":[],"script":[],"noscript":[],"htmlAttrs":{"lang":"ko","class":"h-full"},"bodyAttrs":{"class":"antialiased bg-gray-50 dark:bg-black min-h-screen"}};
 
 const appRootId = "__nuxt";
 

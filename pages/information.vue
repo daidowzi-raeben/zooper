@@ -490,9 +490,26 @@
 
 <script setup>
 useHead({
-  title: '젤리 경제 - 우리 교실의 완벽한 경제 자치 시스템',
+  title: '젤리 경제 - 우리 교실의 완벽한 경제 자치 시스템 (JELLY)',
   meta: [
-    { name: 'description', content: 'QR 실물 카드로 즐기는 프리미엄 교실 경제학 프로그램 젤리(JELLY). 저축, 이체, 직업, 신용관리까지! 아이들이 직접 참여하고 배우는 살아있는 경제 교육을 지금 시작하세요.' }
+    { 
+      name: 'description', 
+      content: 'QR 실물 카드로 즐기는 프리미엄 교실 경제 자치 시스템 젤리(JELLY). 학급 화폐, 저축, 직업, 신용 관리까지 한 번에! 초등학교 경제 교육을 가장 재미있고 혁신적으로 운영하는 비결.' 
+    },
+    {
+      name: 'keywords',
+      content: '학급경제, 교실경제, 학급화폐, 경제교육, 젤리경쟁, 학교경제, 초등경제교육, 직업교육, 신용관리, 선생님로그, 에듀테크, 꿀팁, 교실자치'
+    },
+    { property: 'og:title', content: '젤리 경제 - 우리 교실의 완벽한 경제 자치 시스템' },
+    { property: 'og:description', content: 'QR 카드 한 장으로 시작하는 새로운 교실 경제 경험. 아이들이 꿈을 키우는 경제 습관을 기릅니다.' },
+    { property: 'og:image', content: '/Users/jang-yeong-ug/.gemini/antigravity/brain/770a6177-f41e-4133-bead-1050f5a110e4/jelly_economy_hero_png_1774493889898.png' }, // Consider using a public URL for production
+    { property: 'og:url', content: 'https://school-os.net/information' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: '젤리 경제(JELLY)' },
+    { name: 'twitter:description', content: 'QR로 완성하는 똑똑한 교실 경제 시스템' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://school-os.net/information' }
   ]
 })
 const scrollToFeatures = () => {
