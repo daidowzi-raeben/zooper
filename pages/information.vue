@@ -231,13 +231,13 @@
               아이들이<br />경찰이 되고<br /><span class="text-blue-500">은행원</span>이 되는 곳
             </h2>
             <p class="text-lg text-gray-400 font-medium">
-              모든 학생이 각자의 역할(직업)을 가집니다. 일을 수행하고 받은 주급을 저축하며 사회의 작동 원리를 배웁니다.
+              모든 학생이 각자의 역할(직업)을 가집니다. 활동을 수행하고 받은 보상을 저축하며 사회의 작동 원리를 배웁니다.
             </p>
             <div class="space-y-4">
               <div class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10">
                 <span
                   class="w-10 h-10 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center font-bold">1</span>
-                <p class="text-sm font-bold text-gray-300">직업별 주급 자동 입금 연동</p>
+                <p class="text-sm font-bold text-gray-300">직업별 역할 부여 및 자치 활동</p>
               </div>
               <div class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10">
                 <span
@@ -305,7 +305,7 @@
                 </div>
               </div>
               <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                아이들의 주급에서 세금을 공제하고 국고 예산을 관리합니다. 공적인 돈이 어떻게 사용되는지 체험하는 살아있는 사회 교육입니다.
+                아이들의 소득에서 세금을 공제하고 국고 예산을 관리합니다. 공적인 돈이 어떻게 사용되는지 체험하는 살아있는 사회 교육입니다.
               </p>
               <div class="text-[10px] bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full inline-block font-black">
                 세금 징수 및 국고 자동화</div>
