@@ -490,9 +490,9 @@
 
 <script setup>
 useHead({
-  title: '젤리 경제 - 교실을 살아있는 경제 도시로',
+  title: '젤리 경제 - 우리 교실의 완벽한 경제 자치 시스템',
   meta: [
-    { name: 'description', content: 'QR 실물 카드로 즐기는 교실 경제 자치 시스템 젤리. 아이들이 스스로 돈을 벌고 저축하며 경제를 배웁니다.' }
+    { name: 'description', content: 'QR 실물 카드로 즐기는 프리미엄 교실 경제학 프로그램 젤리(JELLY). 저축, 이체, 직업, 신용관리까지! 아이들이 직접 참여하고 배우는 살아있는 경제 교육을 지금 시작하세요.' }
   ]
 })
 const scrollToFeatures = () => {

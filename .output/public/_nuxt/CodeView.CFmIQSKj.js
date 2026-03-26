@@ -1,1 +1,0 @@
-import{j as o,c as t,Y as s,i as r}from"./entry.CXZJjK-I.js";const a={},c={class:"max-h-96 overflow-auto bg-gray-900 text-sm p-2"};function n(e,l){return r(),t("div",c,[s(e.$slots,"default")])}const d=o(a,[["render",n]]);export{d as default};
