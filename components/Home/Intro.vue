@@ -384,10 +384,10 @@ async function createSavings() {
   const baseMax = Number(product.deposit_max) || 0
   const bonusMax = isGrade1 ? (Number(dispot.value?.grade1_deposit_max) || 0) : 0
   const maxLimit = baseMax + bonusMax
-  const minLimit = 0 // Assuming 0 for now as previously it used dispot.deposit_min which we might not have per product or it's global
+  const minLimit = Number(product.deposit_min) || 0
 
-  if (n < 1) {
-    alert('금액을 입력해 주세요.')
+  if (minLimit > 0 && n < minLimit) {
+    alert(`최소 ${minLimit.toLocaleString()} ${dispot.value?.currency_name} 이상 납입해야 합니다.`)
     return
   }
 
@@ -427,6 +427,7 @@ async function createSavings() {
       teacher: teacher?.value,
       amount_interest: dispotTotal?.value,
       interest_rate: totalRate,
+      deposit_type_idx: selectedDeposit.value?.idx,
       deposit_name: selectedDeposit.value?.deposit_name || "적금통장",
       end_date: maturityDate.value
     })
@@ -584,7 +585,7 @@ watch([amount, selectedDepositIdx], () => {
 
             <div class="flex items-center justify-between text-[11px] font-black text-gray-400 px-2 tracking-widest uppercase">
               <span class="flex items-center gap-1.5">
-                <span class="i-heroicons-information-circle w-4 h-4" />
+                <span v-if="Number(selectedDeposit.deposit_min) > 0">최소 {{ Number(selectedDeposit.deposit_min).toLocaleString() }}{{ dispot?.currency_name }} ~ </span>
                 최대 {{ (Number(selectedDeposit.deposit_max) + (isGrade1 ? (Number(selectedDeposit.grade1_deposit_max || 0) + Number(dispot?.grade1_deposit_max || 0)) : 0)).toLocaleString() }}{{ dispot?.currency_name }}
               </span>
               <span v-if="dispotTotal > 0" class="text-emerald-500 flex items-center gap-1.5 animate-pulse">

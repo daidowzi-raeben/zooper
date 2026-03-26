@@ -136,7 +136,8 @@ const addNewDepositType = () => {
     deposit_day: 30,
     deposit_interest: 0,
     grade1_deposit_interest: 0,
-    deposit_max: 0
+    deposit_max: 0,
+    deposit_min: 0
   })
 }
 
@@ -973,10 +974,10 @@ const onSelectSchool = (school) => {
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 items-start">
       <!-- 🏠 우리반 설정 레이아웃 -->
-      <div class="space-y-6">
-        <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 h-full flex flex-col">
+      <div class="space-y-6 lg:sticky lg:top-24">
+        <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col">
           <h2 class="text-lg font-black text-gray-800 mb-6 flex items-center gap-2">
             <div class="p-1.5 bg-blue-100 rounded-lg">
               <span class="i-heroicons-home-solid w-5 h-5 text-blue-600 outline-none" />
@@ -1021,7 +1022,7 @@ const onSelectSchool = (school) => {
 
       <!-- 💰 적금 상품 관리 (Multiple) -->
       <div class="space-y-6">
-        <section class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100 h-full flex flex-col">
+        <section class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100 flex flex-col">
           <div class="flex items-center justify-between mb-2">
             <h2 class="text-xl font-black text-gray-800 flex items-center gap-2">
               <div class="p-1.5 bg-emerald-100 rounded-lg">
@@ -1054,14 +1055,18 @@ const onSelectSchool = (school) => {
                 </div>
               </div>
 
-              <div class="grid grid-cols-3 gap-3">
+              <div class="grid grid-cols-2 gap-4 pb-2">
                 <div class="space-y-1">
                   <label class="text-[10px] font-black text-gray-400 uppercase">이자율 (%)</label>
                   <UInput v-model="item.deposit_interest" type="number" size="md" class="bg-white" />
                 </div>
                 <div class="space-y-1">
-                  <label class="text-[10px] font-black text-gray-400 uppercase">1등급 우대</label>
+                  <label class="text-[10px] font-black text-gray-400 uppercase">1등급 우대 (+%)</label>
                   <UInput v-model="item.grade1_deposit_interest" type="number" size="md" class="bg-white" />
+                </div>
+                <div class="space-y-1">
+                  <label class="text-[10px] font-black text-gray-400 uppercase">최소 금액</label>
+                  <UInput v-model="item.deposit_min" type="number" size="md" class="bg-white" />
                 </div>
                 <div class="space-y-1">
                   <label class="text-[10px] font-black text-gray-400 uppercase">최대 한도</label>
