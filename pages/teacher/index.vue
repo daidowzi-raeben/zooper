@@ -432,6 +432,28 @@ const submitTreasuryEdit = async () => {
   }
 }
 
+const isFeatureRequestModalOpen = ref(false)
+const featureRequestForm = ref({ content: '' })
+
+const submitFeatureRequest = async () => {
+    if (!featureRequestForm.value.content.trim()) return alert('내용을 입력해주세요.')
+    
+    const res = await apiPost('teacher.php', {
+        mode: 'featureRequest',
+        teacher_name: teacherInfo.value.mb_name,
+        school_name: teacherInfo.value.mb_school,
+        content: featureRequestForm.value.content
+    })
+    
+    if (res.result === 'SUCCESS') {
+        alert('소중한 의견 감사합니다! 개발진에게 전달되었습니다.')
+        featureRequestForm.value.content = ''
+        isFeatureRequestModalOpen.value = false
+    } else {
+        alert(res.message || '전송에 실패했습니다.')
+    }
+}
+
 const isTransferModalOpen = ref(false)
 const transferForm = ref({ amount: '', memo: '국고 지원금' })
 const handleTreasuryTransfer = () => {
@@ -867,7 +889,13 @@ const onSelectSchool = (school) => {
           </h1>
           <p class="text-sm text-gray-400 font-medium ml-10">귀염둥이 6학년 친구들과 함께하는 경제 교실</p>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <UButton label="가이드" color="blue" variant="soft" icon="i-heroicons-book-open" to="/guide"
+            target="_blank" class="rounded-xl font-bold" />
+          <UButton label="기능개선요청" color="yellow" variant="soft" icon="i-heroicons-light-bulb"
+            @click="isFeatureRequestModalOpen = true" class="rounded-xl font-bold" />
+          <UButton label="이용방법문의" color="emerald" variant="soft" icon="i-heroicons-chat-bubble-left-right"
+            to="https://open.kakao.com/o/sf8I8jxe" target="_blank" class="rounded-xl font-bold" />
           <UButton label="로그아웃" color="gray" variant="ghost" icon="i-heroicons-arrow-right-on-rectangle"
             @click="logout" />
           <UButton label="초기화" color="red" variant="soft" icon="i-heroicons-trash" @click="onClickReset" />
@@ -1587,6 +1615,32 @@ const onSelectSchool = (school) => {
             <UButton label="취소" color="gray" variant="ghost" class="flex-1" size="xl"
               @click="isTransferModalOpen = false" />
             <UButton label="보내기" color="emerald" class="flex-1 font-black" size="xl" @click="submitTreasuryTransfer" />
+          </div>
+        </div>
+      </div>
+    </UModal>
+    <!-- 기능 개선 요청 모달 -->
+    <UModal v-model="isFeatureRequestModalOpen">
+      <div class="p-8 space-y-6">
+        <div class="space-y-2">
+          <h2 class="text-2xl font-black text-gray-800 flex items-center gap-2">
+            <span class="i-heroicons-light-bulb-solid w-7 h-7 text-yellow-500" />
+            기능 개선 요청
+          </h2>
+          <p class="text-sm font-medium text-gray-400">
+            사용 중 불편한 점이나 추가되었으면 하는 기능이 있다면 자유롭게 적어주세요! 선생님의 소중한 의견을 텔레그램으로 즉시 전달합니다.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <UTextarea v-model="featureRequestForm.content" placeholder="이곳에 의견을 작성해 주세요." :rows="6" autoresize
+            class="w-full text-lg font-medium p-4 rounded-3xl border-2 border-gray-50 focus:border-yellow-400 transition-all bg-gray-50/50" />
+
+          <div class="flex gap-3">
+            <UButton label="취소" color="gray" variant="soft" block size="xl" class="flex-1 rounded-2xl font-black h-16"
+              @click="isFeatureRequestModalOpen = false" />
+            <UButton label="의견 보내기" color="yellow" variant="solid" block size="xl"
+              class="flex-1 rounded-2xl font-black h-16 shadow-xl shadow-yellow-100" @click="submitFeatureRequest" />
           </div>
         </div>
       </div>

@@ -173,6 +173,7 @@ const handleDeposit = async () => {
 
     amountInput.value = null
     selectedStudent.value = null
+    memberPoint.value = await apiPoint()
   } else {
     alert(res.message || '출금에 실패했습니다.')
   }
