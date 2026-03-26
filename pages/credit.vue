@@ -14,7 +14,7 @@ onMounted(async () => {
   }
   studentInfo.value = JSON.parse(storedStudent)
   
-  if (studentInfo.value.role_code_str !== 'CREDIT_MANAGER') {
+  if (!studentInfo.value.roles?.some(r => r.role_code === 'CREDIT_MANAGER')) {
     alert('신용관리사 권한이 없습니다.')
     window.location.href = '/'
     return

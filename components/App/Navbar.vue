@@ -52,7 +52,7 @@ const items = computed(() => {
     { name: "출금", path: "/expense", icon: "solar:wallet-money-bold-duotone" },
   ]
   
-  if (student.value?.role_code_str === 'CREDIT_MANAGER') {
+  if (student.value?.roles?.some(r => r.role_code === 'CREDIT_MANAGER')) {
     base.push({ name: "신용관리", path: "/credit", icon: "solar:shield-check-bold-duotone" })
   }
   

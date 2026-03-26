@@ -276,6 +276,7 @@ onMounted(async () => {
 })
 
 const jobs = ref([])
+const isDevNoteModalOpen = ref(false)
 const isJobModalOpen = ref(false)
 const newJobName = ref('')
 
@@ -325,10 +326,7 @@ const handleRoleToggle = async (role_idx, actionParam) => {
   if (!selectedStudentData.value) return
 
   const teacher = JSON.parse(sessionStorage.getItem('teacher'))?.idx
-  // If the same role is selected, or if we explicitly want to unset
-  const isCurrentlyThisRole = Number(selectedStudentData.value.role_idx) === Number(role_idx)
-
-  const action = actionParam || (isCurrentlyThisRole ? 'unset' : 'set')
+  const action = actionParam || 'set'
 
   const res = await apiPost('teacher.php', {
     mode: 'updateStudentRole',
@@ -436,44 +434,44 @@ const isFeatureRequestModalOpen = ref(false)
 const featureRequestForm = ref({ content: '' })
 
 const submitFeatureRequest = async () => {
-    if (!featureRequestForm.value.content.trim()) return alert('내용을 입력해주세요.')
-    
-    const res = await apiPost('teacher.php', {
-        mode: 'featureRequest',
-        teacher_name: teacherInfo.value.mb_name,
-        school_name: teacherInfo.value.mb_school,
-        content: featureRequestForm.value.content
-    })
-    
-    if (res.result === 'SUCCESS') {
-        alert('소중한 의견 감사합니다! 개발진에게 전달되었습니다.')
-        featureRequestForm.value.content = ''
-        isFeatureRequestModalOpen.value = false
-    } else {
-        alert(res.message || '전송에 실패했습니다.')
-    }
+  if (!featureRequestForm.value.content.trim()) return alert('내용을 입력해주세요.')
+
+  const res = await apiPost('teacher.php', {
+    mode: 'featureRequest',
+    teacher_name: teacherInfo.value.mb_name,
+    school_name: teacherInfo.value.mb_school,
+    content: featureRequestForm.value.content
+  })
+
+  if (res.result === 'SUCCESS') {
+    alert('소중한 의견 감사합니다! 개발진에게 전달되었습니다.')
+    featureRequestForm.value.content = ''
+    isFeatureRequestModalOpen.value = false
+  } else {
+    alert(res.message || '전송에 실패했습니다.')
+  }
 }
 
 const isPasswordModalOpen = ref(false)
 const passwordForm = ref({ newPassword: '', confirmPassword: '' })
 
 const submitChangePassword = async () => {
-    if (!passwordForm.value.newPassword) return alert('새 비밀번호를 입력해주세요.')
-    if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) return alert('비밀번호가 일치하지 않습니다.')
+  if (!passwordForm.value.newPassword) return alert('새 비밀번호를 입력해주세요.')
+  if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) return alert('비밀번호가 일치하지 않습니다.')
 
-    const res = await apiPost('teacher.php', {
-        mode: 'changePassword',
-        teacher_idx: teacherInfo.value.idx,
-        new_pw: passwordForm.value.newPassword
-    })
+  const res = await apiPost('teacher.php', {
+    mode: 'changePassword',
+    teacher_idx: teacherInfo.value.idx,
+    new_pw: passwordForm.value.newPassword
+  })
 
-    if (res.result === 'SUCCESS') {
-        alert('비밀번호가 변경되었습니다.')
-        passwordForm.value = { newPassword: '', confirmPassword: '' }
-        isPasswordModalOpen.value = false
-    } else {
-        alert(res.message || '변경 실패')
-    }
+  if (res.result === 'SUCCESS') {
+    alert('비밀번호가 변경되었습니다.')
+    passwordForm.value = { newPassword: '', confirmPassword: '' }
+    isPasswordModalOpen.value = false
+  } else {
+    alert(res.message || '변경 실패')
+  }
 }
 
 const isTransferModalOpen = ref(false)
@@ -908,14 +906,16 @@ const onSelectSchool = (school) => {
           <h1 class="text-2xl font-black text-gray-800 flex flex-wrap items-center gap-2">
             <span class="text-3xl">👋</span>
             {{ teacherInfo?.mb_name }} <span class="text-blue-500 text-lg font-bold">선생님</span>
-            <UButton label="패스워드 변경" size="xs" color="gray" variant="soft"
-              class="ml-2 rounded-lg font-bold" @click="isPasswordModalOpen = true" />
+            <UButton label="패스워드 변경" size="xs" color="gray" variant="soft" class="ml-2 rounded-lg font-bold"
+              @click="isPasswordModalOpen = true" />
           </h1>
-          <p class="text-sm text-gray-400 font-medium ml-10">귀염둥이 6학년 친구들과 함께하는 경제 교실</p>
+          <p class="text-sm text-gray-400 font-medium ml-10">귀염둥이 친구들과 함께하는 경제 교실</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <UButton label="가이드" color="blue" variant="soft" icon="i-heroicons-book-open" to="/guide"
-            target="_blank" class="rounded-xl font-bold" />
+          <UButton label="개발자노트" color="purple" variant="soft" icon="i-heroicons-document-text"
+            @click="isDevNoteModalOpen = true" class="rounded-xl font-bold" />
+          <UButton label="가이드" color="blue" variant="soft" icon="i-heroicons-book-open" to="/guide" target="_blank"
+            class="rounded-xl font-bold" />
           <UButton label="기능개선요청" color="yellow" variant="soft" icon="i-heroicons-light-bulb"
             @click="isFeatureRequestModalOpen = true" class="rounded-xl font-bold" />
           <UButton label="이용방법문의" color="emerald" variant="soft" icon="i-heroicons-chat-bubble-left-right"
@@ -928,18 +928,18 @@ const onSelectSchool = (school) => {
 
       <!-- 🛠️ 퀵 액션 바 -->
       <div class="flex flex-wrap gap-2 overflow-x-auto pb-2 scrollbar-hide">
-        <UButton label="학급 설정 및 1등급 혜택" icon="i-heroicons-cog-6-tooth" color="blue" @click="handleOpenSettings"
+        <UButton label="1등급 혜택 설정" icon="i-heroicons-cog-6-tooth" color="blue" @click="handleOpenSettings"
           class="rounded-xl px-6 py-2 shadow-md shadow-blue-100 font-bold" />
         <UButton label="학생 업로드 엑셀 샘플" icon="i-heroicons-document-arrow-down" color="white" variant="solid"
           @click="onClickDownload" class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
         <UButton label="학생 엑셀 업로드" icon="i-heroicons-cloud-arrow-up" color="white" variant="solid"
           @click="onClickUpload" class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
-        <UButton label="학생 QR 전체 인쇄" icon="i-heroicons-printer" color="white" variant="solid" @click="printStudentQR"
-          class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
         <UButton label="직업 관리" icon="i-heroicons-briefcase" color="indigo" @click="isJobModalOpen = true"
           class="rounded-xl px-6 py-2 shadow-md shadow-indigo-100 font-bold" />
         <UButton label="QR 카드 디자인" icon="i-heroicons-paint-brush" color="purple" @click="isQRDesignModalOpen = true"
           class="rounded-xl px-6 py-2 shadow-md shadow-purple-100 font-bold" />
+        <UButton label="학생 QR 전체 인쇄" icon="i-heroicons-printer" color="white" variant="solid" @click="printStudentQR"
+          class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
       </div>
 
       <!-- 📊 핵심 대시보드 카드 -->
@@ -971,7 +971,7 @@ const onSelectSchool = (school) => {
             <div>
               <div class="flex items-baseline gap-2 mb-2">
                 <span class="text-4xl font-black tracking-tight">{{ Number(teacherInfo?.mb_point || 0).toLocaleString()
-                }}</span>
+                  }}</span>
                 <span class="text-lg font-bold opacity-60">{{ teacherInfo?.currency_name }}</span>
               </div>
               <div
@@ -1112,10 +1112,11 @@ const onSelectSchool = (school) => {
                   <label class="text-[10px] font-black text-gray-400 uppercase">이자율 (%)</label>
                   <UInput v-model="item.deposit_interest" type="number" size="md" class="bg-white" />
                 </div>
-                <div class="space-y-1">
+                <!-- <div class="space-y-1">
                   <label class="text-[10px] font-black text-gray-400 uppercase">1등급 우대 (+%)</label>
                   <UInput v-model="item.grade1_deposit_interest" type="number" size="md" class="bg-white" />
-                </div>
+                </div> -->
+
                 <div class="space-y-1">
                   <label class="text-[10px] font-black text-gray-400 uppercase">최소 금액</label>
                   <UInput v-model="item.deposit_min" type="number" size="md" class="bg-white" />
@@ -1172,7 +1173,7 @@ const onSelectSchool = (school) => {
             <h2 class="text-2xl font-black text-gray-800 flex items-center gap-2">
               우리반 <span class="text-blue-600">경제 전사들</span>
               <span class="text-sm font-bold bg-blue-100 text-blue-600 px-3 py-1 rounded-full">{{ studentOptions.length
-              }}명</span>
+                }}명</span>
             </h2>
             <p class="text-sm text-gray-400 mt-1">학생을 클릭하여 상세 정보를 보거나 해당 계정으로 대리 로그인할 수 있습니다.</p>
           </div>
@@ -1244,7 +1245,7 @@ const onSelectSchool = (school) => {
                   <div v-for="(badge, bIdx) in selectedStudentData.badges.split(',')" :key="bIdx"
                     @click="handleUseBadge(badge, bIdx)" class="group relative cursor-pointer">
                     <span class="text-3xl hover:scale-125 transition-transform inline-block drop-shadow-sm">{{ badge
-                    }}</span>
+                      }}</span>
                     <div
                       class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                       사용 확인
@@ -1272,20 +1273,24 @@ const onSelectSchool = (school) => {
                   <span class="i-heroicons-briefcase-solid w-4 h-4 text-indigo-500" />
                   <span class="text-xs font-black text-gray-400 uppercase tracking-widest">직업 설정</span>
                 </div>
-                <div class="relative flex gap-1">
-                  <USelectMenu v-model="selectedStudentData.role_idx" :options="jobs" value-attribute="idx"
-                    option-attribute="role_name" placeholder="직업 없음" class="flex-1" size="xl"
-                    @update:model-value="(val) => handleRoleToggle(val, 'set')">
+                <div class="space-y-3">
+                  <div class="flex flex-wrap gap-2 min-h-[32px]">
+                    <UBadge v-for="role in selectedStudentData.roles" :key="role.idx" color="indigo" variant="soft"
+                      class="rounded-lg py-1 pl-3 pr-1 flex items-center gap-1 font-bold text-sm">
+                      {{ role.role_name }}
+                      <UButton icon="i-heroicons-x-mark" color="gray" variant="ghost" size="xs"
+                        class="text-gray-400 hover:text-red-500 rounded-lg p-0.5"
+                        @click.stop="handleRoleToggle(role.idx, 'unset')" />
+                    </UBadge>
+                    <div v-if="!selectedStudentData.roles?.length" class="text-xs text-gray-400 font-bold py-1">직업 없음
+                    </div>
+                  </div>
+                  <USelectMenu :options="jobs" value-attribute="idx" option-attribute="role_name" placeholder="직업 추가하기"
+                    class="w-full" size="xl" @update:model-value="(val) => handleRoleToggle(val, 'set')">
                     <template #label>
-                      <span class="font-bold">
-                        {{jobs.find(j => Number(j.idx) === Number(selectedStudentData.role_idx))?.role_name || '직업 없음'
-                        }}
-                      </span>
+                      <span class="text-gray-400 font-bold">직업 추가하기...</span>
                     </template>
                   </USelectMenu>
-                  <UButton v-if="selectedStudentData?.role_idx" icon="i-heroicons-x-mark" color="gray" variant="ghost"
-                    size="xs" class="text-gray-300 ml-1"
-                    @click.stop="handleRoleToggle(selectedStudentData.role_idx, 'unset')" />
                 </div>
               </div>
 
@@ -1553,7 +1558,7 @@ const onSelectSchool = (school) => {
         <div class="flex items-center justify-between">
           <h3 class="text-xl font-black text-gray-800 flex items-center gap-2">
             <span class="i-heroicons-sparkles-solid w-6 h-6 text-blue-500" />
-            1등급 신용등급 특별 혜택
+            1등급 혜택 설정
           </h3>
           <UButton icon="i-heroicons-x-mark" color="gray" variant="ghost" circular
             @click="isSettingModalOpen = false" />
@@ -1572,6 +1577,9 @@ const onSelectSchool = (school) => {
                 <UInput v-model="teacherSettings.grade1_hope_price" type="number" size="xl" class="rounded-2xl" />
               </div>
             </div>
+
+
+
 
             <div class="grid grid-cols-2 gap-8">
               <div class="space-y-3">
@@ -1699,6 +1707,26 @@ const onSelectSchool = (school) => {
               class="flex-1 rounded-2xl font-black h-16 shadow-xl" @click="submitChangePassword" />
           </div>
         </div>
+      </div>
+    </UModal>
+    <!-- 개발자 노트 모달 -->
+    <UModal v-model="isDevNoteModalOpen">
+      <div class="p-8 space-y-6">
+        <h3 class="text-xl font-black flex items-center gap-2">
+          <span class="i-heroicons-document-text-solid w-6 h-6 text-purple-600" />
+          개발자 노트
+        </h3>
+        <div class="space-y-4 text-sm font-medium text-gray-600 leading-relaxed">
+          <div class="p-5 bg-purple-50 rounded-2xl border border-purple-100">
+            <p class="font-bold text-purple-700 mb-2">📢 적금 우대금리 지급 방식 변경 안내</p>
+            <p>우대금리 지급 방식이 변경되었습니다. 이전에는 가입 시점의 등급으로 금리가 고정되었으나, 이제는 <strong>만기 시점의 신용등급이 1등급인 경우에만</strong> 우대금리가
+              지급됩니다. 또한 적금마다 설정 가능하던 "1등급 우대 (+%)" 가 1등급 신용혜택과 중첩돼어 제거되었습니다.
+            </p>
+            <p class="mt-2 text-rose-500 font-bold">만기 전에 등급이 하락하면 우대 혜택을 받을 수 없으니 학생들에게 꾸준한 신용 관리를 독려해 주세요.</p>
+          </div>
+        </div>
+        <UButton label="확인했습니다" block color="purple" size="xl" class="rounded-2xl font-black"
+          @click="isDevNoteModalOpen = false" />
       </div>
     </UModal>
   </div>

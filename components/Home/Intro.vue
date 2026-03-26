@@ -133,6 +133,12 @@ useSeoMeta({
 
 const isMoney = ref(false)
 
+const classLogo = computed(() => {
+  if (student.value?.idnt_code === 'jauqFGD1fF') return '/rabong.png'
+  return dispot.value?.qr_bg ? (dispot.value.qr_bg.startsWith('http') ? dispot.value.qr_bg : hostUrl + dispot.value.qr_bg) : logo
+})
+
+
 const meals = ref([])
 
 const fetchMeals = async () => {
@@ -427,6 +433,8 @@ async function createSavings() {
       teacher: teacher?.value,
       amount_interest: dispotTotal?.value,
       interest_rate: totalRate,
+      base_rate: baseRate,
+      bonus_rate: (prodBonus + globBonus),
       deposit_type_idx: selectedDeposit.value?.idx,
       deposit_name: selectedDeposit.value?.deposit_name || "적금통장",
       end_date: maturityDate.value
@@ -479,7 +487,7 @@ watch([amount, selectedDepositIdx], () => {
           <div
             class="absolute inset-0 bg-white/30 blur-2xl rounded-full scale-125 opacity-0 group-hover:opacity-100 transition-opacity">
           </div>
-          <img :src="dispot?.qr_bg ? (dispot.qr_bg.startsWith('http') ? dispot.qr_bg : hostUrl + dispot.qr_bg) : logo"
+          <img :src="classLogo"
             alt="Class Logo"
             class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-2xl bg-white p-1 relative z-10">
         </div>
@@ -548,10 +556,7 @@ watch([amount, selectedDepositIdx], () => {
               <div>
                 <h4 class="text-lg font-black text-gray-800 truncate">{{ type.deposit_name }}</h4>
                 <p class="text-[10px] text-gray-400 font-bold mt-1 tracking-tighter">
-                  이율 {{ type.deposit_interest }}% + 우대 {{ type.grade1_deposit_interest }}%
-                  <span v-if="dispot?.grade1_deposit_interest > 0" class="text-indigo-500 font-black">
-                    (+1등급 {{ dispot.grade1_deposit_interest }}%)
-                  </span>
+                  이율 {{ type.deposit_interest }}%
                 </p>
               </div>
             </div>
@@ -586,7 +591,7 @@ watch([amount, selectedDepositIdx], () => {
             <div class="flex items-center justify-between text-[11px] font-black text-gray-400 px-2 tracking-widest uppercase">
               <span class="flex items-center gap-1.5">
                 <span v-if="Number(selectedDeposit.deposit_min) > 0">최소 {{ Number(selectedDeposit.deposit_min).toLocaleString() }}{{ dispot?.currency_name }} ~ </span>
-                최대 {{ (Number(selectedDeposit.deposit_max) + (isGrade1 ? (Number(selectedDeposit.grade1_deposit_max || 0) + Number(dispot?.grade1_deposit_max || 0)) : 0)).toLocaleString() }}{{ dispot?.currency_name }}
+                최대 {{ Number(selectedDeposit.deposit_max).toLocaleString() }}{{ dispot?.currency_name }}
               </span>
               <span v-if="dispotTotal > 0" class="text-emerald-500 flex items-center gap-1.5 animate-pulse">
                 <span class="i-heroicons-check-badge w-4 h-4" />예상 이자 +{{ Number(dispotTotal).toLocaleString() }}{{ dispot?.currency_name }}
