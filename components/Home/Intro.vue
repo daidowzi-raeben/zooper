@@ -535,10 +535,10 @@ watch([amount, selectedDepositIdx], () => {
         <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-1 px-1">
           <div v-for="(type, idx) in dispot?.deposit_types" :key="idx" 
             @click="selectedDepositIdx = idx"
-            :class="['min-w-[200px] p-6 rounded-[32px] border-2 transition-all cursor-pointer relative overflow-hidden',
+            :class="['min-w-[200px] p-6 rounded-[32px] border-2 transition-all cursor-pointer relative',
               selectedDepositIdx === idx ? 'bg-emerald-50 border-emerald-500 shadow-lg shadow-emerald-100' : 'bg-white border-gray-100 hover:border-emerald-200 shadow-sm']">
             
-            <div v-if="selectedDepositIdx === idx" class="absolute -right-2 -top-2">
+            <div v-if="selectedDepositIdx === idx" class="absolute right-4 top-4">
               <span class="i-heroicons-check-circle-solid w-8 h-8 text-emerald-500" />
             </div>
 

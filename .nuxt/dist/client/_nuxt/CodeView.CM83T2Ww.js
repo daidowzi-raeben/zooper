@@ -1,1 +1,0 @@
-import{j as o,c as t,a3 as s,i as a}from"./entry.CoDr_odj.js";const r={},c={class:"max-h-96 overflow-auto bg-gray-900 text-sm p-2"};function n(e,l){return a(),t("div",c,[s(e.$slots,"default")])}const d=o(r,[["render",n]]);export{d as default};

@@ -410,6 +410,64 @@ const handleCreditUpdate = async (val) => {
   }
 }
 
+const isTreasuryModalOpen = ref(false)
+const treasuryForm = ref({ amount: 0 })
+const onClickEditTreasury = () => {
+  treasuryForm.value.amount = Number(teacherInfo.value?.mb_point || 0)
+  isTreasuryModalOpen.value = true
+}
+
+const submitTreasuryEdit = async () => {
+  const res = await apiPost('teacher.php', {
+    mode: 'updateTreasury',
+    teacher_idx: teacherInfo.value.idx,
+    amount: treasuryForm.value.amount
+  })
+
+  if (res.result === 'SUCCESS') {
+    alert('국고 잔액이 수정되었습니다.')
+    teacherInfo.value.mb_point = treasuryForm.value.amount
+    isTreasuryModalOpen.value = false
+  }
+}
+
+const isTransferModalOpen = ref(false)
+const transferForm = ref({ amount: '', memo: '국고 지원금' })
+const handleTreasuryTransfer = () => {
+  transferForm.value.amount = ''
+  transferForm.value.memo = '국고 지원금'
+  isTransferModalOpen.value = true
+}
+
+const submitTreasuryTransfer = async () => {
+  if (!selectedStudentData.value) return
+  const n = Number(transferForm.value.amount)
+  if (isNaN(n) || n <= 0) return alert('올바른 금액을 입력하세요.')
+
+  const res = await apiPost('teacher.php', {
+    mode: 'transferToStudent',
+    teacher_idx: teacherInfo.value.idx,
+    student_idnt: selectedStudentData.value.idnt_code,
+    amount: n,
+    memo: transferForm.value.memo
+  })
+
+  if (res.result === 'SUCCESS') {
+    alert('지급되었습니다.')
+    teacherInfo.value.mb_point -= n
+    await fetchStudents()
+    selectedStudentData.value = studentOptions.value.find(s => s.value === selectedStudent.value)
+
+    // Reset and Refresh Points (Timeline)
+    page.value = 1
+    points.value = []
+    hasMore.value = true
+    await fetchPoints(1)
+
+    isTransferModalOpen.value = false
+  }
+}
+
 const handleScroll = () => {
   const scrollPosition = window.scrollY + window.innerHeight
   const bottomPosition = document.body.offsetHeight - 100
@@ -819,10 +877,10 @@ const onSelectSchool = (school) => {
       <div class="flex flex-wrap gap-2 overflow-x-auto pb-2 scrollbar-hide">
         <UButton label="학급 설정 및 1등급 혜택" icon="i-heroicons-cog-6-tooth" color="blue" @click="handleOpenSettings"
           class="rounded-xl px-6 py-2 shadow-md shadow-blue-100 font-bold" />
-        <UButton label="엑셀 샘플" icon="i-heroicons-document-arrow-down" color="white" variant="solid"
+        <UButton label="학생 업로드 엑셀 샘플" icon="i-heroicons-document-arrow-down" color="white" variant="solid"
           @click="onClickDownload" class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
-        <UButton label="엑셀 업로드" icon="i-heroicons-cloud-arrow-up" color="white" variant="solid" @click="onClickUpload"
-          class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
+        <UButton label="학생 엑셀 업로드" icon="i-heroicons-cloud-arrow-up" color="white" variant="solid"
+          @click="onClickUpload" class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
         <UButton label="학생 QR 전체 인쇄" icon="i-heroicons-printer" color="white" variant="solid" @click="printStudentQR"
           class="rounded-xl px-4 py-2 shadow-sm border-gray-200" />
         <UButton label="직업 관리" icon="i-heroicons-briefcase" color="indigo" @click="isJobModalOpen = true"
@@ -835,20 +893,42 @@ const onSelectSchool = (school) => {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- 국고 잔액 -->
         <div
-          class="relative overflow-hidden group rounded-3xl bg-gradient-to-br from-indigo-500 via-blue-600 to-blue-700 p-6 text-white shadow-xl shadow-blue-200 transition-all hover:-translate-y-1">
-          <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
-            <span class="i-heroicons-banknotes w-32 h-32" />
+          class="relative overflow-hidden group rounded-3xl bg-gradient-to-br from-indigo-500 via-blue-600 to-blue-700 p-7 text-white shadow-xl shadow-blue-100 transition-all hover:-translate-y-1">
+          <!-- Background Decoration -->
+          <div
+            class="absolute right-0 top-0 p-8 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+            <span class="i-heroicons-building-library-solid w-32 h-32" />
           </div>
-          <div class="flex justify-between items-start mb-4">
-            <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-              <span class="i-heroicons-building-library-solid w-6 h-6" />
+
+          <div class="relative z-10 flex flex-col h-full justify-between gap-8">
+            <div class="flex justify-between items-start">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-black tracking-widest uppercase opacity-50">National Treasury</span>
+                  <div class="w-1 h-1 rounded-full bg-white/30" />
+                  <span class="text-[9px] font-bold opacity-40">우리반 국고</span>
+                </div>
+                <h4 class="text-sm font-bold opacity-80">현재 국고 잔액</h4>
+              </div>
+              <UButton icon="i-heroicons-pencil-square-solid" size="2xs" color="white" variant="soft"
+                class="bg-white/10 hover:bg-white/20 border-0 rounded-lg backdrop-blur-md"
+                @click="onClickEditTreasury" />
             </div>
-            <span class="text-[10px] font-bold tracking-widest uppercase opacity-60">National Treasury</span>
-          </div>
-          <p class="text-sm font-medium opacity-80 mb-1">현재 국고 잔액</p>
-          <div class="flex items-baseline gap-2">
-            <span class="text-3xl font-black">{{ Number(teacherInfo?.mb_point || 0).toLocaleString() }}</span>
-            <span class="text-sm font-bold opacity-70">{{ teacherInfo?.currency_name }}</span>
+
+            <div>
+              <div class="flex items-baseline gap-2 mb-2">
+                <span class="text-4xl font-black tracking-tight">{{ Number(teacherInfo?.mb_point || 0).toLocaleString()
+                }}</span>
+                <span class="text-lg font-bold opacity-60">{{ teacherInfo?.currency_name }}</span>
+              </div>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-black/10 rounded-xl backdrop-blur-sm border border-white/5">
+                <span class="text-[10px] font-black text-white/50 uppercase">Student Assets</span>
+                <span class="text-[11px] font-bold text-white/80">
+                  {{ Number(teacherInfo?.student_mb_point || 0).toLocaleString() }}{{ teacherInfo?.currency_name }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -955,7 +1035,8 @@ const onSelectSchool = (school) => {
           <p class="text-xs text-gray-400 mb-6 ml-10">다양한 적금 상품을 만들어 아이들의 저축을 유도하세요.</p>
 
           <div class="flex-1 space-y-4 overflow-y-auto max-h-[500px] pr-2 custom-scrollbar">
-            <div v-if="depositTypes.length === 0" class="text-center py-12 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-200">
+            <div v-if="depositTypes.length === 0"
+              class="text-center py-12 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-200">
               <p class="text-xs text-gray-400 font-bold">아직 등록된 상품이 없습니다.</p>
             </div>
 
@@ -968,7 +1049,8 @@ const onSelectSchool = (school) => {
                 </div>
                 <div class="space-y-1">
                   <label class="text-[10px] font-black text-gray-400 uppercase">기간 (일)</label>
-                  <UInput v-model="item.deposit_day" type="number" size="lg" trailing-icon="i-heroicons-calendar" class="bg-white" />
+                  <UInput v-model="item.deposit_day" type="number" size="lg" trailing-icon="i-heroicons-calendar"
+                    class="bg-white" />
                 </div>
               </div>
 
@@ -988,32 +1070,38 @@ const onSelectSchool = (school) => {
               </div>
 
               <div class="flex gap-2">
-                <UButton label="저장" color="emerald" class="flex-1 rounded-xl font-bold" @click="saveDepositType(item)" />
-                <UButton icon="i-heroicons-trash" color="red" variant="soft" class="rounded-xl" @click="deleteDepositType(item.idx, idx)" />
+                <UButton label="저장" color="emerald" class="flex-1 rounded-xl font-bold"
+                  @click="saveDepositType(item)" />
+                <UButton icon="i-heroicons-trash" color="red" variant="soft" class="rounded-xl"
+                  @click="deleteDepositType(item.idx, idx)" />
               </div>
             </div>
           </div>
 
           <!-- 실시간 신청 현황 요약 -->
           <div class="mt-6 pt-6 border-t border-gray-100">
-             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">실시간 신청 현황</h3>
-                <span class="text-[10px] font-bold bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full">{{ deposits.length }}건</span>
-             </div>
-             <div v-if="deposits.length > 0" class="max-h-[120px] overflow-y-auto space-y-2 pr-2 custom-scrollbar">
-                <div v-for="dep in deposits" :key="dep.idx" class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-gray-100">
-                   <div class="flex items-center gap-2">
-                      <div class="w-7 h-7 bg-emerald-50 rounded-full flex items-center justify-center text-[10px] font-black text-emerald-600">
-                        {{ dep.student_name.charAt(0) }}
-                      </div>
-                      <span class="text-xs font-bold text-gray-700">{{ dep.student_name }}</span>
-                   </div>
-                   <div class="text-right">
-                      <p class="text-xs font-black text-gray-800">{{ Number(dep.amount).toLocaleString() }} {{ teacherInfo.currency_name }}</p>
-                   </div>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">실시간 신청 현황</h3>
+              <span class="text-[10px] font-bold bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full">{{
+                deposits.length }}건</span>
+            </div>
+            <div v-if="deposits.length > 0" class="max-h-[120px] overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+              <div v-for="dep in deposits" :key="dep.idx"
+                class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-gray-100">
+                <div class="flex items-center gap-2">
+                  <div
+                    class="w-7 h-7 bg-emerald-50 rounded-full flex items-center justify-center text-[10px] font-black text-emerald-600">
+                    {{ dep.student_name.charAt(0) }}
+                  </div>
+                  <span class="text-xs font-bold text-gray-700">{{ dep.student_name }}</span>
                 </div>
-             </div>
-             <p v-else class="text-center py-4 text-[10px] text-gray-400 font-bold">진행 중인 적금이 없습니다.</p>
+                <div class="text-right">
+                  <p class="text-xs font-black text-gray-800">{{ Number(dep.amount).toLocaleString() }} {{
+                    teacherInfo.currency_name }}</p>
+                </div>
+              </div>
+            </div>
+            <p v-else class="text-center py-4 text-[10px] text-gray-400 font-bold">진행 중인 적금이 없습니다.</p>
           </div>
         </section>
       </div>
@@ -1113,6 +1201,9 @@ const onSelectSchool = (school) => {
                   icon="i-heroicons-arrow-right-on-rectangle"
                   class="rounded-[24px] h-14 font-black text-base shadow-xl transition-all hover:-translate-y-1 active:scale-95 px-8"
                   @click="onClickLogin" />
+                <UButton label="국고 지원금 보내기" color="emerald" variant="solid" size="xl" icon="i-heroicons-banknotes"
+                  class="rounded-[24px] h-14 font-black text-base shadow-xl transition-all hover:-translate-y-1 active:scale-95 px-8"
+                  @click="handleTreasuryTransfer" />
               </div>
             </div>
 
@@ -1451,6 +1542,50 @@ const onSelectSchool = (school) => {
     </UModal>
 
     <!-- Modals are closed or removed -->
+    <!-- 국고 잔액 수정 모달 -->
+    <UModal v-model="isTreasuryModalOpen">
+      <div class="p-8">
+        <h3 class="text-xl font-black mb-6 flex items-center gap-2">
+          <span class="i-heroicons-banknotes-solid w-6 h-6 text-blue-600" />
+          국고 잔액 수정
+        </h3>
+        <div class="space-y-6">
+          <UFormGroup label="수정할 금액 (입력한 금액으로 변경됩니다)">
+            <UInput v-model="treasuryForm.amount" type="number" size="xl" autocomplete="off"
+              class="w-full text-center font-black" />
+          </UFormGroup>
+          <div class="flex gap-4">
+            <UButton label="취소" color="gray" variant="ghost" class="flex-1" size="xl"
+              @click="isTreasuryModalOpen = false" />
+            <UButton label="저장하기" color="blue" class="flex-1" size="xl" @click="submitTreasuryEdit" />
+          </div>
+        </div>
+      </div>
+    </UModal>
+
+    <!-- 국고 지원금 이체 모달 -->
+    <UModal v-model="isTransferModalOpen">
+      <div class="p-8">
+        <h3 class="text-xl font-black mb-6 flex items-center gap-2">
+          <span class="i-heroicons-paper-airplane-solid w-6 h-6 text-emerald-600" />
+          '{{ selectedStudentName }}' 학생에게 송금
+        </h3>
+        <div class="space-y-6">
+          <UFormGroup label="보낼 금액 (국고에서 차감)">
+            <UInput v-model="transferForm.amount" type="number" size="xl" placeholder="예: 50" autocomplete="off"
+              class="w-full text-center font-black" />
+          </UFormGroup>
+          <UFormGroup label="지급 메모 (통장 내역)">
+            <UInput v-model="transferForm.memo" size="xl" placeholder="국고 지원금, 대회 우승 상금 등" autocomplete="off" />
+          </UFormGroup>
+          <div class="flex gap-4">
+            <UButton label="취소" color="gray" variant="ghost" class="flex-1" size="xl"
+              @click="isTransferModalOpen = false" />
+            <UButton label="보내기" color="emerald" class="flex-1 font-black" size="xl" @click="submitTreasuryTransfer" />
+          </div>
+        </div>
+      </div>
+    </UModal>
   </div>
 </template>
 
