@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <h3 :id=\"props.id\">\n    <a\n      v-if=\"props.id && generate\"\n      :href=\"`#${props.id}`\"\n    >\n      <slot />\n    </a>\n    <slot v-else />\n  </h3>\n</template>\n\n<script setup lang=\"ts\">\nimport { computed, useRuntimeConfig } from '#imports'\n\nconst props = defineProps<{ id?: string }>()\n\nconst { headings } = useRuntimeConfig().public.mdc\nconst generate = computed(() => props.id && ((typeof headings?.anchorLinks === 'boolean' && headings?.anchorLinks === true) || (typeof headings?.anchorLinks === 'object' && headings?.anchorLinks?.h3)))\n</script>\n",
-      "start": 1774502225189,
-      "end": 1774502225381,
+      "start": 1774510876848,
+      "end": 1774510877049,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877049,
+      "end": 1774510877049,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877049,
+      "end": 1774510877049,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877049,
+      "end": 1774510877049,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877050,
+      "end": 1774510877050,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877050,
+      "end": 1774510877050,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877050,
+      "end": 1774510877050,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877050,
+      "end": 1774510877050,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877050,
+      "end": 1774510877050,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774502225381,
-      "end": 1774502225381,
+      "start": 1774510877050,
+      "end": 1774510877050,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import _sfc_main from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH3.vue?vue&type=script&setup=true&lang.ts\";\nexport * from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH3.vue?vue&type=script&setup=true&lang.ts\";\nexport default _sfc_main;\n",
-      "start": 1774502225381,
-      "end": 1774502225400,
+      "start": 1774510877050,
+      "end": 1774510878361,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,156 +74,156 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774502225400,
-      "end": 1774502225400,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774502225400,
-      "end": 1774502225400,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774502225400,
-      "end": 1774502225400,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774502225400,
-      "end": 1774502225400,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
       "result": "import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => import(\"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH3.vue\").then(r => r.default))",
-      "start": 1774502225400,
-      "end": 1774502225400,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "replace",
-      "start": 1774502225400,
-      "end": 1774502225400,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774502225400,
-      "end": 1774502225400,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878361,
+      "end": 1774510878361,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878361,
+      "end": 1774510878362,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774502225401,
-      "end": 1774502225401,
+      "start": 1774510878362,
+      "end": 1774510878362,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1774502225401,
-      "end": 1774502225402,
+      "start": 1774510878363,
+      "end": 1774510878363,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774502225402,
-      "end": 1774502225402,
+      "start": 1774510878363,
+      "end": 1774510878363,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
       "result": "import { __vitePreload } from \"\u0000vite/preload-helper.js\";import { defineAsyncComponent } from \"vue\"\nexport default defineAsyncComponent(() => __vitePreload(() => import(\"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseH3.vue\"),__VITE_IS_MODERN__?\"__VITE_PRELOAD__\":void 0,import.meta.url).then(r => r.default))",
-      "start": 1774502225402,
-      "end": 1774502225402,
+      "start": 1774510878363,
+      "end": 1774510878363,
       "order": "normal",
       "sourcemaps": null
     },
     {
       "name": "vite:reporter",
-      "start": 1774502225402,
-      "end": 1774502225402,
+      "start": 1774510878363,
+      "end": 1774510878363,
       "order": "normal"
     }
   ]

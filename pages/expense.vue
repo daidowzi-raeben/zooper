@@ -123,9 +123,11 @@ const roleStudent = async () => {
 
 
   if (res.result === 'SUCCESS') {
+    // role_code가 BANKER인 학생만 필터링
+    const bankers = res.data.filter(s => s.role_code === 'BANKER')
     // 이름만 추출해서 문자열로 변환
-    studentRole.value = res.data.map(s => s.student_name).join(', ')
-    studentRoleIdntCode.value = res.data.map(s => s.idnt_code)
+    studentRole.value = bankers.map(s => s.student_name).join(', ')
+    studentRoleIdntCode.value = bankers.map(s => s.idnt_code)
   }
 }
 
@@ -213,7 +215,7 @@ const handleDeposit = async () => {
     <div class="bg-white p-8 rounded-[40px] border border-gray-100 shadow-xl space-y-8">
       <div class="space-y-2">
         <h3 class="text-xl font-black text-gray-800">얼마를 사용할까요?</h3>
-        <p class="text-sm text-gray-400 font-medium font-bold">은행원 친구( <span class="text-rose-500">{{ studentRole || '없음' }}</span> )와 함께 승인이 필요해요!</p>
+        <p class="text-sm text-gray-400 font-medium">은행원 친구( <span class="text-indigo-500 font-bold">{{ studentRole || '없음' }}</span> )와 함께 승인이 필요해요!</p>
       </div>
 
       <div class="space-y-6">

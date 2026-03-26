@@ -118,9 +118,11 @@ const roleStudent = async () => {
 
 
   if (res.result === 'SUCCESS') {
+    // role_code가 BANKER인 학생만 필터링
+    const bankers = res.data.filter(s => s.role_code === 'BANKER')
     // 이름만 추출해서 문자열로 변환
-    studentRole.value = res.data.map(s => s.student_name).join(', ')
-    studentRoleIdntCode.value = res.data.map(s => s.idnt_code)
+    studentRole.value = bankers.map(s => s.student_name).join(', ')
+    studentRoleIdntCode.value = bankers.map(s => s.idnt_code)
   }
 }
 
