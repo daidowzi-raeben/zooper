@@ -113,34 +113,33 @@ const handleClose = () => {
             <!-- 상단: 학교/반 정보 & 학생 번호/이름 -->
             <div class="flex justify-between items-start">
               <div class="space-y-1 text-left">
-                <div class="h-4 w-16 bg-current opacity-20 rounded"></div>
-                <div class="text-[10px] font-black uppercase tracking-widest opacity-60">{{ teacherInfo.class_name }}
+                <div class="h-5 w-20 bg-current opacity-20 rounded"></div>
+                <div class="text-[10px] font-black uppercase tracking-widest opacity-50">{{ teacherInfo.class_name }}
                 </div>
               </div>
               <div class="text-right">
-                <div class="text-xl font-black leading-tight">{{ student.student_number }}번 {{ student.student_name }}
+                <div class="text-base font-black leading-tight">{{ student.student_number }}번 {{ student.student_name }}
                 </div>
-                <div class="text-[8px] font-bold opacity-30 tracking-widest mt-0.5 uppercase">Student Card</div>
+                <div class="text-[9px] font-bold opacity-40 uppercase">Student Card</div>
               </div>
             </div>
 
             <!-- 하단: 안내 문구 & QR 코드 -->
             <div class="flex justify-between items-end gap-2">
               <div class="space-y-1.5 text-left flex-1">
-                <div class="text-[9px] leading-tight font-bold opacity-60">
-                  <p>• 입출금은 은행원 승인이 필요합니다.</p>
-                  <p>• 계좌 이체는 개인 QR코드로 가능합니다.</p>
-                  <p>• QR코드를 타인에게 노출하지 마세요.</p>
+                <div class="text-[9px] leading-relaxed font-bold opacity-60">
+                  <p>입출금은 은행원 승인이 필요합니다.</p>
+                  <p>계좌 이체는 개인 QR코드로 가능합니다.</p>
                 </div>
                 <div class="px-2 py-0.5 rounded border border-current opacity-20 text-[7px] font-black italic inline-block mt-2">
                   {{ teacherInfo.class_name }}</div>
               </div>
 
-              <!-- QR 코드 영역 -->
-              <div class="bg-white p-2 rounded-xl shadow-sm border border-gray-100 shrink-0">
-                <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.idnt_code}`"
-                  class="w-14 h-14" alt="QR Code" />
-              </div>
+                <div
+                  class="w-14 h-14 border-2 border-current opacity-20 bg-white/50 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                  <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.idnt_code}`"
+                    class="w-10 h-10" alt="QR Code" />
+                </div>
             </div>
           </div>
 
@@ -162,7 +161,7 @@ const handleClose = () => {
 .qr-card {
   width: 86mm;
   height: 54mm;
-  border-radius: 12px;
+  border-radius: 28px;
   box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;

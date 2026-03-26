@@ -4,8 +4,8 @@
     {
       "name": "commonjs",
       "result": "var xlsx_full_min = {exports: {}}; export {xlsx_full_min as __module}",
-      "start": 1774496817521,
-      "end": 1774496817521
+      "start": 1774496971167,
+      "end": 1774496971167
     }
   ]
 }
