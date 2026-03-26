@@ -14,6 +14,9 @@ export default defineNuxtConfig({
   ui: {
     icons: ["heroicons", "lucide"],
   },
+  colorMode: {
+    preference: 'light',
+  },
   nitro: {
     prerender: {
       routes: [],
