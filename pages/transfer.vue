@@ -21,7 +21,7 @@ const startScan = () => {
     return
   }
   if (!selectedStudent.value) {
-    alert('출금할 학생을 선택해주세요')
+    alert('이체할 친구를 선택해주세요')
     return
   }
 
@@ -151,14 +151,14 @@ const handleDeposit = async () => {
     return
   }
   if (!selectedStudent.value) {
-    alert('출금할 학생을 선택해주세요')
+    alert('이체할 친구를 선택해주세요')
     return
   }
 
   const res = await apiPost('bank.php', {
     mode: 'deposit',
     from_idnt_code: sessionStorage.getItem('idnt_code'),
-    to_idnt_code: selectedStudent.value,
+    to_idnt_code: selectedStudent.value.value,
     point: parseInt(amountInput.value)
   })
 
@@ -217,8 +217,6 @@ const handleDeposit = async () => {
             placeholder="친구를 선택해주세요" 
             size="xl" 
             class="rounded-2xl"
-            value-attribute="value"
-            option-attribute="label"
           />
         </div>
 

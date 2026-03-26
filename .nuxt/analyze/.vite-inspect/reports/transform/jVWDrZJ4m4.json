@@ -4,8 +4,8 @@
     {
       "name": "vite:vue",
       "result": "\nexport default (sfc, props) => {\n  const target = sfc.__vccOpts || sfc;\n  for (const [key, val] of props) {\n    target[key] = val;\n  }\n  return target;\n}\n",
-      "start": 1774510878882,
-      "end": 1774510878882,
+      "start": 1774511337730,
+      "end": 1774511337730,
       "sourcemaps": null
     }
   ]
