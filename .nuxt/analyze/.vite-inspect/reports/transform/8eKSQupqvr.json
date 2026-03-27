@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nimport { onMounted, ref } from 'vue'\nimport { apiPost, apiPoint } from '@/common/api'\n\n//  QR\nimport { QrcodeStream } from 'vue-qrcode-reader'\n\nconst isScanning = ref(false)\nconst error = ref('')\n\nconst startScan = () => {\n\n  if (amountInput.value < 1) {\n    alert('장난 안돼요 ^^')\n    return\n  }\n\n\n  if (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n  if (!selectedStudent.value) {\n    alert('이체할 친구를 선택해주세요')\n    return\n  }\n\n  if (amountInput.value > memberPoint.value) {\n    alert('잔액이 부족합니다.')\n    return\n  }\n\n  isScanning.value = true\n  error.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (url === sessionStorage.getItem('idnt_code')) {\n    handleDeposit()\n  } else {\n    isScanning.value = false\n    return alert('인증오류')\n  }\n  if (!url) return\n\n  isScanning.value = false\n  //   router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\n//  QR\nconst points = ref([])\nconst page = ref(1)\nconst isLoading = ref(false)\nconst hasMore = ref(true)\n\nconst studentOptions = ref([])\nconst selectedStudent = ref(null)\nconst amountInput = ref(null)\n\nconst fetchPoints = async (v) => {\n  if (isLoading.value || !hasMore.value) return\n\n  const idnt_code = sessionStorage.getItem('idnt_code')\n  if (!idnt_code) return\n\n  isLoading.value = true\n\n  try {\n    const res = await apiPost('bank.php', {\n      mode: 'history',\n      idnt_code,\n      page: v || page.value,\n      rows: 10,\n    })\n\n    if (res.result === 'SUCCESS' && Array.isArray(res.data)) {\n      if (res.data.length === 0) {\n        hasMore.value = false\n      } else {\n        points.value.push(...res.data)\n        page.value++\n      }\n    } else {\n      hasMore.value = false\n    }\n  } catch (error) {\n    console.error('포인트 조회 실패:', error)\n    hasMore.value = false\n  } finally {\n    isLoading.value = false\n  }\n}\n\nconst fetchStudents = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n\n  const res = await apiPost('member.php', {\n    mode: 'studentList',\n    teacher\n  })\n\n  if (res.result === 'SUCCESS') {\n    memberPoint.value = await apiPoint()\n    const studentInfo = JSON.parse(sessionStorage.getItem('student'))\n    const selfIdntCode = studentInfo?.idnt_code\n\n    studentOptions.value = res.data\n      .filter(s => String(s.idnt_code).trim() !== String(selfIdntCode).trim())\n      .map(s => ({\n        label: s.student_name,\n        value: s.idnt_code\n      }))\n  }\n}\n\nconst dispot = ref(null)\nconst fetchDispot = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n  const res = await apiPost('teacher.php', { mode: 'dispot', teacher: teacher })\n  if (res.result === 'SUCCESS') dispot.value = res.data\n}\n\nonMounted(async () => {\n  await fetchDispot()\n  fetchPoints()\n  fetchStudents()\n  window.addEventListener('scroll', handleScroll)\n\n  const point = await apiPoint()\n  memberPoint.value = point\n})\n\nconst handleScroll = () => {\n  const scrollPosition = window.scrollY + window.innerHeight\n  const bottomPosition = document.body.offsetHeight - 50\n  if (scrollPosition >= bottomPosition) {\n    fetchPoints()\n  }\n}\n\n\nconst memberPoint = ref(0)\nconst handleDeposit = async () => {\n  if (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n  if (!selectedStudent.value) {\n    alert('이체할 친구를 선택해주세요')\n    return\n  }\n\n  const res = await apiPost('bank.php', {\n    mode: 'deposit',\n    from_idnt_code: sessionStorage.getItem('idnt_code'),\n    to_idnt_code: selectedStudent.value.value,\n    point: parseInt(amountInput.value)\n  })\n\n  if (res.result === 'SUCCESS') {\n    alert('출금 완료')\n\n    // 리스트 초기화 및 다시 조회\n    page.value = 1\n    points.value = []\n    hasMore.value = true\n    await fetchPoints(1)\n\n    amountInput.value = null\n    selectedStudent.value = null\n    memberPoint.value = await apiPoint()\n  } else {\n    alert(res.message || '출금에 실패했습니다.')\n  }\n}\n\n</script>\n\n<template>\n  <div class=\"pb-32 space-y-10 min-h-screen\">\n    <!-- 💸 이체 헤더 (Transfer Header) -->\n    <div\n      class=\"relative bg-gradient-to-br from-violet-600 to-indigo-700 rounded-[40px] p-8 text-white shadow-2xl shadow-indigo-100 overflow-hidden\">\n      <div class=\"absolute -right-10 -top-10 w-48 h-48 bg-white/10 rounded-full blur-3xl\"></div>\n\n      <div class=\"relative z-10 flex flex-col items-center text-center space-y-6\">\n        <div\n          class=\"w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl\">\n          <Icon name=\"solar:banknote-2-bold-duotone\" class=\"w-12 h-12 text-white\" />\n        </div>\n\n        <div class=\"space-y-1\">\n          <p class=\"text-[10px] font-black uppercase tracking-[0.3em] opacity-60\">My Wallet Balance</p>\n          <div class=\"flex items-baseline gap-2\">\n            <h2 class=\"text-4xl font-black tabular-nums\">{{ Number(memberPoint).toLocaleString() }}</h2>\n            <span class=\"text-lg font-bold opacity-70\">{{ dispot?.currency_name || '돌멩이' }}</span>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <!-- 🏦 이체 폼 (Transfer Form) -->\n    <div class=\"bg-white p-8 rounded-[40px] border border-gray-100 shadow-xl space-y-8\">\n      <div class=\"space-y-2\">\n        <h3 class=\"text-xl font-black text-gray-800\">누구에게 보낼까요?</h3>\n        <p class=\"text-sm text-gray-400 font-medium font-bold\">친구에게 소중한 마음을 전달해보세요!</p>\n      </div>\n\n      <div class=\"space-y-6\">\n        <div class=\"space-y-2\">\n          <label class=\"text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2\">Select Student</label>\n          <USelectMenu v-model=\"selectedStudent\" :options=\"studentOptions\" placeholder=\"친구를 선택해주세요\" size=\"xl\"\n            class=\"rounded-2xl\" />\n        </div>\n\n        <div class=\"space-y-2\">\n          <label class=\"text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2\">Amount</label>\n          <div class=\"relative group\">\n            <UInput v-model=\"amountInput\" placeholder=\"보낼 금액 입력\" size=\"xl\" type=\"tel\"\n              input-class=\"h-20 font-black text-2xl pl-16 rounded-[28px] border-2 border-gray-50 focus:border-violet-400 bg-gray-50/50 transition-all text-right pr-8\" />\n            <span\n              class=\"absolute left-6 top-1/2 -translate-y-1/2 i-heroicons-paper-airplane w-7 h-7 text-gray-300 group-focus-within:text-violet-500 transition-colors\" />\n          </div>\n        </div>\n\n        <UButton label=\"친구에게 송금하기\" size=\"xl\" block\n          class=\"h-20 rounded-[28px] font-black text-lg bg-violet-600 hover:bg-violet-700 shadow-xl shadow-violet-100 transition-all active:scale-95 border-0\"\n          @click=\"startScan()\" />\n      </div>\n    </div>\n\n    <!-- 📱 본인 인증 QR 스캐너 (Security) -->\n    <div v-if=\"isScanning\"\n      class=\"fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black/90 backdrop-blur-md p-10\">\n      <div class=\"absolute top-10 text-white text-center space-y-2\">\n        <p class=\"text-[10px] font-black tracking-widest uppercase opacity-60\">Security Check</p>\n        <h3 class=\"text-3xl font-black text-white\">송금 본인 인증</h3>\n        <p class=\"text-sm font-medium text-white/50\">나의 QR코드를 스캔해서 이체를 승인하세요</p>\n      </div>\n\n      <div\n        class=\"relative w-full max-w-sm aspect-square rounded-[40px] overflow-hidden border-4 border-violet-500/30 shadow-2xl\">\n        <qrcode-stream @detect=\"onDetect\" @error=\"onError\" />\n        <div class=\"absolute inset-0 border-[40px] border-black/20 pointer-events-none\"></div>\n        <div\n          class=\"absolute top-1/2 left-0 right-0 h-0.5 bg-violet-400/50 shadow-[0_0_20px_rgba(167,139,250,1)] animate-scan\">\n        </div>\n      </div>\n\n      <button @click=\"isScanning = false\"\n        class=\"mt-12 text-white/50 hover:text-white font-black text-sm p-4 tracking-widest uppercase\">Go Back</button>\n    </div>\n\n    <!-- 📝 거래 내역 (History) -->\n    <div class=\"space-y-6\">\n      <div class=\"flex items-center gap-2 px-2 text-gray-800\">\n        <span class=\"i-heroicons-list-bullet-solid w-5 h-5 text-gray-400\" />\n        <h3 class=\"text-xs font-black text-gray-400 uppercase tracking-[0.3em]\">Recent Transactions</h3>\n      </div>\n\n      <div\n        class=\"bg-white rounded-[40px] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50/50 text-gray-800\">\n        <div v-if=\"points.length > 0\">\n          <div v-for=\"item in points\" :key=\"item.idx\"\n            class=\"flex items-center justify-between p-6 hover:bg-gray-50/50 transition-all group\">\n            <div class=\"flex items-center gap-4\">\n              <div :class=\"['w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all group-hover:scale-110',\n                item.point_type === 'save' ? 'bg-blue-50 text-blue-600' : 'bg-rose-50 text-rose-600']\">\n                <Icon :name=\"item.point_type === 'save' ? 'solar:arrow-down-bold' : 'solar:arrow-up-bold'\"\n                  class=\"w-6 h-6\" />\n              </div>\n              <div>\n                <p class=\"text-sm font-black text-gray-800 leading-tight\">{{ item.description }}</p>\n                <p class=\"text-[9px] text-gray-400 font-bold tracking-tighter mt-1\">{{ item.c_datetime }}</p>\n              </div>\n            </div>\n            <div class=\"text-right\">\n              <p\n                :class=\"['text-base font-black tabular-nums', item.point_type === 'save' ? 'text-blue-600' : 'text-rose-600']\">\n                {{ item.point_type === 'save' ? '+' : '-' }}{{ Number(item.point).toLocaleString() }}\n              </p>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n</script>",
-      "start": 1774589246532,
-      "end": 1774589246792,
+      "start": 1774590570983,
+      "end": 1774590571254,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774589246792,
-      "end": 1774589246792,
+      "start": 1774590571254,
+      "end": 1774590571254,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { createElementVNode as _createElementVNode, resolveComponent as _resolveComponent, createVNode as _createVNode, toDisplayString as _toDisplayString, unref as _unref, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode, renderList as _renderList, Fragment as _Fragment, normalizeClass as _normalizeClass } from \"vue\"\n\nconst _hoisted_1 = { class: \"pb-32 space-y-10 min-h-screen\" }\nconst _hoisted_2 = { class: \"relative bg-gradient-to-br from-violet-600 to-indigo-700 rounded-[40px] p-8 text-white shadow-2xl shadow-indigo-100 overflow-hidden\" }\nconst _hoisted_3 = { class: \"relative z-10 flex flex-col items-center text-center space-y-6\" }\nconst _hoisted_4 = { class: \"w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl\" }\nconst _hoisted_5 = { class: \"space-y-1\" }\nconst _hoisted_6 = { class: \"flex items-baseline gap-2\" }\nconst _hoisted_7 = { class: \"text-4xl font-black tabular-nums\" }\nconst _hoisted_8 = { class: \"text-lg font-bold opacity-70\" }\nconst _hoisted_9 = { class: \"bg-white p-8 rounded-[40px] border border-gray-100 shadow-xl space-y-8\" }\nconst _hoisted_10 = { class: \"space-y-6\" }\nconst _hoisted_11 = { class: \"space-y-2\" }\nconst _hoisted_12 = { class: \"space-y-2\" }\nconst _hoisted_13 = { class: \"relative group\" }\nconst _hoisted_14 = {\n  key: 0,\n  class: \"fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black/90 backdrop-blur-md p-10\"\n}\nconst _hoisted_15 = { class: \"relative w-full max-w-sm aspect-square rounded-[40px] overflow-hidden border-4 border-violet-500/30 shadow-2xl\" }\nconst _hoisted_16 = { class: \"space-y-6\" }\nconst _hoisted_17 = { class: \"bg-white rounded-[40px] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50/50 text-gray-800\" }\nconst _hoisted_18 = { key: 0 }\nconst _hoisted_19 = { class: \"flex items-center gap-4\" }\nconst _hoisted_20 = { class: \"text-sm font-black text-gray-800 leading-tight\" }\nconst _hoisted_21 = { class: \"text-[9px] text-gray-400 font-bold tracking-tighter mt-1\" }\nconst _hoisted_22 = { class: \"text-right\" }\n\nimport { onMounted, ref } from 'vue'\nimport { apiPost, apiPoint } from '@/common/api'\n\n//  QR\nimport { QrcodeStream } from 'vue-qrcode-reader'\n\n\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n\n\nconst _sfc_main = /*@__PURE__*/Object.assign(__default__, {\n  __name: 'transfer',\n  setup(__props) {\n\nconst isScanning = ref(false)\nconst error = ref('')\n\nconst startScan = () => {\n\n  if (amountInput.value < 1) {\n    alert('장난 안돼요 ^^')\n    return\n  }\n\n\n  if (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n  if (!selectedStudent.value) {\n    alert('이체할 친구를 선택해주세요')\n    return\n  }\n\n  if (amountInput.value > memberPoint.value) {\n    alert('잔액이 부족합니다.')\n    return\n  }\n\n  isScanning.value = true\n  error.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (url === sessionStorage.getItem('idnt_code')) {\n    handleDeposit()\n  } else {\n    isScanning.value = false\n    return alert('인증오류')\n  }\n  if (!url) return\n\n  isScanning.value = false\n  //   router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\n//  QR\nconst points = ref([])\nconst page = ref(1)\nconst isLoading = ref(false)\nconst hasMore = ref(true)\n\nconst studentOptions = ref([])\nconst selectedStudent = ref(null)\nconst amountInput = ref(null)\n\nconst fetchPoints = async (v) => {\n  if (isLoading.value || !hasMore.value) return\n\n  const idnt_code = sessionStorage.getItem('idnt_code')\n  if (!idnt_code) return\n\n  isLoading.value = true\n\n  try {\n    const res = await apiPost('bank.php', {\n      mode: 'history',\n      idnt_code,\n      page: v || page.value,\n      rows: 10,\n    })\n\n    if (res.result === 'SUCCESS' && Array.isArray(res.data)) {\n      if (res.data.length === 0) {\n        hasMore.value = false\n      } else {\n        points.value.push(...res.data)\n        page.value++\n      }\n    } else {\n      hasMore.value = false\n    }\n  } catch (error) {\n    console.error('포인트 조회 실패:', error)\n    hasMore.value = false\n  } finally {\n    isLoading.value = false\n  }\n}\n\nconst fetchStudents = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n\n  const res = await apiPost('member.php', {\n    mode: 'studentList',\n    teacher\n  })\n\n  if (res.result === 'SUCCESS') {\n    memberPoint.value = await apiPoint()\n    const studentInfo = JSON.parse(sessionStorage.getItem('student'))\n    const selfIdntCode = studentInfo?.idnt_code\n\n    studentOptions.value = res.data\n      .filter(s => String(s.idnt_code).trim() !== String(selfIdntCode).trim())\n      .map(s => ({\n        label: s.student_name,\n        value: s.idnt_code\n      }))\n  }\n}\n\nconst dispot = ref(null)\nconst fetchDispot = async () => {\n  const teacher = JSON.parse(sessionStorage.getItem('student'))?.teacher\n  if (!teacher) return\n  const res = await apiPost('teacher.php', { mode: 'dispot', teacher: teacher })\n  if (res.result === 'SUCCESS') dispot.value = res.data\n}\n\nonMounted(async () => {\n  await fetchDispot()\n  fetchPoints()\n  fetchStudents()\n  window.addEventListener('scroll', handleScroll)\n\n  const point = await apiPoint()\n  memberPoint.value = point\n})\n\nconst handleScroll = () => {\n  const scrollPosition = window.scrollY + window.innerHeight\n  const bottomPosition = document.body.offsetHeight - 50\n  if (scrollPosition >= bottomPosition) {\n    fetchPoints()\n  }\n}\n\n\nconst memberPoint = ref(0)\nconst handleDeposit = async () => {\n  if (!amountInput.value) {\n    alert('출금액을 입력해주세요')\n    return\n  }\n  if (!selectedStudent.value) {\n    alert('이체할 친구를 선택해주세요')\n    return\n  }\n\n  const res = await apiPost('bank.php', {\n    mode: 'deposit',\n    from_idnt_code: sessionStorage.getItem('idnt_code'),\n    to_idnt_code: selectedStudent.value.value,\n    point: parseInt(amountInput.value)\n  })\n\n  if (res.result === 'SUCCESS') {\n    alert('출금 완료')\n\n    // 리스트 초기화 및 다시 조회\n    page.value = 1\n    points.value = []\n    hasMore.value = true\n    await fetchPoints(1)\n\n    amountInput.value = null\n    selectedStudent.value = null\n    memberPoint.value = await apiPoint()\n  } else {\n    alert(res.message || '출금에 실패했습니다.')\n  }\n}\n\n\nreturn (_ctx, _cache) => {\n  const _component_Icon = _resolveComponent(\"Icon\")\n  const _component_USelectMenu = _resolveComponent(\"USelectMenu\")\n  const _component_UInput = _resolveComponent(\"UInput\")\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    _createElementVNode(\"div\", _hoisted_2, [\n      _cache[5] || (_cache[5] = _createElementVNode(\"div\", { class: \"absolute -right-10 -top-10 w-48 h-48 bg-white/10 rounded-full blur-3xl\" }, null, -1)),\n      _createElementVNode(\"div\", _hoisted_3, [\n        _createElementVNode(\"div\", _hoisted_4, [\n          _createVNode(_component_Icon, {\n            name: \"solar:banknote-2-bold-duotone\",\n            class: \"w-12 h-12 text-white\"\n          })\n        ]),\n        _createElementVNode(\"div\", _hoisted_5, [\n          _cache[4] || (_cache[4] = _createElementVNode(\"p\", { class: \"text-[10px] font-black uppercase tracking-[0.3em] opacity-60\" }, \"My Wallet Balance\", -1)),\n          _createElementVNode(\"div\", _hoisted_6, [\n            _createElementVNode(\"h2\", _hoisted_7, _toDisplayString(Number(memberPoint.value).toLocaleString()), 1),\n            _createElementVNode(\"span\", _hoisted_8, _toDisplayString(dispot.value?.currency_name || '돌멩이'), 1)\n          ])\n        ])\n      ])\n    ]),\n    _createElementVNode(\"div\", _hoisted_9, [\n      _cache[9] || (_cache[9] = _createElementVNode(\"div\", { class: \"space-y-2\" }, [\n        _createElementVNode(\"h3\", { class: \"text-xl font-black text-gray-800\" }, \"누구에게 보낼까요?\"),\n        _createElementVNode(\"p\", { class: \"text-sm text-gray-400 font-medium font-bold\" }, \"친구에게 소중한 마음을 전달해보세요!\")\n      ], -1)),\n      _createElementVNode(\"div\", _hoisted_10, [\n        _createElementVNode(\"div\", _hoisted_11, [\n          _cache[6] || (_cache[6] = _createElementVNode(\"label\", { class: \"text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2\" }, \"Select Student\", -1)),\n          _createVNode(_component_USelectMenu, {\n            modelValue: selectedStudent.value,\n            \"onUpdate:modelValue\": _cache[0] || (_cache[0] = $event => ((selectedStudent).value = $event)),\n            options: studentOptions.value,\n            placeholder: \"친구를 선택해주세요\",\n            size: \"xl\",\n            class: \"rounded-2xl\"\n          }, null, 8, [\"modelValue\", \"options\"])\n        ]),\n        _createElementVNode(\"div\", _hoisted_12, [\n          _cache[8] || (_cache[8] = _createElementVNode(\"label\", { class: \"text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2\" }, \"Amount\", -1)),\n          _createElementVNode(\"div\", _hoisted_13, [\n            _createVNode(_component_UInput, {\n              modelValue: amountInput.value,\n              \"onUpdate:modelValue\": _cache[1] || (_cache[1] = $event => ((amountInput).value = $event)),\n              placeholder: \"보낼 금액 입력\",\n              size: \"xl\",\n              type: \"tel\",\n              \"input-class\": \"h-20 font-black text-2xl pl-16 rounded-[28px] border-2 border-gray-50 focus:border-violet-400 bg-gray-50/50 transition-all text-right pr-8\"\n            }, null, 8, [\"modelValue\"]),\n            _cache[7] || (_cache[7] = _createElementVNode(\"span\", { class: \"absolute left-6 top-1/2 -translate-y-1/2 i-heroicons-paper-airplane w-7 h-7 text-gray-300 group-focus-within:text-violet-500 transition-colors\" }, null, -1))\n          ])\n        ]),\n        _createVNode(_component_UButton, {\n          label: \"친구에게 송금하기\",\n          size: \"xl\",\n          block: \"\",\n          class: \"h-20 rounded-[28px] font-black text-lg bg-violet-600 hover:bg-violet-700 shadow-xl shadow-violet-100 transition-all active:scale-95 border-0\",\n          onClick: _cache[2] || (_cache[2] = $event => (startScan()))\n        })\n      ])\n    ]),\n    (isScanning.value)\n      ? (_openBlock(), _createElementBlock(\"div\", _hoisted_14, [\n          _cache[12] || (_cache[12] = _createElementVNode(\"div\", { class: \"absolute top-10 text-white text-center space-y-2\" }, [\n            _createElementVNode(\"p\", { class: \"text-[10px] font-black tracking-widest uppercase opacity-60\" }, \"Security Check\"),\n            _createElementVNode(\"h3\", { class: \"text-3xl font-black text-white\" }, \"송금 본인 인증\"),\n            _createElementVNode(\"p\", { class: \"text-sm font-medium text-white/50\" }, \"나의 QR코드를 스캔해서 이체를 승인하세요\")\n          ], -1)),\n          _createElementVNode(\"div\", _hoisted_15, [\n            _createVNode(_unref(QrcodeStream), {\n              onDetect: onDetect,\n              onError: onError\n            }),\n            _cache[10] || (_cache[10] = _createElementVNode(\"div\", { class: \"absolute inset-0 border-[40px] border-black/20 pointer-events-none\" }, null, -1)),\n            _cache[11] || (_cache[11] = _createElementVNode(\"div\", { class: \"absolute top-1/2 left-0 right-0 h-0.5 bg-violet-400/50 shadow-[0_0_20px_rgba(167,139,250,1)] animate-scan\" }, null, -1))\n          ]),\n          _createElementVNode(\"button\", {\n            onClick: _cache[3] || (_cache[3] = $event => (isScanning.value = false)),\n            class: \"mt-12 text-white/50 hover:text-white font-black text-sm p-4 tracking-widest uppercase\"\n          }, \"Go Back\")\n        ]))\n      : _createCommentVNode(\"\", true),\n    _createElementVNode(\"div\", _hoisted_16, [\n      _cache[13] || (_cache[13] = _createElementVNode(\"div\", { class: \"flex items-center gap-2 px-2 text-gray-800\" }, [\n        _createElementVNode(\"span\", { class: \"i-heroicons-list-bullet-solid w-5 h-5 text-gray-400\" }),\n        _createElementVNode(\"h3\", { class: \"text-xs font-black text-gray-400 uppercase tracking-[0.3em]\" }, \"Recent Transactions\")\n      ], -1)),\n      _createElementVNode(\"div\", _hoisted_17, [\n        (points.value.length > 0)\n          ? (_openBlock(), _createElementBlock(\"div\", _hoisted_18, [\n              (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(points.value, (item) => {\n                return (_openBlock(), _createElementBlock(\"div\", {\n                  key: item.idx,\n                  class: \"flex items-center justify-between p-6 hover:bg-gray-50/50 transition-all group\"\n                }, [\n                  _createElementVNode(\"div\", _hoisted_19, [\n                    _createElementVNode(\"div\", {\n                      class: _normalizeClass(['w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all group-hover:scale-110',\n                item.point_type === 'save' ? 'bg-blue-50 text-blue-600' : 'bg-rose-50 text-rose-600'])\n                    }, [\n                      _createVNode(_component_Icon, {\n                        name: item.point_type === 'save' ? 'solar:arrow-down-bold' : 'solar:arrow-up-bold',\n                        class: \"w-6 h-6\"\n                      }, null, 8, [\"name\"])\n                    ], 2),\n                    _createElementVNode(\"div\", null, [\n                      _createElementVNode(\"p\", _hoisted_20, _toDisplayString(item.description), 1),\n                      _createElementVNode(\"p\", _hoisted_21, _toDisplayString(item.c_datetime), 1)\n                    ])\n                  ]),\n                  _createElementVNode(\"div\", _hoisted_22, [\n                    _createElementVNode(\"p\", {\n                      class: _normalizeClass(['text-base font-black tabular-nums', item.point_type === 'save' ? 'text-blue-600' : 'text-rose-600'])\n                    }, _toDisplayString(item.point_type === 'save' ? '+' : '-') + _toDisplayString(Number(item.point).toLocaleString()), 3)\n                  ])\n                ]))\n              }), 128))\n            ]))\n          : _createCommentVNode(\"\", true)\n      ])\n    ])\n  ]))\n}\n}\n\n})\n\n\n\nexport default _sfc_main",
-      "start": 1774589246792,
-      "end": 1774589246796,
+      "start": 1774590571254,
+      "end": 1774590571259,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,117 +74,117 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774589246796,
-      "end": 1774589246796,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774589246797,
-      "end": 1774589246797,
+      "start": 1774590571259,
+      "end": 1774590571259,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774589246797,
-      "end": 1774589246802,
+      "start": 1774590571259,
+      "end": 1774590571264,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571264,
+      "end": 1774590571265,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571265,
+      "end": 1774590571266,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -197,38 +197,38 @@
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571266,
+      "end": 1774590571266,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571266,
+      "end": 1774590571266,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571266,
+      "end": 1774590571266,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571266,
+      "end": 1774590571266,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571266,
+      "end": 1774590571266,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1774589246802,
-      "end": 1774589246802,
+      "start": 1774590571266,
+      "end": 1774590571266,
       "order": "normal"
     }
   ]

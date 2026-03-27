@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nimport { onMounted, ref } from 'vue'\nimport { apiPost } from '@/common/api'\n\nconst students = ref([])\nconst isLoading = ref(true)\nconst studentInfo = ref(null)\n\nonMounted(async () => {\n  const storedStudent = sessionStorage.getItem('student')\n  if (!storedStudent) {\n    window.location.href = '/login'\n    return\n  }\n  studentInfo.value = JSON.parse(storedStudent)\n  \n  if (!studentInfo.value.roles?.some(r => r.role_code === 'CREDIT_MANAGER')) {\n    alert('신용관리사 권한이 없습니다.')\n    window.location.href = '/'\n    return\n  }\n  \n  await fetchStudents()\n})\n\nconst fetchStudents = async () => {\n  isLoading.value = true\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'getCreditStudentList',\n      teacher_idx: studentInfo.value.teacher,\n      idnt_code: studentInfo.value.idnt_code\n    })\n    if (res.result === 'SUCCESS') {\n      students.value = res.data\n    }\n  } catch (error) {\n    console.error('학생 목록 조회 실패:', error)\n  } finally {\n    isLoading.value = false\n  }\n}\n\nconst setCreditGrade = async (student, grade) => {\n  if (student.credit_score == grade) return\n\n  if (!confirm(`${student.student_name} 학생의 신용등급을 ${grade}등급으로 변경하시겠습니까?`)) return\n\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'updateCreditScore',\n      student_idx: student.idx,\n      credit_score: grade\n    })\n    if (res.result === 'SUCCESS') {\n      student.credit_score = grade\n    } else {\n      alert(res.message || '업데이트 실패')\n    }\n  } catch (err) {\n    alert('에러가 발생했습니다.')\n  }\n}\n</script>\n\n<template>\n  <div class=\"px-4 py-8 pb-32\">\n    <div class=\"mb-10\">\n      <h1 class=\"text-3xl font-black text-gray-800 mb-2 flex items-center gap-3\">\n        <div class=\"w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center\">\n          <Icon name=\"solar:shield-star-bold-duotone\" class=\"text-indigo-600 w-8 h-8\" />\n        </div>\n        <span>Credit <span class=\"text-indigo-600\">Center</span></span>\n      </h1>\n      <p class=\"text-sm text-gray-400 font-medium opacity-80\">성실하고 정직한 학급 신용 문화를 함께 만들어가요!</p>\n    </div>\n\n    <!-- 📊 관리자 요약 -->\n    <div class=\"mb-10 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[40px] p-8 text-white shadow-2xl shadow-indigo-100 relative overflow-hidden\">\n      <div class=\"absolute -right-10 -top-10 w-48 h-48 bg-white/10 rounded-full blur-3xl\"></div>\n      <div class=\"relative z-10 flex items-center gap-6\">\n        <div class=\"w-16 h-16 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl\">\n          <Icon name=\"solar:user-speak-bold-duotone\" class=\"w-10 h-10\" />\n        </div>\n        <div class=\"space-y-1\">\n          <p class=\"text-[10px] font-black uppercase tracking-[0.3em] opacity-60\">Authorized Manager</p>\n          <h2 class=\"text-2xl font-black\">{{ studentInfo?.student_name }} 신용관리사</h2>\n        </div>\n      </div>\n    </div>\n\n    <!-- 👥 학생 리스트 (개선된 카드 UI) -->\n    <div v-if=\"isLoading\" class=\"flex flex-col items-center py-32 gap-6 text-center\">\n      <div class=\"relative\">\n        <div class=\"absolute inset-0 bg-indigo-100 rounded-full blur-2xl animate-pulse\"></div>\n        <Icon name=\"solar:refresh-square-bold-duotone\" class=\"w-16 h-16 text-indigo-500 animate-spin relative\" />\n      </div>\n      <p class=\"text-sm font-black text-gray-300 uppercase tracking-widest\">Accessing Student Register...</p>\n    </div>\n    \n    <div v-else class=\"space-y-6\">\n      <div v-for=\"student in students\" :key=\"student.idx\" \n        class=\"bg-white p-6 rounded-[35px] shadow-sm border border-gray-100 flex flex-col gap-6 transition-all hover:shadow-xl hover:translate-y-[-4px] hover:border-indigo-100 group\">\n        \n        <div class=\"flex items-center justify-between\">\n          <div class=\"flex items-center gap-4\">\n            <div class=\"w-14 h-14 flex items-center justify-center rounded-2xl bg-gray-50 text-indigo-600 text-xl font-black group-hover:bg-indigo-50 transition-colors\">\n              {{ student.student_number || '?' }}\n            </div>\n            <div>\n              <h3 class=\"text-lg font-black text-gray-800 leading-tight\">{{ student.student_name }}</h3>\n              <div class=\"flex items-center gap-2 mt-1\">\n                <span class=\"text-[9px] font-black uppercase tracking-widest text-gray-300\">Grade Status</span>\n                <span :class=\"['text-xs font-black px-2 py-0.5 rounded-full', \n                  Number(student.credit_score) <= 3 ? 'bg-emerald-50 text-emerald-600' : \n                  Number(student.credit_score) <= 7 ? 'bg-indigo-50 text-indigo-600' : 'bg-rose-50 text-rose-600']\">\n                  {{ student.credit_score || 5 }}등급\n                </span>\n              </div>\n            </div>\n          </div>\n          \n          <!-- 신용 점수 라벨 (원형) -->\n          <div :class=\"['w-12 h-12 rounded-full flex items-center justify-center text-sm font-black border-4',\n            Number(student.credit_score) <= 3 ? 'border-emerald-100 text-emerald-600' : \n            Number(student.credit_score) <= 7 ? 'border-indigo-100 text-indigo-600' : 'border-rose-100 text-rose-600']\">\n            {{ student.credit_score || 5 }}\n          </div>\n        </div>\n\n        <!-- 1~10 등급 선택기 -->\n        <div class=\"grid grid-cols-5 sm:grid-cols-10 gap-2 p-2 bg-gray-50/50 rounded-2xl border border-gray-50\">\n          <button v-for=\"grade in 10\" :key=\"grade\"\n            @click=\"setCreditGrade(student, grade)\"\n            :class=\"['h-10 rounded-xl text-xs font-black transition-all border flex items-center justify-center', \n            student.credit_score == grade \n              ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-100 scale-110 z-10' \n              : 'bg-white text-gray-400 border-gray-100 hover:border-indigo-200 hover:text-indigo-400']\">\n            {{ grade }}\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n",
-      "start": 1774589246516,
-      "end": 1774589246546,
+      "start": 1774590570952,
+      "end": 1774590570994,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570994,
+      "end": 1774590570994,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570994,
+      "end": 1774590570995,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570995,
+      "end": 1774590570995,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570995,
+      "end": 1774590570995,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570995,
+      "end": 1774590570995,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570995,
+      "end": 1774590570995,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570995,
+      "end": 1774590570995,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570995,
+      "end": 1774590570995,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774589246546,
-      "end": 1774589246546,
+      "start": 1774590570995,
+      "end": 1774590570995,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { resolveComponent as _resolveComponent, createVNode as _createVNode, createElementVNode as _createElementVNode, createTextVNode as _createTextVNode, toDisplayString as _toDisplayString, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode, renderList as _renderList, Fragment as _Fragment, normalizeClass as _normalizeClass } from \"vue\"\n\nconst _hoisted_1 = { class: \"px-4 py-8 pb-32\" }\nconst _hoisted_2 = { class: \"mb-10\" }\nconst _hoisted_3 = { class: \"text-3xl font-black text-gray-800 mb-2 flex items-center gap-3\" }\nconst _hoisted_4 = { class: \"w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center\" }\nconst _hoisted_5 = { class: \"mb-10 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[40px] p-8 text-white shadow-2xl shadow-indigo-100 relative overflow-hidden\" }\nconst _hoisted_6 = { class: \"relative z-10 flex items-center gap-6\" }\nconst _hoisted_7 = { class: \"w-16 h-16 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl\" }\nconst _hoisted_8 = { class: \"space-y-1\" }\nconst _hoisted_9 = { class: \"text-2xl font-black\" }\nconst _hoisted_10 = {\n  key: 0,\n  class: \"flex flex-col items-center py-32 gap-6 text-center\"\n}\nconst _hoisted_11 = { class: \"relative\" }\nconst _hoisted_12 = {\n  key: 1,\n  class: \"space-y-6\"\n}\nconst _hoisted_13 = { class: \"flex items-center justify-between\" }\nconst _hoisted_14 = { class: \"flex items-center gap-4\" }\nconst _hoisted_15 = { class: \"w-14 h-14 flex items-center justify-center rounded-2xl bg-gray-50 text-indigo-600 text-xl font-black group-hover:bg-indigo-50 transition-colors\" }\nconst _hoisted_16 = { class: \"text-lg font-black text-gray-800 leading-tight\" }\nconst _hoisted_17 = { class: \"flex items-center gap-2 mt-1\" }\nconst _hoisted_18 = { class: \"grid grid-cols-5 sm:grid-cols-10 gap-2 p-2 bg-gray-50/50 rounded-2xl border border-gray-50\" }\nconst _hoisted_19 = [\"onClick\"]\n\nimport { onMounted, ref } from 'vue'\nimport { apiPost } from '@/common/api'\n\n\nconst _sfc_main = {\n  __name: 'credit',\n  setup(__props) {\n\nconst students = ref([])\nconst isLoading = ref(true)\nconst studentInfo = ref(null)\n\nonMounted(async () => {\n  const storedStudent = sessionStorage.getItem('student')\n  if (!storedStudent) {\n    window.location.href = '/login'\n    return\n  }\n  studentInfo.value = JSON.parse(storedStudent)\n  \n  if (!studentInfo.value.roles?.some(r => r.role_code === 'CREDIT_MANAGER')) {\n    alert('신용관리사 권한이 없습니다.')\n    window.location.href = '/'\n    return\n  }\n  \n  await fetchStudents()\n})\n\nconst fetchStudents = async () => {\n  isLoading.value = true\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'getCreditStudentList',\n      teacher_idx: studentInfo.value.teacher,\n      idnt_code: studentInfo.value.idnt_code\n    })\n    if (res.result === 'SUCCESS') {\n      students.value = res.data\n    }\n  } catch (error) {\n    console.error('학생 목록 조회 실패:', error)\n  } finally {\n    isLoading.value = false\n  }\n}\n\nconst setCreditGrade = async (student, grade) => {\n  if (student.credit_score == grade) return\n\n  if (!confirm(`${student.student_name} 학생의 신용등급을 ${grade}등급으로 변경하시겠습니까?`)) return\n\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'updateCreditScore',\n      student_idx: student.idx,\n      credit_score: grade\n    })\n    if (res.result === 'SUCCESS') {\n      student.credit_score = grade\n    } else {\n      alert(res.message || '업데이트 실패')\n    }\n  } catch (err) {\n    alert('에러가 발생했습니다.')\n  }\n}\n\nreturn (_ctx, _cache) => {\n  const _component_Icon = _resolveComponent(\"Icon\")\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createElementVNode(\"h1\", _hoisted_3, [\n        _createElementVNode(\"div\", _hoisted_4, [\n          _createVNode(_component_Icon, {\n            name: \"solar:shield-star-bold-duotone\",\n            class: \"text-indigo-600 w-8 h-8\"\n          })\n        ]),\n        _cache[0] || (_cache[0] = _createElementVNode(\"span\", null, [\n          _createTextVNode(\"Credit \"),\n          _createElementVNode(\"span\", { class: \"text-indigo-600\" }, \"Center\")\n        ], -1))\n      ]),\n      _cache[1] || (_cache[1] = _createElementVNode(\"p\", { class: \"text-sm text-gray-400 font-medium opacity-80\" }, \"성실하고 정직한 학급 신용 문화를 함께 만들어가요!\", -1))\n    ]),\n    _createElementVNode(\"div\", _hoisted_5, [\n      _cache[3] || (_cache[3] = _createElementVNode(\"div\", { class: \"absolute -right-10 -top-10 w-48 h-48 bg-white/10 rounded-full blur-3xl\" }, null, -1)),\n      _createElementVNode(\"div\", _hoisted_6, [\n        _createElementVNode(\"div\", _hoisted_7, [\n          _createVNode(_component_Icon, {\n            name: \"solar:user-speak-bold-duotone\",\n            class: \"w-10 h-10\"\n          })\n        ]),\n        _createElementVNode(\"div\", _hoisted_8, [\n          _cache[2] || (_cache[2] = _createElementVNode(\"p\", { class: \"text-[10px] font-black uppercase tracking-[0.3em] opacity-60\" }, \"Authorized Manager\", -1)),\n          _createElementVNode(\"h2\", _hoisted_9, _toDisplayString(studentInfo.value?.student_name) + \" 신용관리사\", 1)\n        ])\n      ])\n    ]),\n    (isLoading.value)\n      ? (_openBlock(), _createElementBlock(\"div\", _hoisted_10, [\n          _createElementVNode(\"div\", _hoisted_11, [\n            _cache[4] || (_cache[4] = _createElementVNode(\"div\", { class: \"absolute inset-0 bg-indigo-100 rounded-full blur-2xl animate-pulse\" }, null, -1)),\n            _createVNode(_component_Icon, {\n              name: \"solar:refresh-square-bold-duotone\",\n              class: \"w-16 h-16 text-indigo-500 animate-spin relative\"\n            })\n          ]),\n          _cache[5] || (_cache[5] = _createElementVNode(\"p\", { class: \"text-sm font-black text-gray-300 uppercase tracking-widest\" }, \"Accessing Student Register...\", -1))\n        ]))\n      : (_openBlock(), _createElementBlock(\"div\", _hoisted_12, [\n          (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(students.value, (student) => {\n            return (_openBlock(), _createElementBlock(\"div\", {\n              key: student.idx,\n              class: \"bg-white p-6 rounded-[35px] shadow-sm border border-gray-100 flex flex-col gap-6 transition-all hover:shadow-xl hover:translate-y-[-4px] hover:border-indigo-100 group\"\n            }, [\n              _createElementVNode(\"div\", _hoisted_13, [\n                _createElementVNode(\"div\", _hoisted_14, [\n                  _createElementVNode(\"div\", _hoisted_15, _toDisplayString(student.student_number || '?'), 1),\n                  _createElementVNode(\"div\", null, [\n                    _createElementVNode(\"h3\", _hoisted_16, _toDisplayString(student.student_name), 1),\n                    _createElementVNode(\"div\", _hoisted_17, [\n                      _cache[6] || (_cache[6] = _createElementVNode(\"span\", { class: \"text-[9px] font-black uppercase tracking-widest text-gray-300\" }, \"Grade Status\", -1)),\n                      _createElementVNode(\"span\", {\n                        class: _normalizeClass(['text-xs font-black px-2 py-0.5 rounded-full', \n                  Number(student.credit_score) <= 3 ? 'bg-emerald-50 text-emerald-600' : \n                  Number(student.credit_score) <= 7 ? 'bg-indigo-50 text-indigo-600' : 'bg-rose-50 text-rose-600'])\n                      }, _toDisplayString(student.credit_score || 5) + \"등급 \", 3)\n                    ])\n                  ])\n                ]),\n                _createElementVNode(\"div\", {\n                  class: _normalizeClass(['w-12 h-12 rounded-full flex items-center justify-center text-sm font-black border-4',\n            Number(student.credit_score) <= 3 ? 'border-emerald-100 text-emerald-600' : \n            Number(student.credit_score) <= 7 ? 'border-indigo-100 text-indigo-600' : 'border-rose-100 text-rose-600'])\n                }, _toDisplayString(student.credit_score || 5), 3)\n              ]),\n              _createElementVNode(\"div\", _hoisted_18, [\n                (_openBlock(), _createElementBlock(_Fragment, null, _renderList(10, (grade) => {\n                  return _createElementVNode(\"button\", {\n                    key: grade,\n                    onClick: $event => (setCreditGrade(student, grade)),\n                    class: _normalizeClass(['h-10 rounded-xl text-xs font-black transition-all border flex items-center justify-center', \n            student.credit_score == grade \n              ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-100 scale-110 z-10' \n              : 'bg-white text-gray-400 border-gray-100 hover:border-indigo-200 hover:text-indigo-400'])\n                  }, _toDisplayString(grade), 11, _hoisted_19)\n                }), 64))\n              ])\n            ]))\n          }), 128))\n        ]))\n  ]))\n}\n}\n\n}\n\n\n\nexport default _sfc_main",
-      "start": 1774589246546,
-      "end": 1774589246550,
+      "start": 1774590570995,
+      "end": 1774590570998,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,117 +74,117 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774589246550,
-      "end": 1774589246550,
+      "start": 1774590570998,
+      "end": 1774590570998,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774589246550,
-      "end": 1774589246553,
+      "start": 1774590570998,
+      "end": 1774590571001,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774589246553,
-      "end": 1774589246553,
+      "start": 1774590571001,
+      "end": 1774590571001,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1774589246553,
-      "end": 1774589246554,
+      "start": 1774590571001,
+      "end": 1774590571002,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -197,38 +197,38 @@
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774589246554,
-      "end": 1774589246554,
+      "start": 1774590571002,
+      "end": 1774590571002,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774589246554,
-      "end": 1774589246554,
+      "start": 1774590571002,
+      "end": 1774590571002,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1774589246554,
-      "end": 1774589246554,
+      "start": 1774590571002,
+      "end": 1774590571002,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774589246554,
-      "end": 1774589246554,
+      "start": 1774590571002,
+      "end": 1774590571002,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1774589246554,
-      "end": 1774589246554,
+      "start": 1774590571002,
+      "end": 1774590571002,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1774589246554,
-      "end": 1774589246554,
+      "start": 1774590571002,
+      "end": 1774590571002,
       "order": "normal"
     }
   ]

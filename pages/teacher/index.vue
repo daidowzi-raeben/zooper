@@ -368,7 +368,7 @@ const saveJob = async () => {
 }
 
 const deleteJob = async (role_idx) => {
-  if (!confirm('정말 삭제하시겠습니까? 해당 직업을 가진 학생들의 직업이 해제됩니다.')) return
+  if (!confirm('정말 삭제하시겠습니까?\n(더 이상 새로운 학생에게 부여할 수 없게 되지만, 이미 이 직업을 가진 학생들의 직업은 유지됩니다.)')) return
   const teacher = JSON.parse(sessionStorage.getItem('teacher'))?.idx
   const res = await apiPost('teacher.php', {
     mode: 'deleteJob',
@@ -535,11 +535,20 @@ const submitChangePassword = async () => {
 }
 
 const isTransferModalOpen = ref(false)
+const isBatchTransferModalOpen = ref(false)
 const transferForm = ref({ amount: '', memo: '국고 지원금' })
+const batchTransferForm = ref({ amount: '', memo: '국고 지원금 (일괄)' })
+
 const handleTreasuryTransfer = () => {
   transferForm.value.amount = ''
   transferForm.value.memo = '국고 지원금'
   isTransferModalOpen.value = true
+}
+
+const handleBatchTreasuryTransfer = () => {
+  batchTransferForm.value.amount = ''
+  batchTransferForm.value.memo = '국고 지원금 (일괄)'
+  isBatchTransferModalOpen.value = true
 }
 
 const submitTreasuryTransfer = async () => {
@@ -568,6 +577,33 @@ const submitTreasuryTransfer = async () => {
     await fetchPoints(1)
 
     isTransferModalOpen.value = false
+  }
+}
+
+const submitBatchTreasuryTransfer = async () => {
+  const n = Number(batchTransferForm.value.amount)
+  if (isNaN(n) || n <= 0) return alert('올바른 금액을 입력하세요.')
+
+  if (!confirm(`전체 학생(${studentOptions.value.length}명)에게 각각 ${n.toLocaleString()}P씩 지급하시겠습니까?`)) return
+
+  const res = await apiPost('teacher.php', {
+    mode: 'batchTransferToStudents',
+    teacher_idx: teacherInfo.value.idx,
+    amount: n,
+    memo: batchTransferForm.value.memo
+  })
+
+  if (res.result === 'SUCCESS') {
+    alert(`${res.count}명의 학생에게 총 ${res.total.toLocaleString()}P가 지급되었습니다.`)
+    teacherInfo.value.mb_point -= res.total
+    await fetchStudents()
+    if (selectedStudent.value) {
+      selectedStudentData.value = studentOptions.value.find(s => s.value === selectedStudent.value)
+    }
+
+    isBatchTransferModalOpen.value = false
+  } else {
+    alert(res.message || '지급 실패')
   }
 }
 
@@ -1328,6 +1364,9 @@ const onSelectSchool = (school) => {
                 <UButton label="국고 지원금 보내기" color="emerald" variant="solid" size="xl" icon="i-heroicons-banknotes"
                   class="rounded-[24px] h-14 font-black text-base shadow-xl transition-all hover:-translate-y-1 active:scale-95 px-8"
                   @click="handleTreasuryTransfer" />
+                <UButton label="국고 지원금 일괄지급" color="blue" variant="solid" size="xl" icon="i-heroicons-user-group"
+                  class="rounded-[24px] h-14 font-black text-base shadow-xl transition-all hover:-translate-y-1 active:scale-95 px-8"
+                  @click="handleBatchTreasuryTransfer" />
               </div>
             </div>
 
@@ -1604,11 +1643,11 @@ const onSelectSchool = (school) => {
               <div class="flex items-center gap-2">
                 <span :class="['w-2 h-2 rounded-full', job.role_code ? 'bg-blue-500' : 'bg-indigo-300']"></span>
                 <span class="font-bold text-gray-700">{{ job.role_name }}</span>
-                <span v-if="job.role_code"
+                <span v-if="job.role_code === 'BANKER' || job.role_code === 'CREDIT_MANAGER'"
                   class="text-[10px] bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-black">DEFAULT</span>
               </div>
-              <UButton v-if="!job.role_code" icon="i-heroicons-trash" color="rose" variant="ghost" size="xs"
-                @click="deleteJob(job.idx)" />
+              <UButton v-if="job.role_code !== 'BANKER' && job.role_code !== 'CREDIT_MANAGER'" icon="i-heroicons-x-mark"
+                color="rose" variant="ghost" size="xs" @click="deleteJob(job.idx)" />
             </div>
           </div>
         </div>
@@ -1713,6 +1752,29 @@ const onSelectSchool = (school) => {
             <UButton label="취소" color="gray" variant="ghost" class="flex-1" size="xl"
               @click="isTransferModalOpen = false" />
             <UButton label="보내기" color="emerald" class="flex-1 font-black" size="xl" @click="submitTreasuryTransfer" />
+          </div>
+        </div>
+      </div>
+    </UModal>
+    <!-- 국고 지원금 일괄 이체 모달 -->
+    <UModal v-model="isBatchTransferModalOpen">
+      <div class="p-8">
+        <h3 class="text-xl font-black mb-6 flex items-center gap-2">
+          <span class="i-heroicons-user-group-solid w-6 h-6 text-blue-600" />
+          학생 전원에게 일괄 송금
+        </h3>
+        <div class="space-y-6">
+          <UFormGroup :label="`전체 학생(${studentOptions.length}명)에게 각각 보낼 금액`">
+            <UInput v-model="batchTransferForm.amount" type="number" size="xl" placeholder="예: 50" autocomplete="off"
+              class="w-full text-center font-black" />
+          </UFormGroup>
+          <UFormGroup label="지급 메모 (통장 내역)">
+            <UInput v-model="batchTransferForm.memo" size="xl" placeholder="국고 지원금 (일괄)" autocomplete="off" />
+          </UFormGroup>
+          <div class="flex gap-4">
+            <UButton label="취소" color="gray" variant="ghost" class="flex-1" size="xl"
+              @click="isBatchTransferModalOpen = false" />
+            <UButton label="일괄 보내기" color="blue" class="flex-1 font-black" size="xl" @click="submitBatchTreasuryTransfer" />
           </div>
         </div>
       </div>
