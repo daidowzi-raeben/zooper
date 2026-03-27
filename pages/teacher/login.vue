@@ -67,8 +67,7 @@ onMounted(async () => {
         <!-- <div v-if="student">
       <h1 class="text-xl font-bold">학생 정보</h1>
       <p>이름: {{ student.student_name }}</p>
-      <p>학년: {{ student.student_grade }}</p>
-      <p>반: {{ student.student_class }}</p>
+      <p>학급명: {{ student.class_name }}</p>
       <p>번호: {{ student.student_number }}</p>
       <p>성별: {{ student.gender }}</p>
       <p>보호자 이름: {{ student.guardian_name }}</p>

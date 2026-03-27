@@ -273,7 +273,67 @@ onMounted(async () => {
   if (rRes.result === 'SUCCESS') {
     bankerRoleIdx.value = rRes.role_idx
   }
+  await fetchDevNotes()
 })
+
+const hasNewDevNote = computed(() => {
+  const today = new Date().toISOString().split('T')[0]
+  return devNotes.value.some(note => note.c_datetime.startsWith(today))
+})
+
+const isAdmin = computed(() => teacherInfo.value?.mb_email === 'admin@korea.kr')
+const devNotes = ref([])
+const isDevNoteWriteModalOpen = ref(false)
+const newDevNote = ref({ category: '개발자노트', content: '' })
+
+const fetchDevNotes = async () => {
+  const res = await apiPost('teacher.php', { mode: 'getDevNotes' })
+  if (res.result === 'SUCCESS') {
+    devNotes.value = res.data
+  }
+}
+
+const saveDevNote = async () => {
+  if (!newDevNote.value.content) return alert('내용을 입력해주세요.')
+  const res = await apiPost('teacher.php', {
+    mode: 'saveDevNote',
+    ...newDevNote.value
+  })
+  if (res.result === 'SUCCESS') {
+    alert('저장되었습니다.')
+    await fetchDevNotes()
+    isDevNoteWriteModalOpen.value = false
+    newDevNote.value = { category: '개발자노트', content: '' }
+  }
+}
+
+const handleNoteImageUpload = async (e) => {
+  const file = e.target.files[0]
+  if (!file) return
+
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('mode', 'uploadImage')
+
+  const res = await apiPost('teacher.php', formData)
+  if (res.result === 'SUCCESS') {
+    const imageUrl = `${hostUrl}${res.url}`
+    newDevNote.value.content += `\n![이미지](${imageUrl})\n`
+  } else {
+    alert('이미지 업로드에 실패했습니다.')
+  }
+}
+
+
+const renderMarkdown = (text) => {
+  if (!text) return ''
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="max-w-full rounded-2xl my-4 shadow-lg" />')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-purple-600 underline">$1</a>')
+    .replace(/\n/g, '<br>')
+}
 
 const jobs = ref([])
 const isDevNoteModalOpen = ref(false)
@@ -912,8 +972,10 @@ const onSelectSchool = (school) => {
           <p class="text-sm text-gray-400 font-medium ml-10">귀염둥이 친구들과 함께하는 경제 교실</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <UButton label="개발자노트" color="purple" variant="soft" icon="i-heroicons-document-text"
-            @click="isDevNoteModalOpen = true" class="rounded-xl font-bold" />
+          <UChip :show="hasNewDevNote" text="NEW" size="md" color="red">
+            <UButton label="개발자노트 & TIP" color="purple" variant="soft" icon="i-heroicons-document-text"
+              @click="isDevNoteModalOpen = true" class="rounded-xl font-bold" />
+          </UChip>
           <UButton label="가이드" color="blue" variant="soft" icon="i-heroicons-book-open" to="/guide" target="_blank"
             class="rounded-xl font-bold" />
           <UButton label="기능개선요청" color="yellow" variant="soft" icon="i-heroicons-light-bulb"
@@ -1044,16 +1106,7 @@ const onSelectSchool = (school) => {
                 size="lg" class="rounded-xl" @update:modelValue="onSelectSchool" />
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">학년</label>
-                <UInput v-model="teacherInfo.mb_grade" placeholder="학년" type="number" size="xl" />
-              </div>
-              <div class="space-y-1">
-                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">반</label>
-                <UInput v-model="teacherInfo.mb_class" placeholder="반" type="number" size="xl" />
-              </div>
-            </div>
+            <!-- 학년/반 필드 제거됨 (NULL 유지) -->
 
             <div class="grid grid-cols-2 gap-4">
               <div class="space-y-1">
@@ -1220,22 +1273,22 @@ const onSelectSchool = (school) => {
                   class="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center rounded-[32px] text-3xl font-black shadow-2xl shadow-blue-200">
                   {{ selectedStudentName.substring(0, 1) }}
                 </div>
-                <!-- 역할 표시 배지 -->
-                <div
-                  class="absolute -bottom-2 -right-2 bg-white px-2 py-1 rounded-xl shadow-lg border border-gray-50 flex items-center gap-1.5 min-w-[60px] justify-center">
-                  <span class="text-[10px] font-black text-blue-600">
-                    {{jobs.find(j => Number(j.idx) === Number(selectedStudentData.role_idx))?.role_name || '일반'}}
-                  </span>
-                </div>
               </div>
 
               <div class="flex-1 text-center lg:text-left space-y-4">
                 <div>
                   <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-1">
                     <h3 class="text-3xl font-black text-gray-800">{{ selectedStudentName }}</h3>
-                    <div class="flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full">
-                      <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Student
-                        Session</span>
+                    
+                    <!-- 직업 라벨 (Roles) -->
+                    <div v-if="selectedStudentData?.roles?.length > 0" class="flex flex-wrap gap-1.5">
+                      <span v-for="role in selectedStudentData.roles" :key="role.idx" 
+                        class="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-black rounded-full border border-gray-200 uppercase tracking-wider">
+                        {{ role.role_name }}
+                      </span>
+                    </div>
+                    <div v-else class="flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full">
+                      <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">일반 학생</span>
                     </div>
                   </div>
                   <p class="text-sm text-gray-400 font-medium">학생의 지갑 및 활동 내역을 관리하고 대리 로그인을 수행할 수 있습니다.</p>
@@ -1709,26 +1762,75 @@ const onSelectSchool = (school) => {
         </div>
       </div>
     </UModal>
-    <!-- 개발자 노트 모달 -->
-    <UModal v-model="isDevNoteModalOpen">
+    <!-- 개발자노트 & TIP 모달 -->
+    <UModal v-model="isDevNoteModalOpen" :ui="{ width: 'max-w-4xl' }">
       <div class="p-8 space-y-6">
-        <h3 class="text-xl font-black flex items-center gap-2">
-          <span class="i-heroicons-document-text-solid w-6 h-6 text-purple-600" />
-          개발자 노트
-        </h3>
-        <div class="space-y-4 text-sm font-medium text-gray-600 leading-relaxed">
-          <div class="p-5 bg-purple-50 rounded-2xl border border-purple-100">
-            <p class="font-bold text-purple-700 mb-2">📢 적금 우대금리 지급 방식 변경 안내</p>
-            <p>우대금리 지급 방식이 변경되었습니다. 이전에는 가입 시점의 등급으로 금리가 고정되었으나, 이제는 <strong>만기 시점의 신용등급이 1등급인 경우에만</strong> 우대금리가
-              지급됩니다. 또한 적금마다 설정 가능하던 "1등급 우대 (+%)" 가 1등급 신용혜택과 중첩돼어 제거되었습니다.
-            </p>
-            <p class="mt-2 text-rose-500 font-bold">만기 전에 등급이 하락하면 우대 혜택을 받을 수 없으니 학생들에게 꾸준한 신용 관리를 독려해 주세요.</p>
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-black flex items-center gap-2">
+            <span class="i-heroicons-document-text-solid w-6 h-6 text-purple-600" />
+            개발자 노트 & TIP
+          </h3>
+          <UButton v-if="isAdmin" label="새 글 작성" color="purple" icon="i-heroicons-plus"
+            @click="isDevNoteWriteModalOpen = true" />
+        </div>
+
+        <div class="space-y-6 max-h-[600px] overflow-y-auto pr-2">
+          <div v-if="devNotes.length === 0" class="text-center py-20 text-gray-400">
+            등록된 데이터가 없습니다.
+          </div>
+          <div v-for="note in devNotes" :key="note.idx"
+            class="p-6 bg-gray-50 rounded-3xl border border-gray-100 space-y-4 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span
+                class="text-[10px] bg-purple-100 text-purple-600 px-3 py-1 rounded-full font-black uppercase tracking-widest">{{
+                  note.category }}</span>
+              <span class="text-[10px] text-gray-400 font-bold tabular-nums">{{ note.c_datetime }}</span>
+            </div>
+            <div class="text-sm font-medium text-gray-700 leading-relaxed html-content"
+              v-html="renderMarkdown(note.content)">
+            </div>
           </div>
         </div>
-        <UButton label="확인했습니다" block color="purple" size="xl" class="rounded-2xl font-black"
+        <UButton label="확인했습니다" block color="purple" size="xl" class="h-16 rounded-[24px] font-black"
           @click="isDevNoteModalOpen = false" />
       </div>
     </UModal>
+
+    <!-- 글 작성 모달 (admin 전용) -->
+    <UModal v-model="isDevNoteWriteModalOpen" :ui="{ width: 'max-w-3xl' }">
+      <div class="p-8 space-y-6">
+        <h3 class="text-xl font-black flex items-center gap-2">
+          <span class="i-heroicons-pencil-square-solid w-6 h-6 text-purple-600" />
+          노트 작성
+        </h3>
+
+        <div class="space-y-4">
+          <div class="flex gap-4">
+            <USelect v-model="newDevNote.category" :options="['개발자노트', '팁']" size="xl" class="flex-1" />
+            <input type="file" id="note-img-upload" hidden @change="handleNoteImageUpload" accept="image/*" />
+            <UButton icon="i-heroicons-photo" label="이미지 첨부" color="gray" variant="soft" size="xl"
+              @click="() => document.getElementById('note-img-upload').click()" />
+          </div>
+
+          <div class="relative group">
+            <UTextarea v-model="newDevNote.content" placeholder="내용을 입력하세요 (마크다운 지원)" :rows="12"
+              class="font-medium p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-purple-200" />
+          </div>
+
+          <div class="text-[10px] text-gray-400 font-bold bg-gray-50 p-3 rounded-xl border border-dotted border-gray-200">
+            💡 팁: 마크다운 문법을 사용하여 글을 작성할 수 있습니다. 이미지는 위 버튼을 통해 첨부 가능합니다.
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <UButton label="취소" color="gray" variant="soft" block class="h-14 font-black flex-1 rounded-2xl"
+            @click="isDevNoteWriteModalOpen = false" />
+          <UButton label="저장하기" color="purple" block class="h-14 font-black flex-1 rounded-2xl shadow-xl shadow-purple-100"
+            @click="saveDevNote" />
+        </div>
+      </div>
+    </UModal>
+
   </div>
 </template>
 

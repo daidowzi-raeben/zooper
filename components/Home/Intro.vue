@@ -494,9 +494,18 @@ watch([amount, selectedDepositIdx], () => {
 
         <div class="text-center space-y-1 mb-8">
           <p class="text-white/60 text-[10px] font-black tracking-[0.3em] uppercase">{{ dispot?.mb_school ||
-            'JellySchool' }} {{ dispot?.mb_grade }}-{{ dispot?.mb_class }}</p>
+            'JellySchool' }} {{ dispot?.class_name }}</p>
           <h2 class="text-white text-3xl font-black tracking-tight">{{ student?.student_name }}<span
               class="text-blue-200 text-xl ml-1">친구</span></h2>
+          
+          <!-- 직업 라벨 (Roles) -->
+          <div v-if="student?.roles?.length > 0" class="flex flex-wrap gap-1.5 mt-2 justify-center">
+            <span v-for="role in student.roles" :key="role.idx" 
+              class="px-2.5 py-1 bg-white/20 backdrop-blur-md text-white text-[10px] font-black rounded-full border border-white/30 shadow-sm uppercase tracking-wider">
+              {{ role.role_name }}
+            </span>
+          </div>
+
           <div v-if="student?.badges" class="flex flex-wrap gap-1 mt-1 justify-center">
             <span v-for="(badge, bIdx) in student.badges.split(',')" :key="bIdx"
               class="text-2xl drop-shadow-lg animate-bounce" :style="{ animationDelay: (bIdx * 0.1) + 's' }">{{ badge

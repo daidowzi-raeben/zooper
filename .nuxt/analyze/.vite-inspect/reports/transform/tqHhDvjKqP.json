@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<script setup>\nimport { onMounted, ref } from 'vue'\nimport { useRoute } from 'vue-router'\nimport { apiPost, hostUrl } from '@/common/api'\n\nconst route = useRoute()\nconst idnt_code = route.query.idnt_code\n\nconst students = ref([])\nconst teacherInfo = ref(null)\nconst isLoading = ref(true)\n\nconst fetchPrintData = async () => {\n  try {\n    const tRes = await apiPost('teacher.php', {\n      mode: 'teacherInfo',\n      idnt_code: idnt_code\n    })\n\n    if (tRes.result === 'SUCCESS') {\n      teacherInfo.value = tRes.data\n    }\n\n    if (teacherInfo.value) {\n      const sRes = await apiPost('member.php', {\n        mode: 'studentList',\n        teacher: teacherInfo.value.idx\n      })\n      if (sRes.result === 'SUCCESS') {\n        students.value = sRes.data\n      }\n    }\n  } catch (error) {\n    console.error('Fetch error:', error)\n  } finally {\n    isLoading.value = false\n  }\n}\n\nonMounted(() => {\n  if (!idnt_code) {\n    alert('잘못된 접근입니다.')\n    return\n  }\n  fetchPrintData()\n})\n\nconst handlePrint = () => {\n  window.print()\n}\n\nconst handleClose = () => {\n  window.close()\n}\n</script>\n\n<template>\n  <div\n    class=\"fixed inset-0 z-[99999] bg-gray-100 overflow-y-auto print:static print:z-auto print:bg-white print:overflow-visible font-pretendard print-content\">\n\n    <div v-if=\"isLoading\" class=\"flex flex-col items-center justify-center min-h-screen\">\n      <div class=\"animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4\"></div>\n      <p class=\"font-bold text-gray-500 text-lg\">인쇄 데이터를 불러오는 중...</p>\n    </div>\n\n    <div v-else-if=\"!teacherInfo\" class=\"text-center py-20 font-bold text-red-500 bg-white min-h-screen\">\n      정보를 불러오지 못했습니다.\n    </div>\n\n    <div v-else class=\"p-8 print:p-0\">\n      <!-- 안내 메시지 (인쇄 시 숨김) -->\n      <div class=\"fixed top-24 left-1/2 -translate-x-1/2 z-[100001] print:hidden\">\n        <div class=\"bg-amber-50 border border-amber-200 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3\">\n          <span class=\"i-heroicons-exclamation-triangle-solid w-5 h-5 text-amber-500\" />\n          <p class=\"text-sm font-bold text-amber-900\">인쇄 설정에서 <span class=\"text-red-600 underline\">\"배경 그래픽\"</span>을 반드시\n            체크해야 디자인이 보입니다!</p>\n        </div>\n      </div>\n\n      <!-- 상단 컨트롤 (인쇄 시 숨김) -->\n      <div class=\"fixed top-6 right-6 z-[100000] print:hidden\">\n        <div\n          class=\"flex items-center gap-3 bg-white/90 backdrop-blur-md p-4 rounded-3xl shadow-2xl border border-white\">\n          <div class=\"mr-4 text-left\">\n            <h1 class=\"text-sm font-black text-gray-800\">{{ teacherInfo.class_name }} QR 카드</h1>\n            <p class=\"text-[10px] text-gray-400 font-bold\">총 {{ students.length }}명 / 2열 배치</p>\n          </div>\n          <UButton label=\"창 닫기\" color=\"gray\" variant=\"ghost\" icon=\"i-heroicons-x-mark\" @click=\"handleClose\" />\n          <UButton label=\"인쇄하기\" color=\"blue\" icon=\"i-heroicons-printer\"\n            class=\"rounded-2xl font-black px-6 shadow-lg shadow-blue-100\" @click=\"handlePrint\" />\n        </div>\n      </div>\n\n      <!-- QR 카드 격자 -->\n      <div class=\"print-grid mx-auto max-w-[210mm] grid grid-cols-2 gap-4 print:gap-[8mm]\">\n        <div v-for=\"student in students\" :key=\"student.idnt_code\"\n          class=\"qr-card relative overflow-hidden print:border-0\" :style=\"{\n            backgroundColor: teacherInfo.qr_color || '#ffffff',\n            color: teacherInfo.qr_text_color || '#000000'\n          }\">\n          <!-- 배경 이미지 (절대 경로 보장) -->\n          <img v-if=\"teacherInfo.qr_bg\"\n            :src=\"teacherInfo.qr_bg.startsWith('http') ? teacherInfo.qr_bg : hostUrl + teacherInfo.qr_bg\"\n            class=\"absolute pointer-events-none object-contain\" :style=\"{\n              top: (teacherInfo.qr_top) + 'px',\n              left: (teacherInfo.qr_left) + 'px',\n              width: teacherInfo.qr_width + '%',\n              zIndex: 0\n            }\" />\n\n          <!-- 카드 레이아웃 -->\n          <div class=\"relative z-10 h-full p-[24px] flex flex-col justify-between\">\n            <!-- 상단: 학교/반 정보 & 학생 번호/이름 -->\n            <div class=\"flex justify-between items-start\">\n              <div class=\"space-y-1 text-left\">\n                <div class=\"h-4 w-16 bg-current opacity-20 rounded\"></div>\n                <div class=\"text-[10px] font-black uppercase tracking-widest opacity-60\">{{ teacherInfo.class_name }}\n                </div>\n              </div>\n              <div class=\"text-right\">\n                <div class=\"text-xl font-black leading-tight\">{{ student.student_number }}번 {{ student.student_name }}\n                </div>\n                <div class=\"text-[8px] font-bold opacity-30 tracking-widest mt-0.5 uppercase\">Student Card</div>\n              </div>\n            </div>\n\n            <!-- 하단: 안내 문구 & QR 코드 -->\n            <div class=\"flex justify-between items-end gap-2\">\n              <div class=\"space-y-1.5 text-left flex-1\">\n                <div class=\"text-[9px] leading-relaxed font-bold opacity-60\">\n                  입출금은 은행원 승인이 필요합니다.<br>이체는 개인 QR코드로 가능합니다.<br>QR코드를 타인에게 노출하지 마세요.\n                </div>\n                <div\n                  class=\"px-2 py-0.5 rounded border border-current opacity-20 text-[7px] font-black italic inline-block mt-2\">\n                  {{ teacherInfo.class_name }}</div>\n              </div>\n\n              <!-- QR 코드 영역 -->\n              <div class=\"bg-white p-2 rounded-2xl shadow-sm border border-gray-100 shrink-0\">\n                <img :src=\"`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.idnt_code}`\"\n                  class=\"w-16 h-16\" alt=\"QR Code\" />\n              </div>\n            </div>\n          </div>\n\n          <!-- 자름선 안내 (인쇄 시만 살짝 보임) -->\n          <div class=\"absolute inset-0 border border-black/5 pointer-events-none\"></div>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<style scoped>\n@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');\n\n.font-pretendard {\n  font-family: 'Pretendard', sans-serif;\n}\n\n.qr-card {\n  width: 86mm;\n  height: 54mm;\n  border-radius: 20px;\n  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);\n  -webkit-print-color-adjust: exact !important;\n  color-adjust: exact !important;\n  print-color-adjust: exact !important;\n  position: relative;\n  overflow: hidden;\n}\n\n@media print {\n  @page {\n    size: A4;\n    margin: 15mm;\n  }\n\n  .print-content {\n    background: white !important;\n    padding: 0 !important;\n    position: static !important;\n    overflow: visible !important;\n  }\n\n  .print-grid {\n    display: grid !important;\n    grid-template-columns: repeat(2, 1fr) !important;\n    gap: 10mm !important;\n    max-width: none !important;\n    width: 100% !important;\n  }\n\n  .qr-card {\n    page-break-inside: avoid;\n    break-inside: avoid;\n    border: 1px solid #eee !important;\n    border-radius: 20px !important;\n    box-shadow: none !important;\n    width: 86mm !important;\n    height: 54mm !important;\n    -webkit-print-color-adjust: exact !important;\n    print-color-adjust: exact !important;\n  }\n\n  img {\n    -webkit-print-color-adjust: exact !important;\n    print-color-adjust: exact !important;\n  }\n}\n</style>\n",
-      "start": 1774523471409,
-      "end": 1774523471564,
+      "start": 1774579815821,
+      "end": 1774579815992,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815992,
+      "end": 1774579815992,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815992,
+      "end": 1774579815992,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815992,
+      "end": 1774579815992,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815992,
+      "end": 1774579815992,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815992,
+      "end": 1774579815993,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { createElementVNode as _createElementVNode, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode, createTextVNode as _createTextVNode, toDisplayString as _toDisplayString, resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, unref as _unref, normalizeStyle as _normalizeStyle, createStaticVNode as _createStaticVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"fixed inset-0 z-[99999] bg-gray-100 overflow-y-auto print:static print:z-auto print:bg-white print:overflow-visible font-pretendard print-content\" }\nconst _hoisted_2 = {\n  key: 0,\n  class: \"flex flex-col items-center justify-center min-h-screen\"\n}\nconst _hoisted_3 = {\n  key: 1,\n  class: \"text-center py-20 font-bold text-red-500 bg-white min-h-screen\"\n}\nconst _hoisted_4 = {\n  key: 2,\n  class: \"p-8 print:p-0\"\n}\nconst _hoisted_5 = { class: \"fixed top-6 right-6 z-[100000] print:hidden\" }\nconst _hoisted_6 = { class: \"flex items-center gap-3 bg-white/90 backdrop-blur-md p-4 rounded-3xl shadow-2xl border border-white\" }\nconst _hoisted_7 = { class: \"mr-4 text-left\" }\nconst _hoisted_8 = { class: \"text-sm font-black text-gray-800\" }\nconst _hoisted_9 = { class: \"text-[10px] text-gray-400 font-bold\" }\nconst _hoisted_10 = { class: \"print-grid mx-auto max-w-[210mm] grid grid-cols-2 gap-4 print:gap-[8mm]\" }\nconst _hoisted_11 = [\"src\"]\nconst _hoisted_12 = { class: \"relative z-10 h-full p-[24px] flex flex-col justify-between\" }\nconst _hoisted_13 = { class: \"flex justify-between items-start\" }\nconst _hoisted_14 = { class: \"space-y-1 text-left\" }\nconst _hoisted_15 = { class: \"text-[10px] font-black uppercase tracking-widest opacity-60\" }\nconst _hoisted_16 = { class: \"text-right\" }\nconst _hoisted_17 = { class: \"text-xl font-black leading-tight\" }\nconst _hoisted_18 = { class: \"flex justify-between items-end gap-2\" }\nconst _hoisted_19 = { class: \"space-y-1.5 text-left flex-1\" }\nconst _hoisted_20 = { class: \"px-2 py-0.5 rounded border border-current opacity-20 text-[7px] font-black italic inline-block mt-2\" }\nconst _hoisted_21 = { class: \"bg-white p-2 rounded-2xl shadow-sm border border-gray-100 shrink-0\" }\nconst _hoisted_22 = [\"src\"]\n\nimport { onMounted, ref } from 'vue'\nimport { useRoute } from 'vue-router'\nimport { apiPost, hostUrl } from '@/common/api'\n\n\nconst _sfc_main = {\n  __name: 'print',\n  setup(__props) {\n\nconst route = useRoute()\nconst idnt_code = route.query.idnt_code\n\nconst students = ref([])\nconst teacherInfo = ref(null)\nconst isLoading = ref(true)\n\nconst fetchPrintData = async () => {\n  try {\n    const tRes = await apiPost('teacher.php', {\n      mode: 'teacherInfo',\n      idnt_code: idnt_code\n    })\n\n    if (tRes.result === 'SUCCESS') {\n      teacherInfo.value = tRes.data\n    }\n\n    if (teacherInfo.value) {\n      const sRes = await apiPost('member.php', {\n        mode: 'studentList',\n        teacher: teacherInfo.value.idx\n      })\n      if (sRes.result === 'SUCCESS') {\n        students.value = sRes.data\n      }\n    }\n  } catch (error) {\n    console.error('Fetch error:', error)\n  } finally {\n    isLoading.value = false\n  }\n}\n\nonMounted(() => {\n  if (!idnt_code) {\n    alert('잘못된 접근입니다.')\n    return\n  }\n  fetchPrintData()\n})\n\nconst handlePrint = () => {\n  window.print()\n}\n\nconst handleClose = () => {\n  window.close()\n}\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = _resolveComponent(\"UButton\")\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    (isLoading.value)\n      ? (_openBlock(), _createElementBlock(\"div\", _hoisted_2, _cache[0] || (_cache[0] = [\n          _createElementVNode(\"div\", { class: \"animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4\" }, null, -1),\n          _createElementVNode(\"p\", { class: \"font-bold text-gray-500 text-lg\" }, \"인쇄 데이터를 불러오는 중...\", -1)\n        ])))\n      : (!teacherInfo.value)\n        ? (_openBlock(), _createElementBlock(\"div\", _hoisted_3, \" 정보를 불러오지 못했습니다. \"))\n        : (_openBlock(), _createElementBlock(\"div\", _hoisted_4, [\n            _cache[5] || (_cache[5] = _createStaticVNode(\"<div class=\\\"fixed top-24 left-1/2 -translate-x-1/2 z-[100001] print:hidden\\\" data-v-2ee1f66d><div class=\\\"bg-amber-50 border border-amber-200 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3\\\" data-v-2ee1f66d><span class=\\\"i-heroicons-exclamation-triangle-solid w-5 h-5 text-amber-500\\\" data-v-2ee1f66d></span><p class=\\\"text-sm font-bold text-amber-900\\\" data-v-2ee1f66d>인쇄 설정에서 <span class=\\\"text-red-600 underline\\\" data-v-2ee1f66d>&quot;배경 그래픽&quot;</span>을 반드시 체크해야 디자인이 보입니다!</p></div></div>\", 1)),\n            _createElementVNode(\"div\", _hoisted_5, [\n              _createElementVNode(\"div\", _hoisted_6, [\n                _createElementVNode(\"div\", _hoisted_7, [\n                  _createElementVNode(\"h1\", _hoisted_8, _toDisplayString(teacherInfo.value.class_name) + \" QR 카드\", 1),\n                  _createElementVNode(\"p\", _hoisted_9, \"총 \" + _toDisplayString(students.value.length) + \"명 / 2열 배치\", 1)\n                ]),\n                _createVNode(_component_UButton, {\n                  label: \"창 닫기\",\n                  color: \"gray\",\n                  variant: \"ghost\",\n                  icon: \"i-heroicons-x-mark\",\n                  onClick: handleClose\n                }),\n                _createVNode(_component_UButton, {\n                  label: \"인쇄하기\",\n                  color: \"blue\",\n                  icon: \"i-heroicons-printer\",\n                  class: \"rounded-2xl font-black px-6 shadow-lg shadow-blue-100\",\n                  onClick: handlePrint\n                })\n              ])\n            ]),\n            _createElementVNode(\"div\", _hoisted_10, [\n              (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(students.value, (student) => {\n                return (_openBlock(), _createElementBlock(\"div\", {\n                  key: student.idnt_code,\n                  class: \"qr-card relative overflow-hidden print:border-0\",\n                  style: _normalizeStyle({\n            backgroundColor: teacherInfo.value.qr_color || '#ffffff',\n            color: teacherInfo.value.qr_text_color || '#000000'\n          })\n                }, [\n                  (teacherInfo.value.qr_bg)\n                    ? (_openBlock(), _createElementBlock(\"img\", {\n                        key: 0,\n                        src: teacherInfo.value.qr_bg.startsWith('http') ? teacherInfo.value.qr_bg : _unref(hostUrl) + teacherInfo.value.qr_bg,\n                        class: \"absolute pointer-events-none object-contain\",\n                        style: _normalizeStyle({\n              top: (teacherInfo.value.qr_top) + 'px',\n              left: (teacherInfo.value.qr_left) + 'px',\n              width: teacherInfo.value.qr_width + '%',\n              zIndex: 0\n            })\n                      }, null, 12, _hoisted_11))\n                    : _createCommentVNode(\"\", true),\n                  _createElementVNode(\"div\", _hoisted_12, [\n                    _createElementVNode(\"div\", _hoisted_13, [\n                      _createElementVNode(\"div\", _hoisted_14, [\n                        _cache[1] || (_cache[1] = _createElementVNode(\"div\", { class: \"h-4 w-16 bg-current opacity-20 rounded\" }, null, -1)),\n                        _createElementVNode(\"div\", _hoisted_15, _toDisplayString(teacherInfo.value.class_name), 1)\n                      ]),\n                      _createElementVNode(\"div\", _hoisted_16, [\n                        _createElementVNode(\"div\", _hoisted_17, _toDisplayString(student.student_number) + \"번 \" + _toDisplayString(student.student_name), 1),\n                        _cache[2] || (_cache[2] = _createElementVNode(\"div\", { class: \"text-[8px] font-bold opacity-30 tracking-widest mt-0.5 uppercase\" }, \"Student Card\", -1))\n                      ])\n                    ]),\n                    _createElementVNode(\"div\", _hoisted_18, [\n                      _createElementVNode(\"div\", _hoisted_19, [\n                        _cache[3] || (_cache[3] = _createElementVNode(\"div\", { class: \"text-[9px] leading-relaxed font-bold opacity-60\" }, [\n                          _createTextVNode(\" 입출금은 은행원 승인이 필요합니다.\"),\n                          _createElementVNode(\"br\"),\n                          _createTextVNode(\"이체는 개인 QR코드로 가능합니다.\"),\n                          _createElementVNode(\"br\"),\n                          _createTextVNode(\"QR코드를 타인에게 노출하지 마세요. \")\n                        ], -1)),\n                        _createElementVNode(\"div\", _hoisted_20, _toDisplayString(teacherInfo.value.class_name), 1)\n                      ]),\n                      _createElementVNode(\"div\", _hoisted_21, [\n                        _createElementVNode(\"img\", {\n                          src: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.idnt_code}`,\n                          class: \"w-16 h-16\",\n                          alt: \"QR Code\"\n                        }, null, 8, _hoisted_22)\n                      ])\n                    ])\n                  ]),\n                  _cache[4] || (_cache[4] = _createElementVNode(\"div\", { class: \"absolute inset-0 border border-black/5 pointer-events-none\" }, null, -1))\n                ], 4))\n              }), 128))\n            ])\n          ]))\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/pages/teacher/print.vue?vue&type=style&index=0&scoped=2ee1f66d&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-2ee1f66d\"]])",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,153 +74,153 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774523471564,
-      "end": 1774523471564,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774523471564,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774523471565,
-      "end": 1774523471565,
+      "start": 1774579815993,
+      "end": 1774579815993,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774523471565,
-      "end": 1774523471567,
+      "start": 1774579815993,
+      "end": 1774579815996,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815996,
+      "end": 1774579815996,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815996,
+      "end": 1774579815996,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815996,
+      "end": 1774579815996,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815996,
+      "end": 1774579815996,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
       "result": "import { default as __nuxt_component_0 } from \"/Users/jang-yeong-ug/Documents/zooper/node_modules/@nuxt/ui/dist/runtime/components/elements/Button.vue\";\nimport { createElementVNode as _createElementVNode, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode, createTextVNode as _createTextVNode, toDisplayString as _toDisplayString, resolveComponent as _resolveComponent, createVNode as _createVNode, renderList as _renderList, Fragment as _Fragment, unref as _unref, normalizeStyle as _normalizeStyle, createStaticVNode as _createStaticVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"fixed inset-0 z-[99999] bg-gray-100 overflow-y-auto print:static print:z-auto print:bg-white print:overflow-visible font-pretendard print-content\" }\nconst _hoisted_2 = {\n  key: 0,\n  class: \"flex flex-col items-center justify-center min-h-screen\"\n}\nconst _hoisted_3 = {\n  key: 1,\n  class: \"text-center py-20 font-bold text-red-500 bg-white min-h-screen\"\n}\nconst _hoisted_4 = {\n  key: 2,\n  class: \"p-8 print:p-0\"\n}\nconst _hoisted_5 = { class: \"fixed top-6 right-6 z-[100000] print:hidden\" }\nconst _hoisted_6 = { class: \"flex items-center gap-3 bg-white/90 backdrop-blur-md p-4 rounded-3xl shadow-2xl border border-white\" }\nconst _hoisted_7 = { class: \"mr-4 text-left\" }\nconst _hoisted_8 = { class: \"text-sm font-black text-gray-800\" }\nconst _hoisted_9 = { class: \"text-[10px] text-gray-400 font-bold\" }\nconst _hoisted_10 = { class: \"print-grid mx-auto max-w-[210mm] grid grid-cols-2 gap-4 print:gap-[8mm]\" }\nconst _hoisted_11 = [\"src\"]\nconst _hoisted_12 = { class: \"relative z-10 h-full p-[24px] flex flex-col justify-between\" }\nconst _hoisted_13 = { class: \"flex justify-between items-start\" }\nconst _hoisted_14 = { class: \"space-y-1 text-left\" }\nconst _hoisted_15 = { class: \"text-[10px] font-black uppercase tracking-widest opacity-60\" }\nconst _hoisted_16 = { class: \"text-right\" }\nconst _hoisted_17 = { class: \"text-xl font-black leading-tight\" }\nconst _hoisted_18 = { class: \"flex justify-between items-end gap-2\" }\nconst _hoisted_19 = { class: \"space-y-1.5 text-left flex-1\" }\nconst _hoisted_20 = { class: \"px-2 py-0.5 rounded border border-current opacity-20 text-[7px] font-black italic inline-block mt-2\" }\nconst _hoisted_21 = { class: \"bg-white p-2 rounded-2xl shadow-sm border border-gray-100 shrink-0\" }\nconst _hoisted_22 = [\"src\"]\n\nimport { onMounted, ref } from 'vue'\nimport { useRoute } from 'vue-router'\nimport { apiPost, hostUrl } from '@/common/api'\n\n\nconst _sfc_main = {\n  __name: 'print',\n  setup(__props) {\n\nconst route = useRoute()\nconst idnt_code = route.query.idnt_code\n\nconst students = ref([])\nconst teacherInfo = ref(null)\nconst isLoading = ref(true)\n\nconst fetchPrintData = async () => {\n  try {\n    const tRes = await apiPost('teacher.php', {\n      mode: 'teacherInfo',\n      idnt_code: idnt_code\n    })\n\n    if (tRes.result === 'SUCCESS') {\n      teacherInfo.value = tRes.data\n    }\n\n    if (teacherInfo.value) {\n      const sRes = await apiPost('member.php', {\n        mode: 'studentList',\n        teacher: teacherInfo.value.idx\n      })\n      if (sRes.result === 'SUCCESS') {\n        students.value = sRes.data\n      }\n    }\n  } catch (error) {\n    console.error('Fetch error:', error)\n  } finally {\n    isLoading.value = false\n  }\n}\n\nonMounted(() => {\n  if (!idnt_code) {\n    alert('잘못된 접근입니다.')\n    return\n  }\n  fetchPrintData()\n})\n\nconst handlePrint = () => {\n  window.print()\n}\n\nconst handleClose = () => {\n  window.close()\n}\n\nreturn (_ctx, _cache) => {\n  const _component_UButton = __nuxt_component_0\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    (isLoading.value)\n      ? (_openBlock(), _createElementBlock(\"div\", _hoisted_2, _cache[0] || (_cache[0] = [\n          _createElementVNode(\"div\", { class: \"animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4\" }, null, -1),\n          _createElementVNode(\"p\", { class: \"font-bold text-gray-500 text-lg\" }, \"인쇄 데이터를 불러오는 중...\", -1)\n        ])))\n      : (!teacherInfo.value)\n        ? (_openBlock(), _createElementBlock(\"div\", _hoisted_3, \" 정보를 불러오지 못했습니다. \"))\n        : (_openBlock(), _createElementBlock(\"div\", _hoisted_4, [\n            _cache[5] || (_cache[5] = _createStaticVNode(\"<div class=\\\"fixed top-24 left-1/2 -translate-x-1/2 z-[100001] print:hidden\\\" data-v-2ee1f66d><div class=\\\"bg-amber-50 border border-amber-200 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3\\\" data-v-2ee1f66d><span class=\\\"i-heroicons-exclamation-triangle-solid w-5 h-5 text-amber-500\\\" data-v-2ee1f66d></span><p class=\\\"text-sm font-bold text-amber-900\\\" data-v-2ee1f66d>인쇄 설정에서 <span class=\\\"text-red-600 underline\\\" data-v-2ee1f66d>&quot;배경 그래픽&quot;</span>을 반드시 체크해야 디자인이 보입니다!</p></div></div>\", 1)),\n            _createElementVNode(\"div\", _hoisted_5, [\n              _createElementVNode(\"div\", _hoisted_6, [\n                _createElementVNode(\"div\", _hoisted_7, [\n                  _createElementVNode(\"h1\", _hoisted_8, _toDisplayString(teacherInfo.value.class_name) + \" QR 카드\", 1),\n                  _createElementVNode(\"p\", _hoisted_9, \"총 \" + _toDisplayString(students.value.length) + \"명 / 2열 배치\", 1)\n                ]),\n                _createVNode(_component_UButton, {\n                  label: \"창 닫기\",\n                  color: \"gray\",\n                  variant: \"ghost\",\n                  icon: \"i-heroicons-x-mark\",\n                  onClick: handleClose\n                }),\n                _createVNode(_component_UButton, {\n                  label: \"인쇄하기\",\n                  color: \"blue\",\n                  icon: \"i-heroicons-printer\",\n                  class: \"rounded-2xl font-black px-6 shadow-lg shadow-blue-100\",\n                  onClick: handlePrint\n                })\n              ])\n            ]),\n            _createElementVNode(\"div\", _hoisted_10, [\n              (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(students.value, (student) => {\n                return (_openBlock(), _createElementBlock(\"div\", {\n                  key: student.idnt_code,\n                  class: \"qr-card relative overflow-hidden print:border-0\",\n                  style: _normalizeStyle({\n            backgroundColor: teacherInfo.value.qr_color || '#ffffff',\n            color: teacherInfo.value.qr_text_color || '#000000'\n          })\n                }, [\n                  (teacherInfo.value.qr_bg)\n                    ? (_openBlock(), _createElementBlock(\"img\", {\n                        key: 0,\n                        src: teacherInfo.value.qr_bg.startsWith('http') ? teacherInfo.value.qr_bg : _unref(hostUrl) + teacherInfo.value.qr_bg,\n                        class: \"absolute pointer-events-none object-contain\",\n                        style: _normalizeStyle({\n              top: (teacherInfo.value.qr_top) + 'px',\n              left: (teacherInfo.value.qr_left) + 'px',\n              width: teacherInfo.value.qr_width + '%',\n              zIndex: 0\n            })\n                      }, null, 12, _hoisted_11))\n                    : _createCommentVNode(\"\", true),\n                  _createElementVNode(\"div\", _hoisted_12, [\n                    _createElementVNode(\"div\", _hoisted_13, [\n                      _createElementVNode(\"div\", _hoisted_14, [\n                        _cache[1] || (_cache[1] = _createElementVNode(\"div\", { class: \"h-4 w-16 bg-current opacity-20 rounded\" }, null, -1)),\n                        _createElementVNode(\"div\", _hoisted_15, _toDisplayString(teacherInfo.value.class_name), 1)\n                      ]),\n                      _createElementVNode(\"div\", _hoisted_16, [\n                        _createElementVNode(\"div\", _hoisted_17, _toDisplayString(student.student_number) + \"번 \" + _toDisplayString(student.student_name), 1),\n                        _cache[2] || (_cache[2] = _createElementVNode(\"div\", { class: \"text-[8px] font-bold opacity-30 tracking-widest mt-0.5 uppercase\" }, \"Student Card\", -1))\n                      ])\n                    ]),\n                    _createElementVNode(\"div\", _hoisted_18, [\n                      _createElementVNode(\"div\", _hoisted_19, [\n                        _cache[3] || (_cache[3] = _createElementVNode(\"div\", { class: \"text-[9px] leading-relaxed font-bold opacity-60\" }, [\n                          _createTextVNode(\" 입출금은 은행원 승인이 필요합니다.\"),\n                          _createElementVNode(\"br\"),\n                          _createTextVNode(\"이체는 개인 QR코드로 가능합니다.\"),\n                          _createElementVNode(\"br\"),\n                          _createTextVNode(\"QR코드를 타인에게 노출하지 마세요. \")\n                        ], -1)),\n                        _createElementVNode(\"div\", _hoisted_20, _toDisplayString(teacherInfo.value.class_name), 1)\n                      ]),\n                      _createElementVNode(\"div\", _hoisted_21, [\n                        _createElementVNode(\"img\", {\n                          src: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.idnt_code}`,\n                          class: \"w-16 h-16\",\n                          alt: \"QR Code\"\n                        }, null, 8, _hoisted_22)\n                      ])\n                    ])\n                  ]),\n                  _cache[4] || (_cache[4] = _createElementVNode(\"div\", { class: \"absolute inset-0 border border-black/5 pointer-events-none\" }, null, -1))\n                ], 4))\n              }), 128))\n            ])\n          ]))\n  ]))\n}\n}\n\n}\n\n\nimport \"/Users/jang-yeong-ug/Documents/zooper/pages/teacher/print.vue?vue&type=style&index=0&scoped=2ee1f66d&lang.css\"\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['__scopeId',\"data-v-2ee1f66d\"]])",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815996,
+      "end": 1774579815996,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815996,
+      "end": 1774579815996,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815996,
+      "end": 1774579815997,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1774523471567,
-      "end": 1774523471567,
+      "start": 1774579815997,
+      "end": 1774579815997,
       "order": "normal"
     }
   ]
