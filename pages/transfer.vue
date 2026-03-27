@@ -113,12 +113,18 @@ const fetchStudents = async () => {
     const studentInfo = JSON.parse(sessionStorage.getItem('student'))
     const selfIdntCode = studentInfo?.idnt_code
 
-    studentOptions.value = res.data
+    const options = res.data
       .filter(s => String(s.idnt_code).trim() !== String(selfIdntCode).trim())
       .map(s => ({
         label: s.student_name,
         value: s.idnt_code
       }))
+
+    studentOptions.value = [
+      ...(res.teacher?.is_tax_active === 'Y' ? [{ label: '💸 세금 납부', value: 'TAX' }] : []),
+      ...(res.teacher?.is_penalty_active === 'Y' ? [{ label: '⚖️ 벌금 납부', value: 'PENALTY' }] : []),
+      ...options
+    ]
   }
 }
 
@@ -160,11 +166,25 @@ const handleDeposit = async () => {
     return
   }
 
-  const res = await apiPost('bank.php', {
-    mode: 'deposit',
+  const targetValue = selectedStudent.value.value
+  let mode = 'deposit'
+  let payload = {
     from_idnt_code: sessionStorage.getItem('idnt_code'),
-    to_idnt_code: selectedStudent.value.value,
+    to_idnt_code: targetValue,
     point: parseInt(amountInput.value)
+  }
+
+  if (targetValue === 'TAX' || targetValue === 'PENALTY') {
+    mode = targetValue.toLowerCase()
+    payload = {
+      idnt_code: sessionStorage.getItem('idnt_code'),
+      point: parseInt(amountInput.value)
+    }
+  }
+
+  const res = await apiPost('bank.php', {
+    mode,
+    ...payload
   })
 
   if (res.result === 'SUCCESS') {

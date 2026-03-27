@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import api, { apiPost, apiPoint, apiTeacher, hostUrl } from '@/common/api'
 import * as XLSX from 'xlsx/dist/xlsx.full.min.js'
 //  QR
@@ -204,6 +204,26 @@ const handleSaveSettings = async () => {
     if (dRes.result === 'SUCCESS') {
       teacherInfo.value = { ...teacherInfo.value, ...dRes.data }
     }
+  }
+}
+
+const activateFeature = async (feature) => {
+  const label = feature === 'tax' ? '세금' : '벌금'
+  if (!confirm(`${label} 기능을 사용하시겠습니까?\n활성화 시 학생들의 이체 목록에 '${label} 납부' 메뉴가 추가됩니다.`)) return
+
+  const res = await apiPost('teacher.php', {
+    mode: 'toggleFeature',
+    idnt_code: sessionStorage.getItem('t_idnt_code'),
+    feature,
+    status: 'Y'
+  })
+
+  if (res.result === 'SUCCESS') {
+    alert(`${label} 기능이 활성화되었습니다.`)
+    const info = await apiTeacher()
+    teacherInfo.value = info
+  } else {
+    alert(res.message || '활성화 실패')
   }
 }
 
@@ -536,8 +556,20 @@ const submitChangePassword = async () => {
 
 const isTransferModalOpen = ref(false)
 const isBatchTransferModalOpen = ref(false)
+const selectedBatchStudents = ref([])
 const transferForm = ref({ amount: '', memo: '국고 지원금' })
 const batchTransferForm = ref({ amount: '', memo: '국고 지원금 (일괄)' })
+
+const allSelected = computed({
+  get: () => selectedBatchStudents.value.length === studentOptions.value.length,
+  set: (val) => {
+    if (val) {
+      selectedBatchStudents.value = studentOptions.value.map(s => s.value)
+    } else {
+      selectedBatchStudents.value = []
+    }
+  }
+})
 
 const handleTreasuryTransfer = () => {
   transferForm.value.amount = ''
@@ -548,6 +580,8 @@ const handleTreasuryTransfer = () => {
 const handleBatchTreasuryTransfer = () => {
   batchTransferForm.value.amount = ''
   batchTransferForm.value.memo = '국고 지원금 (일괄)'
+  // Default to selecting all students
+  selectedBatchStudents.value = studentOptions.value.map(s => s.value)
   isBatchTransferModalOpen.value = true
 }
 
@@ -584,13 +618,16 @@ const submitBatchTreasuryTransfer = async () => {
   const n = Number(batchTransferForm.value.amount)
   if (isNaN(n) || n <= 0) return alert('올바른 금액을 입력하세요.')
 
-  if (!confirm(`전체 학생(${studentOptions.value.length}명)에게 각각 ${n.toLocaleString()}P씩 지급하시겠습니까?`)) return
+  if (selectedBatchStudents.value.length === 0) return alert('지급할 학생을 선택하세요.')
+
+  if (!confirm(`선택한 학생(${selectedBatchStudents.value.length}명)에게 각각 ${n.toLocaleString()}P씩 지급하시겠습니까?`)) return
 
   const res = await apiPost('teacher.php', {
     mode: 'batchTransferToStudents',
     teacher_idx: teacherInfo.value.idx,
     amount: n,
-    memo: batchTransferForm.value.memo
+    memo: batchTransferForm.value.memo,
+    student_idnts: selectedBatchStudents.value
   })
 
   if (res.result === 'SUCCESS') {
@@ -604,6 +641,15 @@ const submitBatchTreasuryTransfer = async () => {
     isBatchTransferModalOpen.value = false
   } else {
     alert(res.message || '지급 실패')
+  }
+}
+
+const toggleStudentSelection = (val) => {
+  const index = selectedBatchStudents.value.indexOf(val)
+  if (index > -1) {
+    selectedBatchStudents.value.splice(index, 1)
+  } else {
+    selectedBatchStudents.value.push(val)
   }
 }
 
@@ -881,13 +927,15 @@ const historyList = ref([])
 
 const openHistoryModal = async (type) => {
   historyTitle.value = type === 'tax' ? '세금 내역' : '벌금 내역'
-  const res = await apiPost('bank.php', {
-    mode: 'historyByType',
-    idnt_code: sessionStorage.getItem('t_idnt_code'),
-    type // 'tax' or 'penalty'
+  const res = await apiPost('teacher.php', {
+    mode: 'getHistoryLogs',
+    teacher_idx: teacherInfo.value.idx,
+    history_type: type
   })
-  historyList.value = res.data || []
-  isHistoryModalOpen.value = true
+  if (res.result === 'SUCCESS') {
+    historyList.value = res.data
+    isHistoryModalOpen.value = true
+  }
 }
 
 const isQRDesignModalOpen = ref(false)
@@ -1088,6 +1136,15 @@ const onSelectSchool = (school) => {
         <!-- 누적 세금 -->
         <div
           class="relative overflow-hidden group rounded-3xl bg-gradient-to-br from-amber-400 via-orange-500 to-orange-600 p-6 text-white shadow-xl shadow-orange-200 transition-all hover:-translate-y-1">
+          <!-- 비활성화 오버레이 -->
+          <div v-if="teacherInfo?.is_tax_active !== 'Y'"
+            class="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center space-y-3 cursor-pointer group-hover:bg-black/50 transition-all"
+            @click="activateFeature('tax')">
+            <span class="i-heroicons-lock-closed-solid w-8 h-8 text-white/80 transition-transform group-hover:scale-110" />
+            <p class="text-sm font-black text-white">세금 기능 비활성화</p>
+            <p class="text-[10px] font-bold text-white/60">클릭하여 활성화 하세요</p>
+          </div>
+
           <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
             <span class="i-heroicons-document-text-solid w-32 h-32" />
           </div>
@@ -1108,6 +1165,15 @@ const onSelectSchool = (school) => {
         <!-- 누적 벌금 -->
         <div
           class="relative overflow-hidden group rounded-3xl bg-gradient-to-br from-rose-400 via-red-500 to-red-600 p-6 text-white shadow-xl shadow-red-200 transition-all hover:-translate-y-1">
+          <!-- 비활성화 오버레이 -->
+          <div v-if="teacherInfo?.is_penalty_active !== 'Y'"
+            class="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center space-y-3 cursor-pointer group-hover:bg-black/50 transition-all"
+            @click="activateFeature('penalty')">
+            <span class="i-heroicons-lock-closed-solid w-8 h-8 text-white/80 transition-transform group-hover:scale-110" />
+            <p class="text-sm font-black text-white">벌금 기능 비활성화</p>
+            <p class="text-[10px] font-bold text-white/60">클릭하여 활성화 하세요</p>
+          </div>
+
           <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
             <span class="i-heroicons-exclamation-triangle-solid w-32 h-32" />
           </div>
@@ -1282,19 +1348,14 @@ const onSelectSchool = (school) => {
         </div>
 
         <!-- 학생 태그 그리드 -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2">
           <div v-for="student in studentOptions" :key="student.value"
             @click="handleStudentClick(student.value, student.label)" :class="[
-              'group relative flex flex-col items-center justify-center p-4 rounded-3xl cursor-pointer transition-all duration-300 border-2',
+              'group relative flex flex-col items-center justify-center py-2 px-3 rounded-xl cursor-pointer transition-all duration-300 border-2',
               selectedStudent === student.value ? 'bg-blue-600 border-blue-600 shadow-lg shadow-blue-200 -translate-y-1' : 'bg-white border-gray-50 hover:border-blue-200 hover:bg-blue-50/30'
             ]">
-            <div
-              :class="['w-12 h-12 flex items-center justify-center rounded-2xl mb-2 text-lg font-black transition-colors',
-                selectedStudent === student.value ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-400 group-hover:bg-blue-100 group-hover:text-blue-500']">
-              {{ student.label.substring(0, 1) }}
-            </div>
             <p
-              :class="['text-xs font-black truncate w-full text-center', selectedStudent === student.value ? 'text-white' : 'text-gray-700']">
+              :class="['text-sm font-black truncate w-full text-center', selectedStudent === student.value ? 'text-white' : 'text-gray-700']">
               {{ student.label }}
             </p>
             <p
@@ -1313,21 +1374,15 @@ const onSelectSchool = (school) => {
         <!-- 선택된 학생 상세 액션 -->
         <Transition name="fade-slide">
           <div v-if="selectedStudentName"
-            class="mt-8 p-10 bg-white rounded-[40px] border border-gray-100 shadow-2xl shadow-blue-50/50">
+            class="mt-6 p-6 bg-white rounded-[32px] border border-gray-100 shadow-xl shadow-blue-50/50">
             <!-- 학생 프로필 정보 -->
             <div
-              class="flex flex-col lg:flex-row items-center lg:items-start gap-10 mb-10 pb-10 border-b border-gray-100">
-              <div class="relative">
-                <div
-                  class="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center rounded-[32px] text-3xl font-black shadow-2xl shadow-blue-200">
-                  {{ selectedStudentName.substring(0, 1) }}
-                </div>
-              </div>
+              class="flex flex-col lg:flex-row items-center lg:items-start gap-4 mb-4 pb-4 border-b border-gray-100">
 
-              <div class="flex-1 text-center lg:text-left space-y-4">
+              <div class="flex-1 text-center lg:text-left space-y-2">
                 <div>
-                  <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-1">
-                    <h3 class="text-3xl font-black text-gray-800">{{ selectedStudentName }}</h3>
+                  <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-0.5">
+                    <h3 class="text-2xl font-black text-gray-800">{{ selectedStudentName }}</h3>
                     
                     <!-- 직업 라벨 (Roles) -->
                     <div v-if="selectedStudentData?.roles?.length > 0" class="flex flex-wrap gap-1.5">
@@ -1484,9 +1539,51 @@ const onSelectSchool = (school) => {
       </section>
     </div>
     <!-- 세금/벌금 내역 모달 -->
-    <!-- 세금/벌금 내역 모달 -->
     <UModal v-model="isHistoryModalOpen">
-      ... (no changes)
+      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100' }" class="rounded-3xl overflow-hidden">
+        <template #header>
+          <div class="flex items-center justify-between p-2">
+            <h3 class="text-xl font-black text-gray-800 flex items-center gap-2">
+              <div class="p-1.5 bg-blue-100 rounded-lg">
+                <span :class="historyTitle === '세금 내역' ? 'i-heroicons-receipt-percent-solid' : 'i-heroicons-shield-exclamation-solid'" class="w-5 h-5 text-blue-600" />
+              </div>
+              {{ historyTitle }}
+            </h3>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isHistoryModalOpen = false" />
+          </div>
+        </template>
+
+        <div class="max-h-[60vh] overflow-y-auto custom-scrollbar">
+          <table class="w-full text-sm text-left">
+            <thead class="text-[10px] font-black uppercase text-gray-400 bg-gray-50/50 sticky top-0 backdrop-blur-md">
+              <tr>
+                <th class="px-6 py-4">일시</th>
+                <th class="px-6 py-4">학생명</th>
+                <th class="px-6 py-4 text-right">금액</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              <tr v-for="item in historyList" :key="item.idx" class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 text-gray-500 font-medium whitespace-nowrap">{{ item.c_datetime?.substring(5, 16) }}</td>
+                <td class="px-6 py-4">
+                  <span class="font-black text-gray-700">{{ item.student_name }}</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <span class="font-black text-blue-600">{{ Number(item.point).toLocaleString() }}P</span>
+                </td>
+              </tr>
+              <tr v-if="historyList.length === 0">
+                <td colspan="3" class="px-6 py-20 text-center">
+                  <div class="flex flex-col items-center gap-2 opacity-20">
+                    <span class="i-heroicons-document-text-solid w-12 h-12" />
+                    <p class="font-black">아직 내역이 없습니다.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </UCard>
     </UModal>
 
     <!-- QR 카드 디자인 모달 -->
@@ -1764,8 +1861,25 @@ const onSelectSchool = (school) => {
           학생 전원에게 일괄 송금
         </h3>
         <div class="space-y-6">
-          <UFormGroup :label="`전체 학생(${studentOptions.length}명)에게 각각 보낼 금액`">
-            <UInput v-model="batchTransferForm.amount" type="number" size="xl" placeholder="예: 50" autocomplete="off"
+          <div class="bg-gray-50/50 rounded-2xl p-4 border border-gray-100">
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-gray-100">
+              <div class="flex items-center gap-2 cursor-pointer select-none" @click="allSelected = !allSelected">
+                <UCheckbox v-model="allSelected" @click.stop />
+                <span class="text-sm font-black text-gray-500">전체 선택</span>
+              </div>
+              <span class="text-xs font-bold text-gray-400">선택됨: {{ selectedBatchStudents.length }}명</span>
+            </div>
+            <div class="max-h-48 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+              <div v-for="student in studentOptions" :key="student.value"
+                class="flex items-center gap-3 p-2 bg-white rounded-xl border border-gray-100 shadow-sm transition-all hover:bg-gray-50 cursor-pointer select-none"
+                @click="toggleStudentSelection(student.value)">
+                <UCheckbox v-model="selectedBatchStudents" :value="student.value" name="batch-students" @click.stop />
+                <span class="text-sm font-bold text-gray-700">{{ student.label }}</span>
+              </div>
+            </div>
+          </div>
+          <UFormGroup :label="`지급할 금액 (선택한 ${selectedBatchStudents.length}명 각각 지급)`">
+            <UInput v-model="batchTransferForm.amount" type="number" size="xl" placeholder="예: 100" autocomplete="off"
               class="w-full text-center font-black" />
           </UFormGroup>
           <UFormGroup label="지급 메모 (통장 내역)">

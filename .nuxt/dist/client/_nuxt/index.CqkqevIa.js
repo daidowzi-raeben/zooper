@@ -1,0 +1,1 @@
+import{y as s,al as m}from"./entry.kfU489Np.js";function f(e,a){const{title:r,titleTemplate:l,...n}=e;return s({title:r,titleTemplate:l,_flatMeta:n},{...a,transform(t){const o=m({...t._flatMeta});return delete t._flatMeta,{...t,meta:o}}})}export{f as u};
