@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div :class=\"ui.wrapper\">\n    <textarea\n      :id=\"inputId\"\n      ref=\"textarea\"\n      :value=\"modelValue\"\n      :name=\"name\"\n      :rows=\"rows\"\n      :required=\"required\"\n      :disabled=\"disabled\"\n      :placeholder=\"placeholder\"\n      :class=\"textareaClass\"\n      v-bind=\"attrs\"\n      @input=\"onInput\"\n      @blur=\"onBlur\"\n      @change=\"onChange\"\n    />\n\n    <slot />\n  </div>\n</template>\n\n<script>\nimport { ref, computed, toRef, watch, onMounted, nextTick, defineComponent } from \"vue\";\nimport { twMerge, twJoin } from \"tailwind-merge\";\nimport { defu } from \"defu\";\nimport { useUI } from \"../../composables/useUI\";\nimport { useFormGroup } from \"../../composables/useFormGroup\";\nimport { mergeConfig, looseToNumber } from \"../../utils\";\nimport appConfig from \"#build/app.config\";\nimport { textarea } from \"#ui/ui.config\";\nconst config = mergeConfig(appConfig.ui.strategy, appConfig.ui.textarea, textarea);\nexport default defineComponent({\n  inheritAttrs: false,\n  props: {\n    modelValue: {\n      type: [String, Number],\n      default: \"\"\n    },\n    id: {\n      type: String,\n      default: null\n    },\n    name: {\n      type: String,\n      default: null\n    },\n    placeholder: {\n      type: String,\n      default: null\n    },\n    required: {\n      type: Boolean,\n      default: false\n    },\n    disabled: {\n      type: Boolean,\n      default: false\n    },\n    rows: {\n      type: Number,\n      default: 3\n    },\n    autoresize: {\n      type: Boolean,\n      default: false\n    },\n    autofocus: {\n      type: Boolean,\n      default: false\n    },\n    autofocusDelay: {\n      type: Number,\n      default: 100\n    },\n    resize: {\n      type: Boolean,\n      default: false\n    },\n    padded: {\n      type: Boolean,\n      default: true\n    },\n    size: {\n      type: String,\n      default: null,\n      validator(value) {\n        return Object.keys(config.size).includes(value);\n      }\n    },\n    color: {\n      type: String,\n      default: () => config.default.color,\n      validator(value) {\n        return [...appConfig.ui.colors, ...Object.keys(config.color)].includes(value);\n      }\n    },\n    variant: {\n      type: String,\n      default: () => config.default.variant,\n      validator(value) {\n        return [\n          ...Object.keys(config.variant),\n          ...Object.values(config.color).flatMap((value2) => Object.keys(value2))\n        ].includes(value);\n      }\n    },\n    textareaClass: {\n      type: String,\n      default: null\n    },\n    class: {\n      type: [String, Object, Array],\n      default: () => \"\"\n    },\n    ui: {\n      type: Object,\n      default: () => ({})\n    },\n    modelModifiers: {\n      type: Object,\n      default: () => ({})\n    }\n  },\n  emits: [\"update:modelValue\", \"blur\"],\n  setup(props, { emit }) {\n    const { ui, attrs } = useUI(\"textarea\", toRef(props, \"ui\"), config, toRef(props, \"class\"));\n    const { emitFormBlur, emitFormInput, inputId, color, size, name } = useFormGroup(props, config);\n    const modelModifiers = ref(defu({}, props.modelModifiers, { trim: false, lazy: false, number: false }));\n    const textarea2 = ref(null);\n    const autoFocus = () => {\n      if (props.autofocus) {\n        textarea2.value?.focus();\n      }\n    };\n    const autoResize = () => {\n      if (props.autoresize) {\n        if (!textarea2.value) {\n          return;\n        }\n        textarea2.value.rows = props.rows;\n        const styles = window.getComputedStyle(textarea2.value);\n        const paddingTop = parseInt(styles.paddingTop);\n        const paddingBottom = parseInt(styles.paddingBottom);\n        const padding = paddingTop + paddingBottom;\n        const lineHeight = parseInt(styles.lineHeight);\n        const { scrollHeight } = textarea2.value;\n        const newRows = (scrollHeight - padding) / lineHeight;\n        if (newRows > props.rows) {\n          textarea2.value.rows = newRows;\n        }\n      }\n    };\n    const updateInput = (value) => {\n      if (modelModifiers.value.trim) {\n        value = value.trim();\n      }\n      if (modelModifiers.value.number) {\n        value = looseToNumber(value);\n      }\n      emit(\"update:modelValue\", value);\n      emitFormInput();\n    };\n    const onInput = (event) => {\n      autoResize();\n      if (!modelModifiers.value.lazy) {\n        updateInput(event.target.value);\n      }\n    };\n    const onChange = (event) => {\n      const value = event.target.value;\n      if (modelModifiers.value.lazy) {\n        updateInput(value);\n      }\n      if (modelModifiers.value.trim) {\n        event.target.value = value.trim();\n      }\n    };\n    const onBlur = (event) => {\n      emit(\"blur\", event);\n      emitFormBlur();\n    };\n    onMounted(() => {\n      setTimeout(() => {\n        autoFocus();\n      }, props.autofocusDelay);\n    });\n    watch(() => props.modelValue, () => {\n      nextTick(autoResize);\n    });\n    onMounted(() => {\n      setTimeout(() => {\n        autoFocus();\n        autoResize();\n      }, 100);\n    });\n    const textareaClass = computed(() => {\n      const variant = ui.value.color?.[color.value]?.[props.variant] || ui.value.variant[props.variant];\n      return twMerge(twJoin(\n        ui.value.base,\n        ui.value.form,\n        ui.value.rounded,\n        ui.value.placeholder,\n        ui.value.size[size.value],\n        props.padded ? ui.value.padding[size.value] : \"p-0\",\n        variant?.replaceAll(\"{color}\", color.value),\n        !props.resize && \"resize-none\"\n      ), props.textareaClass);\n    });\n    return {\n      // eslint-disable-next-line vue/no-dupe-keys\n      ui,\n      attrs,\n      // eslint-disable-next-line vue/no-dupe-keys\n      name,\n      inputId,\n      textarea: textarea2,\n      // eslint-disable-next-line vue/no-dupe-keys\n      textareaClass,\n      onInput,\n      onChange,\n      onBlur\n    };\n  }\n});\n</script>\n",
-      "start": 1774579816382,
-      "end": 1774579816884,
+      "start": 1774586708808,
+      "end": 1774586709457,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774579816884,
-      "end": 1774579816884,
+      "start": 1774586709457,
+      "end": 1774586709457,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "\nimport { ref, computed, toRef, watch, onMounted, nextTick, defineComponent } from \"vue\";\nimport { twMerge, twJoin } from \"tailwind-merge\";\nimport { defu } from \"defu\";\nimport { useUI } from \"../../composables/useUI\";\nimport { useFormGroup } from \"../../composables/useFormGroup\";\nimport { mergeConfig, looseToNumber } from \"../../utils\";\nimport appConfig from \"#build/app.config\";\nimport { textarea } from \"#ui/ui.config\";\nconst config = mergeConfig(appConfig.ui.strategy, appConfig.ui.textarea, textarea);\nconst _sfc_main = defineComponent({\n  inheritAttrs: false,\n  props: {\n    modelValue: {\n      type: [String, Number],\n      default: \"\"\n    },\n    id: {\n      type: String,\n      default: null\n    },\n    name: {\n      type: String,\n      default: null\n    },\n    placeholder: {\n      type: String,\n      default: null\n    },\n    required: {\n      type: Boolean,\n      default: false\n    },\n    disabled: {\n      type: Boolean,\n      default: false\n    },\n    rows: {\n      type: Number,\n      default: 3\n    },\n    autoresize: {\n      type: Boolean,\n      default: false\n    },\n    autofocus: {\n      type: Boolean,\n      default: false\n    },\n    autofocusDelay: {\n      type: Number,\n      default: 100\n    },\n    resize: {\n      type: Boolean,\n      default: false\n    },\n    padded: {\n      type: Boolean,\n      default: true\n    },\n    size: {\n      type: String,\n      default: null,\n      validator(value) {\n        return Object.keys(config.size).includes(value);\n      }\n    },\n    color: {\n      type: String,\n      default: () => config.default.color,\n      validator(value) {\n        return [...appConfig.ui.colors, ...Object.keys(config.color)].includes(value);\n      }\n    },\n    variant: {\n      type: String,\n      default: () => config.default.variant,\n      validator(value) {\n        return [\n          ...Object.keys(config.variant),\n          ...Object.values(config.color).flatMap((value2) => Object.keys(value2))\n        ].includes(value);\n      }\n    },\n    textareaClass: {\n      type: String,\n      default: null\n    },\n    class: {\n      type: [String, Object, Array],\n      default: () => \"\"\n    },\n    ui: {\n      type: Object,\n      default: () => ({})\n    },\n    modelModifiers: {\n      type: Object,\n      default: () => ({})\n    }\n  },\n  emits: [\"update:modelValue\", \"blur\"],\n  setup(props, { emit }) {\n    const { ui, attrs } = useUI(\"textarea\", toRef(props, \"ui\"), config, toRef(props, \"class\"));\n    const { emitFormBlur, emitFormInput, inputId, color, size, name } = useFormGroup(props, config);\n    const modelModifiers = ref(defu({}, props.modelModifiers, { trim: false, lazy: false, number: false }));\n    const textarea2 = ref(null);\n    const autoFocus = () => {\n      if (props.autofocus) {\n        textarea2.value?.focus();\n      }\n    };\n    const autoResize = () => {\n      if (props.autoresize) {\n        if (!textarea2.value) {\n          return;\n        }\n        textarea2.value.rows = props.rows;\n        const styles = window.getComputedStyle(textarea2.value);\n        const paddingTop = parseInt(styles.paddingTop);\n        const paddingBottom = parseInt(styles.paddingBottom);\n        const padding = paddingTop + paddingBottom;\n        const lineHeight = parseInt(styles.lineHeight);\n        const { scrollHeight } = textarea2.value;\n        const newRows = (scrollHeight - padding) / lineHeight;\n        if (newRows > props.rows) {\n          textarea2.value.rows = newRows;\n        }\n      }\n    };\n    const updateInput = (value) => {\n      if (modelModifiers.value.trim) {\n        value = value.trim();\n      }\n      if (modelModifiers.value.number) {\n        value = looseToNumber(value);\n      }\n      emit(\"update:modelValue\", value);\n      emitFormInput();\n    };\n    const onInput = (event) => {\n      autoResize();\n      if (!modelModifiers.value.lazy) {\n        updateInput(event.target.value);\n      }\n    };\n    const onChange = (event) => {\n      const value = event.target.value;\n      if (modelModifiers.value.lazy) {\n        updateInput(value);\n      }\n      if (modelModifiers.value.trim) {\n        event.target.value = value.trim();\n      }\n    };\n    const onBlur = (event) => {\n      emit(\"blur\", event);\n      emitFormBlur();\n    };\n    onMounted(() => {\n      setTimeout(() => {\n        autoFocus();\n      }, props.autofocusDelay);\n    });\n    watch(() => props.modelValue, () => {\n      nextTick(autoResize);\n    });\n    onMounted(() => {\n      setTimeout(() => {\n        autoFocus();\n        autoResize();\n      }, 100);\n    });\n    const textareaClass = computed(() => {\n      const variant = ui.value.color?.[color.value]?.[props.variant] || ui.value.variant[props.variant];\n      return twMerge(twJoin(\n        ui.value.base,\n        ui.value.form,\n        ui.value.rounded,\n        ui.value.placeholder,\n        ui.value.size[size.value],\n        props.padded ? ui.value.padding[size.value] : \"p-0\",\n        variant?.replaceAll(\"{color}\", color.value),\n        !props.resize && \"resize-none\"\n      ), props.textareaClass);\n    });\n    return {\n      // eslint-disable-next-line vue/no-dupe-keys\n      ui,\n      attrs,\n      // eslint-disable-next-line vue/no-dupe-keys\n      name,\n      inputId,\n      textarea: textarea2,\n      // eslint-disable-next-line vue/no-dupe-keys\n      textareaClass,\n      onInput,\n      onChange,\n      onBlur\n    };\n  }\n});\n\nimport { mergeProps as _mergeProps, createElementVNode as _createElementVNode, renderSlot as _renderSlot, normalizeClass as _normalizeClass, openBlock as _openBlock, createElementBlock as _createElementBlock } from \"vue\"\n\nconst _hoisted_1 = [\"id\", \"value\", \"name\", \"rows\", \"required\", \"disabled\", \"placeholder\"]\n\nfunction _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {\n  return (_openBlock(), _createElementBlock(\"div\", {\n    class: _normalizeClass(_ctx.ui.wrapper)\n  }, [\n    _createElementVNode(\"textarea\", _mergeProps({\n      id: _ctx.inputId,\n      ref: \"textarea\",\n      value: _ctx.modelValue,\n      name: _ctx.name,\n      rows: _ctx.rows,\n      required: _ctx.required,\n      disabled: _ctx.disabled,\n      placeholder: _ctx.placeholder,\n      class: _ctx.textareaClass\n    }, _ctx.attrs, {\n      onInput: _cache[0] || (_cache[0] = (...args) => (_ctx.onInput && _ctx.onInput(...args))),\n      onBlur: _cache[1] || (_cache[1] = (...args) => (_ctx.onBlur && _ctx.onBlur(...args))),\n      onChange: _cache[2] || (_cache[2] = (...args) => (_ctx.onChange && _ctx.onChange(...args)))\n    }), null, 16, _hoisted_1),\n    _renderSlot(_ctx.$slots, \"default\")\n  ], 2))\n}\n\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render]])",
-      "start": 1774579816884,
-      "end": 1774579816887,
+      "start": 1774586709457,
+      "end": 1774586709458,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,152 +74,152 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709458,
+      "end": 1774586709458,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709458,
+      "end": 1774586709458,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709458,
+      "end": 1774586709458,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709458,
+      "end": 1774586709458,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709458,
+      "end": 1774586709459,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709459,
+      "end": 1774586709459,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709459,
+      "end": 1774586709459,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709459,
+      "end": 1774586709459,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709484,
+      "end": 1774586709484,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709484,
+      "end": 1774586709485,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709485,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709485,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709485,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709485,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709485,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709485,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709485,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709485,
+      "end": 1774586709486,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709486,
+      "end": 1774586709486,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709486,
+      "end": 1774586709486,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709486,
+      "end": 1774586709486,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709504,
+      "end": 1774586709504,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709505,
+      "end": 1774586709505,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709505,
+      "end": 1774586709505,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1774579816887,
-      "end": 1774579816887,
+      "start": 1774586709505,
+      "end": 1774586709505,
       "order": "normal"
     }
   ]

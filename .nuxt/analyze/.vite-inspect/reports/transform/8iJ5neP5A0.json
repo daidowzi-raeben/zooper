@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div class=\"min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden font-sans\">\n    <!-- 🌸 Elegant Gradient Background -->\n    <div class=\"absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-blue-50/50\"></div>\n    <div class=\"absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-100/40 rounded-full blur-[120px] animate-pulse\"></div>\n    <div class=\"absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-indigo-100/40 rounded-full blur-[120px] animate-pulse\" style=\"animation-delay: 2s\"></div>\n    \n    <div class=\"relative z-10 w-full max-w-md px-6\">\n      <!-- 💎 Premium Card Container -->\n      <div class=\"bg-white/80 backdrop-blur-3xl border border-white rounded-[40px] shadow-2xl shadow-indigo-100/50 p-10 overflow-hidden\">\n        \n        <!-- Header -->\n        <div class=\"text-center mb-10\">\n          <div class=\"inline-flex items-center justify-center w-20 h-20 bg-indigo-600 rounded-3xl shadow-xl shadow-indigo-200 mb-6 transform rotate-3 hover:rotate-6 transition-transform\">\n            <span class=\"i-heroicons-sparkles-solid w-10 h-10 text-white\" />\n          </div>\n          <h1 class=\"text-4xl font-black text-gray-900 tracking-tight mb-2\">Jelly <span class=\"text-indigo-600\">OS</span></h1>\n          <p class=\"text-gray-400 text-[10px] font-black tracking-[0.3em] uppercase\">Economy Ecosystem</p>\n        </div>\n\n        <!-- Student Login (QR) Section -->\n        <div v-if=\"!isScanning && !isScanningTeacher\" class=\"space-y-6\">\n          <button \n            @click=\"startScan\"\n            class=\"group w-full relative h-20 bg-indigo-600 hover:bg-indigo-700 rounded-3xl flex items-center justify-between px-8 transition-all hover:-translate-y-1 active:scale-95 shadow-xl shadow-indigo-200\"\n          >\n            <div class=\"flex items-center gap-4\">\n              <div class=\"w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-white\">\n                <span class=\"i-heroicons-qr-code-solid w-6 h-6\" />\n              </div>\n              <span class=\"text-lg font-black text-white\">QR 로그인</span>\n            </div>\n            <span class=\"i-heroicons-chevron-right-solid w-5 h-5 text-white/50 group-hover:translate-x-1 transition-transform\" />\n          </button>\n\n          <button \n            @click=\"startScanTeacher\"\n            class=\"w-full h-16 bg-white hover:bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center gap-2 transition-all text-gray-400 hover:text-gray-600 font-bold shadow-sm\"\n          >\n            <span class=\"i-heroicons-user-solid w-5 h-5\" />\n            선생님 로그인\n          </button>\n        </div>\n\n        <!-- QR Scanner View -->\n        <div v-else-if=\"isScanning\" class=\"space-y-6\">\n          <div class=\"relative rounded-[32px] overflow-hidden border-4 border-white bg-gray-100 aspect-square shadow-2xl\">\n            <qrcode-stream @detect=\"onDetect\" @error=\"onError\" />\n            <div class=\"absolute inset-0 pointer-events-none flex flex-col items-center justify-center\">\n              <div class=\"w-48 h-48 border-2 border-indigo-600 rounded-3xl animate-pulse opacity-50\"></div>\n              <p class=\"mt-4 text-[10px] font-black text-indigo-600 uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-1 rounded-full\">Scanning QR Code...</p>\n            </div>\n          </div>\n          \n          <button \n            @click=\"isScanning = false\"\n            class=\"w-full py-4 text-gray-400 hover:text-gray-900 font-black text-xs uppercase tracking-[0.2em] transition-colors\"\n          >\n            Cancel Scanning\n          </button>\n        </div>\n\n        <!-- Teacher Login Form -->\n        <div v-else-if=\"isScanningTeacher\" class=\"space-y-6\">\n          <div class=\"space-y-3\">\n            <div class=\"relative\">\n              <label class=\"absolute left-6 top-3 text-[9px] font-black text-indigo-400 uppercase tracking-widest\">Email Address</label>\n              <input \n                v-model=\"mb_email\" \n                type=\"text\" \n                class=\"w-full bg-gray-50 border border-gray-100 rounded-2xl pt-7 pb-3 px-6 text-gray-900 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:bg-white transition-all\"\n              />\n            </div>\n            <div class=\"relative\">\n              <label class=\"absolute left-6 top-3 text-[9px] font-black text-indigo-400 uppercase tracking-widest\">Security Password</label>\n              <input \n                v-model=\"mb_pw\" \n                type=\"password\" \n                @keyup.enter=\"onClickLogin\"\n                class=\"w-full bg-gray-50 border border-gray-100 rounded-2xl pt-7 pb-3 px-6 text-gray-900 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:bg-white transition-all\"\n              />\n            </div>\n          </div>\n\n          <div class=\"space-y-3 pt-2\">\n            <button \n              @click=\"onClickLogin\"\n              class=\"w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-indigo-200 transition-all hover:-translate-y-1 active:scale-95\"\n            >\n              선생님 로그인\n            </button>\n            <button \n              @click=\"isScanningTeacher = false\"\n              class=\"w-full py-4 text-gray-400 hover:text-gray-900 font-black text-xs uppercase tracking-[0.2em] transition-colors\"\n            >\n              Go Back\n            </button>\n          </div>\n\n          <div class=\"text-center pt-4 border-t border-gray-50\">\n            <router-link to=\"/signUp\" class=\"text-[10px] font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-[0.2em]\">\n              Create New School Account\n            </router-link>\n          </div>\n        </div>\n\n        <!-- Footer -->\n        <div class=\"mt-8 pt-8 border-t border-gray-50 text-center\">\n          <router-link to=\"/information\" class=\"inline-flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-2xl text-[10px] font-black text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all group tracking-widest uppercase\">\n            <span class=\"i-heroicons-presentation-chart-line-solid w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform\" />\n            Learn More\n          </router-link>\n        </div>\n      </div>\n\n      <!-- App Status / Legal -->\n      <p class=\"mt-8 text-center text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]\">\n        © 2024 JELLY SCHOOL-OS • Ver 2.0.4\n      </p>\n    </div>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nimport { useRouter } from 'vue-router'\nimport { QrcodeStream } from 'vue-qrcode-reader'\nimport { apiPost } from '@/common/api';\n\nconst isScanning = ref(false)\nconst isScanningTeacher = ref(false)\nconst error = ref('')\nconst errorTeacher = ref('')\nconst mb_email = ref('')\nconst mb_pw = ref('')\nconst router = useRouter()\n\nconst startScan = () => {\n  isScanning.value = true\n  error.value = ''\n}\nconst startScanTeacher = () => {\n  isScanningTeacher.value = true\n  errorTeacher.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\nconst onDetectTeacher = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/teacher/' + url)\n}\n\nconst onErrorTeacher = (err) => {\n  errorTeacher.value = '카메라 접근 실패'\n  console.error(err)\n  isScanningTeacher.value = false\n}\n\nconst onClickLogin = async () => {\n  if (!mb_email.value || !mb_pw.value) return alert('이메일과 비밀번호를 모두 입력해 주세요.')\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'login',\n      mb_email: mb_email.value,\n      mb_pw: mb_pw.value,\n    });\n    console.log(res?.data)\n    if (res?.result == 'SUCCESS') {\n\n      sessionStorage.setItem('t_idnt_code', res?.data?.idnt_code)\n      sessionStorage.setItem('idnt_code', 'teacher')\n      sessionStorage.setItem('teacher', JSON.stringify(res?.data))\n      window.location.href = '/teacher'\n\n    } else {\n      if (res?.result == 'NOT_APPROVED') {\n        return alert('승인되지 않은 계정입니다. 관리자에게 문의하세요.')\n      }\n\n      return alert('로그인에 실패했습니다.')\n    }\n\n  } catch (err) {\n    console.error(err);\n  }\n\n}\n</script>\n\n<script>\nexport default {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n</script>",
-      "start": 1774579815540,
-      "end": 1774579815653,
+      "start": 1774586707851,
+      "end": 1774586708090,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774579815653,
-      "end": 1774579815653,
+      "start": 1774586708090,
+      "end": 1774586708090,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "import { createElementVNode as _createElementVNode, createTextVNode as _createTextVNode, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode, unref as _unref, createVNode as _createVNode, vModelText as _vModelText, withDirectives as _withDirectives, withKeys as _withKeys, resolveComponent as _resolveComponent, withCtx as _withCtx, createStaticVNode as _createStaticVNode } from \"vue\"\n\nconst _hoisted_1 = { class: \"min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden font-sans\" }\nconst _hoisted_2 = { class: \"relative z-10 w-full max-w-md px-6\" }\nconst _hoisted_3 = { class: \"bg-white/80 backdrop-blur-3xl border border-white rounded-[40px] shadow-2xl shadow-indigo-100/50 p-10 overflow-hidden\" }\nconst _hoisted_4 = {\n  key: 0,\n  class: \"space-y-6\"\n}\nconst _hoisted_5 = {\n  key: 1,\n  class: \"space-y-6\"\n}\nconst _hoisted_6 = { class: \"relative rounded-[32px] overflow-hidden border-4 border-white bg-gray-100 aspect-square shadow-2xl\" }\nconst _hoisted_7 = {\n  key: 2,\n  class: \"space-y-6\"\n}\nconst _hoisted_8 = { class: \"space-y-3\" }\nconst _hoisted_9 = { class: \"relative\" }\nconst _hoisted_10 = { class: \"relative\" }\nconst _hoisted_11 = { class: \"space-y-3 pt-2\" }\nconst _hoisted_12 = { class: \"text-center pt-4 border-t border-gray-50\" }\nconst _hoisted_13 = { class: \"mt-8 pt-8 border-t border-gray-50 text-center\" }\n\nimport { ref } from 'vue'\nimport { useRouter } from 'vue-router'\nimport { QrcodeStream } from 'vue-qrcode-reader'\nimport { apiPost } from '@/common/api';\n\n\nconst __default__ = {\n  components: {\n    QrcodeStream: () => import('vue-qrcode-reader').then(m => m.QrcodeStream)\n  }\n}\n\n\nconst _sfc_main = /*@__PURE__*/Object.assign(__default__, {\n  __name: 'login',\n  setup(__props) {\n\nconst isScanning = ref(false)\nconst isScanningTeacher = ref(false)\nconst error = ref('')\nconst errorTeacher = ref('')\nconst mb_email = ref('')\nconst mb_pw = ref('')\nconst router = useRouter()\n\nconst startScan = () => {\n  isScanning.value = true\n  error.value = ''\n}\nconst startScanTeacher = () => {\n  isScanningTeacher.value = true\n  errorTeacher.value = ''\n}\n\nconst onDetect = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/sign/' + url)\n}\n\nconst onError = (err) => {\n  error.value = '카메라 접근 실패'\n  console.error(err)\n  isScanning.value = false\n}\n\n\nconst onDetectTeacher = (detectedCodes) => {\n  const url = detectedCodes[0]?.rawValue\n  if (!url) return\n\n  isScanning.value = false\n  router.push('/teacher/' + url)\n}\n\nconst onErrorTeacher = (err) => {\n  errorTeacher.value = '카메라 접근 실패'\n  console.error(err)\n  isScanningTeacher.value = false\n}\n\nconst onClickLogin = async () => {\n  if (!mb_email.value || !mb_pw.value) return alert('이메일과 비밀번호를 모두 입력해 주세요.')\n  try {\n    const res = await apiPost('teacher.php', {\n      mode: 'login',\n      mb_email: mb_email.value,\n      mb_pw: mb_pw.value,\n    });\n    console.log(res?.data)\n    if (res?.result == 'SUCCESS') {\n\n      sessionStorage.setItem('t_idnt_code', res?.data?.idnt_code)\n      sessionStorage.setItem('idnt_code', 'teacher')\n      sessionStorage.setItem('teacher', JSON.stringify(res?.data))\n      window.location.href = '/teacher'\n\n    } else {\n      if (res?.result == 'NOT_APPROVED') {\n        return alert('승인되지 않은 계정입니다. 관리자에게 문의하세요.')\n      }\n\n      return alert('로그인에 실패했습니다.')\n    }\n\n  } catch (err) {\n    console.error(err);\n  }\n\n}\n\nreturn (_ctx, _cache) => {\n  const _component_router_link = _resolveComponent(\"router-link\")\n\n  return (_openBlock(), _createElementBlock(\"div\", _hoisted_1, [\n    _cache[13] || (_cache[13] = _createElementVNode(\"div\", { class: \"absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-blue-50/50\" }, null, -1)),\n    _cache[14] || (_cache[14] = _createElementVNode(\"div\", { class: \"absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-100/40 rounded-full blur-[120px] animate-pulse\" }, null, -1)),\n    _cache[15] || (_cache[15] = _createElementVNode(\"div\", {\n      class: \"absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-indigo-100/40 rounded-full blur-[120px] animate-pulse\",\n      style: {\"animation-delay\":\"2s\"}\n    }, null, -1)),\n    _createElementVNode(\"div\", _hoisted_2, [\n      _createElementVNode(\"div\", _hoisted_3, [\n        _cache[11] || (_cache[11] = _createStaticVNode(\"<div class=\\\"text-center mb-10\\\"><div class=\\\"inline-flex items-center justify-center w-20 h-20 bg-indigo-600 rounded-3xl shadow-xl shadow-indigo-200 mb-6 transform rotate-3 hover:rotate-6 transition-transform\\\"><span class=\\\"i-heroicons-sparkles-solid w-10 h-10 text-white\\\"></span></div><h1 class=\\\"text-4xl font-black text-gray-900 tracking-tight mb-2\\\">Jelly <span class=\\\"text-indigo-600\\\">OS</span></h1><p class=\\\"text-gray-400 text-[10px] font-black tracking-[0.3em] uppercase\\\">Economy Ecosystem</p></div>\", 1)),\n        (!isScanning.value && !isScanningTeacher.value)\n          ? (_openBlock(), _createElementBlock(\"div\", _hoisted_4, [\n              _createElementVNode(\"button\", {\n                onClick: startScan,\n                class: \"group w-full relative h-20 bg-indigo-600 hover:bg-indigo-700 rounded-3xl flex items-center justify-between px-8 transition-all hover:-translate-y-1 active:scale-95 shadow-xl shadow-indigo-200\"\n              }, _cache[4] || (_cache[4] = [\n                _createStaticVNode(\"<div class=\\\"flex items-center gap-4\\\"><div class=\\\"w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-white\\\"><span class=\\\"i-heroicons-qr-code-solid w-6 h-6\\\"></span></div><span class=\\\"text-lg font-black text-white\\\">QR 로그인</span></div><span class=\\\"i-heroicons-chevron-right-solid w-5 h-5 text-white/50 group-hover:translate-x-1 transition-transform\\\"></span>\", 2)\n              ])),\n              _createElementVNode(\"button\", {\n                onClick: startScanTeacher,\n                class: \"w-full h-16 bg-white hover:bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center gap-2 transition-all text-gray-400 hover:text-gray-600 font-bold shadow-sm\"\n              }, _cache[5] || (_cache[5] = [\n                _createElementVNode(\"span\", { class: \"i-heroicons-user-solid w-5 h-5\" }, null, -1),\n                _createTextVNode(\" 선생님 로그인 \")\n              ]))\n            ]))\n          : (isScanning.value)\n            ? (_openBlock(), _createElementBlock(\"div\", _hoisted_5, [\n                _createElementVNode(\"div\", _hoisted_6, [\n                  _createVNode(_unref(QrcodeStream), {\n                    onDetect: onDetect,\n                    onError: onError\n                  }),\n                  _cache[6] || (_cache[6] = _createElementVNode(\"div\", { class: \"absolute inset-0 pointer-events-none flex flex-col items-center justify-center\" }, [\n                    _createElementVNode(\"div\", { class: \"w-48 h-48 border-2 border-indigo-600 rounded-3xl animate-pulse opacity-50\" }),\n                    _createElementVNode(\"p\", { class: \"mt-4 text-[10px] font-black text-indigo-600 uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-1 rounded-full\" }, \"Scanning QR Code...\")\n                  ], -1))\n                ]),\n                _createElementVNode(\"button\", {\n                  onClick: _cache[0] || (_cache[0] = $event => (isScanning.value = false)),\n                  class: \"w-full py-4 text-gray-400 hover:text-gray-900 font-black text-xs uppercase tracking-[0.2em] transition-colors\"\n                }, \" Cancel Scanning \")\n              ]))\n            : (isScanningTeacher.value)\n              ? (_openBlock(), _createElementBlock(\"div\", _hoisted_7, [\n                  _createElementVNode(\"div\", _hoisted_8, [\n                    _createElementVNode(\"div\", _hoisted_9, [\n                      _cache[7] || (_cache[7] = _createElementVNode(\"label\", { class: \"absolute left-6 top-3 text-[9px] font-black text-indigo-400 uppercase tracking-widest\" }, \"Email Address\", -1)),\n                      _withDirectives(_createElementVNode(\"input\", {\n                        \"onUpdate:modelValue\": _cache[1] || (_cache[1] = $event => ((mb_email).value = $event)),\n                        type: \"text\",\n                        class: \"w-full bg-gray-50 border border-gray-100 rounded-2xl pt-7 pb-3 px-6 text-gray-900 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:bg-white transition-all\"\n                      }, null, 512), [\n                        [_vModelText, mb_email.value]\n                      ])\n                    ]),\n                    _createElementVNode(\"div\", _hoisted_10, [\n                      _cache[8] || (_cache[8] = _createElementVNode(\"label\", { class: \"absolute left-6 top-3 text-[9px] font-black text-indigo-400 uppercase tracking-widest\" }, \"Security Password\", -1)),\n                      _withDirectives(_createElementVNode(\"input\", {\n                        \"onUpdate:modelValue\": _cache[2] || (_cache[2] = $event => ((mb_pw).value = $event)),\n                        type: \"password\",\n                        onKeyup: _withKeys(onClickLogin, [\"enter\"]),\n                        class: \"w-full bg-gray-50 border border-gray-100 rounded-2xl pt-7 pb-3 px-6 text-gray-900 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:bg-white transition-all\"\n                      }, null, 544), [\n                        [_vModelText, mb_pw.value]\n                      ])\n                    ])\n                  ]),\n                  _createElementVNode(\"div\", _hoisted_11, [\n                    _createElementVNode(\"button\", {\n                      onClick: onClickLogin,\n                      class: \"w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-indigo-200 transition-all hover:-translate-y-1 active:scale-95\"\n                    }, \" 선생님 로그인 \"),\n                    _createElementVNode(\"button\", {\n                      onClick: _cache[3] || (_cache[3] = $event => (isScanningTeacher.value = false)),\n                      class: \"w-full py-4 text-gray-400 hover:text-gray-900 font-black text-xs uppercase tracking-[0.2em] transition-colors\"\n                    }, \" Go Back \")\n                  ]),\n                  _createElementVNode(\"div\", _hoisted_12, [\n                    _createVNode(_component_router_link, {\n                      to: \"/signUp\",\n                      class: \"text-[10px] font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-[0.2em]\"\n                    }, {\n                      default: _withCtx(() => _cache[9] || (_cache[9] = [\n                        _createTextVNode(\" Create New School Account \")\n                      ])),\n                      _: 1,\n                      __: [9]\n                    })\n                  ])\n                ]))\n              : _createCommentVNode(\"\", true),\n        _createElementVNode(\"div\", _hoisted_13, [\n          _createVNode(_component_router_link, {\n            to: \"/information\",\n            class: \"inline-flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-2xl text-[10px] font-black text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all group tracking-widest uppercase\"\n          }, {\n            default: _withCtx(() => _cache[10] || (_cache[10] = [\n              _createElementVNode(\"span\", { class: \"i-heroicons-presentation-chart-line-solid w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform\" }, null, -1),\n              _createTextVNode(\" Learn More \")\n            ])),\n            _: 1,\n            __: [10]\n          })\n        ])\n      ]),\n      _cache[12] || (_cache[12] = _createElementVNode(\"p\", { class: \"mt-8 text-center text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]\" }, \" © 2024 JELLY SCHOOL-OS • Ver 2.0.4 \", -1))\n    ])\n  ]))\n}\n}\n\n})\n\n\n\nexport default _sfc_main",
-      "start": 1774579815653,
-      "end": 1774579815656,
+      "start": 1774586708090,
+      "end": 1774586708093,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,117 +74,117 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708093,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708093,
+      "end": 1774586708094,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708094,
+      "end": 1774586708094,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708094,
+      "end": 1774586708094,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708094,
+      "end": 1774586708094,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708094,
+      "end": 1774586708094,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708094,
+      "end": 1774586708094,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774579815656,
-      "end": 1774579815656,
+      "start": 1774586708094,
+      "end": 1774586708094,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774579815656,
-      "end": 1774579815661,
+      "start": 1774586708094,
+      "end": 1774586708099,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774579815661,
-      "end": 1774579815661,
+      "start": 1774586708099,
+      "end": 1774586708099,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
       "result": "\nconst __nuxt_page_meta = null\nexport default __nuxt_page_meta\n",
-      "start": 1774579815661,
-      "end": 1774579815662,
+      "start": 1774586708099,
+      "end": 1774586708100,
       "order": "post",
       "sourcemaps": {
         "version": 3,
@@ -197,38 +197,38 @@
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774579815662,
-      "end": 1774579815662,
+      "start": 1774586708100,
+      "end": 1774586708100,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774579815662,
-      "end": 1774579815662,
+      "start": 1774586708100,
+      "end": 1774586708100,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1774579815662,
-      "end": 1774579815662,
+      "start": 1774586708100,
+      "end": 1774586708100,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774579815662,
-      "end": 1774579815662,
+      "start": 1774586708100,
+      "end": 1774586708100,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1774579815662,
-      "end": 1774579815662,
+      "start": 1774586708100,
+      "end": 1774586708100,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1774579815662,
-      "end": 1774579815662,
+      "start": 1774586708100,
+      "end": 1774586708100,
       "order": "normal"
     }
   ]

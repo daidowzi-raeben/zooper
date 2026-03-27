@@ -664,6 +664,8 @@ const saveClassSettings = async () => {
     mb_school: teacherInfo.value.mb_school || '',
     mb_school_code: teacherInfo.value.mb_school_code || '',
     mb_tel: teacherInfo.value.mb_tel || '',
+    soulmate_price: teacherInfo.value.soulmate_price || 10,
+    hope_price: teacherInfo.value.hope_price || 10,
     qr_bg: teacherInfo.value.qr_bg || '',
     qr_top: qrTop.value,
     qr_left: qrLeft.value,
@@ -1120,8 +1122,19 @@ const onSelectSchool = (school) => {
             </div>
           </div>
 
-          <UButton label="위 정보 모두 저장하기" color="blue" size="xl" block
-            class="mt-8 font-black rounded-2xl py-4 shadow-lg shadow-blue-100" @click="saveClassSettings" />
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">단짝 친구 확인 비용</label>
+                <UInput v-model="teacherInfo.soulmate_price" type="number" size="xl" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">오늘의 운세 확인 비용</label>
+                <UInput v-model="teacherInfo.hope_price" type="number" size="xl" />
+              </div>
+            </div>
+
+            <UButton label="위 정보 모두 저장하기" color="blue" size="xl" block
+              class="mt-8 font-black rounded-2xl py-4 shadow-lg shadow-blue-100" @click="saveClassSettings" />
         </section>
       </div>
 

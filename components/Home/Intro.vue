@@ -240,7 +240,7 @@ const onClickHope = async () => {
     return;
   }
 
-  const cost = Number(student.value?.credit_score) === 1 ? (Number(dispot.value?.grade1_hope_price) || 0) : 10;
+  const cost = Number(student.value?.credit_score) === 1 ? (Number(dispot.value?.grade1_hope_price) || 0) : (Number(dispot.value?.hope_price) || 10);
   if (memberPoint.value < cost) {
     alert('금액이 부족합니다.')
     return;
@@ -315,7 +315,7 @@ const onClickFriend = async () => {
     return;
   }
 
-  const cost = Number(student.value?.credit_score) === 1 ? (Number(dispot.value?.grade1_soulmate_price) || 0) : 10;
+  const cost = Number(student.value?.credit_score) === 1 ? (Number(dispot.value?.grade1_soulmate_price) || 0) : (Number(dispot.value?.soulmate_price) || 10);
 
   if (memberPoint.value < cost) {
     alert('금액이 부족합니다.')
@@ -738,7 +738,7 @@ watch([amount, selectedDepositIdx], () => {
             </div>
           </div>
           <div v-if="friendToday?.result === 'FAIL'" class="text-xs font-bold text-blue-500 flex items-center gap-1">
-            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_soulmate_price) || 0) : 10 }}{{ dispot?.currency_name || '원'
+            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_soulmate_price) || 0) : (Number(dispot?.soulmate_price) || 10) }}{{ dispot?.currency_name || '원'
             }})
             <span class="i-heroicons-chevron-right w-3 h-3" />
           </div>
@@ -760,7 +760,7 @@ watch([amount, selectedDepositIdx], () => {
             <p v-else class="text-sm font-bold leading-relaxed line-clamp-3">{{ hopeToday?.data?.result_text }}</p>
           </div>
           <div v-if="hopeToday?.result === 'FAIL'" class="text-xs font-bold text-purple-500 flex items-center gap-1">
-            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_hope_price) || 0) : 10 }}{{ dispot?.currency_name || '원' }})
+            탭하여 확인 ({{ isGrade1 ? (Number(dispot?.grade1_hope_price) || 0) : (Number(dispot?.hope_price) || 10) }}{{ dispot?.currency_name || '원' }})
             <span class="i-heroicons-chevron-right w-3 h-3" />
           </div>
         </div>
