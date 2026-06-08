@@ -137,7 +137,9 @@ const addNewDepositType = () => {
     deposit_interest: 0,
     grade1_deposit_interest: 0,
     deposit_max: 0,
-    deposit_min: 0
+    deposit_min: 0,
+    cancel_type: 'NONE',
+    show_cancel_help: false
   })
 }
 
@@ -1292,6 +1294,54 @@ const onSelectSchool = (school) => {
                 <div class="space-y-1">
                   <label class="text-[10px] font-black text-gray-400 uppercase">최대 한도</label>
                   <UInput v-model="item.deposit_max" type="number" size="md" class="bg-white" />
+                </div>
+              </div>
+
+              <!-- 중도 해지 옵션 필드 추가 -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="text-[10px] font-black text-gray-400 uppercase">중도 해지 방식</label>
+                  <button 
+                    type="button"
+                    class="text-[10px] font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 focus:outline-none"
+                    @click="item.show_cancel_help = !item.show_cancel_help"
+                  >
+                    <span>{{ item.show_cancel_help ? '설명 접기' : '설명 보기' }}</span>
+                    <span :class="item.show_cancel_help ? 'i-heroicons-chevron-up-20-solid' : 'i-heroicons-chevron-down-20-solid'" class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <USelectMenu 
+                  v-model="item.cancel_type" 
+                  :options="[
+                    { label: '중도해지 불가 (NONE)', value: 'NONE' },
+                    { label: '옵션 A (원금만 반환)', value: 'A' },
+                    { label: '옵션 B (원금+이자 모두 반환)', value: 'B' },
+                    { label: '옵션 C (원금 10% 벌금 차감 후 90% 반환)', value: 'C' }
+                  ]"
+                  value-attribute="value"
+                  option-attribute="label"
+                  size="md"
+                  class="bg-white rounded-lg"
+                >
+                  <template #label>
+                    <span class="font-bold text-xs text-gray-700">
+                      {{ 
+                        item.cancel_type === 'A' ? '옵션 A (원금만 반환)' :
+                        item.cancel_type === 'B' ? '옵션 B (원금+이자 모두 반환)' :
+                        item.cancel_type === 'C' ? '옵션 C (원금 10% 벌금 차감 후 90% 반환)' :
+                        '중도해지 불가 (NONE)'
+                      }}
+                    </span>
+                  </template>
+                </USelectMenu>
+
+                <!-- 설명 토글 박스 -->
+                <div v-if="item.show_cancel_help" class="p-3.5 bg-emerald-50/40 rounded-xl border border-emerald-100/60 text-[10px] text-emerald-800 space-y-1 leading-relaxed">
+                  <p class="font-black text-emerald-900 flex items-center gap-1"><span class="i-heroicons-information-circle-solid w-3.5 h-3.5" /> 중도해지 옵션 설명</p>
+                  <p>• <strong>중도해지 불가 (NONE):</strong> 만기일 전에는 학생이 적금을 해지할 수 없습니다.</p>
+                  <p>• <strong>옵션 A (원금만 반환):</strong> 해지 시 이자 지급 없이 오직 원금만 그대로 반환합니다.</p>
+                  <p>• <strong>옵션 B (원금+이자 모두 반환):</strong> 해지 시 만기 시와 동일하게 원금과 이자를 모두 반환합니다.</p>
+                  <p>• <strong>옵션 C (원금 10% 벌금 차감):</strong> 해지 시 이자 지급 없이 원금의 10%를 벌금으로 차감하고 90%만 반환합니다.</p>
                 </div>
               </div>
 

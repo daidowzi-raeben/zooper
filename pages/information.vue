@@ -61,7 +61,7 @@
               class="absolute -inset-4 bg-blue-500/20 rounded-[4rem] blur-3xl opacity-50 group-hover:opacity-100 transition duration-1000">
             </div>
             <img
-              src="/Users/jang-yeong-ug/.gemini/antigravity/brain/770a6177-f41e-4133-bead-1050f5a110e4/jelly_economy_hero_png_1774493889898.png"
+              src="/preview.jpg"
               alt="Jelly Economy Hero" class="relative z-10 w-full h-auto rounded-[3rem] shadow-2xl" />
           </div>
         </div>
@@ -106,7 +106,7 @@
         <div class="flex-1 relative">
           <div class="relative rounded-[48px] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.1)] group">
             <img
-              src="/Users/jang-yeong-ug/.gemini/antigravity/brain/770a6177-f41e-4133-bead-1050f5a110e4/classroom_economy_scene_png_1774493910520.png"
+              src="/preview.jpg"
               alt="Learning Economics"
               class="w-full h-auto object-cover transform group-hover:scale-110 transition duration-[2s]" />
             <div
@@ -167,7 +167,7 @@
               </p>
             </div>
             <img
-              src="/Users/jang-yeong-ug/.gemini/antigravity/brain/770a6177-f41e-4133-bead-1050f5a110e4/jelly_card_mockups_png_1774493925373.png"
+              src="/avatar.png"
               alt="Jelly Card Design"
               class="absolute -right-20 -bottom-20 w-64 h-auto opacity-10 group-hover:opacity-30 group-hover:-translate-y-10 group-hover:-translate-x-10 transition duration-1000 rotate-12" />
           </div>
@@ -502,7 +502,7 @@ useHead({
     },
     { property: 'og:title', content: '젤리 경제 - 우리 교실의 완벽한 경제 자치 시스템' },
     { property: 'og:description', content: 'QR 카드 한 장으로 시작하는 새로운 교실 경제 경험. 아이들이 꿈을 키우는 경제 습관을 기릅니다.' },
-    { property: 'og:image', content: '/Users/jang-yeong-ug/.gemini/antigravity/brain/770a6177-f41e-4133-bead-1050f5a110e4/jelly_economy_hero_png_1774493889898.png' }, // Consider using a public URL for production
+    { property: 'og:image', content: '/preview.jpg' },
     { property: 'og:url', content: 'https://school-os.net/information' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: '젤리 경제(JELLY)' },

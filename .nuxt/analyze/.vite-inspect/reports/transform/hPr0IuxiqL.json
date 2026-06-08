@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div :class=\"ui.wrapper\">\n    <div :class=\"ui.container\">\n      <input\n        :id=\"inputId\"\n        v-model=\"toggle\"\n        :name=\"name\"\n        :required=\"required\"\n        :value=\"value\"\n        :disabled=\"disabled\"\n        :checked=\"checked\"\n        :indeterminate=\"indeterminate\"\n        type=\"checkbox\"\n        :class=\"inputClass\"\n        v-bind=\"attrs\"\n        @change=\"onChange\"\n      >\n    </div>\n    <div v-if=\"label || $slots.label\" :class=\"ui.inner\">\n      <label :for=\"inputId\" :class=\"ui.label\">\n        <slot name=\"label\">{{ label }}</slot>\n        <span v-if=\"required\" :class=\"ui.required\">*</span>\n      </label>\n      <p v-if=\"help\" :class=\"ui.help\">\n        {{ help }}\n      </p>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { computed, toRef, defineComponent } from \"vue\";\nimport { twMerge, twJoin } from \"tailwind-merge\";\nimport { useUI } from \"../../composables/useUI\";\nimport { useFormGroup } from \"../../composables/useFormGroup\";\nimport { mergeConfig } from \"../../utils\";\nimport appConfig from \"#build/app.config\";\nimport { checkbox } from \"#ui/ui.config\";\nconst config = mergeConfig(appConfig.ui.strategy, appConfig.ui.checkbox, checkbox);\nexport default defineComponent({\n  inheritAttrs: false,\n  props: {\n    id: {\n      type: String,\n      default: () => null\n    },\n    value: {\n      type: [String, Number, Boolean, Object],\n      default: null\n    },\n    modelValue: {\n      type: [Boolean, Array],\n      default: null\n    },\n    name: {\n      type: String,\n      default: null\n    },\n    disabled: {\n      type: Boolean,\n      default: false\n    },\n    checked: {\n      type: Boolean,\n      default: false\n    },\n    indeterminate: {\n      type: Boolean,\n      default: false\n    },\n    help: {\n      type: String,\n      default: null\n    },\n    label: {\n      type: String,\n      default: null\n    },\n    required: {\n      type: Boolean,\n      default: false\n    },\n    color: {\n      type: String,\n      default: () => config.default.color,\n      validator(value) {\n        return appConfig.ui.colors.includes(value);\n      }\n    },\n    inputClass: {\n      type: String,\n      default: \"\"\n    },\n    class: {\n      type: [String, Object, Array],\n      default: () => \"\"\n    },\n    ui: {\n      type: Object,\n      default: () => ({})\n    }\n  },\n  emits: [\"update:modelValue\", \"change\"],\n  setup(props, { emit }) {\n    const { ui, attrs } = useUI(\"checkbox\", toRef(props, \"ui\"), config, toRef(props, \"class\"));\n    const { emitFormChange, color, name, inputId } = useFormGroup(props);\n    const toggle = computed({\n      get() {\n        return props.modelValue;\n      },\n      set(value) {\n        emit(\"update:modelValue\", value);\n      }\n    });\n    const onChange = (event) => {\n      emit(\"change\", event);\n      emitFormChange();\n    };\n    const inputClass = computed(() => {\n      return twMerge(twJoin(\n        ui.value.base,\n        ui.value.form,\n        ui.value.rounded,\n        ui.value.background,\n        ui.value.border,\n        color.value && ui.value.ring.replaceAll(\"{color}\", color.value),\n        color.value && ui.value.color.replaceAll(\"{color}\", color.value)\n      ), props.inputClass);\n    });\n    return {\n      // eslint-disable-next-line vue/no-dupe-keys\n      ui,\n      attrs,\n      toggle,\n      inputId,\n      // eslint-disable-next-line vue/no-dupe-keys\n      name,\n      // eslint-disable-next-line vue/no-dupe-keys\n      inputClass,\n      onChange\n    };\n  }\n});\n</script>\n",
-      "start": 1774594252817,
-      "end": 1774594253065,
+      "start": 1780882726262,
+      "end": 1780882727150,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727150,
+      "end": 1780882727150,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727150,
+      "end": 1780882727150,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727150,
+      "end": 1780882727150,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727150,
+      "end": 1780882727151,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727151,
+      "end": 1780882727151,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727151,
+      "end": 1780882727151,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727151,
+      "end": 1780882727151,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727151,
+      "end": 1780882727151,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774594253065,
-      "end": 1774594253065,
+      "start": 1780882727151,
+      "end": 1780882727151,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "\nimport { computed, toRef, defineComponent } from \"vue\";\nimport { twMerge, twJoin } from \"tailwind-merge\";\nimport { useUI } from \"../../composables/useUI\";\nimport { useFormGroup } from \"../../composables/useFormGroup\";\nimport { mergeConfig } from \"../../utils\";\nimport appConfig from \"#build/app.config\";\nimport { checkbox } from \"#ui/ui.config\";\nconst config = mergeConfig(appConfig.ui.strategy, appConfig.ui.checkbox, checkbox);\nconst _sfc_main = defineComponent({\n  inheritAttrs: false,\n  props: {\n    id: {\n      type: String,\n      default: () => null\n    },\n    value: {\n      type: [String, Number, Boolean, Object],\n      default: null\n    },\n    modelValue: {\n      type: [Boolean, Array],\n      default: null\n    },\n    name: {\n      type: String,\n      default: null\n    },\n    disabled: {\n      type: Boolean,\n      default: false\n    },\n    checked: {\n      type: Boolean,\n      default: false\n    },\n    indeterminate: {\n      type: Boolean,\n      default: false\n    },\n    help: {\n      type: String,\n      default: null\n    },\n    label: {\n      type: String,\n      default: null\n    },\n    required: {\n      type: Boolean,\n      default: false\n    },\n    color: {\n      type: String,\n      default: () => config.default.color,\n      validator(value) {\n        return appConfig.ui.colors.includes(value);\n      }\n    },\n    inputClass: {\n      type: String,\n      default: \"\"\n    },\n    class: {\n      type: [String, Object, Array],\n      default: () => \"\"\n    },\n    ui: {\n      type: Object,\n      default: () => ({})\n    }\n  },\n  emits: [\"update:modelValue\", \"change\"],\n  setup(props, { emit }) {\n    const { ui, attrs } = useUI(\"checkbox\", toRef(props, \"ui\"), config, toRef(props, \"class\"));\n    const { emitFormChange, color, name, inputId } = useFormGroup(props);\n    const toggle = computed({\n      get() {\n        return props.modelValue;\n      },\n      set(value) {\n        emit(\"update:modelValue\", value);\n      }\n    });\n    const onChange = (event) => {\n      emit(\"change\", event);\n      emitFormChange();\n    };\n    const inputClass = computed(() => {\n      return twMerge(twJoin(\n        ui.value.base,\n        ui.value.form,\n        ui.value.rounded,\n        ui.value.background,\n        ui.value.border,\n        color.value && ui.value.ring.replaceAll(\"{color}\", color.value),\n        color.value && ui.value.color.replaceAll(\"{color}\", color.value)\n      ), props.inputClass);\n    });\n    return {\n      // eslint-disable-next-line vue/no-dupe-keys\n      ui,\n      attrs,\n      toggle,\n      inputId,\n      // eslint-disable-next-line vue/no-dupe-keys\n      name,\n      // eslint-disable-next-line vue/no-dupe-keys\n      inputClass,\n      onChange\n    };\n  }\n});\n\nimport { vModelCheckbox as _vModelCheckbox, mergeProps as _mergeProps, createElementVNode as _createElementVNode, withDirectives as _withDirectives, normalizeClass as _normalizeClass, renderSlot as _renderSlot, toDisplayString as _toDisplayString, createTextVNode as _createTextVNode, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode } from \"vue\"\n\nconst _hoisted_1 = [\"id\", \"name\", \"required\", \"value\", \"disabled\", \"checked\", \"indeterminate\"]\nconst _hoisted_2 = [\"for\"]\n\nfunction _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {\n  return (_openBlock(), _createElementBlock(\"div\", {\n    class: _normalizeClass(_ctx.ui.wrapper)\n  }, [\n    _createElementVNode(\"div\", {\n      class: _normalizeClass(_ctx.ui.container)\n    }, [\n      _withDirectives(_createElementVNode(\"input\", _mergeProps({\n        id: _ctx.inputId,\n        \"onUpdate:modelValue\": _cache[0] || (_cache[0] = $event => ((_ctx.toggle) = $event)),\n        name: _ctx.name,\n        required: _ctx.required,\n        value: _ctx.value,\n        disabled: _ctx.disabled,\n        checked: _ctx.checked,\n        indeterminate: _ctx.indeterminate,\n        type: \"checkbox\",\n        class: _ctx.inputClass\n      }, _ctx.attrs, {\n        onChange: _cache[1] || (_cache[1] = (...args) => (_ctx.onChange && _ctx.onChange(...args)))\n      }), null, 16, _hoisted_1), [\n        [_vModelCheckbox, _ctx.toggle]\n      ])\n    ], 2),\n    (_ctx.label || _ctx.$slots.label)\n      ? (_openBlock(), _createElementBlock(\"div\", {\n          key: 0,\n          class: _normalizeClass(_ctx.ui.inner)\n        }, [\n          _createElementVNode(\"label\", {\n            for: _ctx.inputId,\n            class: _normalizeClass(_ctx.ui.label)\n          }, [\n            _renderSlot(_ctx.$slots, \"label\", {}, () => [\n              _createTextVNode(_toDisplayString(_ctx.label), 1)\n            ]),\n            (_ctx.required)\n              ? (_openBlock(), _createElementBlock(\"span\", {\n                  key: 0,\n                  class: _normalizeClass(_ctx.ui.required)\n                }, \"*\", 2))\n              : _createCommentVNode(\"\", true)\n          ], 10, _hoisted_2),\n          (_ctx.help)\n            ? (_openBlock(), _createElementBlock(\"p\", {\n                key: 0,\n                class: _normalizeClass(_ctx.ui.help)\n              }, _toDisplayString(_ctx.help), 3))\n            : _createCommentVNode(\"\", true)\n        ], 2))\n      : _createCommentVNode(\"\", true)\n  ], 2))\n}\n\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render]])",
-      "start": 1774594253065,
-      "end": 1774594253066,
+      "start": 1780882727151,
+      "end": 1780882727154,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,152 +74,152 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727154,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727154,
+      "end": 1780882727155,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727155,
+      "end": 1780882727155,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727155,
+      "end": 1780882727155,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1774594253066,
-      "end": 1774594253066,
+      "start": 1780882727155,
+      "end": 1780882727155,
       "order": "normal"
     }
   ]

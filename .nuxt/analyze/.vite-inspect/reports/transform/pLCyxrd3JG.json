@@ -1,0 +1,12 @@
+{
+  "resolvedId": "\u0000vite:asset:public/preview.jpg",
+  "transforms": [
+    {
+      "name": "vite:asset",
+      "result": "export default \"__VITE_PUBLIC_ASSET__a377b15f__\"",
+      "start": 1780882726191,
+      "end": 1780882726191,
+      "sourcemaps": null
+    }
+  ]
+}

@@ -409,10 +409,19 @@ async function createSavings() {
 
   if (submitting.value) return;
 
+  const cancelType = product.cancel_type || 'NONE'
+  let cancelNotice = `만기일 ${maturityDate.value} 전에는 해지 및 출금할 수 없습니다.`
+  if (cancelType === 'A') {
+    cancelNotice = `만기 전 중도해지 시 이자 없이 원금만 반환됩니다.`
+  } else if (cancelType === 'B') {
+    cancelNotice = `만기 전 중도해지 시 원금과 이자가 모두 반환됩니다.`
+  } else if (cancelType === 'C') {
+    cancelNotice = `만기 전 중도해지 시 원금의 10% 벌금이 차감되고 90%만 반환됩니다.`
+  }
 
   const ok = confirm(
     `적금 금액 ${n.toLocaleString()} ${dispot.value?.currency_name} 예치하기.\n` +
-    `만기일 ${maturityDate.value} 전에는 출금할 수 없습니다. 진행할까요?`
+    `${cancelNotice} 진행할까요?`
   )
   if (!ok) return
 
@@ -437,7 +446,8 @@ async function createSavings() {
       bonus_rate: (prodBonus + globBonus),
       deposit_type_idx: selectedDeposit.value?.idx,
       deposit_name: selectedDeposit.value?.deposit_name || "적금통장",
-      end_date: maturityDate.value
+      end_date: maturityDate.value,
+      cancel_type: cancelType
     })
 
     if (res.result === 'SUCCESS') {
@@ -452,6 +462,50 @@ async function createSavings() {
 
   } finally {
     submitting.value = false
+  }
+}
+
+const onClickCancelDeposit = async () => {
+  const cancelType = deposit.value?.cancel_type || 'NONE'
+  if (cancelType === 'NONE') {
+    alert('이 적금은 중도해지가 불가능한 상품입니다.')
+    return
+  }
+
+  const amount = Number(deposit.value?.amount || 0)
+  const currency = dispot.value?.currency_name || '원'
+  let msg = ''
+
+  if (cancelType === 'A') {
+    msg = `만기 전 중도해지 시 이자는 지급되지 않으며, 원금 ${amount.toLocaleString()}${currency}만 돌려받습니다.\n정말 해지하시겠습니까?`
+  } else if (cancelType === 'B') {
+    msg = `중도해지 시에도 원금과 약정 이자를 모두 돌려받습니다.\n정말 해지하시겠습니까?`
+  } else if (cancelType === 'C') {
+    const penalty = Math.floor(amount * 0.1)
+    const payback = amount - penalty
+    msg = `중도해지 시 이자는 없으며, 원금의 10% 벌금(${penalty.toLocaleString()}${currency})이 차감된 ${payback.toLocaleString()}${currency}만 반환됩니다.\n정말 해지하시겠습니까?`
+  }
+
+  if (confirm(msg)) {
+    submitting.value = true
+    try {
+      const res = await apiPost('member.php', {
+        mode: 'depositCancel',
+        idnt_code: sessionStorage.getItem('idnt_code'),
+      })
+
+      if (res.result === 'SUCCESS') {
+        alert(`적금이 중도 해지되어 ${Number(res.paid).toLocaleString()}${currency}이 지갑으로 반환되었습니다.`)
+        memberPoint.value = await apiPoint()
+        await isDispotApi()
+        await isDepositApi()
+        await refreshPoints()
+      } else {
+        alert(res.msg || '중도해지 처리에 실패했습니다.')
+      }
+    } finally {
+      submitting.value = false
+    }
   }
 }
 
@@ -564,8 +618,17 @@ watch([amount, selectedDepositIdx], () => {
               <p class="text-xs font-black text-emerald-600 uppercase tracking-widest">{{ type.deposit_day }}일 만기</p>
               <div>
                 <h4 class="text-lg font-black text-gray-800 truncate">{{ type.deposit_name }}</h4>
-                <p class="text-[10px] text-gray-400 font-bold mt-1 tracking-tighter">
-                  이율 {{ type.deposit_interest }}%
+                <p class="text-[10px] text-gray-400 font-bold mt-1 tracking-tighter flex flex-wrap gap-x-1.5 items-center">
+                  <span>이율 {{ type.deposit_interest }}%</span>
+                  <span class="text-gray-300">•</span>
+                  <span class="text-emerald-700 font-black">
+                    {{ 
+                      type.cancel_type === 'A' ? '원금 반환 해지' :
+                      type.cancel_type === 'B' ? '원금+이자 해지' :
+                      type.cancel_type === 'C' ? '벌금 10% 해지' :
+                      '중도해지 불가'
+                    }}
+                  </span>
                 </p>
               </div>
             </div>
@@ -624,6 +687,16 @@ watch([amount, selectedDepositIdx], () => {
                   class="text-[10px] bg-white/20 px-3 py-1 rounded-full font-black uppercase tracking-widest backdrop-blur-sm">Active</span>
               </h3>
               <p class="text-sm text-white/70 font-medium">목표를 위해 열심히 모으는 중! 대단해요 👍</p>
+              <p class="text-[10px] text-emerald-100 font-bold mt-1.5 flex items-center gap-1">
+                <span class="i-heroicons-information-circle-solid w-3.5 h-3.5" />
+                해지 정책: 
+                {{ 
+                  deposit?.cancel_type === 'A' ? '중도해지 시 이자 미지급 (원금만 반환)' :
+                  deposit?.cancel_type === 'B' ? '중도해지 시 원금 및 이자 모두 반환' :
+                  deposit?.cancel_type === 'C' ? '중도해지 시 원금 10% 벌금 차감 후 반환' :
+                  '중도해지 불가능 (만기 수령만 가능)'
+                }}
+              </p>
             </div>
             <div class="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
               <span class="i-heroicons-rocket-launch-solid w-7 h-7" />
@@ -652,9 +725,14 @@ watch([amount, selectedDepositIdx], () => {
               <p class="flex items-center gap-2 text-white"><span
                   class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>{{ formatDate(deposit?.end_date) }} 만기</p>
             </div>
-            <UButton label="원금 + 이자 모두 받기" :disabled="!isEndDeposit" color="white" size="xl"
-              class="px-12 rounded-[24px] font-black text-emerald-600 shadow-2xl transition-transform hover:-translate-y-1 active:scale-95 disabled:opacity-40"
-              @click="onClickEndDeposit()" />
+            <div class="flex flex-col sm:flex-row gap-3">
+              <UButton v-if="!isEndDeposit && deposit?.cancel_type !== 'NONE'" label="중도 해지하기" color="red" size="xl"
+                class="px-8 rounded-[24px] font-black text-white bg-rose-600 border border-rose-500 shadow-2xl transition-transform hover:-translate-y-1 active:scale-95"
+                @click="onClickCancelDeposit()" />
+              <UButton label="원금 + 이자 모두 받기" :disabled="!isEndDeposit" color="white" size="xl"
+                class="px-12 rounded-[24px] font-black text-emerald-600 shadow-2xl transition-transform hover:-translate-y-1 active:scale-95 disabled:opacity-40"
+                @click="onClickEndDeposit()" />
+            </div>
           </div>
         </div>
       </section>

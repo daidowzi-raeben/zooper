@@ -4,69 +4,69 @@
     {
       "name": "vite:load-fallback",
       "result": "<template>\n  <div :class=\"ui.wrapper\" v-bind=\"attrs\">\n    <slot />\n\n    <span v-if=\"show\" :class=\"chipClass\">\n      <slot name=\"content\">\n        {{ text }}\n      </slot>\n    </span>\n  </div>\n</template>\n\n<script>\nimport { defineComponent, computed, toRef } from \"vue\";\nimport { twJoin } from \"tailwind-merge\";\nimport { useUI } from \"../../composables/useUI\";\nimport { mergeConfig } from \"../../utils\";\nimport appConfig from \"#build/app.config\";\nimport { chip } from \"#ui/ui.config\";\nconst config = mergeConfig(appConfig.ui.strategy, appConfig.ui.chip, chip);\nexport default defineComponent({\n  inheritAttrs: false,\n  props: {\n    size: {\n      type: String,\n      default: () => config.default.size,\n      validator(value) {\n        return Object.keys(config.size).includes(value);\n      }\n    },\n    color: {\n      type: String,\n      default: () => config.default.color,\n      validator(value) {\n        return [\"gray\", ...appConfig.ui.colors].includes(value);\n      }\n    },\n    position: {\n      type: String,\n      default: () => config.default.position,\n      validator(value) {\n        return Object.keys(config.position).includes(value);\n      }\n    },\n    text: {\n      type: [String, Number],\n      default: null\n    },\n    inset: {\n      type: Boolean,\n      default: () => config.default.inset\n    },\n    show: {\n      type: Boolean,\n      default: true\n    },\n    class: {\n      type: [String, Object, Array],\n      default: () => \"\"\n    },\n    ui: {\n      type: Object,\n      default: () => ({})\n    }\n  },\n  setup(props) {\n    const { ui, attrs } = useUI(\"chip\", toRef(props, \"ui\"), config, toRef(props, \"class\"));\n    const chipClass = computed(() => {\n      return twJoin(\n        ui.value.base,\n        ui.value.size[props.size],\n        ui.value.position[props.position],\n        props.inset ? null : ui.value.translate[props.position],\n        ui.value.background.replaceAll(\"{color}\", props.color)\n      );\n    });\n    return {\n      // eslint-disable-next-line vue/no-dupe-keys\n      ui,\n      attrs,\n      chipClass\n    };\n  }\n});\n</script>\n",
-      "start": 1774594252810,
-      "end": 1774594252987,
+      "start": 1780882726241,
+      "end": 1780882727042,
       "sourcemaps": null
     },
     {
       "name": "nuxt:layer-aliasing",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727042,
+      "end": 1780882727042,
       "order": "pre"
     },
     {
       "name": "nuxt:server-devonly:transform",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727042,
+      "end": 1780882727043,
       "order": "pre"
     },
     {
       "name": "content-slot",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727043,
+      "end": 1780882727043,
       "order": "pre"
     },
     {
       "name": "fontaine-transform",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727043,
+      "end": 1780882727043,
       "order": "pre"
     },
     {
       "name": "nuxt:client-fallback-auto-id",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727043,
+      "end": 1780882727043,
       "order": "pre"
     },
     {
       "name": "vite:css",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727043,
+      "end": 1780882727043,
       "order": "normal"
     },
     {
       "name": "vite:esbuild",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727043,
+      "end": 1780882727043,
       "order": "normal"
     },
     {
       "name": "vite:json",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727043,
+      "end": 1780882727043,
       "order": "normal"
     },
     {
       "name": "vite:worker",
-      "start": 1774594252987,
-      "end": 1774594252987,
+      "start": 1780882727043,
+      "end": 1780882727043,
       "order": "normal"
     },
     {
       "name": "vite:vue",
       "result": "\nimport { defineComponent, computed, toRef } from \"vue\";\nimport { twJoin } from \"tailwind-merge\";\nimport { useUI } from \"../../composables/useUI\";\nimport { mergeConfig } from \"../../utils\";\nimport appConfig from \"#build/app.config\";\nimport { chip } from \"#ui/ui.config\";\nconst config = mergeConfig(appConfig.ui.strategy, appConfig.ui.chip, chip);\nconst _sfc_main = defineComponent({\n  inheritAttrs: false,\n  props: {\n    size: {\n      type: String,\n      default: () => config.default.size,\n      validator(value) {\n        return Object.keys(config.size).includes(value);\n      }\n    },\n    color: {\n      type: String,\n      default: () => config.default.color,\n      validator(value) {\n        return [\"gray\", ...appConfig.ui.colors].includes(value);\n      }\n    },\n    position: {\n      type: String,\n      default: () => config.default.position,\n      validator(value) {\n        return Object.keys(config.position).includes(value);\n      }\n    },\n    text: {\n      type: [String, Number],\n      default: null\n    },\n    inset: {\n      type: Boolean,\n      default: () => config.default.inset\n    },\n    show: {\n      type: Boolean,\n      default: true\n    },\n    class: {\n      type: [String, Object, Array],\n      default: () => \"\"\n    },\n    ui: {\n      type: Object,\n      default: () => ({})\n    }\n  },\n  setup(props) {\n    const { ui, attrs } = useUI(\"chip\", toRef(props, \"ui\"), config, toRef(props, \"class\"));\n    const chipClass = computed(() => {\n      return twJoin(\n        ui.value.base,\n        ui.value.size[props.size],\n        ui.value.position[props.position],\n        props.inset ? null : ui.value.translate[props.position],\n        ui.value.background.replaceAll(\"{color}\", props.color)\n      );\n    });\n    return {\n      // eslint-disable-next-line vue/no-dupe-keys\n      ui,\n      attrs,\n      chipClass\n    };\n  }\n});\n\nimport { renderSlot as _renderSlot, toDisplayString as _toDisplayString, createTextVNode as _createTextVNode, normalizeClass as _normalizeClass, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode, mergeProps as _mergeProps } from \"vue\"\n\nfunction _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {\n  return (_openBlock(), _createElementBlock(\"div\", _mergeProps({\n    class: _ctx.ui.wrapper\n  }, _ctx.attrs), [\n    _renderSlot(_ctx.$slots, \"default\"),\n    (_ctx.show)\n      ? (_openBlock(), _createElementBlock(\"span\", {\n          key: 0,\n          class: _normalizeClass(_ctx.chipClass)\n        }, [\n          _renderSlot(_ctx.$slots, \"content\", {}, () => [\n            _createTextVNode(_toDisplayString(_ctx.text), 1)\n          ])\n        ], 2))\n      : _createCommentVNode(\"\", true)\n  ], 16))\n}\n\n\nimport _export_sfc from '\u0000plugin-vue:export-helper'\nexport default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render]])",
-      "start": 1774594252987,
-      "end": 1774594252988,
+      "start": 1780882727043,
+      "end": 1780882727044,
       "order": "normal",
       "sourcemaps": {
         "mappings": ""
@@ -74,152 +74,152 @@
     },
     {
       "name": "vite:vue-jsx",
-      "start": 1774594252988,
-      "end": 1774594252988,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774594252988,
-      "end": 1774594252988,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "nuxt:remove-plugin-metadata",
-      "start": 1774594252989,
-      "end": 1774594252989,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "nuxt:chunk-error",
-      "start": 1774594252989,
-      "end": 1774594252989,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "nuxt:components:imports",
-      "start": 1774594252989,
-      "end": 1774594252989,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "replace",
-      "start": 1774594252989,
-      "end": 1774594252989,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "ssr-styles",
-      "start": 1774594252989,
-      "end": 1774594252989,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:define",
-      "start": 1774594252989,
-      "end": 1774594252989,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:css-post",
-      "start": 1774594253004,
-      "end": 1774594253004,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:build-html",
-      "start": 1774594253004,
-      "end": 1774594253004,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:worker-import-meta-url",
-      "start": 1774594253004,
-      "end": 1774594253004,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:asset-import-meta-url",
-      "start": 1774594253004,
-      "end": 1774594253004,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "commonjs",
-      "start": 1774594253004,
-      "end": 1774594253004,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:dynamic-import-vars",
-      "start": 1774594253004,
-      "end": 1774594253004,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:import-glob",
-      "start": 1774594253004,
-      "end": 1774594253004,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "nuxt:composable-keys",
-      "start": 1774594253005,
-      "end": 1774594253005,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "nuxt:imports-transform",
-      "start": 1774594253005,
-      "end": 1774594253005,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "unctx:transform",
-      "start": 1774594253005,
-      "end": 1774594253005,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "nuxt:pages-macros-transform",
-      "start": 1774594253005,
-      "end": 1774594253005,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "nuxt:runtime-paths-dep",
-      "start": 1774594253005,
-      "end": 1774594253005,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "nuxt:route-injection-plugin",
-      "start": 1774594253005,
-      "end": 1774594253005,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "nuxt:components-loader",
-      "start": 1774594253019,
-      "end": 1774594253019,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "nuxt:tree-shake-composables:transform",
-      "start": 1774594253019,
-      "end": 1774594253019,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "post"
     },
     {
       "name": "vite:build-import-analysis",
-      "start": 1774594253020,
-      "end": 1774594253020,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     },
     {
       "name": "vite:reporter",
-      "start": 1774594253020,
-      "end": 1774594253020,
+      "start": 1780882727044,
+      "end": 1780882727044,
       "order": "normal"
     }
   ]
