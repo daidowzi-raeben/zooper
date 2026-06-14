@@ -210,7 +210,7 @@ const handleClearUnpaidTax = async (student) => {
     <!-- 👥 학생 전체 목록 -->
     <div>
       <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-        <Icon name="solar:users-group-two-round-bold-duotone" class="w-6 h-6 text-gray-500" />
+        <Icon name="solar:users-group-rounded-bold-duotone" class="w-6 h-6 text-gray-500" />
         우리 반 학생 세금 상태
       </h3>
 
