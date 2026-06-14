@@ -55,6 +55,10 @@ const items = computed(() => {
   if (student.value?.roles?.some(r => r.role_code === 'CREDIT_MANAGER')) {
     base.push({ name: "신용관리", path: "/credit", icon: "solar:shield-check-bold-duotone" })
   }
+
+  if (student.value?.roles?.some(r => r.role_code === 'TAX_MANAGER') && student.value?.is_tax_active === 'Y') {
+    base.push({ name: "세금관리", path: "/tax-manager", icon: "solar:bill-list-bold-duotone" })
+  }
   
   return base
 })
