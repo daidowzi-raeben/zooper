@@ -6,6 +6,7 @@ const students = ref([])
 const isLoading = ref(true)
 const studentInfo = ref(null)
 const batchAmount = ref(null)
+const selectedStudentIdxs = ref([])
 
 onMounted(async () => {
   const storedStudent = sessionStorage.getItem('student')
@@ -37,6 +38,8 @@ const fetchStudents = async () => {
     })
     if (res.result === 'SUCCESS') {
       students.value = res.data
+      // 기본적으로 모든 학생 선택
+      selectedStudentIdxs.value = res.data.map(s => s.idx)
     } else {
       alert(res.message || '학생 목록 조회 실패')
     }
@@ -47,12 +50,34 @@ const fetchStudents = async () => {
   }
 }
 
+// 전체 선택/해제 computed
+const isAllSelected = computed({
+  get: () => students.value.length > 0 && selectedStudentIdxs.value.length === students.value.length,
+  set: (val) => {
+    if (val) {
+      selectedStudentIdxs.value = students.value.map(s => s.idx)
+    } else {
+      selectedStudentIdxs.value = []
+    }
+  }
+})
+
+// 행 클릭 시 선택 상태 토글
+const toggleRow = (idx) => {
+  const index = selectedStudentIdxs.value.indexOf(idx)
+  if (index > -1) {
+    selectedStudentIdxs.value = selectedStudentIdxs.value.filter(id => id !== idx)
+  } else {
+    selectedStudentIdxs.value = [...selectedStudentIdxs.value, idx]
+  }
+}
+
 // 미납 세금이 있는 학생 필터링
 const unpaidStudents = computed(() => {
   return students.value.filter(s => Number(s.unpaid_tax) > 0)
 })
 
-// 일괄 징수
+// 세금 징수
 const handleBatchCollect = async () => {
   const amount = parseInt(batchAmount.value)
   if (isNaN(amount) || amount <= 0) {
@@ -60,7 +85,17 @@ const handleBatchCollect = async () => {
     return
   }
 
-  if (!confirm(`우리 반 전체 학생에게 ${amount.toLocaleString()} 젤리씩 세금을 일괄 징수하시겠습니까?\n(잔액이 부족한 학생은 미납 세금으로 누적됩니다.)`)) {
+  if (selectedStudentIdxs.value.length === 0) {
+    alert('징수할 학생을 1명 이상 선택해주세요.')
+    return
+  }
+
+  const isAll = selectedStudentIdxs.value.length === students.value.length
+  const confirmMsg = isAll
+    ? `우리 반 전체 학생에게 ${amount.toLocaleString()} 젤리씩 세금을 일괄 징수하시겠습니까?\n(잔액이 부족한 학생은 미납 세금으로 누적됩니다.)`
+    : `선택한 ${selectedStudentIdxs.value.length}명의 학생에게 ${amount.toLocaleString()} 젤리씩 세금을 징수하시겠습니까?\n(잔액이 부족한 학생은 미납 세금으로 누적됩니다.)`
+
+  if (!confirm(confirmMsg)) {
     return
   }
 
@@ -70,11 +105,12 @@ const handleBatchCollect = async () => {
       mode: 'taxBatchCollect',
       teacher_idx: studentInfo.value.teacher,
       idnt_code: studentInfo.value.idnt_code,
-      amount: amount
+      amount: amount,
+      student_idxs: selectedStudentIdxs.value
     })
     
     if (res.result === 'SUCCESS') {
-      alert(res.message || '세금 일괄 징수가 완료되었습니다.')
+      alert(res.message || '세금 징수가 완료되었습니다.')
       batchAmount.value = null
       await fetchStudents()
     } else {
@@ -146,34 +182,6 @@ const handleClearUnpaidTax = async (student) => {
       </div>
     </div>
 
-    <!-- 💰 세금 일괄 징수 패널 -->
-    <div class="mb-8 bg-white p-6 rounded-[35px] border border-gray-100 shadow-sm">
-      <h3 class="text-lg font-black text-gray-800 mb-3 flex items-center gap-2">
-        <Icon name="solar:hand-money-bold-duotone" class="w-6 h-6 text-rose-500" />
-        세금 일괄 징수
-      </h3>
-      <p class="text-xs text-gray-400 font-medium mb-4">우리 반 전체 학생에게 동시에 세금을 징수합니다. 잔액이 모자란 학생은 미납세금으로 누적됩니다.</p>
-      
-      <div class="flex items-center gap-3">
-        <UInput
-          v-model="batchAmount"
-          placeholder="징수할 세금(젤리)"
-          icon="i-heroicons-currency-dollar"
-          class="flex-1"
-          type="number"
-          size="lg"
-        />
-        <UButton 
-          label="일괄 징수" 
-          size="lg" 
-          color="rose" 
-          @click="handleBatchCollect"
-          :loading="isLoading"
-          class="font-bold px-6"
-        />
-      </div>
-    </div>
-
     <!-- ⚠️ 미납 세금 현황 및 탕감 목록 -->
     <div v-if="unpaidStudents.length > 0" class="mb-8">
       <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
@@ -207,12 +215,53 @@ const handleClearUnpaidTax = async (student) => {
       </div>
     </div>
 
+    <!-- 💰 세금 징수 패널 -->
+    <div class="mb-8 bg-white p-6 rounded-[35px] border border-gray-100 shadow-sm">
+      <h3 class="text-lg font-black text-gray-800 mb-3 flex items-center gap-2">
+        <Icon name="solar:hand-money-bold-duotone" class="w-6 h-6 text-rose-500" />
+        세금 징수
+      </h3>
+      <p class="text-xs text-gray-400 font-medium mb-4">선택한 학생 또는 우리 반 전체 학생에게 세금을 징수합니다. 잔액이 모자란 학생은 미납세금으로 누적됩니다.</p>
+      
+      <p class="text-xs text-rose-500 font-black mb-4 flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+        징수 대상: {{ selectedStudentIdxs.length === students.length ? '전체 학생' : '선택된 학생' }} {{ selectedStudentIdxs.length }}명
+      </p>
+
+      <div class="flex items-center gap-3">
+        <UInput
+          v-model="batchAmount"
+          placeholder="징수할 세금(젤리)"
+          icon="i-heroicons-currency-dollar"
+          class="flex-1"
+          type="number"
+          size="lg"
+        />
+        <UButton 
+          :label="selectedStudentIdxs.length === students.length ? '일괄 징수' : '선택 징수'" 
+          size="lg" 
+          color="rose" 
+          @click="handleBatchCollect"
+          :loading="isLoading"
+          :disabled="selectedStudentIdxs.length === 0"
+          class="font-bold px-6"
+        />
+      </div>
+    </div>
+
     <!-- 👥 학생 전체 목록 -->
     <div>
-      <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
-        <Icon name="solar:users-group-rounded-bold-duotone" class="w-6 h-6 text-gray-500" />
-        우리 반 학생 세금 상태
-      </h3>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2">
+          <Icon name="solar:users-group-rounded-bold-duotone" class="w-6 h-6 text-gray-500" />
+          우리 반 학생 세금 상태
+        </h3>
+        <!-- 전체 선택 체크박스 -->
+        <label v-if="students.length > 0" class="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-200/50 hover:bg-gray-100 transition-all select-none">
+          <UCheckbox v-model="isAllSelected" />
+          <span>전체 선택 ({{ selectedStudentIdxs.length }}/{{ students.length }})</span>
+        </label>
+      </div>
 
       <div v-if="isLoading && students.length === 0" class="flex flex-col items-center py-24 gap-6 text-center">
         <div class="relative">
@@ -224,8 +273,19 @@ const handleClearUnpaidTax = async (student) => {
 
       <div v-else class="space-y-4">
         <div v-for="student in students" :key="student.idx"
-          class="bg-white p-5 rounded-[30px] border border-gray-100 shadow-xs flex items-center justify-between transition-all hover:shadow-md hover:border-rose-100">
+          @click="toggleRow(student.idx)"
+          :class="[
+            'p-5 rounded-[30px] border shadow-xs flex items-center justify-between transition-all hover:shadow-md cursor-pointer select-none',
+            selectedStudentIdxs.includes(student.idx) ? 'bg-rose-50/10 border-rose-100 shadow-rose-50/20' : 'bg-white border-gray-100'
+          ]">
           <div class="flex items-center gap-4">
+            <!-- 개별 선택 체크박스 -->
+            <UCheckbox
+              v-model="selectedStudentIdxs"
+              :value="student.idx"
+              name="tax-students"
+              @click.stop
+            />
             <div class="w-12 h-12 rounded-xl bg-gray-50 text-gray-500 flex items-center justify-center font-black text-sm">
               {{ student.student_number || '?' }}
             </div>
@@ -235,7 +295,7 @@ const handleClearUnpaidTax = async (student) => {
             </div>
           </div>
 
-          <div class="text-right">
+          <div class="text-right" @click.stop>
             <span v-if="Number(student.unpaid_tax) > 0" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-rose-50 text-rose-600 border border-rose-100">
               <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
               미납 {{ Number(student.unpaid_tax).toLocaleString() }} 젤리
